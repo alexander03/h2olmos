@@ -47,9 +47,9 @@ Route::group(['middleware' => 'auth'], function () {
 		return view('pages.upgrade');
 	})->name('upgrade');
 
-	Route::post('grupomenu/buscar', 'GrupomenuController@buscar')->name('grupomenu.buscar');
-    Route::get('grupomenu/eliminar/{id}/{listarluego}', 'GrupomenuController@eliminar')->name('grupomenu.eliminar');
-    Route::resource('grupomenu', 'GrupomenuController', array('except' => array('show')));
+	// Route::post('grupomenu/buscar', 'GrupomenuController@buscar')->name('grupomenu.buscar');
+    // Route::get('grupomenu/eliminar/{id}/{listarluego}', 'GrupomenuController@eliminar')->name('grupomenu.eliminar');
+    // Route::resource('grupomenu', 'GrupomenuController', array('except' => array('show')));
 
 	Route::post('opcionmenu/buscar', 'OpcionmenuController@buscar')->name('opcionmenu.buscar');
     Route::get('opcionmenu/eliminar/{id}/{listarluego}', 'OpcionmenuController@eliminar')->name('opcionmenu.eliminar');
@@ -62,13 +62,18 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('profile', ['as' => 'profile.edit', 'uses' => 'ProfileController@edit']);
 	Route::put('profile', ['as' => 'profile.update', 'uses' => 'ProfileController@update']);
 	Route::put('profile/password', ['as' => 'profile.password', 'uses' => 'ProfileController@password']);
-	Route::post('grupomenu/buscar', 'GrupomenuController@buscar')->name('grupomenu.buscar');
+	// Route::post('grupomenu/buscar', 'GrupomenuController@buscar')->name('grupomenu.buscar');
 
-    Route::get('grupomenu/eliminar/{id}/{listarluego}', 'GrupomenuController@eliminar')->name('grupomenu.eliminar');
-    Route::resource('grupomenu', 'GrupomenuController', array('except' => array('show')));
+	// Route::get('grupomenu/eliminar/{id}/{listarluego}', 'GrupomenuController@eliminar')->name('grupomenu.eliminar');
+	// Route::resource('grupomenu', 'GrupomenuController', array('except' => array('show')));
 
 	Route::post('opcionmenu/buscar', 'OpcionmenuController@buscar')->name('opcionmenu.buscar');
     Route::get('opcionmenu/eliminar/{id}/{listarluego}', 'OpcionmenuController@eliminar')->name('opcionmenu.eliminar');
-    Route::resource('opcionmenu', 'OpcionmenuController', array('except' => array('show')));
+		Route::resource('opcionmenu', 'OpcionmenuController', array('except' => array('show')));
+		
+	//Rutas para las marcas (brands)
+	Route::post('marcas/buscar', 'BrandController@buscar')->name('marcas.buscar');
+	Route::get('marcas/eliminar/{id}/{listarluego}', 'BrandController@eliminar')->name('marcas.eliminar');
+	Route::resource('marcas', 'BrandController', array('except' => array('show')));
 });
 
