@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Validator;
 use Illuminate\Http\Request;
 use App\Brand;
 use App\Librerias\Libreria;
@@ -63,11 +64,45 @@ class BrandController extends Controller
 
     public function index()
     {
-        $entidad          = 'Brands';
+        $entidad          = 'Brand';
         $title            = $this->tituloAdmin;
         $titulo_registrar = $this->tituloRegistrar;
         $ruta             = $this->rutas;
         return view($this->folderview.'.admin')->with(compact('entidad', 'title', 'titulo_registrar', 'ruta'));
     }
     
+    public function create(Request $request)
+    {
+        $listar   = Libreria::getParam($request->input('listar'), 'NO');
+        $entidad  = 'Brand';
+        // $grupomenu = Grupomenu::orderBy('descripcion','asc')->get();
+        // $cboGrupo = array();
+        // foreach($grupomenu as $k=>$v){
+        //     $cboGrupo += array($v->id=>$v->descripcion);
+        // }
+        $brand = null;
+        $formData = array('marcas.store');
+        $formData = array('route' => $formData, 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
+        $boton    = 'Registrar'; 
+        return view($this->folderview.'.mant')->with(compact('brand', 'formData', 'entidad', 'boton', 'listar'));
+    }
+
+    public function store(Request $request)
+    {
+        $listar     = Libreria::getParam($request->input('listar'), 'NO');
+        $reglas     = array('descripcion' => 'required|max:50');
+        $mensajes = array(
+            'descripcion.required' => 'Debe ingresar una descripcion'
+        );
+        $validacion = Validator::make($request->all(), $reglas, $mensajes);
+        if ($validacion->fails()) {
+            return $validacion->messages()->toJson();
+        }
+        $error = DB::transaction(function() use($request){
+            $brand = new Brand();
+            $brand->descripcion= strtoupper($request->input('descripcion'));
+            $brand->save();
+        });
+        return is_null($error) ? "OK" : $error;
+    }
 }
