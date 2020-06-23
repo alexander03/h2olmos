@@ -103,7 +103,7 @@ class BrandController extends Controller
 
     public function edit($id, Request $request)
     {
-        $existe = Libreria::verificarExistencia($id, 'brands');
+        $existe = Libreria::verificarExistencia($id, 'marca');
         if ($existe !== true) {
             return $existe;
         }
@@ -118,7 +118,7 @@ class BrandController extends Controller
 
     public function update(Request $request, $id)
     {
-        $existe = Libreria::verificarExistencia($id, 'brands');
+        $existe = Libreria::verificarExistencia($id, 'marca');
         if ($existe !== true) {
             return $existe;
         }
@@ -140,7 +140,7 @@ class BrandController extends Controller
 
     public function destroy($id)
     {
-        $existe = Libreria::verificarExistencia($id, 'brands');
+        $existe = Libreria::verificarExistencia($id, 'marca');
         if ($existe !== true) {
             return $existe;
         }
@@ -153,7 +153,7 @@ class BrandController extends Controller
 
     public function eliminar($id, $listarLuego)
     {
-        $existe = Libreria::verificarExistencia($id, 'brands');
+        $existe = Libreria::verificarExistencia($id, 'marca');
         if ($existe !== true) {
             return $existe;
         }

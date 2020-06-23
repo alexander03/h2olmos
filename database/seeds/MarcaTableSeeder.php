@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Seeder;
 
-class BrandsTableSeeder extends Seeder
+class MarcaTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -11,27 +11,27 @@ class BrandsTableSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('brands')->insert([
+        DB::table('marca')->insert([
             'descripcion' => 'MITSUBISHI',
             'created_at' => now(),
             'updated_at' => now()
         ]);
-        DB::table('brands')->insert([
+        DB::table('marca')->insert([
             'descripcion' => 'TOYOTA',
             'created_at' => now(),
             'updated_at' => now()
         ]);
-        DB::table('brands')->insert([
+        DB::table('marca')->insert([
             'descripcion' => 'RELUX',
             'created_at' => now(),
             'updated_at' => now()
         ]);
-        DB::table('brands')->insert([
+        DB::table('marca')->insert([
             'descripcion' => 'PIRAMIDE',
             'created_at' => now(),
             'updated_at' => now()
         ]);
-        DB::table('brands')->insert([
+        DB::table('marca')->insert([
             'descripcion' => 'BERTOLINI',
             'created_at' => now(),
             'updated_at' => now()
