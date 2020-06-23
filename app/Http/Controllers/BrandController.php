@@ -85,7 +85,7 @@ class BrandController extends Controller
     public function store(Request $request)
     {
         $listar     = Libreria::getParam($request->input('listar'), 'NO');
-        $reglas     = array('descripcion' => 'required|max:50');
+        $reglas     = array('descripcion' => 'required|max:100');
         $mensajes = array(
             'descripcion.required' => 'Debe ingresar una descripcion'
         );
@@ -122,7 +122,7 @@ class BrandController extends Controller
         if ($existe !== true) {
             return $existe;
         }
-        $reglas     = array('descripcion' => 'required|max:50');
+        $reglas     = array('descripcion' => 'required|max:100');
         $mensajes = array(
             'descripcion.required'         => 'Debe ingresar una descripción'
             );
