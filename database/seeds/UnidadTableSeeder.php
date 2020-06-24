@@ -21,5 +21,20 @@ class UnidadTableSeeder extends Seeder
             'created_at' => now(),
             'updated_at' => now()
         ]);
+        DB::table('unidad')->insert([
+            'descripcion' => 'VOLQUETE',
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
+        DB::table('unidad')->insert([
+            'descripcion' => 'EXCAVADORA',
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
+        DB::table('unidad')->insert([
+            'descripcion' => 'CARGADOR FRONTAL',
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
     }
 }
