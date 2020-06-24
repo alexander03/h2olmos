@@ -42,11 +42,6 @@ class RepuestoController extends Controller
         $unidad           = $request->input('unidad');
         $resultado        = Repuesto::getFilter($filter, $unidad);
         $lista            = $resultado->get();
-        // $resultado        = Repuesto::join('unidad', 'repuesto.unidad_id', '=', 'unidad.id')
-        //                     ->where('codigo', strtoupper($filter))
-        //                     ->select('repuesto.id', 'repuesto.codigo', 'repuesto.descripcion', 'unidad.descripcion as unidad_descripcion')
-        //                     ->orWhere('repuesto.descripcion', 'LIKE', '%'.strtoupper($filter).'%')
-        //                     ->orderBy('repuesto.codigo', 'ASC');
         $cabecera         = array();
         $cabecera[]       = array('valor' => '#', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Código', 'numero' => '1');
@@ -82,5 +77,49 @@ class RepuestoController extends Controller
             $cboUnidades += array($v->id=>$v->descripcion);
         }
         return view($this->folderview.'.admin')->with(compact('entidad', 'title', 'titulo_registrar', 'cboUnidades', 'ruta'));
+    }
+
+    public function create(Request $request)
+    {
+        $listar   = Libreria::getParam($request->input('listar'), 'NO');
+        $entidad  = 'Repuesto';
+        $repuesto = null;
+        $formData = array('repuestos.store');
+        $formData = array('route' => $formData, 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
+        $boton    = 'Registrar';
+        $arrUnidades = Unidad::getAll();
+        $cboUnidades = array('' => 'Seleccione');
+        foreach($arrUnidades as $k=>$v){
+            $cboUnidades += array($v->id=>$v->descripcion);
+        }
+        return view($this->folderview.'.mant')->with(compact('repuesto', 'formData', 'entidad', 'boton', 'cboUnidades', 'listar'));
+    }
+
+    public function store(Request $request)
+    {
+        $listar     = Libreria::getParam($request->input('listar'), 'NO');
+        $reglas     = array(
+            'codigo' => 'required|integer|min:1',
+            'descripcion' => 'required|max:100',
+            'unidad_id' => 'required'
+        );
+        $mensajes = array(
+            'codigo.required' => 'Debe ingresar un código',
+            'codigo.min' => 'Código inválido',
+            'descripcion.required' => 'Debe ingresar una descripcion',
+            'unidad_id.required' => 'Debe seleccionar una unidad'
+        );
+        $validacion = Validator::make($request->all(), $reglas, $mensajes);
+        if ($validacion->fails()) {
+            return $validacion->messages()->toJson();
+        }
+        $error = DB::transaction(function() use($request){
+            $repuesto = new Repuesto();
+            $repuesto->codigo= strtoupper($request->input('codigo'));
+            $repuesto->descripcion= strtoupper($request->input('descripcion'));
+            $repuesto->unidad_id= strtoupper($request->input('unidad_id'));
+            $repuesto->save();
+        });
+        return is_null($error) ? "OK" : $error;
     }
 }
