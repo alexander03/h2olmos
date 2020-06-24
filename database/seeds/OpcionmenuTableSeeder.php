@@ -18,5 +18,12 @@ class OpcionmenuTableSeeder extends Seeder
             'orden' => 1,
             'grupomenu_id' => 1
         ]);
+        DB::table('opcionmenu')->insert([
+            'descripcion' => 'Repuestos',
+            'link' => 'repuestos',
+            'icono' => 'myicon',
+            'orden' => 2,
+            'grupomenu_id' => 1
+        ]);
     }
 }

@@ -21,7 +21,7 @@ class RepuestoTableSeeder extends Seeder
         DB::table('repuesto')->insert([
             'codigo' => '103',
             'descripcion' => 'FAROS DELANTEROS',
-            'unidad_id' => '1',
+            'unidad_id' => '2',
             'created_at' => now(),
             'updated_at' => now()
         ]);
