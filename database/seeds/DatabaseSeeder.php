@@ -15,7 +15,8 @@ class DatabaseSeeder extends Seeder
             UsersTableSeeder::class,
             MarcaTableSeeder::class,
             GrupomenuTableSeeder::class,
-            OpcionmenuTableSeeder::class
+            OpcionmenuTableSeeder::class,
+            UnidadTableSeeder::class
         ]);
     }
 }
