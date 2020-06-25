@@ -1,4 +1,4 @@
-//TODO: EL input para la letra de la licencia falta validar que acepte solo letras y mayusculas
+{{-- TODO: EL input para la letra de la licencia falta validar que acepte solo letras y mayusculas --}}
 @php
 		$readOnly = false;
 @endphp

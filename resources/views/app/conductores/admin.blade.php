@@ -1,3 +1,4 @@
+{{-- TODO: CORREGIR los estilos del nav de la paginacion --}}
 <div class="content">
   <div class="container-fluid">
     <div class="row">

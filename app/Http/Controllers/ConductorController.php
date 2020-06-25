@@ -221,6 +221,37 @@ class ConductorController extends Controller
         return is_null($error) ? "OK" : $error;
     }
 
+    public function destroy($id)
+    {
+        $existe = Libreria::verificarExistencia($id, 'conductor');
+        if ($existe !== true) {
+            return $existe;
+        }
+        $error = DB::transaction(function() use($id){
+            $brand = Conductor::find($id);
+            $brand->delete();
+        });
+        return is_null($error) ? "OK" : $error;
+    }
+
+    public function eliminar($id, $listarLuego)
+    {
+        $existe = Libreria::verificarExistencia($id, 'conductor');
+        if ($existe !== true) {
+            return $existe;
+        }
+        $listar = "NO";
+        if (!is_null(Libreria::obtenerParametro($listarLuego))) {
+            $listar = $listarLuego;
+        }
+        $mensaje=true;
+        $modelo   = Conductor::find($id);
+        $entidad  = 'Conductor';
+        $formData = array('route' => array('conductores.destroy', $id), 'method' => 'DELETE', 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
+        $boton    = 'Eliminar';
+        return view('app.confirmarEliminar')->with(compact('modelo', 'formData', 'entidad', 'boton', 'listar','mensaje'));
+    }
+
     public function existeConductor(Request $request) {
         return $res = Conductor::where('dni', $request->dni)->get();
     }
