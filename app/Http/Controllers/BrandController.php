@@ -87,7 +87,8 @@ class BrandController extends Controller
         $listar     = Libreria::getParam($request->input('listar'), 'NO');
         $reglas     = array('descripcion' => 'required|max:100');
         $mensajes = array(
-            'descripcion.required' => 'Debe ingresar una descripcion'
+            'descripcion.required' => 'Debe ingresar una descripcion',
+            'descripcion.max' => 'La descripcion debe tener max. 100 caracteres'
         );
         $validacion = Validator::make($request->all(), $reglas, $mensajes);
         if ($validacion->fails()) {
@@ -124,8 +125,9 @@ class BrandController extends Controller
         }
         $reglas     = array('descripcion' => 'required|max:100');
         $mensajes = array(
-            'descripcion.required'         => 'Debe ingresar una descripción'
-            );
+            'descripcion.required'         => 'Debe ingresar una descripción',
+            'descripcion.max' => 'La descripcion debe tener max. 100 caracteres'
+        );
         $validacion = Validator::make($request->all(), $reglas, $mensajes);
         if ($validacion->fails()) {
             return $validacion->messages()->toJson();

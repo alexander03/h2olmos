@@ -108,6 +108,7 @@ class RepuestoController extends Controller
             'codigo.integer' => 'Código inválido',
             'codigo.digits' => 'El código debe tener 7 cifras',
             'descripcion.required' => 'Debe ingresar una descripcion',
+            'descripcion.max' => 'La descripcion debe tener max. 100 caracteres',
             'unidad_id.required' => 'Debe seleccionar una unidad'
         );
         $validacion = Validator::make($request->all(), $reglas, $mensajes);
@@ -160,6 +161,7 @@ class RepuestoController extends Controller
             'codigo.integer' => 'Código inválido',
             'codigo.digits' => 'El código debe tener 7 cifras',
             'descripcion.required' => 'Debe ingresar una descripcion',
+            'descripcion.max' => 'La descripcion debe tener max. 100 caracteres',
             'unidad_id.required' => 'Debe seleccionar una unidad'
         );
         $validacion = Validator::make($request->all(), $reglas, $mensajes);
