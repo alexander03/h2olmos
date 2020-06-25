@@ -18,9 +18,9 @@
 							{!! Form::label('filas', 'Filas')!!}
 							{!! Form::selectRange('filas', 1, 30, 20, array('class' => 'form-control input-xs', 'onchange' => 'buscar(\''.$entidad.'\')')) !!}
 						</div>
-						<div class="col-12 col-sm-5 col-md-4 col-lg-4 d-flex justify-content-center align-items-center">
-							{!! Form::button('<i class="material-icons">search</i>Buscar', array('class' => 'btn btn-success', 'id' => 'btnBuscar', 'onclick' => 'buscar(\''.$entidad.'\')')) !!}
-							{!! Form::button('<i class="material-icons">add</i>Nuevo', array('class' => 'btn btn-info btn-xs', 'id' => 'btnNuevo', 'onclick' => 'modal (\''.URL::route($ruta["create"], array('listar'=>'SI')).'\', \''.$titulo_registrar.'\', this);')) !!}
+						<div class="col-12 col-sm-5 col-md-4 col-lg-4 d-flex justify-content-around align-items-center">
+							{!! Form::button('<i class="material-icons">search</i>Buscar', array('class' => 'btn btn-success p-2 pl-1 pr-1', 'id' => 'btnBuscar', 'onclick' => 'buscar(\''.$entidad.'\')')) !!}
+							{!! Form::button('<i class="material-icons">add</i>Nuevo', array('class' => 'btn btn-info p-2 pl-1 pr-1', 'id' => 'btnNuevo', 'onclick' => 'modal (\''.URL::route($ruta["create"], array('listar'=>'SI')).'\', \''.$titulo_registrar.'\', this);')) !!}
 						</div>
 						{!! Form::close() !!}
 						<div class="table-responsive" id="listado{{ $entidad }}">
