@@ -1,9 +1,9 @@
 @php
-		$disabled = false;
+		$readOnly = false;
 @endphp
 @if ($conductor != null)
 	@php
-		$disabled = true;
+		$readOnly = true;
 	@endphp
 @endif
 <div id="divMensajeError{!! $entidad !!}"></div>
@@ -13,7 +13,7 @@
 	<div class="form-group col-5 col-sm-3">
 		{!! Form::label('dni', 'DNI:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
 		<div class="col-lg-12 col-md-12 col-sm-12">
-			{!! Form::text('dni', null, array('class' => 'form-control input-xs', 'id' => 'dni', 'disabled' => $disabled)) !!}
+			{!! Form::text('dni', null, array('class' => 'form-control input-xs solo-lectura', 'id' => 'dni', 'readonly' => $readOnly)) !!}
 		</div>
 	</div>
 	<div class="form-group col-7 col-sm-5 d-flex justify-content-around">
@@ -27,13 +27,13 @@
 	<div class="form-group col-6  col-sm-7">
 		{!! Form::label('apellidos', 'Apellidos:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
 		<div class="col-lg-12 col-md-12 col-sm-12">
-			{!! Form::text('apellidos', null, array('class' => 'form-control input-xs', 'id' => 'apellidos', 'disabled' => true)) !!}
+			{!! Form::text('apellidos', null, array('class' => 'form-control input-xs solo-lectura', 'id' => 'apellidos', 'readonly' => true)) !!}
 		</div>
 	</div>
 	<div class="form-group col-6  col-sm-5">
 		{!! Form::label('nombres', 'Nombres:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
 		<div class="col-lg-12 col-md-12 col-sm-12">
-			{!! Form::text('nombres', null, array('class' => 'form-control input-xs', 'id' => 'nombres', 'disabled' => true)) !!}
+			{!! Form::text('nombres', null, array('class' => 'form-control input-xs solo-lectura', 'id' => 'nombres', 'readonly' => true)) !!}
 		</div>
 	</div>
 </div>
@@ -79,6 +79,12 @@
 	</div>
 </div>
 {!! Form::close() !!}
+<style>
+	.solo-lectura:read-only {
+		background-color: transparent;
+		cursor: not-allowed;
+	}
+</style>
 <script type="text/javascript">
 	$(document).ready(function() {
 		configurarAnchoModal('700');
@@ -103,7 +109,7 @@
 					if(person) {
 						inputApe.value = person.apellidos;
 						inputNom.value = person.nombres;
-						inputDni.setAttribute('disabled', true);
+						inputDni.setAttribute('readonly', true);
 						inputLicenciaNum.value = person.dni;
 					}else {
 						console.log('No existe esa persona')
@@ -118,14 +124,14 @@
 			inputDni.value = '';
 			inputApe.value = '';
 			inputNom.value = '';
-			inputDni.removeAttribute('disabled');
+			inputDni.removeAttribute('readonly');
 			inputLicenciaNum.value = '';
 		})
 
 		inputDni.addEventListener('change', e => {
 			if(isNaN(e.target.value)) e.target.value = '';
 		})
-		
+
 		inputDni.addEventListener('keydown', e => {
 			//TODO: que acepte las teclas: flecha left y right
 			console.log(e.keyCode)
