@@ -99,14 +99,14 @@ class RepuestoController extends Controller
     {
         $listar     = Libreria::getParam($request->input('listar'), 'NO');
         $reglas     = array(
-            'codigo' => 'required|integer|max:7',
+            'codigo' => 'required|integer|digits:7',
             'descripcion' => 'required|max:100',
             'unidad_id' => 'required'
         );
         $mensajes = array(
             'codigo.required' => 'Debe ingresar un código',
             'codigo.integer' => 'Código inválido',
-            'codigo.max' => 'El código debe tener 7 cifras',
+            'codigo.digits' => 'El código debe tener 7 cifras',
             'descripcion.required' => 'Debe ingresar una descripcion',
             'unidad_id.required' => 'Debe seleccionar una unidad'
         );
@@ -151,14 +151,14 @@ class RepuestoController extends Controller
             return $existe;
         }
         $reglas     = array(
-            'codigo' => 'required|integer|max:7',
+            'codigo' => 'required|integer|digits:7',
             'descripcion' => 'required|max:100',
             'unidad_id' => 'required'
         );
         $mensajes = array(
             'codigo.required' => 'Debe ingresar un código',
             'codigo.integer' => 'Código inválido',
-            'codigo.max' => 'El código debe tener 7 cifras',
+            'codigo.digits' => 'El código debe tener 7 cifras',
             'descripcion.required' => 'Debe ingresar una descripcion',
             'unidad_id.required' => 'Debe seleccionar una unidad'
         );

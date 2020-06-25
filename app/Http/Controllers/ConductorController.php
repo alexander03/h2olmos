@@ -114,4 +114,41 @@ class ConductorController extends Controller
         return view($this->folderview.'.mant')->with(compact('conductor', 'formData', 'entidad', 'boton', 'arrCategorias', 'cboContratista', 'listar'));
     }
 
+    public function store(Request $request)
+    {
+        $listar     = Libreria::getParam($request->input('listar'), 'NO');
+        $reglas     = array(
+            'dni' => 'required|integer|digits:8',
+            'licencia_letra' => 'required',
+            'categoria' => 'required',
+            'fechavencimiento' => 'required',
+            'contratista_id' => 'required',
+        );
+        $mensajes = array(
+            'dni.required' => 'Debe ingresar un DNI',
+            'dni.integer' => 'DNI inválido',
+            'dni.digits' => 'DNI debe tener 8 cifras',
+            'licencia_letra.required' => 'Licencia incompleta',
+            'categoria.required' => 'Seleccione categoría',
+            'fechavencimiento.required' => 'Seleccione fecha de vencimiento',
+            'contratista_id.required' => 'Seleccione contratista',
+        );
+        $validacion = Validator::make($request->all(), $reglas, $mensajes);
+        if ($validacion->fails()) {
+            return $validacion->messages()->toJson();
+        }
+        $error = DB::transaction(function() use($request){
+            $conductor = new Conductor();
+            $conductor->dni= strtoupper($request->input('dni'));
+            $conductor->apellidos= strtoupper($request->input('apellidos'));
+            $conductor->nombres= strtoupper($request->input('nombres'));
+            $conductor->licencia= strtoupper($request->input('licencia_letra')) . '-' . strtoupper($request->input('dni'));
+            $conductor->categoria= strtoupper($request->input('categoria'));
+            $conductor->fechavencimiento= strtoupper($request->input('fechavencimiento'));
+            $conductor->contratista_id= strtoupper($request->input('contratista_id'));
+            $conductor->save();
+        });
+        return is_null($error) ? "OK" : $error;
+    }
+
 }
