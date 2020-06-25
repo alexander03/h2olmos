@@ -25,7 +25,7 @@ class ContratistaTableSeeder extends Seeder
         ]);
         DB::table('contratista')->insert([
             'ruc' => '92347859878',
-            'razonsocial' => 'CONVENCIONES MIMASCOT SAA',
+            'razonsocial' => 'CONVENCIONES POLVOS ROSADOS SAA',
             'created_at' => now(),
             'updated_at' => now()
         ]);
