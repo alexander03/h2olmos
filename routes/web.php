@@ -70,5 +70,20 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::post('opcionmenu/buscar', 'OpcionmenuController@buscar')->name('opcionmenu.buscar');
     Route::get('opcionmenu/eliminar/{id}/{listarluego}', 'OpcionmenuController@eliminar')->name('opcionmenu.eliminar');
     Route::resource('opcionmenu', 'OpcionmenuController', array('except' => array('show')));
+
+    //Rutas Tipohora
+	Route::post('tipohora/buscar', 'TipohoraController@buscar')->name('tipohora.buscar');
+	Route::get('tipohora/eliminar/{id}/{listarluego}', 'TipohoraController@eliminar')->name('tipohora.eliminar');
+	Route::resource('tipohora', 'TipohoraController', array('except' => array('show')));
+
+	//Rutas Grifo
+	Route::post('grifo/buscar', 'GrifoController@buscar')->name('grifo.buscar');
+	Route::get('grifo/eliminar/{id}/{listarluego}', 'GrifoController@eliminar')->name('grifo.eliminar');
+	Route::resource('grifo', 'GrifoController', array('except' => array('show')));
+
+	//Rutas Equioi
+	Route::post('equipo/buscar', 'EquipoController@buscar')->name('equipo.buscar');
+	Route::get('equipo/eliminar/{id}/{listarluego}', 'EquipoController@eliminar')->name('equipo.eliminar');
+	Route::resource('equipo', 'EquipoController', array('except' => array('show')));
 });
 
