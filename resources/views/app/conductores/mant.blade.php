@@ -1,3 +1,4 @@
+//TODO: EL input para la letra de la licencia falta validar que acepte solo letras y mayusculas
 @php
 		$readOnly = false;
 @endphp
@@ -17,10 +18,8 @@
 		</div>
 	</div>
 	<div class="form-group col-7 col-sm-5 d-flex justify-content-around">
-			@if ($conductor === null)
-				{!! Form::button('<span class="material-icons">cached</span> Consultar', array('class' => 'btn btn-info p-2 pl-1 pr-1', 'id' => 'btn-consult')) !!}
-				{!! Form::button('<span class="material-icons">delete</span>', array('class' => 'btn btn-danger p-2 pl-1 pr-1', 'id' => 'btn-clear')) !!}
-			@endif
+			{!! Form::button('<span class="material-icons">cached</span> Consultar', array('class' => 'btn btn-info p-2 pl-1 pr-1', 'id' => 'btn-consult')) !!}
+			{!! Form::button('<span class="material-icons">delete</span>', array('class' => 'btn btn-danger p-2 pl-1 pr-1', 'id' => 'btn-clear')) !!}
 		</div>
 </div>
 <div class="form-row">
@@ -42,11 +41,10 @@
 		{!! Form::label('licencia_letra', 'Licencia:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
 		<div class="form-row col-sm-12">
 			<div class="col-3 col-sm-3">
-				{!! Form::text('licencia_letra', null, array('class' => 'form-control input-xs', 'id' => 'licencia_letra')) !!}
+				{!! Form::text('licencia_letra', $licenciaLetra, array('class' => 'form-control input-xs', 'id' => 'licencia_letra')) !!}
 			</div>
 			<div class="col-9 col-sm-9">
-				{!! Form::text('licencia_num', null, array('class' => 'pt-1 pb-1', 'id' => 'licencia_num', 'disabled' => 'true', 'style' => 'background-color: transparent;border:none')) !!}
-				{{--TODO: Este estilo lo usaré cuando se haya llenado el campo automaticamente: border-bottom: 1.5px solid #9c27b0 --}}
+				{!! Form::text('dni', null, array('class' => 'pt-1 pb-1', 'id' => 'licencia_num', 'disabled' => 'true', 'style' => 'background-color: transparent;border:none')) !!}
 			</div>
 		</div>
 	</div>
@@ -56,7 +54,7 @@
 		</div>
 	</div>
 	<div class="form-group col-6  col-sm-3">
-		{!! Form::label('fechavencimiento', 'F.Vencimiento:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
+		{!! Form::label('fechavencimiento', 'F. Vencimiento:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
 		<div class="col-lg-12 col-md-12 col-sm-12">
 			{!! Form::date('fechavencimiento', null, array('class' => 'form-control input-xs', 'id' => 'fechavencimiento')) !!}
 		</div>
