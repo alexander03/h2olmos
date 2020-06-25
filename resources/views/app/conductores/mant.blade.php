@@ -83,18 +83,76 @@
 	$(document).ready(function() {
 		configurarAnchoModal('700');
 		init(IDFORMMANTENIMIENTO+'{!! $entidad !!}', 'M', '{!! $entidad !!}');
-
+		//inputs
 		const btnConsultar = document.getElementById('btn-consult');
 		const btnClear = document.getElementById('btn-clear');
+		const inputDni = document.getElementById('dni');
+		const inputApe = document.getElementById('apellidos');
+		const inputNom = document.getElementById('nombres');
+		const inputLicenciaNum = document.getElementById('licencia_num');
 
-		btnConsultar.addEventListener('click', () => {
+		btnConsultar.addEventListener('click', async () => {
+			//TODO: Validar cuando tengo que hacer la consulta a la db o a la api
 			const dni = document.getElementById('dni').value.trim();
-			consultReniec(dni);
+			try {
+				if(dni.length == 8) {
+					let person = await consultDB(dni);
+					if(!person) {
+						person = await consultReniec(dni);
+					}
+					if(person) {
+						inputApe.value = person.apellidos;
+						inputNom.value = person.nombres;
+						inputDni.setAttribute('disabled', true);
+						inputLicenciaNum.value = person.dni;
+					}else {
+						console.log('No existe esa persona')
+					}
+				}
+			} catch (error) {
+				console.log(error)
+			}
+		});
+
+		btnClear.addEventListener('click', () => {
+			inputDni.value = '';
+			inputApe.value = '';
+			inputNom.value = '';
+			inputDni.removeAttribute('disabled');
+			inputLicenciaNum.value = '';
 		})
 
-		//Funciones
-		const consultReniec = (dni) => {
+		inputDni.addEventListener('change', e => {
+			if(isNaN(e.target.value)) e.target.value = '';
+		})
+		
+		inputDni.addEventListener('keydown', e => {
+			//TODO: que acepte las teclas: flecha left y right
+			console.log(e.keyCode)
+			if(e.target.value.length > 7 && e.keyCode != 8) e.preventDefault();
+			if(e.keyCode < 8 || (e.keyCode >9 && e.keyCode< 48) || (e.keyCode >57 && e.keyCode< 67) || (e.keyCode >67 && e.keyCode< 86) || (e.keyCode >86 && e.keyCode< 96) || e.keyCode> 105) e.preventDefault();
+		})
+
+		//Funciones 
+		const consultDB = (dni) => {
+			const uriConsult = '/existeconductor?dni=' + dni;
+			return fetch(uriConsult)
+			.then(res => res.status === 200 ? res.json() : console.error(`Error al cosultar Conductor en la db: ${res.status}`))
+			.then(res => res[0])
 		}
+
+		const consultReniec = (dni) => {
+			const uriConsult = 'http://127.0.0.1:80/Reniec/consulta_reniec.php'
+			return fetch(uriConsult,{
+				method: 'POST',
+				body: 'dni=' + dni,
+				headers: {
+					'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8;'
+				}
+			})
+			.then(res => res.status === 200 ? res.json() : console.error(`Error al cosultar DNI en la db: ${res.status}`));
+		}
+
 
 	}); 
 </script>

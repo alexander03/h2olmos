@@ -151,4 +151,7 @@ class ConductorController extends Controller
         return is_null($error) ? "OK" : $error;
     }
 
+    public function existeConductor(Request $request) {
+        return $res = Conductor::where('dni', $request->dni)->get();
+    }
 }

@@ -83,5 +83,6 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::post('conductores/buscar', 'ConductorController@buscar')->name('conductores.buscar');
 	Route::get('conductores/eliminar/{id}/{listarluego}', 'ConductorController@eliminar')->name('conductores.eliminar');
 	Route::resource('conductores', 'ConductorController', array('except' => array('show')));
+	Route::get('existeconductor', 'ConductorController@existeConductor')->name('conductores.existeconductor');
 });
 
