@@ -1,10 +1,3 @@
-<?php 
-$icono = '';
-if ($brand !== NULL) {
-	$icono = $brand->icono;
-}
-?>
-
 <div id="divMensajeError{!! $entidad !!}"></div>
 {!! Form::model($brand, $formData) !!}	
 {!! Form::hidden('listar', $listar, array('id' => 'listar')) !!}

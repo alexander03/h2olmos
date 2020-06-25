@@ -25,5 +25,12 @@ class OpcionmenuTableSeeder extends Seeder
             'orden' => 2,
             'grupomenu_id' => 1
         ]);
+        DB::table('opcionmenu')->insert([
+            'descripcion' => 'Conductores',
+            'link' => 'conductores',
+            'icono' => 'myicon',
+            'orden' => 3,
+            'grupomenu_id' => 1
+        ]);
     }
 }
