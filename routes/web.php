@@ -84,5 +84,17 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('conductores/eliminar/{id}/{listarluego}', 'ConductorController@eliminar')->name('conductores.eliminar');
 	Route::resource('conductores', 'ConductorController', array('except' => array('show')));
 	Route::get('existeconductor', 'ConductorController@existeConductor')->name('conductores.existeconductor');
+	//Rutas para las areas
+	Route::post('areas/buscar', 'AreaController@buscar')->name('areas.buscar');
+	Route::get('areas/eliminar/{id}/{listarluego}', 'AreaController@eliminar')->name('areas.eliminar');
+	Route::resource('areas', 'AreaController', array('except' => array('show')));
+	//Rutas para las contratistas
+	Route::post('contratistas/buscar', 'ContratistaController@buscar')->name('contratistas.buscar');
+	Route::get('contratistas/eliminar/{id}/{listarluego}', 'ContratistaController@eliminar')->name('contratistas.eliminar');
+	Route::resource('contratistas', 'ContratistaController', array('except' => array('show')));
+	//Rutas para las trabajos
+	Route::post('trabajos/buscar', 'TrabajoController@buscar')->name('trabajos.buscar');
+	Route::get('trabajos/eliminar/{id}/{listarluego}', 'TrabajoController@eliminar')->name('trabajos.eliminar');
+	Route::resource('trabajos', 'TrabajoController', array('except' => array('show')));
 });
 

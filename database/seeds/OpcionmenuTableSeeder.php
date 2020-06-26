@@ -32,5 +32,22 @@ class OpcionmenuTableSeeder extends Seeder
             'orden' => 3,
             'grupomenu_id' => 1
         ]);
+        DB::table('opcionmenu')->insert([
+            ['descripcion' => 'Areas',
+            'link' => 'areas',
+            'icono' => 'myicon',
+            'orden' => 4,
+            'grupomenu_id' => 1],
+            ['descripcion' => 'Contratistas',
+            'link' => 'contratistas',
+            'icono' => 'myicon',
+            'orden' => 5,
+            'grupomenu_id' => 1],
+            ['descripcion' => 'Trabajos',
+            'link' => 'trabajos',
+            'icono' => 'myicon',
+            'orden' => 6,
+            'grupomenu_id' => 1],
+        ]);
     }
 }

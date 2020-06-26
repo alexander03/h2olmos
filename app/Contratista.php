@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Contratista extends Model
 {
     protected $table = 'contratista';
-    use SoftDeletes;
+    //use SoftDeletes;
     protected $fillable = ['ruc', 'razonsocial'];
 
     public function scopegetAll($query) {
