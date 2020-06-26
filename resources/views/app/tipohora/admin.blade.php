@@ -12,10 +12,10 @@
 					{!! Form::open(['route' => $ruta["search"], 'method' => 'POST' ,'onsubmit' => 'return false;', 'class' => 'form-inline', 'role' => 'form', 'autocomplete' => 'off', 'id' => 'formBusqueda'.$entidad]) !!}
 					{!! Form::hidden('page', 1, array('id' => 'page')) !!}
 					{!! Form::hidden('accion', 'listar', array('id' => 'accion')) !!}
-					<div class="form-group">
+<!--					<div class="form-group">
 						{!! Form::label('codigo', 'Código:') !!}
 						{!! Form::text('codigo', '', array('class' => 'form-control input-xs', 'id' => 'codigo')) !!}
-					</div>
+					</div>  -->
 					<div class="form-group">
 						{!! Form::label('descripcion', 'Descripción:') !!}
 						{!! Form::text('descripcion', '', array('class' => 'form-control input-xs', 'id' => 'descripcion')) !!}

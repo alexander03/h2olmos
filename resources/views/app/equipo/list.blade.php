@@ -7,7 +7,7 @@
 	<thead>
 		<tr>
 			@foreach($cabecera as $key => $value)
-				<th @if((int)$value['numero'] > 1) colspan="{{ $value['numero'] }}" @endif>{!! $value['valor'] !!}</th>
+				<th class="text-nowrap" @if((int)$value['numero'] > 1) colspan="{{ $value['numero'] }}" @endif>{!! $value['valor'] !!}</th>
 			@endforeach
 		</tr>
 	</thead>
@@ -18,7 +18,23 @@
 		@foreach ($lista as $key => $value)
 		<tr>
 			<td>{{ $contador }}</td>
+			<td>{{ $value->codigo }}</td>
 			<td>{{ $value->descripcion }}</td>
+			<td>{{ $value->modelo }}</td>
+			<td>{{ $value->marca_id }}</td>
+			<td>{{ $value->anio }}</td>
+			<td>{{ $value->placa }}</td>
+			<td>{{ $value->motor }}</td>
+			<td>{{ $value->contratista_id }}</td>
+			<td>{{ $value->ua_id }}</td>
+			<td>{{ $value->area_id }}</td>
+			<td>{{ $value->asientos }}</td>
+			<td>{{ $value->chasis }}</td>
+			<td>{{ $value->carroceria }}</td>
+			<td>{{ $value->color }}</td>
+			<td>{{ $value->fechavencimientosoat }}</td>
+			<td>{{ $value->fechavencimientogps }}</td>
+			<td>{{ $value->fechavencimientortv }}</td>
 			<td>{!! Form::button('<i class="material-icons">edit</i>', array('onclick' => 'modal (\''.URL::route($ruta["edit"], array($value->id, 'listar'=>'SI')).'\', \''.$titulo_modificar.'\', this);', 'class' => 'btn btn-primary btn-link btn-sm','rel'=>'tooltip','title'=>'Editar')) !!}</td>
 			<td>{!! Form::button('<i class="material-icons">close</i>', array('onclick' => 'modal (\''.URL::route($ruta["delete"], array($value->id, 'SI')).'\', \''.$titulo_eliminar.'\', this);', 'class' => 'btn btn-danger btn-link btn-sm','rel'=>'tooltip','title'=>'Eliminar')) !!}</td>
 		</tr>

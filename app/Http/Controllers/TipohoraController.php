@@ -51,9 +51,9 @@ class TipohoraController extends Controller
         $filtro           = array();
         $filtro[]         = ['descripcion', 'LIKE', '%'.strtoupper($descripcion).'%'];
 
-        if($codigo){
+/*        if($codigo){
             $filtro[]        = ['codigo', '=', $codigo];
-        }
+        }*/
 
         $resultado        = Tipohora::where($filtro)->orderBy('descripcion', 'ASC');
         $lista            = $resultado->get();

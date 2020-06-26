@@ -11,4 +11,29 @@ class Equipo extends Model
     protected $table = 'equipo';
     protected $dates = ['deleted_at'];
 
+
+    
+	
+	public function ua()
+    {
+        return $this->belongsTo('App\Ua');
+    }
+
+    public function marca()
+    {
+        return $this->belongsTo('App\Marca');
+    }
+	
+	public function contratista()
+    {
+        return $this->belongsTo('App\Contratista');
+    }
+
+    public function area()
+    {
+        return $this->belongsTo('App\Area');
+    }
+
+    
+
 }

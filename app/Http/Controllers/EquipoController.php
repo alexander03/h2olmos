@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use Validator;
 use App\Equipo;
+//use App\Area;
+//use App\Marca;
+//use App\Contratista;
 use Illuminate\Http\Request;
 use App\Librerias\Libreria;
 use App\Http\Controllers\Controller;
@@ -38,11 +41,18 @@ class EquipoController extends Controller
         $pagina           = $request->input('page');
         $filas            = $request->input('filas');
         $entidad          = 'Equipo';
+
+        $codigo     	  = Libreria::getParam($request->input('codigo'));
         $descripcion      = Libreria::getParam($request->input('descripcion'));
-        
+        $ua_id		      = Libreria::getParam($request->input('ua_id'));
+
         $filtro           = array();
+        $filtro[]         = ['codigo', 'LIKE', '%'.strtoupper($codigo).'%'];
         $filtro[]         = ['descripcion', 'LIKE', '%'.strtoupper($descripcion).'%'];
 
+        if($ua_id != 0 ){
+			$filtro[]         = ['ua_id', '=', $ua_id];        	
+        }
 
         $resultado        = Equipo::where($filtro)->orderBy('descripcion', 'ASC');
         $lista            = $resultado->get();
@@ -51,11 +61,10 @@ class EquipoController extends Controller
         $cabecera[]       = array('valor' => 'Código', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Descripción', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Modelo', 'numero' => '1');
+        $cabecera[]       = array('valor' => 'Marca', 'numero' => '1');
+        $cabecera[]       = array('valor' => 'Año de Fbr', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Placa', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Motor', 'numero' => '1');
-        $cabecera[]       = array('valor' => 'Código', 'numero' => '1');
-        $cabecera[]       = array('valor' => 'Año de Fbr', 'numero' => '1');
-        $cabecera[]       = array('valor' => 'Marca', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Contratista', 'numero' => '1');
         $cabecera[]       = array('valor' => 'UA', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Area', 'numero' => '1');
@@ -96,7 +105,16 @@ class EquipoController extends Controller
         $title            = $this->tituloAdmin;
         $titulo_registrar = $this->tituloRegistrar;
         $ruta             = $this->rutas;
-        return view($this->folderview.'.admin')->with(compact('entidad', 'title', 'titulo_registrar', 'ruta'));
+
+//        $uas = Ua::orderBy('descripcion','asc')->get();
+        $cboUa = array();
+        $cboUa += array('0' => 'Selecione UA');
+        $cboUa += array('1' => '12345ua');
+//        foreach($uas as $k=>$v){
+//            $cboUa += array($v->id=>$v->codigo);
+//        }
+
+        return view($this->folderview.'.admin')->with(compact('entidad', 'title', 'titulo_registrar', 'ruta', 'cboUa'));
     }
 
     /**
@@ -113,6 +131,7 @@ class EquipoController extends Controller
 //        $marcas = Marca::orderBy('descripcion','asc')->get();
         $cboMarca = array();
         $cboMarca += array('0' => 'Selecione marca');
+        $cboMarca += array('1' => 'wea');
 //        foreach($marcas as $k=>$v){
 //            $cboMarca += array($v->id=>$v->descripcion);
 //        }
@@ -120,6 +139,7 @@ class EquipoController extends Controller
 //        $areas = Area::orderBy('descripcion','asc')->get();
         $cboArea = array();
         $cboArea += array('0' => 'Selecione área');
+        $cboArea += array('1' => 'wea');
 //        foreach($areas as $k=>$v){
 //            $cboArea += array($v->id=>$v->descripcion);
 //        }
@@ -128,8 +148,17 @@ class EquipoController extends Controller
 //        $contratistas = Contratista::orderBy('descripcion','asc')->get();
         $cboContratista = array();
         $cboContratista += array('0' => 'Selecione contratista');
+        $cboContratista += array('1' => 'wea');
 //        foreach($contratistas as $k=>$v){
 //            $cboContratista += array($v->id=>$v->razonsocial);
+//        }
+
+//        $uas = Ua::orderBy('descripcion','asc')->get();
+        $cboUa = array();
+        $cboUa += array('0' => 'Selecione UA');
+        $cboUa += array('1' => '12345ua');
+//        foreach($uas as $k=>$v){
+//            $cboUa += array($v->id=>$v->descripcion);
 //        }
 
 
@@ -137,7 +166,7 @@ class EquipoController extends Controller
         $formData = array('equipo.store');
         $formData = array('route' => $formData, 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
         $boton    = 'Registrar'; 
-        return view($this->folderview.'.mant')->with(compact('equipo', 'formData', 'entidad', 'boton', 'listar', 'cboMarca', 'cboArea', 'cboContratista'));
+        return view($this->folderview.'.mant')->with(compact('equipo', 'formData', 'entidad', 'boton', 'listar', 'cboMarca', 'cboArea', 'cboContratista', 'cboUa'));
     }
 
     /**
@@ -149,24 +178,24 @@ class EquipoController extends Controller
     public function store(Request $request)
     {
         $listar     = Libreria::getParam($request->input('listar'), 'NO');
-        $reglas     = array('codigo' => 'required|max:20',
-    						'descripcion' => 'required|max:30',
-    						'modelo' => 'required|max:25',
-    						'marca_id' => 'required',
-    						'anio' => 'required',
-    						'contratista_id' => 'required',
-    						'ua_id' => 'required',
-    						'fechavencimientosoat' => 'required',
-    						'fechavencimientogps' => 'required',
-    						'fechavencimientortv' => 'required');
+        $reglas     = array('codigo' 				=> 'required|max:20',
+    						'descripcion' 			=> 'required|max:30',
+    						'modelo' 				=> 'required|max:25',
+    						'marca_id' 				=> 'numeric|min:1',
+    						'anio' 					=> 'required',
+    						'contratista_id'  		=> 'numeric|min:1',
+    						'ua_id' 				=> 'numeric|min:1',
+    						'fechavencimientosoat'  => 'required',
+    						'fechavencimientogps'   => 'required',
+    						'fechavencimientortv'   => 'required');
         $mensajes = array(
         	'codigo.required'         		  => 'Debe ingresar un código',
             'descripcion.required' 		      => 'Debe ingresar una descripcion',
             'modelo.required'         		  => 'Debe ingresar el modelo',
-            'marca_id.required'  	  		  => 'Debe ingresar una descripcion',
+            'marca_id.min'  	  		  	  => 'Debe asignar una marca',
             'anio.required'    				  => 'Debe ingresar la fecha de fabricación',
-            'contratista_id.required'   	  => 'Debe ingresar la fecha de fabricación',
-            'ua_id.required'    			  => 'Debe ingresar la fecha de fabricación',
+            'contratista_id.min'   	  		  => 'Debe asignar un contratista',
+            'ua_id.min'    			  		  => 'Debe asignar una ua',
             'fechavencimientosoat.required'   => 'Debe ingresar la fecha de vencimiento de SOAT',
             'fechavencimientogps.required'    => 'Debe ingresar la fecha de vencimiento de GPS',
             'fechavencimientortv.required'    => 'Debe ingresar la fecha de vencimiento de RTV'
@@ -187,6 +216,29 @@ class EquipoController extends Controller
             $equipo->fechavencimientosoat = $request->input('fechavencimientosoat');
             $equipo->fechavencimientogps  = $request->input('fechavencimientogps');
             $equipo->fechavencimientortv  = $request->input('fechavencimientortv');
+            
+            if($request->input('area_id') != 0){
+            	$equipo->area_id 				  = $request->input('area_id');
+            }
+            if($request->input('placa') != null){
+            	$equipo->placa 				  = $request->input('placa');
+            }
+            if($request->input('motor') != null){
+            	$equipo->motor 				  = $request->input('motor');
+            }
+            if($request->input('asientos') != null){
+            	$equipo->asientos 				  = $request->input('asientos');
+            }
+            if($request->input('chasis') != null){
+            	$equipo->chasis 				  = $request->input('chasis');
+            }
+            if($request->input('carroceria') != null){
+            	$equipo->carroceria 				  = $request->input('carroceria');
+            }
+            if($request->input('colo') != null){
+            	$equipo->color 				  = $request->input('color');
+            }
+
             $equipo->save();
         });
         return is_null($error) ? "OK" : $error;
@@ -221,6 +273,7 @@ class EquipoController extends Controller
 //        $marcas = Marca::orderBy('descripcion','asc')->get();
         $cboMarca = array();
         $cboMarca += array('0' => 'Selecione marca');
+        $cboMarca += array('1' => 'Wea');
 //        foreach($marcas as $k=>$v){
 //            $cboMarca += array($v->id=>$v->descripcion);
 //        }
@@ -228,6 +281,7 @@ class EquipoController extends Controller
 //        $areas = Area::orderBy('descripcion','asc')->get();
         $cboArea = array();
         $cboArea += array('0' => 'Selecione área');
+        $cboArea += array('1' => 'wea');
 //        foreach($areas as $k=>$v){
 //            $cboArea += array($v->id=>$v->descripcion);
 //        }
@@ -236,15 +290,24 @@ class EquipoController extends Controller
 //        $contratistas = Contratista::orderBy('descripcion','asc')->get();
         $cboContratista = array();
         $cboContratista += array('0' => 'Selecione contratista');
+        $cboContratista += array('1' => 'Wea');
 //        foreach($contratistas as $k=>$v){
 //            $cboContratista += array($v->id=>$v->razonsocial);
 //        }
+
+//        $uas = Ua::orderBy('descripcion','asc')->get();
+        $cboUa = array();
+        $cboUa += array('0' => 'Selecione UA');
+        $cboUa += array('1' => '1543ua');
+//        foreach($uas as $k=>$v){
+//            $cboUa += array($v->id=>$v->codigo);
+//        }        
 
         $entidad  = 'Equipo';
         $formData = array('equipo.update', $id);
         $formData = array('route' => $formData, 'method' => 'PUT', 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
         $boton    = 'Modificar';
-        return view($this->folderview.'.mant')->with(compact('equipo', 'formData', 'entidad', 'boton', 'listar', 'cboMarca', 'cboArea', 'cboContratista'));
+        return view($this->folderview.'.mant')->with(compact('equipo', 'formData', 'entidad', 'boton', 'listar', 'cboMarca', 'cboArea', 'cboContratista', 'cboUa'));
     }
 
     /**
@@ -260,22 +323,24 @@ class EquipoController extends Controller
         if ($existe !== true) {
             return $existe;
         }
-        $reglas     = array('codigo' => 'required|max:20',
-    						'descripcion' => 'required|max:30',
-    						'modelo' => 'required|max:25',
-    						'marca_id' => 'required',
-    						'anio' => 'required',
-    						'contratista_id' => 'required',
-    						'ua_id' => 'required',
-    						'fechavencimientosoat' => 'required',
-    						'fechavencimientogps' => 'required',
-    						'fechavencimientortv' => 'required');
+        $reglas     = array('codigo' 				=> 'required|max:20',
+    						'descripcion' 			=> 'required|max:30',
+    						'modelo' 				=> 'required|max:25',
+    						'marca_id' 				=> 'numeric|min:1',
+    						'anio' 					=> 'required',
+    						'contratista_id' 		=> 'numeric|min:1',
+    						'ua_id' 				=> 'numeric|min:1',
+    						'fechavencimientosoat' 	=> 'required',
+    						'fechavencimientogps' 	=> 'required',
+    						'fechavencimientortv' 	=> 'required');
         $mensajes = array(
-            'codigo.required'         		  => 'Debe ingresar un código',
+        	'codigo.required'         		  => 'Debe ingresar un código',
             'descripcion.required' 		      => 'Debe ingresar una descripcion',
             'modelo.required'         		  => 'Debe ingresar el modelo',
-            'marca_id.required'  	  		  => 'Debe ingresar una descripcion',
+            'marca_id.min'  	  			  => 'Debe ingresar una marca',
             'anio.required'    				  => 'Debe ingresar la fecha de fabricación',
+            'contratista_id.min'		   	  => 'Debe ingresar la fecha de fabricación',
+            'ua_id.min'		    			  => 'Debe ingresar una ua',
             'fechavencimientosoat.required'   => 'Debe ingresar la fecha de vencimiento de SOAT',
             'fechavencimientogps.required'    => 'Debe ingresar la fecha de vencimiento de GPS',
             'fechavencimientortv.required'    => 'Debe ingresar la fecha de vencimiento de RTV'
@@ -296,6 +361,27 @@ class EquipoController extends Controller
             $equipo->fechavencimientosoat = $request->input('fechavencimientosoat');
             $equipo->fechavencimientogps  = $request->input('fechavencimientogps');
             $equipo->fechavencimientortv  = $request->input('fechavencimientortv');
+            if($request->input('area_id') != 0){
+            	$equipo->area_id 				  = $request->input('area_id');
+            }
+            if($request->input('placa') != null){
+            	$equipo->placa 				  = $request->input('placa');
+            }
+            if($request->input('motor') != null){
+            	$equipo->motor 				  = $request->input('motor');
+            }
+            if($request->input('asientos') != null){
+            	$equipo->asientos 				  = $request->input('asientos');
+            }
+            if($request->input('chasis') != null){
+            	$equipo->chasis 				  = $request->input('chasis');
+            }
+            if($request->input('carroceria') != null){
+            	$equipo->carroceria 				  = $request->input('carroceria');
+            }
+            if($request->input('colo') != null){
+            	$equipo->color 				  = $request->input('color');
+            }
             $equipo->save();
         });
         return is_null($error) ? "OK" : $error;

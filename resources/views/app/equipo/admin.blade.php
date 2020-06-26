@@ -21,12 +21,10 @@
 						{!! Form::text('descripcion', '', array('class' => 'form-control input-xs', 'id' => 'descripcion')) !!}
 					</div>
 					<div class="form-group">
-						{!! Form::label('placa', 'Placa:') !!}
-						{!! Form::text('placa', '', array('class' => 'form-control input-xs', 'id' => 'placa')) !!}
-					</div>
-					<div class="form-group">
-						{!! Form::label('area', 'Area:') !!}
-						{!! Form::text('area', '', array('class' => 'form-control input-xs', 'id' => 'area')) !!}
+						{!! Form::label('ua_id', 'UA:') !!}
+						<div class="col-lg-12 col-md-12 col-sm-12">
+						{!! Form::select('ua_id', $cboUa, '', array('class' => 'form-control input-xs', 'id' => 'ua_id')) !!}
+						</div>
 					</div>
 					<div class="form-group">
 						{!! Form::label('filas', 'Filas a mostrar:')!!}
