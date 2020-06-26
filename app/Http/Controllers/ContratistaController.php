@@ -141,6 +141,7 @@ class ContratistaController extends Controller
         $error = DB::transaction(function() use($request, $id){
             $contratista = Contratista::find($id);
             $contratista->razonsocial= strtoupper($request->input('razonsocial'));
+            $contratista->ruc= strtoupper($request->input('ruc'));
             $contratista->save();
         });
         return is_null($error) ? "OK" : $error;
