@@ -93,6 +93,7 @@
 		const inputDni = document.getElementById('dni');
 		const inputApe = document.getElementById('apellidos');
 		const inputNom = document.getElementById('nombres');
+		const inputLicenciaLetra = document.getElementById('licencia_letra');
 		const inputLicenciaNum = document.getElementById('licencia_num');
 
 		btnConsultar.addEventListener('click', async () => {
@@ -130,9 +131,14 @@
 		})
 
 		inputDni.addEventListener('keydown', e => {
-			//TODO: que acepte las teclas: flecha left y right
-			if(e.target.value.length > 7 && e.keyCode != 8) e.preventDefault();
-			if(e.keyCode < 8 || (e.keyCode >9 && e.keyCode< 48) || (e.keyCode >57 && e.keyCode< 67) || (e.keyCode >67 && e.keyCode< 86) || (e.keyCode >86 && e.keyCode< 96) || e.keyCode> 105) e.preventDefault();
+			// console.log(e.keyCode)
+			if(e.target.value.length > 7 && e.keyCode != 8 && e.keyCode != 37 && e.keyCode != 39) e.preventDefault();
+			if(e.keyCode < 8 || (e.keyCode >9 && e.keyCode< 37) || (e.keyCode >37 && e.keyCode< 39) || 
+					(e.keyCode >39 && e.keyCode< 48) || (e.keyCode >57 && e.keyCode< 67) || (e.keyCode >67 && e.keyCode< 86) || (e.keyCode >86 && e.keyCode< 96) || e.keyCode> 105) e.preventDefault();
+		})
+
+		inputLicenciaLetra.addEventListener('keydown', e => {
+			// if(e.key.length == 1) e.target.value = e.key.toUpperCase();
 		})
 
 		//Funciones 
