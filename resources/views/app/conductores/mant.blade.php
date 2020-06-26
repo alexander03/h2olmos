@@ -138,7 +138,15 @@
 		})
 
 		inputLicenciaLetra.addEventListener('keydown', e => {
-			// if(e.key.length == 1) e.target.value = e.key.toUpperCase();
+			console.log(e.keyCode)
+			if(e.target.value.length > 0 && e.keyCode != 8 && e.keyCode != 37 && e.keyCode != 39) e.preventDefault();
+			if(!(e.keyCode < 9 || (e.keyCode >9 && e.keyCode< 32) || (e.keyCode >32 && e.keyCode< 48)|| (e.keyCode >57 && e.keyCode< 96) || e.keyCode> 105)) e.preventDefault();
+		})
+
+		inputLicenciaLetra.addEventListener('keyup', e => {
+			const regEx = /^[A-Z]{1}$/ig;
+			console.log(regEx.test(e.target.value))
+			e.target.value = e.target.value.toUpperCase();
 		})
 
 		//Funciones 
