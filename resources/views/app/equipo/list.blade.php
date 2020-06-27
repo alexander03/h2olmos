@@ -26,7 +26,7 @@
 			<td>{{ $value->placa }}</td>
 			<td>{{ $value->motor }}</td>
 			<td>{{ $value->contratista->razonsocial }}</td>
-			<td>{{ $value->ua_id }}</td>
+			<td>{{ $value->ua->codigo }}</td>
 			<td>@if($value->area_id)
 				{{ $value->area->descripcion }}
 				@endif

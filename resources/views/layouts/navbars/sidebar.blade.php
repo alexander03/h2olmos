@@ -46,24 +46,6 @@ use App\Opcionmenu;
           </li>';
       }
       ?>
-      <li class="nav-item">
-                  <a class="nav-link" onclick="cargarRuta( '{{ route('tipohora.index') }}' , 'container')">
-                  <i class="material-icons">wea</i>
-                    <span class="sidebar-normal">sdfdsf</span>
-          </a>
-      </li>
-      <li class="nav-item">
-                  <a class="nav-link" onclick="cargarRuta( '{{ route('grifo.index') }}' , 'container')">
-                  <i class="material-icons">grifo</i>
-                    <span class="sidebar-normal">grifo</span>
-          </a>
-      </li>
-      <li class="nav-item">
-                  <a class="nav-link" onclick="cargarRuta( '{{ route('equipo.index') }}' , 'container')">
-                  <i class="material-icons">equipo</i>
-                    <span class="sidebar-normal">equipo</span>
-          </a>
-      </li>
       <li class="nav-item {{ ($activePage == 'profile' || $activePage == 'user-management') ? ' active' : '' }}">
         <a class="nav-link" data-toggle="collapse" href="#laravelExample" aria-expanded="true">
           <i><img style="width:25px" src="{{ asset('material') }}/img/laravel.svg"></i>

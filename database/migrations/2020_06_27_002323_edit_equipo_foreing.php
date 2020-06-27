@@ -18,7 +18,7 @@ class EditEquipoForeing extends Migration
             $table->foreign('marca_id')->references('id')->on('marca')->onDelete('restrict')->onUpdate('restrict');
             $table->foreign('contratista_id')->references('id')->on('contratista')->onDelete('restrict')->onUpdate('restrict');
             $table->foreign('area_id')->references('id')->on('area');
-            //$table->foreign('ua_id')->references('id')->on('ua')->onDelete('restrict')->onUpdate('restrict');
+            $table->foreign('ua_id')->references('id')->on('ua')->onDelete('restrict')->onUpdate('restrict');
         });
     }
 
@@ -35,7 +35,7 @@ class EditEquipoForeing extends Migration
             $table->dropForeign('equipo_marca_id_foreign');
             $table->dropForeign('equipo_contratista_id_foreign');
             $table->dropForeign('equipo_area_id_foreign');
-            //$table->dropForeign('equipo_aua_id_foreign');
+            $table->dropForeign('equipo_ua_id_foreign');
         });
     }
 }

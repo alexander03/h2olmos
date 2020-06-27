@@ -6,6 +6,7 @@ use Validator;
 use App\Equipo;
 use App\Area;
 use App\Brand;
+use App\Ua;
 use App\Contratista;
 use Illuminate\Http\Request;
 use App\Librerias\Libreria;
@@ -150,13 +151,13 @@ class EquipoController extends Controller
             $cboContratista += array($v->id=>$v->razonsocial);
         }
 
-//        $uas = Ua::orderBy('descripcion','asc')->get();
+        $uas = Ua::orderBy('descripcion','asc')->get();
         $cboUa = array();
         $cboUa += array('0' => 'Selecione UA');
         $cboUa += array('1' => '12345ua');
-//        foreach($uas as $k=>$v){
-//            $cboUa += array($v->id=>$v->descripcion);
-//        }
+        foreach($uas as $k=>$v){
+            $cboUa += array($v->id=>$v->descripcion . '-' . $v->'codigo' );
+        }
 
 
 
