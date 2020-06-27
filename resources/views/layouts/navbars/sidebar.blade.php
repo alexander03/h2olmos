@@ -46,6 +46,26 @@ use App\Opcionmenu;
           </li>';
       }
       ?>
+      <li class="nav-item">
+        <a class="nav-link" href="#" onclick="cargarRuta('{{ route('propietario.index') }}', 'container');">
+          <i class="material-icons">accessibility</i>
+          <p class="sidebar-normal">Propietarios</p>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link" href="#" onclick="cargarRuta('{{ route('ua.index') }}', 'container');">
+          <i class="material-icons">api</i>
+          <p class="sidebar-normal">Ua</p>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link" href="#" onclick="cargarRuta('{{ route('unidad.index') }}', 'container');">
+          <i class="material-icons">ac_unit</i>
+          <p class="sidebar-normal">Unidad</p>
+        </a>
+      </li>
       <li class="nav-item {{ ($activePage == 'profile' || $activePage == 'user-management') ? ' active' : '' }}">
         <a class="nav-link" data-toggle="collapse" href="#laravelExample" aria-expanded="true">
           <i><img style="width:25px" src="{{ asset('material') }}/img/laravel.svg"></i>

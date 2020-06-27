@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Opcionmenu extends Model
 {
-	 use SoftDeletes;
+	use SoftDeletes;
     protected $table = 'opcionmenu';
     protected $dates = ['deleted_at'];
     

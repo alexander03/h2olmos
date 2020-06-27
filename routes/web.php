@@ -11,6 +11,9 @@
 |
 */
 
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
+
 Route::get('/', function () {
     return view('welcome');
 });
@@ -69,6 +72,18 @@ Route::group(['middleware' => 'auth'], function () {
 
 	Route::post('opcionmenu/buscar', 'OpcionmenuController@buscar')->name('opcionmenu.buscar');
     Route::get('opcionmenu/eliminar/{id}/{listarluego}', 'OpcionmenuController@eliminar')->name('opcionmenu.eliminar');
-    Route::resource('opcionmenu', 'OpcionmenuController', array('except' => array('show')));
+	Route::resource('opcionmenu', 'OpcionmenuController', array('except' => array('show')));
+	//Propietario - ua - unidad
+	Route::post('propietario/buscar', 'PropietarioController@buscar')->name('propietario.buscar');
+	Route::get('propietario/eliminar/{id}/{listarluego}', 'PropietarioController@eliminar')->name('propietario.eliminar');
+	Route::resource('propietario', 'PropietarioController');
+
+	Route::post('ua/buscar', 'UaController@buscar')->name('ua.buscar');
+	Route::get('ua/eliminar/{id}/{listarluego}', 'UaController@eliminar')->name('ua.eliminar');
+	Route::resource('ua', 'UaController');
+
+	Route::post('unidad/buscar', 'UnidadController@buscar')->name('unidad.buscar');
+	Route::get('unidad/eliminar/{id}/{listarluego}', 'UnidadController@eliminar')->name('unidad.eliminar');
+	Route::resource('unidad', 'UnidadController');
 });
 
