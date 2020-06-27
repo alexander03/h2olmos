@@ -15,14 +15,8 @@ class Conductor extends Model
     public function scopegetFilter($query, $estado, $filter, $categoria, $contratista_id) {
         return $query->join('contratista', 'conductor.contratista_id', '=', 'contratista.id')
             ->where(function($subquery) use ($estado) {
-                switch ($estado) {
-                    case 'activos':
-                        $subquery->whereNull('conductor.deleted_at');
-                        break;
-                    case 'desactivados':
-                        $subquery->whereNotNull('conductor.deleted_at');
-                        break;
-                }
+                if($estado === 'activos') $subquery->whereNull('conductor.deleted_at');
+                elseif($estado === 'desactivados') $subquery->whereNotNull('conductor.deleted_at');
             })
             ->where(function($subquery) use ($filter) {
                 $subquery->where('conductor.dni', strtoupper($filter))

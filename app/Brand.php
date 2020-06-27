@@ -11,4 +11,14 @@ class Brand extends Model
     use SoftDeletes;
     
     protected $fillable = ['descripcion'];
+
+    public function scopegetFilter($query, $estado, $filter) {
+        return $query
+            ->where(function($subquery) use ($estado) {
+                if($estado === 'activos') $subquery->whereNull('deleted_at');
+                elseif($estado === 'desactivados') $subquery->whereNotNull('deleted_at');
+            })
+            ->where('descripcion', 'LIKE', '%'.strtoupper($filter).'%')
+            ->orderBy('descripcion', 'ASC')->withTrashed();
+    }
 }

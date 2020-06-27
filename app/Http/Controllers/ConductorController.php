@@ -270,7 +270,7 @@ class ConductorController extends Controller
 
     public function reactivar($id){
         $error = DB::transaction(function() use($id){
-            $conductor = Conductor::onlyTrashed()->where('id', $id)->restore();
+            Conductor::onlyTrashed()->where('id', $id)->restore();
         });
         return is_null($error) ? "OK" : $error;
     }

@@ -15,9 +15,11 @@ class BrandController extends Controller
     protected $tituloRegistrar = 'Registrar marca';
     protected $tituloModificar = 'Modificar marca';
     protected $tituloEliminar  = 'Eliminar marca';
+    protected $tituloActivar  = 'Activar marca';
     protected $rutas           = array('create' => 'marcas.create', 
             'edit'   => 'marcas.edit', 
             'delete' => 'marcas.eliminar',
+            'activar' => 'marcas.activar',
             'search' => 'marcas.buscar',
             'index'  => 'marcas.index',
         );
@@ -37,8 +39,9 @@ class BrandController extends Controller
         $pagina           = $request->input('page');
         $filas            = $request->input('filas');
         $entidad          = 'Brand';
-        $nombre             = Libreria::getParam($request->input('descripcion'));
-        $resultado        = Brand::where('descripcion', 'LIKE', '%'.strtoupper($nombre).'%')->orderBy('descripcion', 'ASC');
+        $estado           = $request->input('estado');
+        $filter           = Libreria::getParam($request->input('descripcion'));
+        $resultado        = Brand::getFilter($estado, $filter);
         $lista            = $resultado->get();
         $cabecera         = array();
         $cabecera[]       = array('valor' => '#', 'numero' => '1');
@@ -47,6 +50,7 @@ class BrandController extends Controller
         
         $titulo_modificar = $this->tituloModificar;
         $titulo_eliminar  = $this->tituloEliminar;
+        $titulo_activar  = $this->tituloActivar;
         $ruta             = $this->rutas;
         if (count($lista) > 0) {
             $clsLibreria     = new Libreria();
@@ -57,7 +61,7 @@ class BrandController extends Controller
             $paginaactual    = $paramPaginacion['nuevapagina'];
             $lista           = $resultado->paginate($filas);
             $request->replace(array('page' => $paginaactual));
-            return view($this->folderview.'.list')->with(compact('lista', 'paginacion', 'inicio', 'fin', 'entidad', 'cabecera', 'titulo_modificar', 'titulo_eliminar', 'ruta'));
+            return view($this->folderview.'.list')->with(compact('lista', 'paginacion', 'inicio', 'fin', 'entidad', 'cabecera', 'titulo_modificar', 'titulo_eliminar', 'titulo_activar', 'ruta'));
         }
         return view($this->folderview.'.list')->with(compact('lista', 'entidad'));
     }
@@ -169,5 +173,24 @@ class BrandController extends Controller
         $formData = array('route' => array('marcas.destroy', $id), 'method' => 'DELETE', 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
         $boton    = 'Eliminar';
         return view('app.confirmarEliminar')->with(compact('modelo', 'formData', 'entidad', 'boton', 'listar','mensaje'));
+    }
+
+    public function activar($id, $listarLuego){
+        $listar = "NO";
+        if (!is_null(Libreria::obtenerParametro($listarLuego))) {
+            $listar = $listarLuego;
+        }
+        $modelo   = Brand::find($id);
+        $entidad  = 'Brand';
+        $formData = array('route' => array('marcas.reactivar', $id), 'method' => 'GET', 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
+        $boton    = 'Activar';
+        return view('app.confirmar')->with(compact('modelo', 'formData', 'entidad', 'boton', 'listar'));
+    }
+
+    public function reactivar($id){
+        $error = DB::transaction(function() use($id){
+            Brand::onlyTrashed()->where('id', $id)->restore();
+        });
+        return is_null($error) ? "OK" : $error;
     }
 }

@@ -75,10 +75,14 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::post('marcas/buscar', 'BrandController@buscar')->name('marcas.buscar');
 	Route::get('marcas/eliminar/{id}/{listarluego}', 'BrandController@eliminar')->name('marcas.eliminar');
 	Route::resource('marcas', 'BrandController', array('except' => array('show')));
+	Route::get('marcas/activar/{id}/{listarluego}', 'BrandController@activar')->name('marcas.activar');
+	Route::get('marcas/reactivar/{id}', 'BrandController@reactivar')->name('marcas.reactivar');
 	//Rutas para los repuesto
 	Route::post('repuestos/buscar', 'RepuestoController@buscar')->name('repuestos.buscar');
 	Route::get('repuestos/eliminar/{id}/{listarluego}', 'RepuestoController@eliminar')->name('repuestos.eliminar');
 	Route::resource('repuestos', 'RepuestoController', array('except' => array('show')));
+	Route::get('repuestos/activar/{id}/{listarluego}', 'RepuestoController@activar')->name('repuestos.activar');
+	Route::get('repuestos/reactivar/{id}', 'RepuestoController@reactivar')->name('repuestos.reactivar');
 	//Rutas para los conductores
 	Route::post('conductores/buscar', 'ConductorController@buscar')->name('conductores.buscar');
 	Route::get('conductores/eliminar/{id}/{listarluego}', 'ConductorController@eliminar')->name('conductores.eliminar');

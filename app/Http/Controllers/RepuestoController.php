@@ -16,9 +16,11 @@ class RepuestoController extends Controller
     protected $tituloRegistrar = 'Registrar repuesto';
     protected $tituloModificar = 'Modificar repuesto';
     protected $tituloEliminar  = 'Eliminar repuesto';
+    protected $tituloActivar  = 'Activar repuesto';
     protected $rutas           = array('create' => 'repuestos.create', 
             'edit'   => 'repuestos.edit', 
             'delete' => 'repuestos.eliminar',
+            'activar' => 'repuestos.activar',
             'search' => 'repuestos.buscar',
             'index'  => 'repuestos.index',
     );
@@ -39,8 +41,9 @@ class RepuestoController extends Controller
         $filas            = $request->input('filas');
         $entidad          = 'Repuesto';
         $filter           = Libreria::getParam($request->input('filter'));
+        $estado           = $request->input('estado');
         $unidad           = $request->input('unidad');
-        $resultado        = Repuesto::getFilter($filter, $unidad);
+        $resultado        = Repuesto::getFilter($estado, $filter, $unidad);
         $lista            = $resultado->get();
         $cabecera         = array();
         $cabecera[]       = array('valor' => '#', 'numero' => '1');
@@ -50,6 +53,7 @@ class RepuestoController extends Controller
         $cabecera[]       = array('valor' => 'Operaciones', 'numero' => '2');
         $titulo_modificar = $this->tituloModificar;
         $titulo_eliminar  = $this->tituloEliminar;
+        $titulo_activar  = $this->tituloActivar;
         $ruta             = $this->rutas;
         if (count($lista) > 0) {
             $clsLibreria     = new Libreria();
@@ -60,7 +64,7 @@ class RepuestoController extends Controller
             $paginaactual    = $paramPaginacion['nuevapagina'];
             $lista           = $resultado->paginate($filas);
             $request->replace(array('page' => $paginaactual));
-            return view($this->folderview.'.list')->with(compact('lista', 'paginacion', 'inicio', 'fin', 'entidad', 'cabecera', 'titulo_modificar', 'titulo_eliminar', 'ruta'));
+            return view($this->folderview.'.list')->with(compact('lista', 'paginacion', 'inicio', 'fin', 'entidad', 'cabecera', 'titulo_modificar', 'titulo_eliminar', 'titulo_activar','ruta'));
         }
         return view($this->folderview.'.list')->with(compact('lista', 'entidad'));
     }
@@ -207,5 +211,24 @@ class RepuestoController extends Controller
         $formData = array('route' => array('repuestos.destroy', $id), 'method' => 'DELETE', 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
         $boton    = 'Eliminar';
         return view('app.confirmarEliminar')->with(compact('modelo', 'formData', 'entidad', 'boton', 'listar','mensaje'));
+    }
+
+    public function activar($id, $listarLuego){
+        $listar = "NO";
+        if (!is_null(Libreria::obtenerParametro($listarLuego))) {
+            $listar = $listarLuego;
+        }
+        $modelo   = Repuesto::find($id);
+        $entidad  = 'Repuesto';
+        $formData = array('route' => array('respuestos.reactivar', $id), 'method' => 'GET', 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
+        $boton    = 'Activar';
+        return view('app.confirmar')->with(compact('modelo', 'formData', 'entidad', 'boton', 'listar'));
+    }
+
+    public function reactivar($id){
+        $error = DB::transaction(function() use($id){
+            Repuesto::onlyTrashed()->where('id', $id)->restore();
+        });
+        return is_null($error) ? "OK" : $error;
     }
 }
