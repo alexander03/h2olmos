@@ -188,12 +188,24 @@ class UaController extends Controller{
         return is_null($error) ? "OK" : $error;
     }
 
-    public function eliminar($id, $listarLuego){
+    public function eliminar($id, $listarLuego, Ua $uaModel){
 
         $existe = Libreria::verificarExistencia($id, 'ua');
         if ($existe !== true) {
             return $existe;
         }
+
+        $haveChilds = $uaModel -> select('prop.status') 
+                        -> join('propietarios as prop', 'prop.ua_id', '=', 'ua.id')
+                        -> where('ua.id', '=', $id) -> whereNull('prop.deleted_at')
+                        -> get();
+                   
+        if(!empty($haveChilds[0])) {
+            $childs = true;
+            $entidadChild = 'PROPIETARIOS';
+            return view('app.confirmarEliminar')->with(compact('childs', 'entidadChild'));
+        }
+
         $listar = "NO";
         if (!is_null(Libreria::obtenerParametro($listarLuego))) {
             $listar = $listarLuego;

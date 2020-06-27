@@ -141,12 +141,24 @@ class UnidadController extends Controller
         return is_null($error) ? "OK" : $error;
     }
 
-    public function eliminar($id, $listarLuego){
+    public function eliminar($id, $listarLuego, Unidad $unidadModel){
 
         $existe = Libreria::verificarExistencia($id, 'unidades');
         if ($existe !== true) {
             return $existe;
         }
+
+        $haveChilds = $unidadModel -> select('ua.codigo') 
+                        -> join('ua', 'ua.unidad_id', '=', 'unidades.id') 
+                        -> where('unidades.id', '=', $id) -> whereNull('ua.deleted_at')
+                        -> get();
+        
+        if(!empty($haveChilds[0])) {
+            $childs = true;
+            $entidadChild = 'UA';
+            return view('app.confirmarEliminar')->with(compact('childs', 'entidadChild'));
+        }
+
         $listar = "NO";
         if (!is_null(Libreria::obtenerParametro($listarLuego))) {
             $listar = $listarLuego;

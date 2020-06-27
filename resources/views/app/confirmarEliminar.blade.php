@@ -1,3 +1,4 @@
+@if(!isset($childs))
 <div id="divMensajeError{!! $entidad !!}"></div>
 {!! Form::model($modelo, $formData) !!}
 {!! Form::hidden('listar', $listar, array('id' => 'listar')) !!}
@@ -16,3 +17,20 @@
 		configurarAnchoModal('350');
 	}); 
 </script>
+@else
+<section>
+	<h3 class="text-danger text-center">No puedes eliminar este registro</h3>
+	<p class="text-center text-secondary">
+		Existen registros en {{ $entidadChild }} que dependenden de este. 
+	</p>
+	<div class="d-flex justify-content-center">
+		<button class="btn btn-success" onclick="getModal()">Aceptar</button>
+	</div>
+</section>
+<script>
+	const getModal = ()=>{
+		const idModal = document.querySelector('.bootbox.modal').id;
+		$(`#${idModal}`).modal('hide');
+	};
+</script>
+@endif
