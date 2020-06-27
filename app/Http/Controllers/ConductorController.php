@@ -16,6 +16,7 @@ class ConductorController extends Controller
     protected $tituloRegistrar = 'Registrar conductor';
     protected $tituloModificar = 'Modificar conductor';
     protected $tituloEliminar  = 'Eliminar conductor';
+    protected $tituloActivar  = 'Activar conductor';
     protected $rutas           = array('create' => 'conductores.create', 
             'edit'   => 'conductores.edit', 
             'delete' => 'conductores.eliminar',
@@ -51,6 +52,7 @@ class ConductorController extends Controller
         $cabecera[]       = array('valor' => 'Operaciones', 'numero' => '2');
         $titulo_modificar = $this->tituloModificar;
         $titulo_eliminar  = $this->tituloEliminar;
+        $titulo_activar  = $this->tituloActivar;
         $ruta             = $this->rutas;
         if (count($lista) > 0) {
             $clsLibreria     = new Libreria();
@@ -61,7 +63,7 @@ class ConductorController extends Controller
             $paginaactual    = $paramPaginacion['nuevapagina'];
             $lista           = $resultado->paginate($filas);
             $request->replace(array('page' => $paginaactual));
-            return view($this->folderview.'.list')->with(compact('lista', 'paginacion', 'inicio', 'fin', 'entidad', 'cabecera', 'titulo_modificar', 'titulo_eliminar', 'ruta'));
+            return view($this->folderview.'.list')->with(compact('lista', 'paginacion', 'inicio', 'fin', 'entidad', 'cabecera', 'titulo_modificar', 'titulo_eliminar', 'titulo_activar', 'ruta'));
         }
         return view($this->folderview.'.list')->with(compact('lista', 'entidad'));
     }
