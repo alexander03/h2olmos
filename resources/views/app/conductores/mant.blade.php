@@ -1,4 +1,4 @@
-{{-- TODO: EL input para la letra de la licencia falta validar que acepte solo letras y mayusculas --}}
+{{-- TODO: VALIDAR CUANDO REGISTRO O ACTUALIZO CONDUCTORES CON DATOS DE UN CONDUCTOR ELIMINADO --}}
 @php
 		$readOnly = false;
 @endphp
@@ -142,6 +142,7 @@
 			inputNom.value = '';
 			inputDni.removeAttribute('readonly');
 			inputLicenciaNum.value = '';
+			myDivErrors.classList.add('hidden');
 		})
 
 		inputDni.addEventListener('change', e => {
