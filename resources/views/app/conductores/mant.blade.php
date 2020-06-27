@@ -8,6 +8,7 @@
 	@endphp
 @endif
 <div id="divMensajeError{!! $entidad !!}"></div>
+<div id="my-div-errors" class="hidden"><h5 class="text-center p-0 m-0"><span class="badge badge-danger">El conductor ya está registrado</span></h5></div>
 {!! Form::model($conductor, $formData) !!}	
 {!! Form::hidden('listar', $listar, array('id' => 'listar')) !!}
 <div class="form-row">
@@ -69,7 +70,6 @@
 	</div>
 </div>
 
-
 <div class="form-group">
 	<div class="col-lg-12 col-md-12 col-sm-12 text-right">
 		{!! Form::button('<i class="fa fa-check fa-lg"></i> '.$boton, array('class' => 'btn btn-success btn-sm', 'id' => 'btnGuardar', 'onclick' => 'guardar(\''.$entidad.'\', this)')) !!}
@@ -77,10 +77,14 @@
 	</div>
 </div>
 {!! Form::close() !!}
+<input id="conductor" type="text" class="hidden" value="{{$conductor}}">
 <style>
 	.solo-lectura:read-only {
 		background-color: transparent;
 		cursor: not-allowed;
+	}
+	.hidden {
+		display: none;
 	}
 </style>
 <script type="text/javascript">
@@ -88,20 +92,34 @@
 		configurarAnchoModal('700');
 		init(IDFORMMANTENIMIENTO+'{!! $entidad !!}', 'M', '{!! $entidad !!}');
 		//inputs
+		const myDivErrors = document.getElementById('my-div-errors');
 		const btnConsultar = document.getElementById('btn-consult');
 		const btnClear = document.getElementById('btn-clear');
+		let conductor = {};
+		if(document.getElementById('conductor').value) {
+			conductor = JSON.parse(document.getElementById('conductor').value);
+		}
 		const inputDni = document.getElementById('dni');
 		const inputApe = document.getElementById('apellidos');
 		const inputNom = document.getElementById('nombres');
 		const inputLicenciaLetra = document.getElementById('licencia_letra');
 		const inputLicenciaNum = document.getElementById('licencia_num');
-
 		btnConsultar.addEventListener('click', async () => {
 			const dni = document.getElementById('dni').value.trim();
 			try {
 				if(dni.length == 8) {
+					myDivErrors.classList.add('hidden');
 					let person = await consultDB(dni);
-					if(!person) {
+					if(person) { //Persona existe en la DB
+						if(conductor) { //EDITAR
+							if(person.dni != conductor.dni) {
+								//La personaDB es otro conductor. No es el inicial
+								myDivErrors.classList.remove('hidden');
+							}
+						} else {//CREAR
+							myDivErrors.classList.remove('hidden');
+						}
+					}else { 
 						person = await consultReniec(dni);
 					}
 					if(person) {
