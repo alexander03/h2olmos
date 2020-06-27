@@ -28,6 +28,35 @@ if ($equipo !== NULL) {
 		</div>
 	</div>
 	<div class="form-group col-lg-6 col-md-6 col-sm-12">
+		{!! Form::label('anio', 'Año de fabricación:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
+		<div class="col-lg-12 col-md-12 col-sm-12">
+			{!! Form::text('anio', null, array('class' => 'form-control input-xs', 'id' => 'anio')) !!}
+		</div>
+	</div>
+	<div class="form-group col-lg-6 col-md-6 col-sm-12">
+		{!! Form::label('marca_id', 'Marca:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
+		<div class="col-lg-12 col-md-12 col-sm-12">
+			{!! Form::select('marca_id', $cboMarca, null, array('class' => 'form-control input-xs', 'id' => 'marca_id')) !!}
+		</div>
+	</div>
+	<div class="form-group col-lg-6 col-md-6 col-sm-12">
+		{!! Form::label('contratista_id', 'Contratista:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
+		<div class="col-lg-12 col-md-12 col-sm-12">
+			{!! Form::select('contratista_id', $cboContratista, null, array('class' => 'form-control input-xs', 'id' => 'contratista_id')) !!}
+		</div>
+	</div>
+	<div class="form-group col-lg-6 col-md-6 col-sm-12">
+		{!! Form::label('ua_id', 'UA:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
+		<div class="col-lg-12 col-md-12 col-sm-12">
+			{!! Form::select('ua_id', $cboUa, null, array('class' => 'form-control input-xs', 'id' => 'ua_id')) !!}
+		</div>
+	</div>
+
+	<div class="mt-4 mb-2 ml-3  col-lg-12 col-md-12 col-sm-12">
+		<p class="text-warning ">Datos opcionales</p> 
+	</div>
+
+	<div class="form-group col-lg-6 col-md-6 col-sm-12">
 		{!! Form::label('placa', 'Placa:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
 		<div class="col-lg-12 col-md-12 col-sm-12">
 			{!! Form::text('placa', null, array('class' => 'form-control input-xs', 'id' => 'placa')) !!}
@@ -61,30 +90,6 @@ if ($equipo !== NULL) {
 		{!! Form::label('asientos', 'Asientos:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
 		<div class="col-lg-12 col-md-12 col-sm-12">
 			{!! Form::text('asientos', null, array('class' => 'form-control input-xs', 'id' => 'asientos')) !!}
-		</div>
-	</div>
-	<div class="form-group col-lg-6 col-md-6 col-sm-12">
-		{!! Form::label('anio', 'Año de fabricación:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
-		<div class="col-lg-12 col-md-12 col-sm-12">
-			{!! Form::text('anio', null, array('class' => 'form-control input-xs', 'id' => 'anio')) !!}
-		</div>
-	</div>
-	<div class="form-group col-lg-6 col-md-6 col-sm-12">
-		{!! Form::label('marca_id', 'Marca:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
-		<div class="col-lg-12 col-md-12 col-sm-12">
-			{!! Form::select('marca_id', $cboMarca, null, array('class' => 'form-control input-xs', 'id' => 'marca_id')) !!}
-		</div>
-	</div>
-	<div class="form-group col-lg-6 col-md-6 col-sm-12">
-		{!! Form::label('contratista_id', 'Contratista:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
-		<div class="col-lg-12 col-md-12 col-sm-12">
-			{!! Form::select('contratista_id', $cboContratista, null, array('class' => 'form-control input-xs', 'id' => 'contratista_id')) !!}
-		</div>
-	</div>
-	<div class="form-group col-lg-6 col-md-6 col-sm-12">
-		{!! Form::label('ua_id', 'UA:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
-		<div class="col-lg-12 col-md-12 col-sm-12">
-			{!! Form::select('ua_id', $cboUa, null, array('class' => 'form-control input-xs', 'id' => 'ua_id')) !!}
 		</div>
 	</div>
 	<div class="form-group col-lg-6 col-md-6 col-sm-12">

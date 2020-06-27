@@ -14,7 +14,7 @@ class CreateGrifoTable extends Migration
     public function up()
     {
         Schema::create('grifo', function (Blueprint $table) {
-            $table->engine = 'InnoDB';
+        //    $table->engine = 'InnoDB';
             $table->bigIncrements('id');
             $table->string('descripcion',25);
             $table->timestamps();

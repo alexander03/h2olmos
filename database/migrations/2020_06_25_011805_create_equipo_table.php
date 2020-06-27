@@ -14,7 +14,7 @@ class CreateEquipoTable extends Migration
     public function up()
     {
         Schema::create('equipo', function (Blueprint $table) {
-            $table->engine = 'InnoDB';
+        //    $table->engine = 'InnoDB';
             $table->bigIncrements('id');
             $table->string('codigo',10);
             $table->string('descripcion',22);
@@ -25,14 +25,14 @@ class CreateEquipoTable extends Migration
             $table->unsignedBigInteger('marca_id');
             $table->unsignedBigInteger('contratista_id');
             $table->year('anio');
-            $table->unsignedBigInteger('ua_id');
+            $table->unsignedBigInteger('ua_id')->nullable();
             $table->unsignedBigInteger('area_id')->nullable();
             $table->string('chasis',20)->nullable();
             $table->string('carroceria',10)->nullable();
             $table->string('color',20)->nullable();
-            $table->date('fechavencimientosoat');
-            $table->date('fechavencimientogps');
-            $table->date('fechavencimientortv');
+            $table->date('fechavencimientosoat')->nullable();
+            $table->date('fechavencimientogps')->nullable();
+            $table->date('fechavencimientortv')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

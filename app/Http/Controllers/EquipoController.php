@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 
 use Validator;
 use App\Equipo;
-//use App\Area;
-//use App\Marca;
-//use App\Contratista;
+use App\Area;
+use App\Brand;
+use App\Contratista;
 use Illuminate\Http\Request;
 use App\Librerias\Libreria;
 use App\Http\Controllers\Controller;
@@ -128,30 +128,27 @@ class EquipoController extends Controller
         $entidad  = 'Equipo';
         $equipo = null;
 
-//        $marcas = Marca::orderBy('descripcion','asc')->get();
+        $marcas = Brand::orderBy('descripcion','asc')->get();
         $cboMarca = array();
         $cboMarca += array('0' => 'Selecione marca');
-        $cboMarca += array('1' => 'wea');
-//        foreach($marcas as $k=>$v){
-//            $cboMarca += array($v->id=>$v->descripcion);
-//        }
+        foreach($marcas as $k=>$v){
+            $cboMarca += array($v->id=>$v->descripcion);
+        }
 
-//        $areas = Area::orderBy('descripcion','asc')->get();
+        $areas = Area::orderBy('descripcion','asc')->get();
         $cboArea = array();
         $cboArea += array('0' => 'Selecione área');
-        $cboArea += array('1' => 'wea');
-//        foreach($areas as $k=>$v){
-//            $cboArea += array($v->id=>$v->descripcion);
-//        }
+        foreach($areas as $k=>$v){
+            $cboArea += array($v->id=>$v->descripcion);
+        }
 
 
-//        $contratistas = Contratista::orderBy('descripcion','asc')->get();
+        $contratistas = Contratista::orderBy('razonsocial','asc')->get();
         $cboContratista = array();
         $cboContratista += array('0' => 'Selecione contratista');
-        $cboContratista += array('1' => 'wea');
-//        foreach($contratistas as $k=>$v){
-//            $cboContratista += array($v->id=>$v->razonsocial);
-//        }
+        foreach($contratistas as $k=>$v){
+            $cboContratista += array($v->id=>$v->razonsocial);
+        }
 
 //        $uas = Ua::orderBy('descripcion','asc')->get();
         $cboUa = array();
@@ -178,27 +175,33 @@ class EquipoController extends Controller
     public function store(Request $request)
     {
         $listar     = Libreria::getParam($request->input('listar'), 'NO');
-        $reglas     = array('codigo' 				=> 'required|max:20',
-    						'descripcion' 			=> 'required|max:30',
-    						'modelo' 				=> 'required|max:25',
+        $reglas     = array('codigo' 				=> 'required|max:10',
+    						'descripcion' 			=> 'required|max:22',
+    						'modelo' 				=> 'required|max:20',
     						'marca_id' 				=> 'numeric|min:1',
+                            'placa'                 => 'max:15',
     						'anio' 					=> 'required',
     						'contratista_id'  		=> 'numeric|min:1',
     						'ua_id' 				=> 'numeric|min:1',
-    						'fechavencimientosoat'  => 'required',
-    						'fechavencimientogps'   => 'required',
-    						'fechavencimientortv'   => 'required');
+//    						'fechavencimientosoat'  => 'required',
+//    						'fechavencimientogps'   => 'required',
+//    						'fechavencimientortv'   => 'required'
+                        );
         $mensajes = array(
         	'codigo.required'         		  => 'Debe ingresar un código',
+            'codigo.max'                      => 'El código sobrepasa los 10 carácteres',
             'descripcion.required' 		      => 'Debe ingresar una descripcion',
+            'descripcion.max'                 => 'La descripcion sobrepasa los 22 carácteres',
             'modelo.required'         		  => 'Debe ingresar el modelo',
+            'modelo.max'                      => 'El modelo sobrepasa los 20 carácteres',
             'marca_id.min'  	  		  	  => 'Debe asignar una marca',
+            'placa.max'                       => 'La placa sobrepasa los 15 carácteres',
             'anio.required'    				  => 'Debe ingresar la fecha de fabricación',
             'contratista_id.min'   	  		  => 'Debe asignar un contratista',
             'ua_id.min'    			  		  => 'Debe asignar una ua',
-            'fechavencimientosoat.required'   => 'Debe ingresar la fecha de vencimiento de SOAT',
-            'fechavencimientogps.required'    => 'Debe ingresar la fecha de vencimiento de GPS',
-            'fechavencimientortv.required'    => 'Debe ingresar la fecha de vencimiento de RTV'
+//            'fechavencimientosoat.required'   => 'Debe ingresar la fecha de vencimiento de SOAT',
+//            'fechavencimientogps.required'    => 'Debe ingresar la fecha de vencimiento de GPS',
+//            'fechavencimientortv.required'    => 'Debe ingresar la fecha de vencimiento de RTV'
             );
         $validacion = Validator::make($request->all(), $reglas, $mensajes);
         if ($validacion->fails()) {
@@ -270,30 +273,30 @@ class EquipoController extends Controller
         $listar   = Libreria::getParam($request->input('listar'), 'NO');
         $equipo = Equipo::find($id);
 
-//        $marcas = Marca::orderBy('descripcion','asc')->get();
+        $marcas = Brand::orderBy('descripcion','asc')->get();
         $cboMarca = array();
         $cboMarca += array('0' => 'Selecione marca');
         $cboMarca += array('1' => 'Wea');
-//        foreach($marcas as $k=>$v){
-//            $cboMarca += array($v->id=>$v->descripcion);
-//        }
+        foreach($marcas as $k=>$v){
+            $cboMarca += array($v->id=>$v->descripcion);
+        }
 
-//        $areas = Area::orderBy('descripcion','asc')->get();
+        $areas = Area::orderBy('descripcion','asc')->get();
         $cboArea = array();
         $cboArea += array('0' => 'Selecione área');
         $cboArea += array('1' => 'wea');
-//        foreach($areas as $k=>$v){
-//            $cboArea += array($v->id=>$v->descripcion);
-//        }
+        foreach($areas as $k=>$v){
+            $cboArea += array($v->id=>$v->descripcion);
+        }
 
 
-//        $contratistas = Contratista::orderBy('descripcion','asc')->get();
+        $contratistas = Contratista::orderBy('razonsocial','asc')->get();
         $cboContratista = array();
         $cboContratista += array('0' => 'Selecione contratista');
         $cboContratista += array('1' => 'Wea');
-//        foreach($contratistas as $k=>$v){
-//            $cboContratista += array($v->id=>$v->razonsocial);
-//        }
+        foreach($contratistas as $k=>$v){
+            $cboContratista += array($v->id=>$v->razonsocial);
+        }
 
 //        $uas = Ua::orderBy('descripcion','asc')->get();
         $cboUa = array();
@@ -323,27 +326,33 @@ class EquipoController extends Controller
         if ($existe !== true) {
             return $existe;
         }
-        $reglas     = array('codigo' 				=> 'required|max:20',
-    						'descripcion' 			=> 'required|max:30',
-    						'modelo' 				=> 'required|max:25',
-    						'marca_id' 				=> 'numeric|min:1',
-    						'anio' 					=> 'required',
-    						'contratista_id' 		=> 'numeric|min:1',
-    						'ua_id' 				=> 'numeric|min:1',
-    						'fechavencimientosoat' 	=> 'required',
-    						'fechavencimientogps' 	=> 'required',
-    						'fechavencimientortv' 	=> 'required');
+        $reglas     = array('codigo'                => 'required|max:10',
+                            'descripcion'           => 'required|max:22',
+                            'modelo'                => 'required|max:20',
+                            'marca_id'              => 'numeric|min:1',
+                            'placa'                 => 'max:15',
+                            'anio'                  => 'required',
+                            'contratista_id'        => 'numeric|min:1',
+                            'ua_id'                 => 'numeric|min:1',
+//                            'fechavencimientosoat'  => 'required',
+//                            'fechavencimientogps'   => 'required',
+//                            'fechavencimientortv'   => 'required'
+                        );
         $mensajes = array(
-        	'codigo.required'         		  => 'Debe ingresar un código',
-            'descripcion.required' 		      => 'Debe ingresar una descripcion',
-            'modelo.required'         		  => 'Debe ingresar el modelo',
-            'marca_id.min'  	  			  => 'Debe ingresar una marca',
-            'anio.required'    				  => 'Debe ingresar la fecha de fabricación',
-            'contratista_id.min'		   	  => 'Debe ingresar la fecha de fabricación',
-            'ua_id.min'		    			  => 'Debe ingresar una ua',
-            'fechavencimientosoat.required'   => 'Debe ingresar la fecha de vencimiento de SOAT',
-            'fechavencimientogps.required'    => 'Debe ingresar la fecha de vencimiento de GPS',
-            'fechavencimientortv.required'    => 'Debe ingresar la fecha de vencimiento de RTV'
+        	'codigo.required'                => 'Debe ingresar un código',
+            'codigo.max'                      => 'El código sobrepasa los 10 carácteres',
+            'descripcion.required'            => 'Debe ingresar una descripcion',
+            'descripcion.max'                 => 'La descripcion sobrepasa los 22 carácteres',
+            'modelo.required'                 => 'Debe ingresar el modelo',
+            'modelo.max'                      => 'El modelo sobrepasa los 20 carácteres',
+            'marca_id.min'                    => 'Debe asignar una marca',
+            'placa.max'                       => 'La placa sobrepasa los 15 carácteres',
+            'anio.required'                   => 'Debe ingresar la fecha de fabricación',
+            'contratista_id.min'              => 'Debe asignar un contratista',
+            'ua_id.min'                       => 'Debe asignar una ua',
+//            'fechavencimientosoat.required'   => 'Debe ingresar la fecha de vencimiento de SOAT',
+//            'fechavencimientogps.required'    => 'Debe ingresar la fecha de vencimiento de GPS',
+//            'fechavencimientortv.required'    => 'Debe ingresar la fecha de vencimiento de RTV'
             );
         $validacion = Validator::make($request->all(), $reglas, $mensajes);
         if ($validacion->fails()) {

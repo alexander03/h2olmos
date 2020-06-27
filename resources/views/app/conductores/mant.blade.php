@@ -1,0 +1,160 @@
+{{-- TODO: EL input para la letra de la licencia falta validar que acepte solo letras y mayusculas --}}
+@php
+		$readOnly = false;
+@endphp
+@if ($conductor != null)
+	@php
+		$readOnly = true;
+	@endphp
+@endif
+<div id="divMensajeError{!! $entidad !!}"></div>
+{!! Form::model($conductor, $formData) !!}	
+{!! Form::hidden('listar', $listar, array('id' => 'listar')) !!}
+<div class="form-row">
+	<div class="form-group col-5 col-sm-3">
+		{!! Form::label('dni', 'DNI:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
+		<div class="col-lg-12 col-md-12 col-sm-12">
+			{!! Form::text('dni', null, array('class' => 'form-control input-xs solo-lectura', 'id' => 'dni', 'readonly' => $readOnly)) !!}
+		</div>
+	</div>
+	<div class="form-group col-7 col-sm-5 d-flex justify-content-around">
+			{!! Form::button('<span class="material-icons">cached</span> Consultar', array('class' => 'btn btn-info p-2 pl-1 pr-1', 'id' => 'btn-consult')) !!}
+			{!! Form::button('<span class="material-icons">delete</span>', array('class' => 'btn btn-danger p-2 pl-1 pr-1', 'id' => 'btn-clear')) !!}
+		</div>
+</div>
+<div class="form-row">
+	<div class="form-group col-6  col-sm-7">
+		{!! Form::label('apellidos', 'Apellidos:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
+		<div class="col-lg-12 col-md-12 col-sm-12">
+			{!! Form::text('apellidos', null, array('class' => 'form-control input-xs solo-lectura', 'id' => 'apellidos', 'readonly' => true)) !!}
+		</div>
+	</div>
+	<div class="form-group col-6  col-sm-5">
+		{!! Form::label('nombres', 'Nombres:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
+		<div class="col-lg-12 col-md-12 col-sm-12">
+			{!! Form::text('nombres', null, array('class' => 'form-control input-xs solo-lectura', 'id' => 'nombres', 'readonly' => true)) !!}
+		</div>
+	</div>
+</div>
+<div class="form-row">
+	<div class="form-group col-12  col-sm-5">
+		{!! Form::label('licencia_letra', 'Licencia:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
+		<div class="form-row col-sm-12">
+			<div class="col-3 col-sm-3">
+				{!! Form::text('licencia_letra', $licenciaLetra, array('class' => 'form-control input-xs', 'id' => 'licencia_letra')) !!}
+			</div>
+			<div class="col-9 col-sm-9">
+				{!! Form::text('dni', null, array('class' => 'pt-1 pb-1', 'id' => 'licencia_num', 'disabled' => 'true', 'style' => 'background-color: transparent;border:none')) !!}
+			</div>
+		</div>
+	</div>
+	<div class="form-group col-6  col-sm-4">
+		<div class="col-lg-12 col-md-12 col-sm-12">
+			{!! Form::select('categoria', $arrCategorias, null, array('class' => 'form-control input-xs', 'id' => 'categoria')) !!}
+		</div>
+	</div>
+	<div class="form-group col-6  col-sm-3">
+		{!! Form::label('fechavencimiento', 'F. Vencimiento:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
+		<div class="col-lg-12 col-md-12 col-sm-12">
+			{!! Form::date('fechavencimiento', null, array('class' => 'form-control input-xs', 'id' => 'fechavencimiento')) !!}
+		</div>
+	</div>
+</div>
+<div class="form-row">
+	<div class="form-group col-12  col-sm-8">
+		{!! Form::label('contratista_id', 'Contratista:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
+		<div class="col-lg-12 col-md-12 col-sm-12">
+			{!! Form::select('contratista_id', $cboContratista, null, array('class' => 'form-control input-xs', 'id' => 'contratista_id')) !!}
+		</div>
+	</div>
+</div>
+
+
+<div class="form-group">
+	<div class="col-lg-12 col-md-12 col-sm-12 text-right">
+		{!! Form::button('<i class="fa fa-check fa-lg"></i> '.$boton, array('class' => 'btn btn-success btn-sm', 'id' => 'btnGuardar', 'onclick' => 'guardar(\''.$entidad.'\', this)')) !!}
+		{!! Form::button('<i class="fa fa-exclamation fa-lg"></i> Cancelar', array('class' => 'btn btn-warning btn-sm', 'id' => 'btnCancelar'.$entidad, 'onclick' => 'cerrarModal();')) !!}
+	</div>
+</div>
+{!! Form::close() !!}
+<style>
+	.solo-lectura:read-only {
+		background-color: transparent;
+		cursor: not-allowed;
+	}
+</style>
+<script type="text/javascript">
+	$(document).ready(function() {
+		configurarAnchoModal('700');
+		init(IDFORMMANTENIMIENTO+'{!! $entidad !!}', 'M', '{!! $entidad !!}');
+		//inputs
+		const btnConsultar = document.getElementById('btn-consult');
+		const btnClear = document.getElementById('btn-clear');
+		const inputDni = document.getElementById('dni');
+		const inputApe = document.getElementById('apellidos');
+		const inputNom = document.getElementById('nombres');
+		const inputLicenciaNum = document.getElementById('licencia_num');
+
+		btnConsultar.addEventListener('click', async () => {
+			const dni = document.getElementById('dni').value.trim();
+			try {
+				if(dni.length == 8) {
+					let person = await consultDB(dni);
+					if(!person) {
+						person = await consultReniec(dni);
+					}
+					if(person) {
+						inputApe.value = person.apellidos;
+						inputNom.value = person.nombres;
+						inputDni.setAttribute('readonly', true);
+						inputLicenciaNum.value = person.dni;
+					}else {
+						console.log('No existe esa persona')
+					}
+				}
+			} catch (error) {
+				console.log(error)
+			}
+		});
+
+		btnClear.addEventListener('click', () => {
+			inputDni.value = '';
+			inputApe.value = '';
+			inputNom.value = '';
+			inputDni.removeAttribute('readonly');
+			inputLicenciaNum.value = '';
+		})
+
+		inputDni.addEventListener('change', e => {
+			if(isNaN(e.target.value)) e.target.value = '';
+		})
+
+		inputDni.addEventListener('keydown', e => {
+			//TODO: que acepte las teclas: flecha left y right
+			if(e.target.value.length > 7 && e.keyCode != 8) e.preventDefault();
+			if(e.keyCode < 8 || (e.keyCode >9 && e.keyCode< 48) || (e.keyCode >57 && e.keyCode< 67) || (e.keyCode >67 && e.keyCode< 86) || (e.keyCode >86 && e.keyCode< 96) || e.keyCode> 105) e.preventDefault();
+		})
+
+		//Funciones 
+		const consultDB = (dni) => {
+			const uriConsult = '/existeconductor?dni=' + dni;
+			return fetch(uriConsult)
+			.then(res => res.status === 200 ? res.json() : console.error(`Error al cosultar Conductor en la db: ${res.status}`))
+			.then(res => res[0])
+		}
+
+		const consultReniec = (dni) => {
+			const uriConsult = 'http://127.0.0.1:80/Reniec/consulta_reniec.php'
+			return fetch(uriConsult,{
+				method: 'POST',
+				body: 'dni=' + dni,
+				headers: {
+					'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8;'
+				}
+			})
+			.then(res => res.status === 200 ? res.json() : console.error(`Error al cosultar DNI en la db: ${res.status}`));
+		}
+
+
+	}); 
+</script>

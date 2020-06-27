@@ -47,9 +47,9 @@ Route::group(['middleware' => 'auth'], function () {
 		return view('pages.upgrade');
 	})->name('upgrade');
 
-	Route::post('grupomenu/buscar', 'GrupomenuController@buscar')->name('grupomenu.buscar');
-    Route::get('grupomenu/eliminar/{id}/{listarluego}', 'GrupomenuController@eliminar')->name('grupomenu.eliminar');
-    Route::resource('grupomenu', 'GrupomenuController', array('except' => array('show')));
+	// Route::post('grupomenu/buscar', 'GrupomenuController@buscar')->name('grupomenu.buscar');
+    // Route::get('grupomenu/eliminar/{id}/{listarluego}', 'GrupomenuController@eliminar')->name('grupomenu.eliminar');
+    // Route::resource('grupomenu', 'GrupomenuController', array('except' => array('show')));
 
 	Route::post('opcionmenu/buscar', 'OpcionmenuController@buscar')->name('opcionmenu.buscar');
     Route::get('opcionmenu/eliminar/{id}/{listarluego}', 'OpcionmenuController@eliminar')->name('opcionmenu.eliminar');
@@ -62,10 +62,10 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('profile', ['as' => 'profile.edit', 'uses' => 'ProfileController@edit']);
 	Route::put('profile', ['as' => 'profile.update', 'uses' => 'ProfileController@update']);
 	Route::put('profile/password', ['as' => 'profile.password', 'uses' => 'ProfileController@password']);
-	Route::post('grupomenu/buscar', 'GrupomenuController@buscar')->name('grupomenu.buscar');
+	// Route::post('grupomenu/buscar', 'GrupomenuController@buscar')->name('grupomenu.buscar');
 
-    Route::get('grupomenu/eliminar/{id}/{listarluego}', 'GrupomenuController@eliminar')->name('grupomenu.eliminar');
-    Route::resource('grupomenu', 'GrupomenuController', array('except' => array('show')));
+	// Route::get('grupomenu/eliminar/{id}/{listarluego}', 'GrupomenuController@eliminar')->name('grupomenu.eliminar');
+	// Route::resource('grupomenu', 'GrupomenuController', array('except' => array('show')));
 
 	Route::post('opcionmenu/buscar', 'OpcionmenuController@buscar')->name('opcionmenu.buscar');
     Route::get('opcionmenu/eliminar/{id}/{listarluego}', 'OpcionmenuController@eliminar')->name('opcionmenu.eliminar');
@@ -81,9 +81,37 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('grifo/eliminar/{id}/{listarluego}', 'GrifoController@eliminar')->name('grifo.eliminar');
 	Route::resource('grifo', 'GrifoController', array('except' => array('show')));
 
-	//Rutas Equioi
+	//Rutas Equipo
 	Route::post('equipo/buscar', 'EquipoController@buscar')->name('equipo.buscar');
 	Route::get('equipo/eliminar/{id}/{listarluego}', 'EquipoController@eliminar')->name('equipo.eliminar');
 	Route::resource('equipo', 'EquipoController', array('except' => array('show')));
+
+		
+	//Rutas para las marcas (brands)
+	Route::post('marcas/buscar', 'BrandController@buscar')->name('marcas.buscar');
+	Route::get('marcas/eliminar/{id}/{listarluego}', 'BrandController@eliminar')->name('marcas.eliminar');
+	Route::resource('marcas', 'BrandController', array('except' => array('show')));
+	//Rutas para los repuesto
+	Route::post('repuestos/buscar', 'RepuestoController@buscar')->name('repuestos.buscar');
+	Route::get('repuestos/eliminar/{id}/{listarluego}', 'RepuestoController@eliminar')->name('repuestos.eliminar');
+	Route::resource('repuestos', 'RepuestoController', array('except' => array('show')));
+	//Rutas para los conductores
+	Route::post('conductores/buscar', 'ConductorController@buscar')->name('conductores.buscar');
+	Route::get('conductores/eliminar/{id}/{listarluego}', 'ConductorController@eliminar')->name('conductores.eliminar');
+	Route::resource('conductores', 'ConductorController', array('except' => array('show')));
+	Route::get('existeconductor', 'ConductorController@existeConductor')->name('conductores.existeconductor');
+	//Rutas para las areas
+	Route::post('areas/buscar', 'AreaController@buscar')->name('areas.buscar');
+	Route::get('areas/eliminar/{id}/{listarluego}', 'AreaController@eliminar')->name('areas.eliminar');
+	Route::resource('areas', 'AreaController', array('except' => array('show')));
+	//Rutas para las contratistas
+	Route::post('contratistas/buscar', 'ContratistaController@buscar')->name('contratistas.buscar');
+	Route::get('contratistas/eliminar/{id}/{listarluego}', 'ContratistaController@eliminar')->name('contratistas.eliminar');
+	Route::resource('contratistas', 'ContratistaController', array('except' => array('show')));
+	//Rutas para las trabajos
+	Route::post('trabajos/buscar', 'TrabajoController@buscar')->name('trabajos.buscar');
+	Route::get('trabajos/eliminar/{id}/{listarluego}', 'TrabajoController@eliminar')->name('trabajos.eliminar');
+	Route::resource('trabajos', 'TrabajoController', array('except' => array('show')));
+
 });
 

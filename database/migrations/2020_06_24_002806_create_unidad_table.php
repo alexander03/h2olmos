@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTipohoraTable extends Migration
+class CreateUnidadTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,9 @@ class CreateTipohoraTable extends Migration
      */
     public function up()
     {
-        Schema::create('tipohora', function (Blueprint $table) {
-        //    $table->engine = 'InnoDB';
+        Schema::create('unidad', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->integer('codigo');
-            $table->string('descripcion',25);
+            $table->string('descripcion', 100);
             $table->timestamps();
             $table->softDeletes();
         });
@@ -30,6 +28,6 @@ class CreateTipohoraTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tipohora');
+        Schema::dropIfExists('unidad');
     }
 }

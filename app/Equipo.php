@@ -21,7 +21,7 @@ class Equipo extends Model
 
     public function marca()
     {
-        return $this->belongsTo('App\Marca');
+        return $this->belongsTo('App\Brand');
     }
 	
 	public function contratista()
