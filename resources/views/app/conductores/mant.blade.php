@@ -1,4 +1,4 @@
-{{-- TODO: EL input para la letra de la licencia falta validar que acepte solo letras y mayusculas --}}
+{{-- TODO: VALIDAR CUANDO REGISTRO O ACTUALIZO CONDUCTORES CON DATOS DE UN CONDUCTOR ELIMINADO --}}
 @php
 		$readOnly = false;
 @endphp
@@ -8,6 +8,7 @@
 	@endphp
 @endif
 <div id="divMensajeError{!! $entidad !!}"></div>
+<div id="my-div-errors" class="hidden"><h5 class="text-center p-0 m-0"><span class="badge badge-danger">El conductor ya está registrado</span></h5></div>
 {!! Form::model($conductor, $formData) !!}	
 {!! Form::hidden('listar', $listar, array('id' => 'listar')) !!}
 <div class="form-row">
@@ -69,7 +70,6 @@
 	</div>
 </div>
 
-
 <div class="form-group">
 	<div class="col-lg-12 col-md-12 col-sm-12 text-right">
 		{!! Form::button('<i class="fa fa-check fa-lg"></i> '.$boton, array('class' => 'btn btn-success btn-sm', 'id' => 'btnGuardar', 'onclick' => 'guardar(\''.$entidad.'\', this)')) !!}
@@ -77,10 +77,14 @@
 	</div>
 </div>
 {!! Form::close() !!}
+<input id="conductor" type="text" class="hidden" value="{{$conductor}}">
 <style>
 	.solo-lectura:read-only {
 		background-color: transparent;
 		cursor: not-allowed;
+	}
+	.hidden {
+		display: none;
 	}
 </style>
 <script type="text/javascript">
@@ -88,19 +92,34 @@
 		configurarAnchoModal('700');
 		init(IDFORMMANTENIMIENTO+'{!! $entidad !!}', 'M', '{!! $entidad !!}');
 		//inputs
+		const myDivErrors = document.getElementById('my-div-errors');
 		const btnConsultar = document.getElementById('btn-consult');
 		const btnClear = document.getElementById('btn-clear');
+		let conductor = {};
+		if(document.getElementById('conductor').value) {
+			conductor = JSON.parse(document.getElementById('conductor').value);
+		}
 		const inputDni = document.getElementById('dni');
 		const inputApe = document.getElementById('apellidos');
 		const inputNom = document.getElementById('nombres');
+		const inputLicenciaLetra = document.getElementById('licencia_letra');
 		const inputLicenciaNum = document.getElementById('licencia_num');
-
 		btnConsultar.addEventListener('click', async () => {
 			const dni = document.getElementById('dni').value.trim();
 			try {
 				if(dni.length == 8) {
+					myDivErrors.classList.add('hidden');
 					let person = await consultDB(dni);
-					if(!person) {
+					if(person) { //Persona existe en la DB
+						if(conductor) { //EDITAR
+							if(person.dni != conductor.dni) {
+								//La personaDB es otro conductor. No es el inicial
+								myDivErrors.classList.remove('hidden');
+							}
+						} else {//CREAR
+							myDivErrors.classList.remove('hidden');
+						}
+					}else { 
 						person = await consultReniec(dni);
 					}
 					if(person) {
@@ -123,6 +142,7 @@
 			inputNom.value = '';
 			inputDni.removeAttribute('readonly');
 			inputLicenciaNum.value = '';
+			myDivErrors.classList.add('hidden');
 		})
 
 		inputDni.addEventListener('change', e => {
@@ -130,9 +150,22 @@
 		})
 
 		inputDni.addEventListener('keydown', e => {
-			//TODO: que acepte las teclas: flecha left y right
-			if(e.target.value.length > 7 && e.keyCode != 8) e.preventDefault();
-			if(e.keyCode < 8 || (e.keyCode >9 && e.keyCode< 48) || (e.keyCode >57 && e.keyCode< 67) || (e.keyCode >67 && e.keyCode< 86) || (e.keyCode >86 && e.keyCode< 96) || e.keyCode> 105) e.preventDefault();
+			// console.log(e.keyCode)
+			if(e.target.value.length > 7 && e.keyCode != 8 && e.keyCode != 37 && e.keyCode != 39) e.preventDefault();
+			if(e.keyCode < 8 || (e.keyCode >9 && e.keyCode< 37) || (e.keyCode >37 && e.keyCode< 39) || 
+					(e.keyCode >39 && e.keyCode< 48) || (e.keyCode >57 && e.keyCode< 67) || (e.keyCode >67 && e.keyCode< 86) || (e.keyCode >86 && e.keyCode< 96) || e.keyCode> 105) e.preventDefault();
+		})
+
+		inputLicenciaLetra.addEventListener('keydown', e => {
+			console.log(e.keyCode)
+			if(e.target.value.length > 0 && e.keyCode != 8 && e.keyCode != 37 && e.keyCode != 39) e.preventDefault();
+			if(!(e.keyCode < 9 || (e.keyCode >9 && e.keyCode< 32) || (e.keyCode >32 && e.keyCode< 48)|| (e.keyCode >57 && e.keyCode< 96) || e.keyCode> 105)) e.preventDefault();
+		})
+
+		inputLicenciaLetra.addEventListener('keyup', e => {
+			const regEx = /^[A-Z]{1}$/ig;
+			console.log(regEx.test(e.target.value))
+			e.target.value = e.target.value.toUpperCase();
 		})
 
 		//Funciones 

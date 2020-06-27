@@ -11,7 +11,7 @@ class AreaTableSeeder extends Seeder
      */
     public function run()
     {
-    	DB::table('area')->insert([
+        DB::table('area')->insert([
 
 	        ['descripcion' => 'O&M',
 	        'created_at' => now(),
