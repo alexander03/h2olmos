@@ -19,6 +19,7 @@ class ConductorController extends Controller
     protected $rutas           = array('create' => 'conductores.create', 
             'edit'   => 'conductores.edit', 
             'delete' => 'conductores.eliminar',
+            'activar' => 'conductores.activar',
             'search' => 'conductores.buscar',
             'index'  => 'conductores.index',
     );
@@ -252,7 +253,26 @@ class ConductorController extends Controller
         return view('app.confirmarEliminar')->with(compact('modelo', 'formData', 'entidad', 'boton', 'listar','mensaje'));
     }
 
+    public function activar($id, $listarLuego){
+        $listar = "NO";
+        if (!is_null(Libreria::obtenerParametro($listarLuego))) {
+            $listar = $listarLuego;
+        }
+        $modelo   = Conductor::find($id);
+        $entidad  = 'Conductor';
+        $formData = array('route' => array('conductores.reactivar', $id), 'method' => 'GET', 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
+        $boton    = 'Activar';
+        return view('app.confirmar')->with(compact('modelo', 'formData', 'entidad', 'boton', 'listar'));
+    }
+
+    public function reactivar($id){
+        $error = DB::transaction(function() use($id){
+            $conductor = Conductor::onlyTrashed()->where('id', $id)->restore();
+        });
+        return is_null($error) ? "OK" : $error;
+    }
+
     public function existeConductor(Request $request) {
-        return $res = Conductor::where('dni', $request->dni)->get();
+        return $res = Conductor::withTrashed()->where('dni', $request->dni)->get();
     }
 }

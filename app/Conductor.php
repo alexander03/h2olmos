@@ -29,6 +29,6 @@ class Conductor extends Model
                 if($contratista_id !== 'all') $subquery->where('conductor.contratista_id', $contratista_id);
             })
             ->orderBy('conductor.apellidos', 'ASC')
-            ->select('conductor.id','conductor.nombres', 'conductor.apellidos', 'conductor.dni', 'conductor.categoria', 'conductor.licencia', 'conductor.fechavencimiento', 'contratista.razonsocial as contratista_razonsocial');
+            ->select('conductor.id','conductor.nombres', 'conductor.apellidos', 'conductor.dni', 'conductor.categoria', 'conductor.licencia', 'conductor.fechavencimiento', 'conductor.deleted_at', 'contratista.razonsocial as contratista_razonsocial')->withTrashed();
     }
 }

@@ -84,6 +84,8 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('conductores/eliminar/{id}/{listarluego}', 'ConductorController@eliminar')->name('conductores.eliminar');
 	Route::resource('conductores', 'ConductorController', array('except' => array('show')));
 	Route::get('existeconductor', 'ConductorController@existeConductor')->name('conductores.existeconductor');
+	Route::get('conductores/activar/{id}/{listarluego}', 'ConductorController@activar')->name('conductores.activar');
+	Route::get('conductores/reactivar/{id}', 'ConductorController@reactivar')->name('conductores.reactivar');
 	//Rutas para las areas
 	Route::post('areas/buscar', 'AreaController@buscar')->name('areas.buscar');
 	Route::get('areas/eliminar/{id}/{listarluego}', 'AreaController@eliminar')->name('areas.eliminar');
