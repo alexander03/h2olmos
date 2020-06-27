@@ -107,13 +107,13 @@ class EquipoController extends Controller
         $titulo_registrar = $this->tituloRegistrar;
         $ruta             = $this->rutas;
 
-//        $uas = Ua::orderBy('descripcion','asc')->get();
+        $uas = Ua::orderBy('descripcion','asc')->get();
         $cboUa = array();
         $cboUa += array('0' => 'Selecione UA');
         $cboUa += array('1' => '12345ua');
-//        foreach($uas as $k=>$v){
-//            $cboUa += array($v->id=>$v->codigo);
-//        }
+        foreach($uas as $k=>$v){
+            $cboUa += array($v->id=>$v->descripcion . '-' .$v->codigo);
+        }
 
         return view($this->folderview.'.admin')->with(compact('entidad', 'title', 'titulo_registrar', 'ruta', 'cboUa'));
     }
@@ -156,7 +156,7 @@ class EquipoController extends Controller
         $cboUa += array('0' => 'Selecione UA');
         $cboUa += array('1' => '12345ua');
         foreach($uas as $k=>$v){
-            $cboUa += array($v->id=>$v->descripcion . '-' . $v->'codigo' );
+            $cboUa += array($v->id=>$v->descripcion . '-' .$v->codigo );
         }
 
 
@@ -299,13 +299,13 @@ class EquipoController extends Controller
             $cboContratista += array($v->id=>$v->razonsocial);
         }
 
-//        $uas = Ua::orderBy('descripcion','asc')->get();
+        $uas = Ua::orderBy('descripcion','asc')->get();
         $cboUa = array();
         $cboUa += array('0' => 'Selecione UA');
         $cboUa += array('1' => '1543ua');
-//        foreach($uas as $k=>$v){
-//            $cboUa += array($v->id=>$v->codigo);
-//        }        
+        foreach($uas as $k=>$v){
+            $cboUa += array($v->id=>$v->descripcion . '-' .$v->codigo);
+        }        
 
         $entidad  = 'Equipo';
         $formData = array('equipo.update', $id);

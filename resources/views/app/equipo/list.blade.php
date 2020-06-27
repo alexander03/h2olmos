@@ -21,14 +21,27 @@
 			<td>{{ $value->codigo }}</td>
 			<td>{{ $value->descripcion }}</td>
 			<td>{{ $value->modelo }}</td>
-			<td>{{ $value->marca->descripcion }}</td>
+			<td>
+				@if($value->marca)
+					{{ $value->marca->descripcion }}
+				@endif
+			</td>
 			<td>{{ $value->anio }}</td>
 			<td>{{ $value->placa }}</td>
 			<td>{{ $value->motor }}</td>
-			<td>{{ $value->contratista->razonsocial }}</td>
-			<td>{{ $value->ua->codigo }}</td>
-			<td>@if($value->area_id)
-				{{ $value->area->descripcion }}
+			<td>
+				@if($value->contratista)
+					{{ $value->contratista->razonsocial }}
+				@endif
+			</td>
+			<td>
+				@if($value->ua)
+					{{ $value->ua_id }}
+				@endif
+			</td>
+			<td>
+				@if($value->area)
+					{{ $value->area->descripcion }}
 				@endif
 			</td>
 			<td>{{ $value->asientos }}</td>
