@@ -12,8 +12,18 @@ class Conductor extends Model
     use SoftDeletes;
     protected $fillable = ['nombres', 'apellidos', 'dni', 'categoria', 'licencia', 'fechavencimiento', 'contratista_id'];
 
-    public function scopegetFilter($query, $filter, $categoria, $contratista_id) {
+    public function scopegetFilter($query, $estado, $filter, $categoria, $contratista_id) {
         return $query->join('contratista', 'conductor.contratista_id', '=', 'contratista.id')
+            ->where(function($subquery) use ($estado) {
+                switch ($estado) {
+                    case 'activos':
+                        $subquery->whereNull('conductor.deleted_at');
+                        break;
+                    case 'desactivados':
+                        $subquery->whereNotNull('conductor.deleted_at');
+                        break;
+                }
+            })
             ->where(function($subquery) use ($filter) {
                 $subquery->where('conductor.dni', strtoupper($filter))
                     ->orWhere('conductor.licencia', strtoupper($filter))
