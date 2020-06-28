@@ -21,7 +21,10 @@ class DatabaseSeeder extends Seeder
             ContratistaTableSeeder::class,
             ConductorTableSeeder::class,
             AreaTableSeeder::class,
-            TrabajoTableSeeder::class
+            TrabajoTableSeeder::class,
+            TipohoraTableSeeder::class,
+            GrifoTableSeeder::class,
+            EquipoTableSeeder::class
         ]);
     }
 }
