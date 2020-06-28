@@ -15,4 +15,5 @@ class Unidad extends Model
     public function scopegetAll($query) {
         return $query->select('id', 'descripcion')->orderBy('descripcion', 'ASC')->get();
     }
+    
 }

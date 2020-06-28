@@ -110,7 +110,7 @@ class EquipoController extends Controller
         $uas = Ua::orderBy('descripcion','asc')->get();
         $cboUa = array();
         $cboUa += array('0' => 'Selecione UA');
-        $cboUa += array('1' => '12345ua');
+//        $cboUa += array('1' => '12345ua');
         foreach($uas as $k=>$v){
             $cboUa += array($v->id=>$v->descripcion . '-' .$v->codigo);
         }
@@ -154,7 +154,7 @@ class EquipoController extends Controller
         $uas = Ua::orderBy('descripcion','asc')->get();
         $cboUa = array();
         $cboUa += array('0' => 'Selecione UA');
-        $cboUa += array('1' => '12345ua');
+//        $cboUa += array('1' => '12345ua');
         foreach($uas as $k=>$v){
             $cboUa += array($v->id=>$v->descripcion . '-' .$v->codigo );
         }
@@ -277,7 +277,7 @@ class EquipoController extends Controller
         $marcas = Brand::orderBy('descripcion','asc')->get();
         $cboMarca = array();
         $cboMarca += array('0' => 'Selecione marca');
-        $cboMarca += array('1' => 'Wea');
+//        $cboMarca += array('1' => 'Wea');
         foreach($marcas as $k=>$v){
             $cboMarca += array($v->id=>$v->descripcion);
         }
@@ -285,7 +285,7 @@ class EquipoController extends Controller
         $areas = Area::orderBy('descripcion','asc')->get();
         $cboArea = array();
         $cboArea += array('0' => 'Selecione área');
-        $cboArea += array('1' => 'wea');
+//        $cboArea += array('1' => 'wea');
         foreach($areas as $k=>$v){
             $cboArea += array($v->id=>$v->descripcion);
         }
@@ -294,7 +294,7 @@ class EquipoController extends Controller
         $contratistas = Contratista::orderBy('razonsocial','asc')->get();
         $cboContratista = array();
         $cboContratista += array('0' => 'Selecione contratista');
-        $cboContratista += array('1' => 'Wea');
+//        $cboContratista += array('1' => 'Wea');
         foreach($contratistas as $k=>$v){
             $cboContratista += array($v->id=>$v->razonsocial);
         }
@@ -302,7 +302,7 @@ class EquipoController extends Controller
         $uas = Ua::orderBy('descripcion','asc')->get();
         $cboUa = array();
         $cboUa += array('0' => 'Selecione UA');
-        $cboUa += array('1' => '1543ua');
+//        $cboUa += array('1' => '1543ua');
         foreach($uas as $k=>$v){
             $cboUa += array($v->id=>$v->descripcion . '-' .$v->codigo);
         }        
