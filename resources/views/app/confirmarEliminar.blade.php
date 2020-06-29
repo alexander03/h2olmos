@@ -2,7 +2,7 @@
 <div id="divMensajeError{!! $entidad !!}"></div>
 {!! Form::model($modelo, $formData) !!}
 {!! Form::hidden('listar', $listar, array('id' => 'listar')) !!}
-
+{{-- comment --}}
 {{-- {!! $mensaje or '<blockquote><p class="text-danger">¿Esta seguro de eliminar el registro?</p></blockquote>' !!} --}}
 
 @if ($mensaje) <blockquote><p class="text-danger">¿Esta seguro de eliminar el registro?</p></blockquote> @endif
