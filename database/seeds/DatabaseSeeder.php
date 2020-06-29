@@ -24,7 +24,9 @@ class DatabaseSeeder extends Seeder
             TrabajoTableSeeder::class,
             TipohoraTableSeeder::class,
             GrifoTableSeeder::class,
-            EquipoTableSeeder::class
+            UaTableSeeder::class,
+            EquipoTableSeeder::class,
+            PropietariosTableSeeder::class
         ]);
     }
 }
