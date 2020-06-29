@@ -15,7 +15,7 @@ class CreatePropietariosTable extends Migration
     public function up()
     {
         Schema::create('propietarios', function (Blueprint $table) {
-            $table->engine = 'InnoDB';
+            //$table->engine = 'InnoDB';
             $table->bigIncrements('id');
             $table->text('descripcion');
             $table->date('fecha_llegada');

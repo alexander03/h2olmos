@@ -16,7 +16,7 @@ class UpdateAddfkUnidadUa extends Migration
     {
         Schema::table('ua', function (Blueprint $table) {
             
-            $table -> foreign('unidad_id') -> references('id') -> on('unidades') -> onDelete('cascade');
+            $table -> foreign('unidad_id') -> references('id') -> on('unidad') -> onDelete('cascade');
         });
     }
 
@@ -30,7 +30,7 @@ class UpdateAddfkUnidadUa extends Migration
         Schema::table('ua', function (Blueprint $table) {
             
             DB::statement('SET FOREIGN_KEY_CHECKS = 0');
-            // $table -> dropForeign('unidad_id');
+            //$table -> dropForeign('unidad_id');
             DB::statement('SET FOREIGN_KEY_CHECKS = 1');
         });
     }

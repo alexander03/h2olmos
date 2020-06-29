@@ -2,10 +2,9 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
-class CreateUnidadesTable extends Migration
+class CreateContratistasTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,10 +13,10 @@ class CreateUnidadesTable extends Migration
      */
     public function up()
     {
-        Schema::create('unidad', function (Blueprint $table) {
-            //$table->engine = 'InnoDB';
+        Schema::create('contratista', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->text('descripcion');
+            $table->string('ruc', 11)->unique();
+            $table->string('razonsocial');
             $table->timestamps();
             $table->softDeletes();
         });
@@ -30,8 +29,6 @@ class CreateUnidadesTable extends Migration
      */
     public function down()
     {
-        DB::statement('SET FOREIGN_KEY_CHECKS = 0');
-        Schema::dropIfExists('unidad');
-        DB::statement('SET FOREIGN_KEY_CHECKS = 1');
+        Schema::dropIfExists('contratista');
     }
 }

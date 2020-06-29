@@ -15,7 +15,7 @@ class CreateUaTable extends Migration
     public function up()
     {
         Schema::create('ua', function (Blueprint $table) {
-            $table -> engine = 'InnoDB';
+            //$table -> engine = 'InnoDB';
             $table -> bigIncrements('id');
             $table -> bigInteger('codigo') -> unique();
             $table -> text('descripcion');

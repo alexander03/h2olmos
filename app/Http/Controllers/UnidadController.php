@@ -101,7 +101,7 @@ class UnidadController extends Controller
 
     public function edit($id, Request $request){
 
-        $existe = Libreria::verificarExistencia($id, 'unidades');
+        $existe = Libreria::verificarExistencia($id, 'unidad');
         if ($existe !== true) {
             return $existe;
         }
@@ -128,7 +128,7 @@ class UnidadController extends Controller
             return $validacion->messages()->toJson();
         }
 
-        $existe = Libreria::verificarExistencia($id, 'unidades');
+        $existe = Libreria::verificarExistencia($id, 'unidad');
         if ($existe !== true) {
             return $existe;
         }
@@ -143,14 +143,14 @@ class UnidadController extends Controller
 
     public function eliminar($id, $listarLuego, Unidad $unidadModel){
 
-        $existe = Libreria::verificarExistencia($id, 'unidades');
+        $existe = Libreria::verificarExistencia($id, 'unidad');
         if ($existe !== true) {
             return $existe;
         }
 
         $haveChilds = $unidadModel -> select('ua.codigo') 
-                        -> join('ua', 'ua.unidad_id', '=', 'unidades.id') 
-                        -> where('unidades.id', '=', $id) -> whereNull('ua.deleted_at')
+                        -> join('ua', 'ua.unidad_id', '=', 'unidad.id') 
+                        -> where('unidad.id', '=', $id) -> whereNull('ua.deleted_at')
                         -> get();
         
         if(!empty($haveChilds[0])) {
@@ -173,7 +173,7 @@ class UnidadController extends Controller
 
     public function destroy($id){
 
-        $existe = Libreria::verificarExistencia($id, 'unidades');
+        $existe = Libreria::verificarExistencia($id, 'unidad');
         if ($existe !== true) {
             return $existe;
         }
