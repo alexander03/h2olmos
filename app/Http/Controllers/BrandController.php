@@ -89,9 +89,10 @@ class BrandController extends Controller
     public function store(Request $request)
     {
         $listar     = Libreria::getParam($request->input('listar'), 'NO');
-        $reglas     = array('descripcion' => 'required|max:100');
+        $reglas     = array('descripcion' => 'required|max:100|unique:marca,descripcion');
         $mensajes = array(
             'descripcion.required' => 'Debe ingresar una descripcion',
+            'descripcion.unique' => 'Esta marca ya existe',
             'descripcion.max' => 'La descripcion debe tener max. 100 caracteres'
         );
         $validacion = Validator::make($request->all(), $reglas, $mensajes);
@@ -127,9 +128,14 @@ class BrandController extends Controller
         if ($existe !== true) {
             return $existe;
         }
-        $reglas     = array('descripcion' => 'required|max:100');
+        //Valido si la marca tiene la misma descripcion que la proporcionada
+        $brand = Brand::find($id);
+        if ($brand->descripcion == strtoupper($request->input('descripcion'))) $reglas = array('descripcion' => 'required|max:100');
+        else $reglas = array('descripcion' => 'required|max:100|unique:marca,descripcion');
+
         $mensajes = array(
             'descripcion.required'         => 'Debe ingresar una descripción',
+            'descripcion.unique' => 'Esta marca ya existe',
             'descripcion.max' => 'La descripcion debe tener max. 100 caracteres'
         );
         $validacion = Validator::make($request->all(), $reglas, $mensajes);

@@ -103,15 +103,17 @@ class RepuestoController extends Controller
     {
         $listar     = Libreria::getParam($request->input('listar'), 'NO');
         $reglas     = array(
-            'codigo' => 'required|integer|digits:7',
-            'descripcion' => 'required|max:100',
+            'codigo' => 'required|integer|digits:7|unique:repuesto,codigo',
+            'descripcion' => 'required|max:100|unique:repuesto,descripcion',
             'unidad_id' => 'required'
         );
         $mensajes = array(
             'codigo.required' => 'Debe ingresar un código',
+            'codigo.unique' => 'Este código ya existe',
             'codigo.integer' => 'Código inválido',
             'codigo.digits' => 'El código debe tener 7 cifras',
             'descripcion.required' => 'Debe ingresar una descripcion',
+            'descripcion.unique' => 'Esta descripción ya existe',
             'descripcion.max' => 'La descripcion debe tener max. 100 caracteres',
             'unidad_id.required' => 'Debe seleccionar una unidad'
         );
@@ -155,17 +157,22 @@ class RepuestoController extends Controller
         if ($existe !== true) {
             return $existe;
         }
-        $reglas     = array(
-            'codigo' => 'required|integer|digits:7',
-            'descripcion' => 'required|max:100',
-            'unidad_id' => 'required'
-        );
+        $reglas = array('unidad_id' => 'required');
+        $repuesto = Repuesto::find($id);
+        if ($repuesto->codigo == strtoupper($request->input('codigo'))) $reglas += array('codigo' => 'required|integer|digits:7');
+        else $reglas += array('codigo' => 'required|integer|digits:7|unique:repuesto,codigo');
+        
+        if ($repuesto->descripcion == strtoupper($request->input('descripcion'))) $reglas += array('descripcion' => 'required|max:100');
+        else $reglas += array('descripcion' => 'required|max:100|unique:repuesto,descripcion',);
+
         $mensajes = array(
             'codigo.required' => 'Debe ingresar un código',
             'codigo.integer' => 'Código inválido',
             'codigo.digits' => 'El código debe tener 7 cifras',
+            'codigo.unique' => 'El código ya existe',
             'descripcion.required' => 'Debe ingresar una descripcion',
             'descripcion.max' => 'La descripcion debe tener max. 100 caracteres',
+            'descripcion.unique' => 'La descripción ya existe',
             'unidad_id.required' => 'Debe seleccionar una unidad'
         );
         $validacion = Validator::make($request->all(), $reglas, $mensajes);

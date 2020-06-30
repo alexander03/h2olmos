@@ -16,7 +16,7 @@ class CreateRepuestosTable extends Migration
         Schema::create('repuesto', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('codigo', 7)->unique();
-            $table->string('descripcion', 200);
+            $table->string('descripcion')->unique();
             $table->unsignedBigInteger('unidad_id');
             // $table->foreign('unidad_id')->references('id')->on('unidad');
             $table->timestamps();
