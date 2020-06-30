@@ -37,9 +37,9 @@ class ConductorController extends Controller
         $filter           = Libreria::getParam($request->input('filter'));
 
         $estado           = $request->input('estado');
-        $categoria        = $request->input('categoria');
-        $contratista_id      = $request->input('contratista_id');
-        $resultado        = Conductor::getFilter($estado , $filter, $categoria, $contratista_id);
+        $categoria_id        = $request->input('categoria_id');
+        $contratista      = $request->input('contratista');
+        $resultado        = Conductor::getFilter($estado , $filter, $categoria_id, $contratista);
         $lista            = $resultado->get();
 
         $cabecera         = array();

@@ -20,12 +20,12 @@
 							{!! Form::text('filter', '', array('class' => 'form-control input-xs', 'id' => 'filter')) !!}
 						</div>
 						<div class="col-3 col-sm-2 col-md-1 col-lg-1">
-							{!! Form::label('categoria', 'Categoría:') !!}
-							{!! Form::select('categoria', $arrCategorias, 'all', array('class' => 'form-control input-xs', 'onchange' => 'buscar(\''.$entidad.'\')', 'id' => 'categoria')) !!}
+							{!! Form::label('categoria_id', 'Categoría:') !!}
+							{!! Form::select('categoria_id', $arrCategorias, 'all', array('class' => 'form-control input-xs', 'onchange' => 'buscar(\''.$entidad.'\')', 'id' => 'categoria_id')) !!}
 						</div>
 						<div class="col-6 col-sm-6 col-md-3 col-lg-3">
-							{!! Form::label('contratista_id', 'Contratista:') !!}
-							{!! Form::select('contratista_id', $cboContratista, 'all', array('class' => 'form-control input-xs', 'onchange' => 'buscar(\''.$entidad.'\')', 'id' => 'contratista_id')) !!}
+							{!! Form::label('contratista', 'Contratista:') !!}
+							{!! Form::select('contratista', $cboContratista, 'all', array('class' => 'form-control input-xs', 'onchange' => 'buscar(\''.$entidad.'\')', 'id' => 'contratista')) !!}
 						</div>
 						<div class="col-3 col-sm-2 col-md-1 col-lg-1">
 							{!! Form::label('filas', 'Filas')!!}
