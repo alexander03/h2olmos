@@ -56,7 +56,7 @@
 	<div class="form-group col-6  col-sm-3">
 		{!! Form::label('fechavencimiento', 'F. Vencimiento:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
 		<div class="col-lg-12 col-md-12 col-sm-12">
-			{!! Form::date('fechavencimiento', null, array('class' => 'form-control input-xs', 'id' => 'fechavencimiento')) !!}
+			{!! Form::date('fechavencimiento', null, array('class' => 'form-control input-xs', 'id' => 'fechavencimiento', 'min' => date('Y-m-d') )) !!}
 		</div>
 	</div>
 </div>

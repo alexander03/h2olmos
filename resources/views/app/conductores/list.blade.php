@@ -23,7 +23,6 @@
 			<td>{{$value->categoria}}</td>
 			<td>{{$value->licencia}}</td>
 			<td>{{date('d/m/Y', strtotime($value->fechavencimiento))}}</td>
-
 			<td>{{$value->contratista_razonsocial}}</td>
 			<td>{!! Form::button('<i class="material-icons">edit</i>', array('onclick' => 'modal (\''.URL::route($ruta["edit"], array($value->id, 'listar'=>'SI')).'\', \''.$titulo_modificar.'\', this);', 'class' => 'btn btn-primary btn-link btn-sm','rel'=>'tooltip','title'=>'Editar')) !!}</td>
 			@if (!$value->deleted_at)
