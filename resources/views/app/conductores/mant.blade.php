@@ -1,4 +1,3 @@
-{{-- TODO: VALIDAR CUANDO REGISTRO O ACTUALIZO CONDUCTORES CON DATOS DE UN CONDUCTOR ELIMINADO --}}
 @php
 		$readOnly = false;
 @endphp
@@ -8,7 +7,7 @@
 	@endphp
 @endif
 <div id="divMensajeError{!! $entidad !!}"></div>
-<div id="my-div-errors" class="hidden"><h5 class="text-center p-0 m-0"><span class="badge badge-danger">El conductor ya está registrado</span></h5></div>
+<div id="my-div-errors" class="hidden"><h5 class="text-center p-0 m-0"><span class="badge badge-danger"></span></h5></div>
 {!! Form::model($conductor, $formData) !!}	
 {!! Form::hidden('listar', $listar, array('id' => 'listar')) !!}
 <div class="form-row">
@@ -104,8 +103,11 @@
 		const inputNom = document.getElementById('nombres');
 		const inputLicenciaLetra = document.getElementById('licencia_letra');
 		const inputLicenciaNum = document.getElementById('licencia_num');
-		btnConsultar.addEventListener('click', async () => {
+		btnConsultar.addEventListener('click', async (e) => {
 			const dni = document.getElementById('dni').value.trim();
+			// console.dir(e.target.children[0])
+			const iconLoader = e.target.children[0];
+			iconLoader.classList.add('fa-spin');
 			try {
 				if(dni.length == 8) {
 					myDivErrors.classList.add('hidden');
@@ -114,10 +116,10 @@
 						if(conductor) { //EDITAR
 							if(person.dni != conductor.dni) {
 								//La personaDB es otro conductor. No es el inicial
-								myDivErrors.classList.remove('hidden');
+								showErrors('El conductor ya está registrado');
 							}
 						} else {//CREAR
-							myDivErrors.classList.remove('hidden');
+							showErrors('El conductor ya está registrado');
 						}
 					}else { 
 						person = await consultReniec(dni);
@@ -128,12 +130,15 @@
 						inputDni.setAttribute('readonly', true);
 						inputLicenciaNum.value = person.dni;
 					}else {
-						console.log('No existe esa persona')
+						showErrors('No existe este DNI');
+						inputDni.removeAttribute('readonly');
+						inputDni.focus();
 					}
 				}
 			} catch (error) {
 				console.log(error)
 			}
+			iconLoader.classList.remove('fa-spin');
 		});
 
 		btnClear.addEventListener('click', () => {
@@ -141,6 +146,7 @@
 			inputApe.value = '';
 			inputNom.value = '';
 			inputDni.removeAttribute('readonly');
+			inputDni.focus();
 			inputLicenciaNum.value = '';
 			myDivErrors.classList.add('hidden');
 		})
@@ -188,6 +194,10 @@
 			.then(res => res.status === 200 ? res.json() : console.error(`Error al cosultar DNI en la db: ${res.status}`));
 		}
 
+		const showErrors = (msg) => {
+			myDivErrors.children[0].children[0].textContent = msg;
+			myDivErrors.classList.remove('hidden');
+		}
 
 	}); 
 </script>
