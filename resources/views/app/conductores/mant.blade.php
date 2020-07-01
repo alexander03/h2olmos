@@ -103,9 +103,9 @@
 		const inputNom = document.getElementById('nombres');
 		const inputLicenciaLetra = document.getElementById('licencia_letra');
 		const inputLicenciaNum = document.getElementById('licencia_num');
+
 		btnConsultar.addEventListener('click', async (e) => {
 			const dni = document.getElementById('dni').value.trim();
-			// console.dir(e.target.children[0])
 			const iconLoader = e.target.children[0];
 			iconLoader.classList.add('fa-spin');
 			try {
@@ -174,7 +174,7 @@
 			e.target.value = e.target.value.toUpperCase();
 		})
 
-		//Funciones 
+		//Funciones
 		const consultDB = (dni) => {
 			const uriConsult = '/existeconductor?dni=' + dni;
 			return fetch(uriConsult)
