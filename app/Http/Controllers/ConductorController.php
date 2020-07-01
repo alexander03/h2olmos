@@ -124,7 +124,7 @@ class ConductorController extends Controller
         $listar     = Libreria::getParam($request->input('listar'), 'NO');
         $reglas     = array(
             'dni' => 'required|integer|digits:8',
-            'licencia_letra' => 'required',
+            'licencia_letra' => 'required|alpha',
             'categoria' => 'required',
             'fechavencimiento' => 'required',
             'contratista_id' => 'required',
@@ -134,6 +134,7 @@ class ConductorController extends Controller
             'dni.integer' => 'DNI inválido',
             'dni.digits' => 'DNI debe tener 8 cifras',
             'licencia_letra.required' => 'Licencia incompleta',
+            'licencia_letra.alpha' => 'Licencia inválida',
             'categoria.required' => 'Seleccione categoría',
             'fechavencimiento.required' => 'Seleccione fecha de vencimiento',
             'contratista_id.required' => 'Seleccione contratista',
@@ -193,7 +194,7 @@ class ConductorController extends Controller
         }
         $reglas     = array(
             'dni' => 'required|integer|digits:8',
-            'licencia_letra' => 'required',
+            'licencia_letra' => 'required|alpha',
             'categoria' => 'required',
             'fechavencimiento' => 'required',
             'contratista_id' => 'required',
@@ -203,6 +204,7 @@ class ConductorController extends Controller
             'dni.integer' => 'DNI inválido',
             'dni.digits' => 'DNI debe tener 8 cifras',
             'licencia_letra.required' => 'Licencia incompleta',
+            'licencia_letra.alpha' => 'Licencia inválida',
             'categoria.required' => 'Seleccione categoría',
             'fechavencimiento.required' => 'Seleccione fecha de vencimiento',
             'contratista_id.required' => 'Seleccione contratista',
