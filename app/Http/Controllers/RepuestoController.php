@@ -8,6 +8,7 @@ use App\Repuesto;
 use App\Unidad;
 use App\Librerias\Libreria;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rule;
 
 class RepuestoController extends Controller
 {
@@ -157,14 +158,11 @@ class RepuestoController extends Controller
         if ($existe !== true) {
             return $existe;
         }
-        $reglas = array('unidad_id' => 'required');
-        $repuesto = Repuesto::find($id);
-        if ($repuesto->codigo == strtoupper($request->input('codigo'))) $reglas += array('codigo' => 'required|integer|digits:7');
-        else $reglas += array('codigo' => 'required|integer|digits:7|unique:repuesto,codigo');
-        
-        if ($repuesto->descripcion == strtoupper($request->input('descripcion'))) $reglas += array('descripcion' => 'required|max:100');
-        else $reglas += array('descripcion' => 'required|max:100|unique:repuesto,descripcion',);
-
+        $reglas = array(
+            'unidad_id' => 'required',
+            'codigo' => ['required','integer', 'digits:7',Rule::unique('repuesto')->ignore($id)],
+            'descripcion' => ['required','max:100',Rule::unique('repuesto')->ignore($id)],
+        );
         $mensajes = array(
             'codigo.required' => 'Debe ingresar un código',
             'codigo.integer' => 'Código inválido',

@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Brand;
 use App\Librerias\Libreria;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rule;
 
 class BrandController extends Controller
 {
@@ -129,14 +130,12 @@ class BrandController extends Controller
             return $existe;
         }
         //Valido si la marca tiene la misma descripcion que la proporcionada
-        $brand = Brand::find($id);
-        if ($brand->descripcion == strtoupper($request->input('descripcion'))) $reglas = array('descripcion' => 'required|max:100');
-        else $reglas = array('descripcion' => 'required|max:100|unique:marca,descripcion');
+        $reglas = array('descripcion' => ['required','max:100',Rule::unique('marca')->ignore($id)]);
 
         $mensajes = array(
             'descripcion.required'         => 'Debe ingresar una descripción',
             'descripcion.unique' => 'Esta marca ya existe',
-            'descripcion.max' => 'La descripcion debe tener max. 100 caracteres'
+            'descripcion.max' => 'La descripcion debe tener max. 100 caracteres',
         );
         $validacion = Validator::make($request->all(), $reglas, $mensajes);
         if ($validacion->fails()) {
