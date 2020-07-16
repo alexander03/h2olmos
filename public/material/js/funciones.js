@@ -70,7 +70,8 @@ function sendRuta(ruta){
 * @param  {string} idContenedor
 * @return {html}
 */
-function cargarRuta(ruta, idContenedor) {
+var rutaant="";
+function cargarRuta(ruta, idContenedor, ruta2) {
     var contenedor = '#' + idContenedor;
     $(contenedor).html(imgCargando());
     var respuesta = '';
@@ -85,7 +86,14 @@ function cargarRuta(ruta, idContenedor) {
         }else{
             $(contenedor).html(respuesta);    
         }
-    }); 
+	}); 
+	if(ruta2!=undefined){
+		if(rutaant!=""){
+			$("#"+rutaant).removeClass("active");	
+		}
+		rutaant=ruta2;
+		$("#"+ruta2).addClass("active");
+	}
 }
 
 /**
@@ -191,6 +199,7 @@ function guardar (entidad, idboton, entidad2) {
 		if(respuesta === 'ERROR'){
 		}else{
 			if (respuesta === 'OK') {
+				md.showNotification('top','right','Guardado correctamente','info');
 				cerrarModal();
 				if (listar === 'SI') {
 					if(typeof entidad2 != 'undefined' && entidad2 !== ''){
@@ -540,80 +549,6 @@ function confirmarpermiso (idformulario, idboton) {
 			} else{
 				alert(respuesta);
 			}
-		}
-	});
-}
-
-/**
- * cargar facultades en un select, enviando el id de la universidad
- * @param  {string} ruta    ruta del generador del combo
- * @param  {string} entidad para identificar en que formulario se va a cargar
- * @param  {string} tipo    B: para formulario de búsqueda, M: Para formulario de mantenimiento
- * @return {string}         contenido que se cargará en el select
- */
-function mostrarFacultades(ruta, entidad, tipo) {
- 	var iduniversidad;
- 	if (tipo === 'B') {
- 		iduniversidad = $(IDFORMBUSQUEDA + entidad + " :input[id='universidad_id']").val();
- 	}
- 	if (tipo === 'M') {
- 		iduniversidad = $(IDFORMMANTENIMIENTO + entidad + " :input[id='universidad_id']").val();
- 	}
- 	if (iduniversidad !== '') {
- 		ruta = ruta + '/' + iduniversidad;
- 		var respuesta = '';
- 		var data = sendRuta(ruta);
- 		data.done(function(msg) {
- 			respuesta = msg;
- 		}).fail(function(xhr, textStatus, errorThrown) {
- 			respuesta = estiloError('Error en el procesamiento de la ruta');
- 		}).always(function() {
- 			if (tipo === 'B') {
- 				$(IDFORMBUSQUEDA + entidad + " :input[id='facultad_id']").html("'<option value=''>Todas</option>");
- 				$(IDFORMBUSQUEDA + entidad + " :input[id='facultad_id']").append(respuesta);
- 			}
- 			if (tipo === 'M') {
- 				$(IDFORMMANTENIMIENTO + entidad + " :input[id='facultad_id']").html("'<option value=''>Seleccione facultad</option>");
- 				$(IDFORMMANTENIMIENTO + entidad + " :input[id='facultad_id']").append(respuesta);
- 			}
- 		});
- 	}else{
- 		$(IDFORMMANTENIMIENTO + entidad + " :input[id='facultad_id']").html("'<option value=''>Seleccione facultad</option>");
- 	}
- }
-
-/**
- * cargar escuelas en un select, enviando el id de la facultad
- * @param  {string} ruta    ruta del generador del combo
- * @param  {string} entidad para identificar en que formulario se va a cargar
- * @param  {string} tipo    B: para formulario de búsqueda, M: Para formulario de mantenimiento
- * @return {string}         contenido que se cargará en el select
- */
-function mostrarEscuelas(ruta, entidad, tipo) {
-	var idfacultad;
-	if (tipo === 'B') {
-		idfacultad = $(IDFORMBUSQUEDA + entidad + " :input[id='facultad_id']").val();
-	}
-	if (tipo === 'M') {
-		idfacultad = $(IDFORMMANTENIMIENTO + entidad + " :input[id='facultad_id']").val();
-	}
-	if (idfacultad !== '') {
-		ruta = ruta + '/' + idfacultad;
-	};    
-	var respuesta = '';
-	var data = sendRuta(ruta);
-	data.done(function(msg) {
-		respuesta = msg;
-	}).fail(function(xhr, textStatus, errorThrown) {
-		respuesta = estiloError('Error en el procesamiento de la ruta');
-	}).always(function() {
-		if (tipo === 'B') {
-			$(IDFORMBUSQUEDA + entidad + " :input[id='escuela_id']").html("'<option value=''>Todas</option>");
-			$(IDFORMBUSQUEDA + entidad + " :input[id='escuela_id']").append(respuesta);
-		}
-		if (tipo === 'M') {
-			$(IDFORMMANTENIMIENTO + entidad + " :input[id='escuela_id']").html("'<option value=''>Seleccione distrito</option>");
-			$(IDFORMMANTENIMIENTO + entidad + " :input[id='escuela_id']").append(respuesta);
 		}
 	});
 }

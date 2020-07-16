@@ -15,27 +15,27 @@ use App\Opcionmenu;
   </div>
   <div class="sidebar-wrapper">
     <ul class="nav">
-      <li class="nav-item{{ $activePage == 'dashboard' ? ' active' : '' }}">
+      <!--li class="nav-item{{ $activePage == 'dashboard' ? ' active' : '' }}">
         <a class="nav-link" href="{{ route('home') }}">
           <i class="material-icons">dashboard</i>
             <p>{{ __('Dashboard') }}</p>
         </a>
-      </li>
+      </li-->
       <?php
       $data = Grupomenu::orderBy('orden','asc')->get();
       foreach ($data as $key => $val) {
         echo '<li class="nav-item">
-                <a class="nav-link" data-toggle="collapse" href="#'.$val->id.'" aria-expanded="true">
+                <a class="nav-link" data-toggle="collapse" href="#'.$val->id.'">
                   <i class="material-icons">'.$val->icono.'</i>
                   <p>'.$val->descripcion.'<b class="caret"></b>
                   </p>
                 </a>
-                <div class="collapse show" id="'.$val->id.'">
+                <div class="collapse" id="'.$val->id.'">
                   <ul class="nav">';  
         $data2 = Opcionmenu::where('grupomenu_id','=',$val->id)->get();
         foreach($data2 as $k => $v){
-          echo '<li class="nav-item">
-                  <a class="nav-link" onclick="cargarRuta(\''.URL::to($v->link).'\', \'container\');"">
+          echo '<li class="nav-item" id="'.$v->link.'">
+                  <a class="nav-link" onclick="cargarRuta(\''.URL::to($v->link).'\', \'container\',\''.$v->link.'\');">
                   <i class="material-icons">'.$v->icono.'</i>
                     <span class="sidebar-normal">'.$v->descripcion.'</span>
                   </a>
@@ -46,26 +46,7 @@ use App\Opcionmenu;
           </li>';
       }
       ?>
-      <li class="nav-item">
-        <a class="nav-link" href="#" onclick="cargarRuta('{{ route('propietario.index') }}', 'container');">
-          <i class="material-icons">accessibility</i>
-          <p class="sidebar-normal">Propietarios</p>
-        </a>
-      </li>
-
-      <li class="nav-item">
-        <a class="nav-link" href="#" onclick="cargarRuta('{{ route('ua.index') }}', 'container');">
-          <i class="material-icons">api</i>
-          <p class="sidebar-normal">Ua</p>
-        </a>
-      </li>
-
-      <li class="nav-item">
-        <a class="nav-link" href="#" onclick="cargarRuta('{{ route('unidad.index') }}', 'container');">
-          <i class="material-icons">ac_unit</i>
-          <p class="sidebar-normal">Unidad</p>
-        </a>
-      </li>
+      <?php /*
       <li class="nav-item {{ ($activePage == 'profile' || $activePage == 'user-management') ? ' active' : '' }}">
         <a class="nav-link" data-toggle="collapse" href="#laravelExample" aria-expanded="true">
           <i><img style="width:25px" src="{{ asset('material') }}/img/laravel.svg"></i>
@@ -126,6 +107,8 @@ use App\Opcionmenu;
           <p>{{ __('RTL Support') }}</p>
         </a>
       </li>
+      */
+       ?>
     </ul>
   </div>
 </div>

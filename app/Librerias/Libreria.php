@@ -28,53 +28,53 @@ class Libreria
 			$fin = $cantidadTotal;
 		}
 
-		$cadenaPagina  = "";
+		$cadenaPagina  = "<br /><div class=\"card-header card-header-tabs card-header-info\" style=\"width: fit-content;padding: 0px;margin-left: 0;padding-left: 5px;\"><span class=\"nav-tabs-title\">TOTAL DE REGISTROS " . $cantidadTotal . "</span>";
 		$puntosDelante = "";
 		$puntosDetras  = "";
-		$cadenaPagina .= "<ul class=\"pagination pagination-sm\">";
-		$cadenaPagina .= "<li class=\"active\"><a href=\"#\">TOTAL DE REGISTROS " . $cantidadTotal . "</a></li>";
+		$cadenaPagina .= "<ul class=\"pagination nav nav-tabs\">";
+		$cadenaPagina .= "";
 
 		for ($i=1; $i <= $div ; $i++) { 
 			if ($i == 1) {
 				if ($i == $pagina) {
-					$cadenaPagina .= "<li class=\"active\"><a>" . $i . "</a></li>";
+					$cadenaPagina .= "<li class=\"nav-item\"><a class=\"nav-link active\">" . $i . "</a></li>";
 				} else {
-					$cadenaPagina .= "<li><a onclick=\"buscarCompaginado(" . $i . ", '', '".$entidad."')\">" . $i . "</a></li>";
+					$cadenaPagina .= "<li class=\"nav-item\"><a class=\"nav-link\" onclick=\"buscarCompaginado(" . $i . ", '', '".$entidad."')\">" . $i . "</a></li>";
 				}
 			}
 			if ($i == $div && $i != 1) {
 				if ($i == $pagina) {
-					$cadenaPagina .= "<li class=\"active\"><a>" . $i . "</a></li>";
+					$cadenaPagina .= "<li class=\"nav-item\"><a class=\"nav-link active\">" . $i . "</a></li>";
 				} else {
-					$cadenaPagina .= "<li><a onclick=\"buscarCompaginado(" . $i . ",'', '".$entidad."')\">" . $i . "</a></li>";
+					$cadenaPagina .= "<li class=\"nav-item\"><a class=\"nav-link\" onclick=\"buscarCompaginado(" . $i . ",'', '".$entidad."')\">" . $i . "</a></li>";
 				}
 			}
 			if ($i != 1 && $i != $div) {
 				if ($i == $pagina) {
-					$cadenaPagina .= "<li class=\"active\"><a>" . $i . "</a></li>";
+					$cadenaPagina .= "<li class=\"nav-item\"><a class=\"nav-link active\">" . $i . "</a></li>";
 				} else {
 					if ($i == ($pagina - 1) || $i == ($pagina - 2)) {
-						$cadenaPagina .= "<li><a onclick=\"buscarCompaginado(" . $i . ",'', '".$entidad."')\">" . $i . "</a></li>";
+						$cadenaPagina .= "<li class=\"nav-item\"><a class=\"nav-link\" onclick=\"buscarCompaginado(" . $i . ",'', '".$entidad."')\">" . $i . "</a></li>";
 					}
 					if ($i == ($pagina + 1) || $i == ($pagina + 2)) {
-						$cadenaPagina .= "<li><a onclick=\"buscarCompaginado(" . $i . ",'', '".$entidad."')\">" . $i . "</a></li>";
+						$cadenaPagina .= "<li class=\"nav-item\"><a class=\"nav-link\" onclick=\"buscarCompaginado(" . $i . ",'', '".$entidad."')\">" . $i . "</a></li>";
 					}
 				}
 			}
 			if ($i > 1 && $i < ($pagina - 2)) {
 				if ($puntosDelante == '') {
-					$puntosDelante =  "<li class=\"disabled\"><a href=\"#\">...</a></li>";
+					$puntosDelante =  "<li class=\"disabled nav-item\"><a class=\"nav-link\" href=\"#\">...</a></li>";
 					$cadenaPagina .= $puntosDelante;
 				}
 			}
 			if ($i < $div && $i > ($pagina + 2)) {
 				if ($puntosDetras == '') {
-					$puntosDetras = "<li class=\"disabled\"><a href=\"#\">...</a></li>";
+					$puntosDetras = "<li class=\"disabled nav-item\"><a class=\"nav-link\" href=\"#\">...</a></li>";
 					$cadenaPagina .= $puntosDetras;
 				}
 			}
 		}
-		$cadenaPagina .= "</ul>";
+		$cadenaPagina .= "</ul></div>";
 		$paginacion = array(
 			'cadenapaginacion' => $cadenaPagina,
 			'inicio'           => $inicio,
