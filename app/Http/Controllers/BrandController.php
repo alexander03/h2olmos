@@ -102,7 +102,7 @@ class BrandController extends Controller
         }
         $error = DB::transaction(function() use($request){
             $brand = new Brand();
-            $brand->descripcion= strtoupper($request->input('descripcion'));
+            $brand->descripcion= mb_strtoupper($request->input('descripcion'), 'utf-8');
             $brand->save();
         });
         return is_null($error) ? "OK" : $error;
@@ -143,7 +143,7 @@ class BrandController extends Controller
         } 
         $error = DB::transaction(function() use($request, $id){
             $brand = Brand::find($id);
-            $brand->descripcion= strtoupper($request->input('descripcion'));
+            $brand->descripcion= mb_strtoupper($request->input('descripcion'), 'utf-8');
             $brand->save();
         });
         return is_null($error) ? "OK" : $error;

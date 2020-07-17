@@ -145,13 +145,13 @@ class ConductorController extends Controller
         }
         $error = DB::transaction(function() use($request){
             $conductor = new Conductor();
-            $conductor->dni= strtoupper($request->input('dni'));
-            $conductor->apellidos= strtoupper($request->input('apellidos'));
-            $conductor->nombres= strtoupper($request->input('nombres'));
-            $conductor->licencia= strtoupper($request->input('licencia_letra')) . '-' . strtoupper($request->input('dni'));
+            $conductor->dni= $request->input('dni');
+            $conductor->apellidos= mb_strtoupper($request->input('apellidos'), 'utf-8');
+            $conductor->nombres= mb_strtoupper($request->input('nombres'), 'utf-8');
+            $conductor->licencia= mb_strtoupper($request->input('licencia_letra'), 'utf-8') . '-' . $request->input('dni') ;
             $conductor->categoria= $request->input('categoria');
-            $conductor->fechavencimiento= strtoupper($request->input('fechavencimiento'));
-            $conductor->contratista_id= strtoupper($request->input('contratista_id'));
+            $conductor->fechavencimiento= mb_strtoupper($request->input('fechavencimiento'), 'utf-8');
+            $conductor->contratista_id= mb_strtoupper($request->input('contratista_id'), 'utf-8');
             $conductor->save();
         });
         return is_null($error) ? "OK" : $error;
@@ -215,13 +215,13 @@ class ConductorController extends Controller
         }
         $error = DB::transaction(function() use($request, $id){
             $conductor = Conductor::find($id);
-            $conductor->dni= strtoupper($request->input('dni'));
-            $conductor->apellidos= strtoupper($request->input('apellidos'));
-            $conductor->nombres= strtoupper($request->input('nombres'));
-            $conductor->licencia= strtoupper($request->input('licencia_letra')) . '-' . strtoupper($request->input('dni'));
+            $conductor->dni= $request->input('dni');
+            $conductor->apellidos= mb_strtoupper($request->input('apellidos'), 'utf-8');
+            $conductor->nombres= mb_strtoupper($request->input('nombres'), 'utf-8');
+            $conductor->licencia= mb_strtoupper($request->input('licencia_letra'), 'utf-8') . '-' . $request->input('dni');
             $conductor->categoria= $request->input('categoria');
-            $conductor->fechavencimiento= strtoupper($request->input('fechavencimiento'));
-            $conductor->contratista_id= strtoupper($request->input('contratista_id'));
+            $conductor->fechavencimiento= mb_strtoupper($request->input('fechavencimiento'), 'utf-8');
+            $conductor->contratista_id= mb_strtoupper($request->input('contratista_id'), 'utf-8');
             $conductor->save();
         });
         return is_null($error) ? "OK" : $error;

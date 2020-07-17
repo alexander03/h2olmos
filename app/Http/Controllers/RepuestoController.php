@@ -124,9 +124,9 @@ class RepuestoController extends Controller
         }
         $error = DB::transaction(function() use($request){
             $repuesto = new Repuesto();
-            $repuesto->codigo= strtoupper($request->input('codigo'));
-            $repuesto->descripcion= strtoupper($request->input('descripcion'));
-            $repuesto->unidad_id= strtoupper($request->input('unidad_id'));
+            $repuesto->codigo= mb_strtoupper($request->input('codigo'), 'utf-8');
+            $repuesto->descripcion= mb_strtoupper($request->input('descripcion'), 'utf-8');
+            $repuesto->unidad_id= $request->input('unidad_id');
             $repuesto->save();
         });
         return is_null($error) ? "OK" : $error;
@@ -179,9 +179,9 @@ class RepuestoController extends Controller
         }
         $error = DB::transaction(function() use($request, $id){
             $repuesto = Repuesto::find($id);
-            $repuesto->codigo= strtoupper($request->input('codigo'));
-            $repuesto->descripcion= strtoupper($request->input('descripcion'));
-            $repuesto->unidad_id= strtoupper($request->input('unidad_id'));
+            $repuesto->codigo= mb_strtoupper($request->input('codigo'), 'utf-8');
+            $repuesto->descripcion= mb_strtoupper($request->input('descripcion'), 'utf-8');
+            $repuesto->unidad_id= $request->input('unidad_id');
             $repuesto->save();
         });
         return is_null($error) ? "OK" : $error;
