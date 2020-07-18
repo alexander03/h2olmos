@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Validator;
 
 class UaController extends Controller{
     protected $folderview      = 'app.ua';
-    protected $tituloAdmin     = 'Administrar ua';
+    protected $tituloAdmin     = 'Ua';
     protected $tituloRegistrar = 'Registrar ua';
     protected $tituloModificar = 'Modificar ua';
     protected $tituloEliminar  = 'Eliminar ua';

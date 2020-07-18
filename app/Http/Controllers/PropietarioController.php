@@ -15,7 +15,7 @@ class PropietarioController extends Controller
 {
     
     protected $folderview      = 'app.propietario';
-    protected $tituloAdmin     = 'Administrar propietarios';
+    protected $tituloAdmin     = 'Propietarios';
     protected $tituloRegistrar = 'Registrar propietario';
     protected $tituloModificar = 'Modificar propietario';
     protected $tituloEliminar  = 'Eliminar propietario';

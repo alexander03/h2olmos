@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Validator;
 class UnidadController extends Controller
 {
     protected $folderview      = 'app.unidad';
-    protected $tituloAdmin     = 'Administrar unidad';
+    protected $tituloAdmin     = 'Unidad';
     protected $tituloRegistrar = 'Registrar unidad';
     protected $tituloModificar = 'Modificar unidad';
     protected $tituloEliminar  = 'Eliminar unidad';

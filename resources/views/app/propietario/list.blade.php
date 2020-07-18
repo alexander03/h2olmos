@@ -2,9 +2,9 @@
 <h3 class="text-warning">No se encontraron resultados.</h3>
 @else
 {!! $paginacion !!}
-<table id="example1" class="table table-striped table-hover">
+<table id="example1" class="table table-striped table-hover mt-2">
 
-	<thead class="thead-dark">
+	<thead>
 		<tr class="text-center">
 			@foreach($cabecera as $key => $value)
 				<th class="text-nowrap" @if((int)$value['numero'] > 1) colspan="{{ $value['numero'] }}" @endif>{!! $value['valor'] !!}</th>
