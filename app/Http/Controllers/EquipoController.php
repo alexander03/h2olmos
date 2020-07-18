@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\DB;
 class EquipoController extends Controller
 {
     protected $folderview      = 'app.equipo';
-    protected $tituloAdmin     = 'Opcion equipo';
+    protected $tituloAdmin     = 'Equipo';
     protected $tituloRegistrar = 'Registrar equipo';
     protected $tituloModificar = 'Modificar equipo';
     protected $tituloEliminar  = 'Eliminar equipo';

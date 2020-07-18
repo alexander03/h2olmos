@@ -92,25 +92,25 @@ if ($equipo !== NULL) {
 			{!! Form::text('asientos', null, array('class' => 'form-control input-xs', 'id' => 'asientos')) !!}
 		</div>
 	</div>
-	<div class="form-group col-lg-6 col-md-6 col-sm-12">
+	<div class="form-group col-lg-6 col-md-6 col-sm-12 ">
 		{!! Form::label('area_id', 'Area:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
 		<div class="col-lg-12 col-md-12 col-sm-12">
 			{!! Form::select('area_id', $cboArea, null, array('class' => 'form-control input-xs', 'id' => 'area_id')) !!}
 		</div>
 	</div>
-	<div class="form-group col-lg-6 col-md-6 col-sm-12">
-		{!! Form::label('fechavencimientosoat', 'Fecha V SOAT:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
-		<div class="col-lg-6 col-md-6 col-sm-12">
-			{!! Form::date('fechavencimientosoat', null, array('class' => 'form-control input-xs', 'id' => 'fechavencimientosoat')) !!}
+	<div class="form-group col-lg-6 col-md-6 col-sm-12 pt-3">
+		{!! Form::label('fechavencimientosoat', 'Fecha V SOAT:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label ')) !!}
+		<div class="col-lg-12 col-md-12 col-sm-12">
+			{!! Form::date('fechavencimientosoat', null, array('class' => 'form-control input-xs ', 'id' => 'fechavencimientosoat')) !!}
 		</div>
 	</div>
-	<div class="form-group col-lg-6 col-md-6 col-sm-12">
+	<div class="form-group col-lg-6 col-md-6 col-sm-12 pt-3">
 		{!! Form::label('fechavencimientogps', 'Fecha V GPS:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
-		<div class="col-lg-6 col-md-6 col-sm-12">
+		<div class="col-lg-12 col-md-12 col-sm-12">
 			{!! Form::date('fechavencimientogps', null, array('class' => 'form-control input-xs', 'id' => 'fechavencimientogps')) !!}
 		</div>
 	</div>
-	<div class="form-group col-lg-6 col-md-6 col-sm-12">
+	<div class="form-group col-lg-6 col-md-6 col-sm-12 pt-3">
 		{!! Form::label('fechavencimientortv', 'Fecha V RTV:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
 		<div class="col-lg-12 col-md-12 col-sm-12">
 			{!! Form::date('fechavencimientortv', null, array('class' => 'form-control input-xs', 'id' => 'fechavencimientortv')) !!}
