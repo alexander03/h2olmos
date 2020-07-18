@@ -13,7 +13,7 @@ class GrifoController extends Controller
 {
    
     protected $folderview      = 'app.grifo';
-    protected $tituloAdmin     = 'Opcion grifo';
+    protected $tituloAdmin     = 'Grifo';
     protected $tituloRegistrar = 'Registrar grifo';
     protected $tituloModificar = 'Modificar grifo';
     protected $tituloEliminar  = 'Eliminar grifo';

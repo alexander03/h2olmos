@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\DB;
 class TipohoraController extends Controller
 {
     protected $folderview      = 'app.tipohora';
-    protected $tituloAdmin     = 'Opciones de tipo de hora';
+    protected $tituloAdmin     = 'Tipo de hora';
     protected $tituloRegistrar = 'Registrar tipo de hora';
     protected $tituloModificar = 'Modificar tipo de hora';
     protected $tituloEliminar  = 'Eliminar tipo de hora';
