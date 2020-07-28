@@ -104,14 +104,13 @@ class RepuestoController extends Controller
     {
         $listar     = Libreria::getParam($request->input('listar'), 'NO');
         $reglas     = array(
-            'codigo' => 'required|integer|digits:7|unique:repuesto,codigo',
+            'codigo' => 'required|digits:7|unique:repuesto,codigo',
             'descripcion' => 'required|max:100|unique:repuesto,descripcion',
             'unidad_id' => 'required'
         );
         $mensajes = array(
             'codigo.required' => 'Debe ingresar un código',
             'codigo.unique' => 'Este código ya existe',
-            'codigo.integer' => 'Código inválido',
             'codigo.digits' => 'El código debe tener 7 cifras',
             'descripcion.required' => 'Debe ingresar una descripcion',
             'descripcion.unique' => 'Esta descripción ya existe',
@@ -160,12 +159,11 @@ class RepuestoController extends Controller
         }
         $reglas = array(
             'unidad_id' => 'required',
-            'codigo' => ['required','integer', 'digits:7',Rule::unique('repuesto')->ignore($id)],
+            'codigo' => ['required', 'digits:7',Rule::unique('repuesto')->ignore($id)],
             'descripcion' => ['required','max:100',Rule::unique('repuesto')->ignore($id)],
         );
         $mensajes = array(
             'codigo.required' => 'Debe ingresar un código',
-            'codigo.integer' => 'Código inválido',
             'codigo.digits' => 'El código debe tener 7 cifras',
             'codigo.unique' => 'El código ya existe',
             'descripcion.required' => 'Debe ingresar una descripcion',
