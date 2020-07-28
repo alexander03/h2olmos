@@ -10,19 +10,19 @@ if ($ua !== NULL) {
 {!! Form::hidden('listar', $listar, array('id' => 'listar')) !!}
 <section class="form-row">
 	<div class="form-group col-md-6 p-3">
-		<label for="id-codigo" class="pl-3">Su código</label>
+		<label for="id-codigo" class="pl-3">Código</label>
 		<input type="number" name="codigo" id="id-codigo" class="form-control" value="<?php if($ua) echo $ua->codigo ?>">
 	</div>
 	<div class="form-group col-md-6 p-3">
-		<label for="id-desc" class="pl-3">Su descripción</label>
+		<label for="id-desc" class="pl-3">Descripción</label>
 		<textarea name="descripcion" id="id-desc" class="form-control" rows="1">@php if($ua) echo $ua->descripcion @endphp</textarea>
 	</div>
 	<div class="form-group col-md-6 p-3">
-		<label for="id-tipo" class="pl-3">Su tipo</label>
+		<label for="id-tipo" class="pl-3">Tipo</label>
 		<input type="text" name="tipo" id="id-tipo" class="form-control" value="<?php if($ua) echo $ua->tipo ?>">
 	</div>
 	<div class="form-group col-md-6 p-3">
-		<label class="pl-3">¿Posee fondos?</label>
+		<label class="pl-3">Fondos</label>
 		<input type="text" class="form-control" style="display: none">
 		<section class="d-flex mt-1"> 
 			<div style="width: 50%;" class="d-flex">
@@ -36,15 +36,15 @@ if ($ua !== NULL) {
 		</section>	
 	</div>
 	<div class="form-group col-md-6 p-3">
-		<label for="id-responsable" class="pl-3">Su responsable</label>
+		<label for="id-responsable" class="pl-3">Responsable</label>
 		<input type="text" name="responsable" id="id-responsable" class="form-control" value="<?php if($ua) echo $ua->responsable ?>">
 	</div>
 	<div class="form-group col-md-6 p-3">
-		<label for="id-t-costo" class="pl-3">Su tipo de costo</label>
+		<label for="id-t-costo" class="pl-3">Tipo de costo</label>
 		<input type="text" name="tipo_costo" id="id-t-costo" class="form-control" value="<?php if($ua) echo $ua->tipo_costo ?>">
 	</div>
 	<div class="form-group col-md-12 p-3">
-		<label for="id-unidad" class="pl-3">Su unidad</label>
+		<label for="id-unidad" class="pl-3">Unidad</label>
 		<select name="unidad_id" id="id-unidad" class="form-control">
 			<option value="0">Seleccione una unidad</option>
 			@foreach ($unidadList as $unidad)
@@ -52,10 +52,10 @@ if ($ua !== NULL) {
 			@endforeach
 		</select>
 	</div>
-	<div class="form-group col-12 px-3">
-		<div class="d-flex justify-content-end">
-			{!! Form::button('<i class="fa fa-check fa-lg"></i> '.$boton, array('class' => 'btn btn-success mr-0 mr-sm-2', 'id' => 'btnGuardar', 'onclick' => 'guardar(\''.$entidad.'\', this)')) !!}
-			{!! Form::button('<i class="fa fa-exclamation fa-lg"></i> Cancelar', array('class' => 'btn btn-warning', 'id' => 'btnCancelar'.$entidad, 'onclick' => 'cerrarModal();')) !!}
+	<div class="form-group w-100">
+		<div class="col-lg-12 col-md-12 col-sm-12 text-right">
+			{!! Form::button('<i class="fa fa-check fa-lg"></i> '.$boton, array('class' => 'btn btn-success btn-sm', 'id' => 'btnGuardar', 'onclick' => 'guardar(\''.$entidad.'\', this)')) !!}
+			{!! Form::button('<i class="fa fa-exclamation fa-lg"></i> Cancelar', array('class' => 'btn btn-warning btn-sm', 'id' => 'btnCancelar'.$entidad, 'onclick' => 'cerrarModal();')) !!}
 		</div>
 	</div>
 </section>
