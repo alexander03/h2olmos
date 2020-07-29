@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Librerias\Libreria;
+use App\Rules\SearchUaPadre;
 use App\Rules\SelectDifZero;
 use App\Ua;
 use App\Unidad;
@@ -95,6 +96,7 @@ class UaController extends Controller{
             'fondos' => 'required',
             'responsable' => 'required',
             'tipo_costo' => 'required',
+            'ua_padre_id' => [ new SearchUaPadre() ],
             'unidad_id' => ['required', new SelectDifZero()],
         ];
         $mensajes = [
@@ -113,7 +115,7 @@ class UaController extends Controller{
         }
 
         $listar     = Libreria::getParam($request->input('listar'), 'NO');
-        
+    
         $error = DB::transaction(function() use($request){
             $ua = new Ua();
             $ua -> codigo = $request -> input('codigo');
@@ -123,6 +125,11 @@ class UaController extends Controller{
             $ua -> responsable = $request -> input('responsable');
             $ua -> tipo_costo = $request -> input('tipo_costo');
             $ua -> unidad_id = $request -> input('unidad_id');
+            //BUSCAR
+            if($request -> input('ua_padre_id')){
+                $uaDB =  Ua::where('codigo', $request -> input('ua_padre_id')) -> get();
+                $ua -> ua_padre_id = (!( $uaDB -> isEmpty() )) ? $uaDB[0] -> id : null;
+            }
             $ua -> save();
         });
         return is_null($error) ? "OK" : $error;
@@ -156,6 +163,7 @@ class UaController extends Controller{
             'fondos' => 'required',
             'responsable' => 'required',
             'tipo_costo' => 'required',
+            'ua_padre_id' => [ new SearchUaPadre() ],
             'unidad_id' => ['required', new SelectDifZero()],
         ];
         $mensajes = [
@@ -187,6 +195,11 @@ class UaController extends Controller{
             $ua -> responsable = $request -> input('responsable');
             $ua -> tipo_costo = $request -> input('tipo_costo');
             $ua -> unidad_id = $request -> input('unidad_id');
+            //BUSCAR
+            if($request -> input('ua_padre_id')){
+                $uaDB =  Ua::where('codigo', $request -> input('ua_padre_id')) -> get();
+                $ua -> ua_padre_id = (!( $uaDB -> isEmpty() )) ? $uaDB[0] -> id : null;
+            }
             $ua -> save();
         });
         return is_null($error) ? "OK" : $error;

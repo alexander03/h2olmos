@@ -72,7 +72,7 @@ const doSearchUA = () => {
             const selection = feedback.selection.value;
             document.querySelector(".js-ua-id").value = selection.codigo;
             document.querySelector(".js-ua-desc").innerText = selection.descripcion;
-            console.log(feedback);
+            // console.log(feedback);
         }
     });
     

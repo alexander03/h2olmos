@@ -2,9 +2,11 @@
 
 namespace App\Rules;
 
+use App\Ua;
+use Exception;
 use Illuminate\Contracts\Validation\Rule;
 
-class SelectDifZero implements Rule
+class SearchUaPadre implements Rule
 {
     private $nombAtt = "";
 
@@ -16,10 +18,19 @@ class SelectDifZero implements Rule
      * @return bool
      */
     public function passes($attribute, $value){
-        
+
         $this -> nombAtt = $attribute;
-        if($value == 0) return false;
-        
+
+        if($value){
+            try{
+                $uaDB =  Ua::where('codigo', $value) -> get();
+                if( !$uaDB -> isEmpty() ) return true;
+                else return false; 
+            }catch(Exception $error){
+                return false; 
+            }
+        }
+    
         return true;
     }
 
@@ -30,6 +41,6 @@ class SelectDifZero implements Rule
      */
     public function message(){
 
-        return 'Su ' . $this -> nombAtt . ' es requerido';
+        return 'El código de UA no existe.';
     }
 }

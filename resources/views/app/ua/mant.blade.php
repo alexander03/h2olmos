@@ -43,12 +43,13 @@ if ($ua !== NULL) {
 	<div class="form-group col-md-6 p-3 u-search-ua">
 		<label for="autoComplete" class="pl-3">Código Ua Padre</label>
 		<div class="u-ua-style js-ua-desc">
-			<?php if($ua) if($ua -> ua_padre_id)echo $ua -> uaPadre($ua -> id)[0] -> descripcion; else echo 'Sin padre';?>
+			<?php if($ua) if($ua -> ua_padre_id)echo $ua -> uaPadre($ua -> ua_padre_id)[0] -> descripcion; else echo 'Sin padre';?>
 		</div>
 		<input type="text" 
 			tabindex="1"
+			name="ua_padre_id"
 			class="form-control js-ua-id" 
-			value="<?php if($ua) if($ua -> ua_padre_id)echo $ua -> uaPadre($ua -> id)[0] -> codigo; else echo '';?>">
+			value="<?php if($ua) if($ua -> ua_padre_id)echo $ua -> uaPadre($ua -> ua_padre_id)[0] -> codigo; else echo '';?>">
 	</div>
 	<div class="form-group col-md-6 p-3">
 		<label for="id-unidad" class="pl-3">Unidad</label>
