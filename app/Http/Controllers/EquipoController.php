@@ -433,4 +433,10 @@ class EquipoController extends Controller
         $boton    = 'Eliminar';
         return view('app.confirmarEliminar')->with(compact('modelo', 'formData', 'entidad', 'boton', 'listar','mensaje'));
     }
+
+    public function autocomplete(){
+        $uas = Ua::select('codigo','descripcion')->get();
+
+        return response() -> json($uas);
+    }
 }

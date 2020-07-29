@@ -17,6 +17,9 @@
     <!-- CSS Just for demo purpose, don't include it in your project -->
     <link href="{{ asset('material') }}/demo/demo.css" rel="stylesheet" />
     <link rel="stylesheet" href="{{ asset('material/css/main.css') }}">
+
+
+
     </head>
     <body class="{{ $class ?? '' }}">
         @auth()
@@ -76,6 +79,8 @@
         <script src="{{ asset('material') }}/js/settings.js"></script>
         <script src="{{ asset('material') }}/js/funciones.js"></script>
         <script src="{{ asset('material') }}/js/bootbox.min.js"></script>
+
+
         @stack('js')
     </body>
 </html>

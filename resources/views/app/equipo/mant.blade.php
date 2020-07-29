@@ -48,7 +48,8 @@ if ($equipo !== NULL) {
 	<div class="form-group col-lg-6 col-md-6 col-sm-12">
 		{!! Form::label('ua_id', 'UA:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
 		<div class="col-lg-12 col-md-12 col-sm-12">
-			{!! Form::select('ua_id', $cboUa, null, array('class' => 'form-control input-xs', 'id' => 'ua_id')) !!}
+			
+			{!! Form::text('ua_id', null, array('class' => 'form-control input-xs ua_id', 'id' => 'ua_id')) !!}
 		</div>
 	</div>
 
@@ -130,3 +131,5 @@ if ($equipo !== NULL) {
 		init(IDFORMMANTENIMIENTO+'{!! $entidad !!}', 'M', '{!! $entidad !!}');
 	}); 
 </script>
+
+<script src="{{ asset('material') }}/js/ua_autocomplete.js"></script>

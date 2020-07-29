@@ -93,7 +93,7 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::post('equipo/buscar', 'EquipoController@buscar')->name('equipo.buscar');
 	Route::get('equipo/eliminar/{id}/{listarluego}', 'EquipoController@eliminar')->name('equipo.eliminar');
 	Route::resource('equipo', 'EquipoController', array('except' => array('show')));
-
+	
 		
 	//Rutas para las marcas (brands)
 	Route::post('marcas/buscar', 'BrandController@buscar')->name('marcas.buscar');
