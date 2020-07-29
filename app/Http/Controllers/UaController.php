@@ -28,9 +28,11 @@ class UaController extends Controller{
         $pagina           = $request->input('page');
         $filas            = $request->input('filas');
         $entidad          = 'Propietario';
-        $nombre             = Libreria::getParam($request->input('descripcion'));
+        $nombre           = Libreria::getParam($request->input('descripcion'));
+        $codigo           = Libreria::getParam($request -> input('codigo'));
         $resultado        = Ua::where('descripcion', 'LIKE', '%'.strtoupper($nombre).'%')->orderBy('descripcion', 'ASC');
-        $lista            = $resultado->get();   
+        $resultado2       = Ua::where('codigo', 'LIKE', '%'.$codigo.'%')->orderBy('codigo', 'ASC');
+        ($codigo) ? $lista = $resultado2 -> get() : $lista = $resultado -> get();
         $cabecera         = array();
         $cabecera[]       = array('valor' => '#', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Código', 'numero' => '1');
@@ -39,6 +41,7 @@ class UaController extends Controller{
         $cabecera[]       = array('valor' => 'Fondos', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Responsable', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Tipo de costo', 'numero' => '1');
+        $cabecera[]       = array('valor' => 'Ua Padre', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Unidad', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Operaciones', 'numero' => '2');
         
@@ -52,7 +55,7 @@ class UaController extends Controller{
             $inicio          = $paramPaginacion['inicio'];
             $fin             = $paramPaginacion['fin'];
             $paginaactual    = $paramPaginacion['nuevapagina'];
-            $lista           = $resultado->paginate($filas);
+            ($codigo) ? $lista = $resultado2 -> paginate($filas) : $lista = $resultado -> paginate($filas);
             $request->replace(array('page' => $paginaactual));
 
             return view($this->folderview.'.list')->with(compact('lista', 'paginacion', 'inicio', 'fin', 'entidad', 'cabecera', 'titulo_modificar', 'titulo_eliminar', 'ruta'));
@@ -60,6 +63,7 @@ class UaController extends Controller{
         return view($this->folderview.'.list')->with(compact('lista', 'entidad'));
     }
     
+
     public function index(){
         
         $entidad          = 'Ua';
@@ -229,5 +233,15 @@ class UaController extends Controller{
             $ua->delete();
         });
         return is_null($error) ? "OK" : $error;
+    }
+
+    //PETICION GET QUE DEVUELVE TODOS LOS DATOS
+    public function searchAutocomplete(Ua $uaModel, $query){
+
+        $consulta = "select codigo, descripcion from ua where 
+            codigo LIKE '%".$query."%' OR descripcion LIKE '%".$query."%'";
+        $res = DB::select($consulta);
+        // $res = $uaModel -> all();
+        return response() -> json($res);
     }
 }
