@@ -236,12 +236,12 @@ class UaController extends Controller{
     }
 
     //PETICION GET QUE DEVUELVE TODOS LOS DATOS
-    public function searchAutocomplete(Ua $uaModel, $query){
+    public function searchAutocomplete($query){
 
-        $consulta = "select codigo, descripcion from ua where 
+        $consulta = "select id, codigo, descripcion from ua where 
             codigo LIKE '%".$query."%' OR descripcion LIKE '%".$query."%'";
         $res = DB::select($consulta);
-        // $res = $uaModel -> all();
+        
         return response() -> json($res);
     }
 }
