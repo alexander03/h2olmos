@@ -25,14 +25,11 @@ if ($ua !== NULL) {
 		<label class="pl-3">Fondos</label>
 		<input type="text" class="form-control" style="display: none">
 		<section class="d-flex mt-1"> 
-			<div style="width: 50%;" class="d-flex">
-				<input style="height:25px; width:25px" class="form-control mr-2" type="radio" id="id-tipo1" name="fondos" value="1" <?php if($ua) if($ua->fondos) echo 'checked' ?>>
-				Sí
-			</div>
-			<div style="width: 50%;" class="d-flex">
-				<input style="height:25px; width:25px" class="form-control mr-2" type="radio" id="id-tipo2" name="fondos" value="0" <?php if($ua) if(!$ua->fondos) echo 'checked' ?>>
-				No
-			</div>
+			<select class="form-control" name="fondos">
+				<option value="">Seleccione si posee fondos</option>
+				<option value="1" <?php if($ua) if($ua->fondos) echo 'selected' ?>>Sí</option>
+				<option value="0" <?php if($ua) if(!$ua->fondos) echo 'selected' ?>>No</option>
+			</select>
 		</section>	
 	</div>
 	<div class="form-group col-md-6 p-3">
@@ -43,14 +40,23 @@ if ($ua !== NULL) {
 		<label for="id-t-costo" class="pl-3">Tipo de costo</label>
 		<input type="text" name="tipo_costo" id="id-t-costo" class="form-control" value="<?php if($ua) echo $ua->tipo_costo ?>">
 	</div>
-	<div class="form-group col-md-12 p-3">
+	<div class="form-group col-md-6 p-3">
 		<label for="id-unidad" class="pl-3">Unidad</label>
+		<input type="text" class="form-control" style="display: none">
 		<select name="unidad_id" id="id-unidad" class="form-control">
 			<option value="0">Seleccione una unidad</option>
 			@foreach ($unidadList as $unidad)
 			<option value="{{ $unidad -> id }}" <?php if($ua) if($ua->unidad_id == $unidad->id) echo 'selected' ?>>{{ $unidad -> descripcion }}</option>
 			@endforeach
 		</select>
+	</div>
+	<div class="form-group col-md-6 p-3">
+		<label for="autoComplete">Ua Padre</label>
+		<input type="text" 
+			id="autoComplete" 
+			tabindex="1"
+			class="form-control" 
+			value="<?php if($ua) if($ua -> ua_padre_id) echo $ua -> uaPadre($ua -> id)[0] -> descripcion;?>">
 	</div>
 	<div class="form-group w-100">
 		<div class="col-lg-12 col-md-12 col-sm-12 text-right">

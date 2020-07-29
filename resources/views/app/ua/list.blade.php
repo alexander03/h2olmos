@@ -30,6 +30,13 @@
 			</td>
 			<td class="text-nowrap">{{ $value->	responsable }}</td>
 			<td class="text-nowrap">{{ $value->	tipo_costo }}</td>
+			<td class="text-nowrap">
+				@if($value -> ua_padre_id)
+					{{  $value -> uaPadre($value -> id)[0] -> descripcion }}
+				@else
+					Sin padre
+				@endif
+			</td>
 			<td class="text-nowrap">{{ $value->	unidad -> descripcion }}</td>
 			<td class="text-nowrap">{!! Form::button('<i class="material-icons">edit</i>', array('onclick' => 'modal (\''.URL::route($ruta["edit"], array($value->id, 'listar'=>'SI')).'\', \''.$titulo_modificar.'\', this);', 'class' => 'btn btn-primary btn-link btn-sm','rel'=>'tooltip','title'=>'Editar')) !!}</td>
 			<td class="text-nowrap">{!! Form::button('<i class="material-icons">close</i>', array('onclick' => 'modal (\''.URL::route($ruta["delete"], array($value->id, 'SI')).'\', \''.$titulo_eliminar.'\', this);', 'class' => 'btn btn-danger btn-link btn-sm','rel'=>'tooltip','title'=>'Eliminar')) !!}</td>

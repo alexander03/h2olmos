@@ -17,9 +17,13 @@
     <!-- CSS Just for demo purpose, don't include it in your project -->
     <link href="{{ asset('material') }}/demo/demo.css" rel="stylesheet" />
     <link rel="stylesheet" href="{{ asset('material/css/main.css') }}">
+<<<<<<< HEAD
 
 
 
+=======
+    <link rel="stylesheet" href="{{ asset('css/auto-complete.css') }}">
+>>>>>>> alex_dev
     </head>
     <body class="{{ $class ?? '' }}">
         @auth()
