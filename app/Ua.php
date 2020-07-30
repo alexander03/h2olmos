@@ -20,7 +20,7 @@ class Ua extends Model{
 
     public function uaPadre($id){
 
-        return DB::select('select descripcion from ua where id = ?', [ $id ]);
+        return DB::select('select codigo, descripcion from ua where id = ?', [ $id ]);
     }
     // public function propietarios(){
 

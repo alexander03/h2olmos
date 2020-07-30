@@ -40,6 +40,17 @@ if ($ua !== NULL) {
 		<label for="id-t-costo" class="pl-3">Tipo de costo</label>
 		<input type="text" name="tipo_costo" id="id-t-costo" class="form-control" value="<?php if($ua) echo $ua->tipo_costo ?>">
 	</div>
+	<div class="form-group col-md-6 p-3 u-search-ua">
+		<label for="autoComplete" class="pl-3">Código Ua Padre</label>
+		<div class="u-ua-style js-ua-desc">
+			<?php if($ua) if($ua -> ua_padre_id)echo $ua -> uaPadre($ua -> ua_padre_id)[0] -> descripcion; else echo 'Sin padre';?>
+		</div>
+		<input type="text" 
+			tabindex="1"
+			name="ua_padre_id"
+			class="form-control js-ua-id" 
+			value="<?php if($ua) if($ua -> ua_padre_id)echo $ua -> uaPadre($ua -> ua_padre_id)[0] -> codigo; else echo '';?>">
+	</div>
 	<div class="form-group col-md-6 p-3">
 		<label for="id-unidad" class="pl-3">Unidad</label>
 		<input type="text" class="form-control" style="display: none">
@@ -49,14 +60,6 @@ if ($ua !== NULL) {
 			<option value="{{ $unidad -> id }}" <?php if($ua) if($ua->unidad_id == $unidad->id) echo 'selected' ?>>{{ $unidad -> descripcion }}</option>
 			@endforeach
 		</select>
-	</div>
-	<div class="form-group col-md-6 p-3">
-		<label for="autoComplete">Ua Padre</label>
-		<input type="text" 
-			id="autoComplete" 
-			tabindex="1"
-			class="form-control" 
-			value="<?php if($ua) if($ua -> ua_padre_id) echo $ua -> uaPadre($ua -> id)[0] -> descripcion;?>">
 	</div>
 	<div class="form-group w-100">
 		<div class="col-lg-12 col-md-12 col-sm-12 text-right">
@@ -70,5 +73,6 @@ if ($ua !== NULL) {
 	$(document).ready(function() {
 		configurarAnchoModal('800');
 		init(IDFORMMANTENIMIENTO+'{!! $entidad !!}', 'M', '{!! $entidad !!}');
+		doSearchUA();
 	}); 
 </script>

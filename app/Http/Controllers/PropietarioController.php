@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Librerias\Libreria;
 use App\Opcionmenu;
 use App\Propietario;
+use App\Rules\SearchUaPadre;
 use App\Rules\SelectDifZero;
 use App\Ua;
 use Illuminate\Http\Request;
@@ -104,7 +105,7 @@ class PropietarioController extends Controller
             'km' => 'required',
             'observacion' => 'required',
             'ubicacion' => 'required',
-            'ua_id' => ['required', new SelectDifZero()]
+            'ua_id' => ['required', new SelectDifZero(), new SearchUaPadre()]
         ];
         $mensajes = [
             'descripcion.required' => 'Su descripción es requerida',
@@ -131,7 +132,11 @@ class PropietarioController extends Controller
         $error = DB::transaction(function() use($request){
             $propietario = new Propietario();
             $propietario -> descripcion = strtoupper($request->input('descripcion'));
-            $propietario -> ua_id = $request -> input('ua_id');
+            //BUSCAR
+            if($request -> input('ua_id')){
+                $uaDB =  Ua::where('codigo', $request -> input('ua_id')) -> get();
+                $propietario -> ua_id = (!( $uaDB -> isEmpty() )) ? $uaDB[0] -> id : null;
+            }
             $propietario -> fecha_contrato = $request -> input('fecha_contrato');
             $propietario -> fecha_llegada = $request -> input('fecha_llegada');
             $propietario -> fecha_salida = $request -> input('fecha_salida');
@@ -180,7 +185,7 @@ class PropietarioController extends Controller
             'km' => 'required',
             'observacion' => 'required',
             'ubicacion' => 'required',
-            'ua_id' => ['required', new SelectDifZero()]
+            'ua_id' => ['required', new SelectDifZero(), new SearchUaPadre()]
         ];
         $mensajes = [
             'descripcion.required' => 'Su descripción es requerida',
@@ -210,7 +215,11 @@ class PropietarioController extends Controller
         $error = DB::transaction(function() use($request, $id){
             $propietario = Propietario::find($id);
             $propietario -> descripcion = strtoupper($request->input('descripcion'));
-            $propietario -> ua_id = $request -> input('ua_id');
+            //BUSCAR
+            if($request -> input('ua_id')){
+                $uaDB =  Ua::where('codigo', $request -> input('ua_id')) -> get();
+                $propietario -> ua_id = (!( $uaDB -> isEmpty() )) ? $uaDB[0] -> id : null;
+            }
             $propietario -> fecha_contrato = $request -> input('fecha_contrato');
             $propietario -> fecha_llegada = $request -> input('fecha_llegada');
             $propietario -> fecha_salida = $request -> input('fecha_salida');

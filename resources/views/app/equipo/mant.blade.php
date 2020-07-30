@@ -45,11 +45,19 @@ if ($equipo !== NULL) {
 			{!! Form::select('contratista_id', $cboContratista, null, array('class' => 'form-control input-xs', 'id' => 'contratista_id')) !!}
 		</div>
 	</div>
-	<div class="form-group col-lg-6 col-md-6 col-sm-12">
+	<div class="form-group col-lg-6 col-md-6 col-sm-12 u-search-ua">
 		{!! Form::label('ua_id', 'UA:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
+		<div class="u-ua-style js-ua-desc">
+			@if($equipo != null)
+				{{ $equipo->ua->descripcion}}
+			@endif
+		</div>
 		<div class="col-lg-12 col-md-12 col-sm-12">
-			
-			{!! Form::text('ua_id', null, array('class' => 'form-control input-xs ua_id', 'id' => 'ua_id')) !!}
+			@if($equipo == null)
+				{!! Form::text('ua_id', null, array('class' => 'form-control input-xs  js-ua-id', 'id' => 'ua_id')) !!}
+			@else
+				{!! Form::text('ua_id', $equipo->ua->codigo, array('class' => 'form-control input-xs  js-ua-id', 'id' => 'ua_id')) !!}
+			@endif
 		</div>
 	</div>
 
@@ -129,7 +137,6 @@ if ($equipo !== NULL) {
 	$(document).ready(function() {
 		configurarAnchoModal('800');
 		init(IDFORMMANTENIMIENTO+'{!! $entidad !!}', 'M', '{!! $entidad !!}');
+		doSearchUA();
 	}); 
 </script>
-
-<script src="{{ asset('material') }}/js/ua_autocomplete.js"></script>

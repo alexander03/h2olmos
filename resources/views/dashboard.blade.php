@@ -425,6 +425,4 @@
       md.initDashboardPageCharts();
     });
   </script>
-  <script src="./js/auto-complete.js"></script>
-  <script src="./js/main.js"></script>
 @endpush

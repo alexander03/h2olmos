@@ -32,7 +32,7 @@
 			<td class="text-nowrap">{{ $value->	tipo_costo }}</td>
 			<td class="text-nowrap">
 				@if($value -> ua_padre_id)
-					{{  $value -> uaPadre($value -> id)[0] -> descripcion }}
+					{{  $value -> uaPadre($value -> ua_padre_id)[0] -> descripcion }}
 				@else
 					Sin padre
 				@endif

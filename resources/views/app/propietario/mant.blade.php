@@ -11,16 +11,19 @@ if ($propietario !== NULL) {
 <section class="form-row">
 	<div class="form-group col-md-6 p-3">
 		<label for="descripcion" class="pl-3">Descripción</label>
-		<textarea name="descripcion" id="descripcion" class="form-control" rows="3">@php if($propietario) echo $propietario->descripcion @endphp</textarea>
+		<textarea name="descripcion" id="descripcion" class="form-control" rows="1">@php if($propietario) echo $propietario->descripcion @endphp</textarea>
 	</div>
-	<div class="form-group col-md-6 p-3">
-		<label for="id-ua" class="pl-3">Ua</label>
-		<select name="ua_id" id="id-ua" class="form-control">
-			<option value="0">Seleccione una ua</option>
-			@foreach ($uaList as $ua)
-			<option value="{{ $ua -> id }}" <?php if($propietario) if($propietario->ua_id == $ua->id) echo 'selected' ?>>{{ $ua -> descripcion }}</option>
-			@endforeach
-		</select>
+	<div class="form-group col-md-6 p-3 u-search-ua">
+		<label for="id-ua" class="pl-3">Código Ua</label>
+		<div class="u-ua-style js-ua-desc">
+			<?php if($propietario) if($propietario -> ua -> id) echo $propietario -> ua -> descripcion;?>
+		</div>
+		<input type="text" 
+			tabindex="1"
+			name="ua_id"
+			id="id-ua"
+			class="form-control js-ua-id" 
+			value="<?php if($propietario) if($propietario -> ua -> id) echo $propietario -> ua -> codigo;?>">
 	</div>
 	<div class="form-group col-md-6 p-3">
 	  <label for="id-date-begin" class="pl-3">Fecha de llegada</label>
@@ -74,5 +77,6 @@ if ($propietario !== NULL) {
 	$(document).ready(function() {
 		configurarAnchoModal('800');
 		init(IDFORMMANTENIMIENTO+'{!! $entidad !!}', 'M', '{!! $entidad !!}');
+		doSearchUA();
 	}); 
 </script>

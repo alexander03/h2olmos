@@ -20,9 +20,8 @@
 			</div>
 			<div class="col-2 col-sm-2 col-md-2 col-lg-2">
 				{!! Form::label('ua_id', 'UA:') !!}
-				<div class="col-lg-12 col-md-12 col-sm-12">
-					{!! Form::select('ua_id', $cboUa, '', array('class' => 'form-control', 'id' => 'ua_id')) !!}
-				</div>
+				{!! Form::text('ua_id', '', array('class' => 'form-control', 'id' => 'ua_id')) !!}
+
 			</div>
 			<div class="col-2 col-sm-2 col-md-2 col-lg-2">
 				{!! Form::label('filas', 'Filas a mostrar:')!!}
