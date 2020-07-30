@@ -381,7 +381,7 @@ CREATE TABLE `trabajo` (
 
 CREATE TABLE `ua` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `codigo` bigint(20) NOT NULL,
+  `codigo` varchar(200) NOT NULL,
   `descripcion` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `tipo` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `fondos` tinyint(1) NOT NULL,

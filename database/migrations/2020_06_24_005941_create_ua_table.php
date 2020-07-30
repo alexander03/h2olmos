@@ -17,13 +17,13 @@ class CreateUaTable extends Migration
         Schema::create('ua', function (Blueprint $table) {
             //$table -> engine = 'InnoDB';
             $table -> bigIncrements('id');
-            $table -> bigInteger('codigo') -> unique();
+            $table -> string('codigo') -> unique();
             $table -> text('descripcion');
             $table -> string('tipo');
             $table -> boolean('fondos');
             $table -> string('responsable');
             $table -> string('tipo_costo');
-            $table -> bigIncrements('ua_padre_id') -> unique();
+            $table -> bigInteger('ua_padre_id');
             $table -> unsignedBigInteger('unidad_id');
             $table -> timestamps();
             $table -> softDeletes();

@@ -11,7 +11,7 @@ if ($ua !== NULL) {
 <section class="form-row">
 	<div class="form-group col-md-6 p-3">
 		<label for="id-codigo" class="pl-3">Código</label>
-		<input type="number" name="codigo" id="id-codigo" class="form-control" value="<?php if($ua) echo $ua->codigo ?>">
+		<input type="text" name="codigo" id="id-codigo" class="form-control" value="<?php if($ua) echo $ua->codigo ?>">
 	</div>
 	<div class="form-group col-md-6 p-3">
 		<label for="id-desc" class="pl-3">Descripción</label>
