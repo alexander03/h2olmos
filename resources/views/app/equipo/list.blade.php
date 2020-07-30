@@ -36,7 +36,7 @@
 			</td>
 			<td>
 				@if($value->ua)
-					{{ $value->ua_id }}
+					{{ $value->ua->descripcion }}
 				@endif
 			</td>
 			<td>

@@ -73,6 +73,7 @@ Route::group(['middleware' => 'auth'], function () {
 
 	Route::post('ua/buscar', 'UaController@buscar')->name('ua.buscar');
 	Route::get('ua/eliminar/{id}/{listarluego}', 'UaController@eliminar')->name('ua.eliminar');
+	Route::get('ua/search/{query}', 'UaController@searchAutocomplete')->name('ua.search');
 	Route::resource('ua', 'UaController');
 
 	Route::post('unidad/buscar', 'UnidadController@buscar')->name('unidad.buscar');
@@ -93,7 +94,7 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::post('equipo/buscar', 'EquipoController@buscar')->name('equipo.buscar');
 	Route::get('equipo/eliminar/{id}/{listarluego}', 'EquipoController@eliminar')->name('equipo.eliminar');
 	Route::resource('equipo', 'EquipoController', array('except' => array('show')));
-
+	
 		
 	//Rutas para las marcas (brands)
 	Route::post('marcas/buscar', 'BrandController@buscar')->name('marcas.buscar');

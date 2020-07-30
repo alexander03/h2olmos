@@ -387,6 +387,7 @@ CREATE TABLE `ua` (
   `fondos` tinyint(1) NOT NULL,
   `responsable` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `tipo_costo` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `ua_padre_id` bigint(20),
   `unidad_id` bigint(20) UNSIGNED NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,

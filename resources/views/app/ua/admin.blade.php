@@ -16,6 +16,10 @@
 					{!! Form::text('descripcion', '', array('class' => 'form-control input-xs mr-2', 'id' => 'descripcion')) !!}
 				</div>
 				<div class="col-2 col-sm-2 col-md-2 col-lg-2">
+					{!! Form::label('codigo', 'Código:') !!}
+					{!! Form::text('codigo', '', array('class' => 'form-control input-xs mr-2', 'id' => 'codigo')) !!}
+				</div>
+				<div class="col-2 col-sm-2 col-md-2 col-lg-2">
 					{!! Form::label('filas', 'Filas a mostrar:')!!}
 					{!! Form::selectRange('filas', 1, 30, 20, array('class' => 'form-control input-xs', 'onchange' => 'buscar(\''.$entidad.'\')')) !!}
 				</div>
