@@ -23,7 +23,7 @@ class CreateUaTable extends Migration
             $table -> boolean('fondos');
             $table -> string('responsable');
             $table -> string('tipo_costo');
-            $table -> bigInteger('ua_padre_id');
+            $table -> unsignedBigInteger('ua_padre_id') -> nullable();
             $table -> unsignedBigInteger('unidad_id');
             $table -> timestamps();
             $table -> softDeletes();

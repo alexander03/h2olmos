@@ -10,6 +10,7 @@ use App\Ua;
 use App\Contratista;
 use Illuminate\Http\Request;
 use App\Librerias\Libreria;
+use App\Rules\SearchUaPadre;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 class EquipoController extends Controller
@@ -50,12 +51,18 @@ class EquipoController extends Controller
         $filtro           = array();
         $filtro[]         = ['codigo', 'LIKE', '%'.strtoupper($codigo).'%'];
         $filtro[]         = ['descripcion', 'LIKE', '%'.strtoupper($descripcion).'%'];
-
+/*
         if($ua_id != 0 ){
 			$filtro[]         = ['ua_id', '=', $ua_id];        	
         }
+*/
+        $resultado        = Equipo::where($filtro)->whereHas( 'ua',
+                                function ($query) use ($ua_id){
+                                    $query->where('codigo', 'like', '%'.strtoupper($ua_id).'%')
+                                          ->orWhere('descripcion', 'like', '%'.strtoupper($ua_id).'%');
+                                }
+                            )->orderBy('descripcion', 'ASC');
 
-        $resultado        = Equipo::where($filtro)->orderBy('descripcion', 'ASC');
         $lista            = $resultado->get();
         $cabecera         = array();
         $cabecera[]       = array('valor' => '#', 'numero' => '1');
@@ -150,7 +157,7 @@ class EquipoController extends Controller
         foreach($contratistas as $k=>$v){
             $cboContratista += array($v->id=>$v->razonsocial);
         }
-
+/*
         $uas = Ua::orderBy('descripcion','asc')->get();
         $cboUa = array();
         $cboUa += array('0' => 'Selecione UA');
@@ -158,13 +165,13 @@ class EquipoController extends Controller
         foreach($uas as $k=>$v){
             $cboUa += array($v->id=>$v->descripcion . '-' .$v->codigo );
         }
-
+*/
 
 
         $formData = array('equipo.store');
         $formData = array('route' => $formData, 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
         $boton    = 'Registrar'; 
-        return view($this->folderview.'.mant')->with(compact('equipo', 'formData', 'entidad', 'boton', 'listar', 'cboMarca', 'cboArea', 'cboContratista', 'cboUa'));
+        return view($this->folderview.'.mant')->with(compact('equipo', 'formData', 'entidad', 'boton', 'listar', 'cboMarca', 'cboArea', 'cboContratista'));
     }
 
     /**
@@ -183,7 +190,7 @@ class EquipoController extends Controller
                             'placa'                 => 'max:15',
     						'anio' 					=> 'required',
     						'contratista_id'  		=> 'numeric|min:1',
-    						'ua_id' 				=> 'numeric|min:1',
+    						'ua_id' 				=> ['required', new SearchUaPadre() ]
 //    						'fechavencimientosoat'  => 'required',
 //    						'fechavencimientogps'   => 'required',
 //    						'fechavencimientortv'   => 'required'
@@ -199,7 +206,7 @@ class EquipoController extends Controller
             'placa.max'                       => 'La placa sobrepasa los 15 carácteres',
             'anio.required'    				  => 'Debe ingresar la fecha de fabricación',
             'contratista_id.min'   	  		  => 'Debe asignar un contratista',
-            'ua_id.min'    			  		  => 'Debe asignar una ua',
+            'ua_id.required'		  		  => 'Debe asignar una ua',
 //            'fechavencimientosoat.required'   => 'Debe ingresar la fecha de vencimiento de SOAT',
 //            'fechavencimientogps.required'    => 'Debe ingresar la fecha de vencimiento de GPS',
 //            'fechavencimientortv.required'    => 'Debe ingresar la fecha de vencimiento de RTV'
@@ -216,7 +223,9 @@ class EquipoController extends Controller
             $equipo->marca_id 			  = $request->input('marca_id');
             $equipo->anio 				  = $request->input('anio');
             $equipo->contratista_id 	  = $request->input('contratista_id');
-            $equipo->ua_id 				  = $request->input('ua_id');
+
+            $uaDB = Ua::where('codigo', $request -> input('ua_id')) -> get();
+            $equipo->ua_id 				  = $uaDB[0]->id;
             $equipo->fechavencimientosoat = $request->input('fechavencimientosoat');
             $equipo->fechavencimientogps  = $request->input('fechavencimientogps');
             $equipo->fechavencimientortv  = $request->input('fechavencimientortv');
@@ -299,19 +308,19 @@ class EquipoController extends Controller
             $cboContratista += array($v->id=>$v->razonsocial);
         }
 
-        $uas = Ua::orderBy('descripcion','asc')->get();
+/*        $uas = Ua::orderBy('descripcion','asc')->get();
         $cboUa = array();
         $cboUa += array('0' => 'Selecione UA');
 //        $cboUa += array('1' => '1543ua');
         foreach($uas as $k=>$v){
             $cboUa += array($v->id=>$v->descripcion . '-' .$v->codigo);
         }        
-
+*/
         $entidad  = 'Equipo';
         $formData = array('equipo.update', $id);
         $formData = array('route' => $formData, 'method' => 'PUT', 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
         $boton    = 'Modificar';
-        return view($this->folderview.'.mant')->with(compact('equipo', 'formData', 'entidad', 'boton', 'listar', 'cboMarca', 'cboArea', 'cboContratista', 'cboUa'));
+        return view($this->folderview.'.mant')->with(compact('equipo', 'formData', 'entidad', 'boton', 'listar', 'cboMarca', 'cboArea', 'cboContratista'));
     }
 
     /**
@@ -334,7 +343,7 @@ class EquipoController extends Controller
                             'placa'                 => 'max:15',
                             'anio'                  => 'required',
                             'contratista_id'        => 'numeric|min:1',
-                            'ua_id'                 => 'numeric|min:1',
+                            'ua_id'                 => ['required', new SearchUaPadre() ]
 //                            'fechavencimientosoat'  => 'required',
 //                            'fechavencimientogps'   => 'required',
 //                            'fechavencimientortv'   => 'required'
@@ -350,7 +359,7 @@ class EquipoController extends Controller
             'placa.max'                       => 'La placa sobrepasa los 15 carácteres',
             'anio.required'                   => 'Debe ingresar la fecha de fabricación',
             'contratista_id.min'              => 'Debe asignar un contratista',
-            'ua_id.min'                       => 'Debe asignar una ua',
+            'ua_id.required'                  => 'Debe asignar una ua',
 //            'fechavencimientosoat.required'   => 'Debe ingresar la fecha de vencimiento de SOAT',
 //            'fechavencimientogps.required'    => 'Debe ingresar la fecha de vencimiento de GPS',
 //            'fechavencimientortv.required'    => 'Debe ingresar la fecha de vencimiento de RTV'
@@ -367,7 +376,8 @@ class EquipoController extends Controller
             $equipo->marca_id 			  = $request->input('marca_id');
             $equipo->anio 				  = $request->input('anio');
             $equipo->contratista_id 	  = $request->input('contratista_id');
-            $equipo->ua_id 				  = $request->input('ua_id');
+            $uaDB = Ua::where('codigo', $request -> input('ua_id')) -> get();
+            $equipo->ua_id                = $uaDB[0]->id;
             $equipo->fechavencimientosoat = $request->input('fechavencimientosoat');
             $equipo->fechavencimientogps  = $request->input('fechavencimientogps');
             $equipo->fechavencimientortv  = $request->input('fechavencimientortv');
@@ -432,5 +442,11 @@ class EquipoController extends Controller
         $formData = array('route' => array('equipo.destroy', $id), 'method' => 'DELETE', 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
         $boton    = 'Eliminar';
         return view('app.confirmarEliminar')->with(compact('modelo', 'formData', 'entidad', 'boton', 'listar','mensaje'));
+    }
+
+    public function autocomplete(){
+        $uas = Ua::select('codigo','descripcion')->get();
+
+        return response() -> json($uas);
     }
 }
