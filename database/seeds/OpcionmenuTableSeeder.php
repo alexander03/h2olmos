@@ -71,5 +71,13 @@ class OpcionmenuTableSeeder extends Seeder
             'grupomenu_id' => 1
         ]);
 
+        DB::table('opcionmenu')->insert([
+            'descripcion' => 'Mant. corr. y prev.',
+            'link' => 'mantcorrprev',
+            'icono' => 'myicon',
+            'orden' => 1,
+            'grupomenu_id' => 3
+        ]);
+
     }
 }

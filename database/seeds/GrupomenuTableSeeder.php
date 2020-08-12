@@ -12,9 +12,19 @@ class GrupomenuTableSeeder extends Seeder
     public function run()
     {
         DB::table('grupomenu')->insert([
-            'descripcion' => 'Mantenimiento',
+            'descripcion' => 'MANTENIMIENTO',
             'icono' => 'myicon',
             'orden' => 1
+        ]);
+        DB::table('grupomenu')->insert([
+            'descripcion' => 'SISTEMA',
+            'icono' => 'myicon',
+            'orden' => 2
+        ]);
+        DB::table('grupomenu')->insert([
+            'descripcion' => 'PROCESOS',
+            'icono' => 'myicon',
+            'orden' => 3
         ]);
     }
 }
