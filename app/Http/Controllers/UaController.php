@@ -10,6 +10,8 @@ use App\Unidad;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\UaExport;
 
 class UaController extends Controller{
     protected $folderview      = 'app.ua';
@@ -251,10 +253,22 @@ class UaController extends Controller{
     //PETICION GET QUE DEVUELVE TODOS LOS DATOS
     public function searchAutocomplete($query){
 
-        $consulta = "select id, codigo, descripcion from ua where 
+        $consulta = "select id, codigo, descripcion from ua where
+            deleted_at IS NULL AND
             codigo LIKE '%".$query."%' OR descripcion LIKE '%".$query."%'";
         $res = DB::select($consulta);
         
         return response() -> json($res);
     }
+
+    //EXPORTAR E IMPORTAR EXCEL
+    public function importExcel(){
+
+    }
+
+    public function exportExcel(){
+
+        return Excel::download(new UaExport, 'ua-list.xlsx');
+    }
 }
+

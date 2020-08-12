@@ -27,6 +27,14 @@
 					{!! Form::button('<i class="material-icons">search</i>Buscar', array('class' => 'btn btn-success btn-sm', 'id' => 'btnBuscar', 'onclick' => 'buscar(\''.$entidad.'\')')) !!}
 					{!! Form::button('<i class="material-icons">add</i>Nuevo', array('class' => 'btn btn-info btn-sm', 'id' => 'btnNuevo', 'onclick' => 'modal (\''.URL::route($ruta["create"], array('listar'=>'SI')).'\', \''.$titulo_registrar.'\', this);')) !!}
 				</div>
+				<div class="form-group">
+					<a href="{{ route('ua.excel.import') }}" class="ml-1 btn btn-sm btn-primary">
+						<i class="material-icons">cloud_upload</i> Importar
+					</a>
+					<a href="{{ route('ua.excel.export') }}" class="btn btn-sm btn-dark">
+						<i class="material-icons">cloud_download</i> Exportar
+					</a>
+				</div>
 			
 				{!! Form::close() !!}
             	<div class="table-responsive" id="listado{{ $entidad }}">
