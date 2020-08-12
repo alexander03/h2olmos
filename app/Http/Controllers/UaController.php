@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\UaExport;
+use App\Imports\UaImport;
+use Exception;
 
 class UaController extends Controller{
     protected $folderview      = 'app.ua';
@@ -30,7 +32,7 @@ class UaController extends Controller{
 
         $pagina           = $request->input('page');
         $filas            = $request->input('filas');
-        $entidad          = 'Propietario';
+        $entidad          = 'Ua';
         $nombre           = Libreria::getParam($request->input('descripcion'));
         $codigo           = Libreria::getParam($request -> input('codigo'));
         $resultado        = Ua::where('descripcion', 'LIKE', '%'.strtoupper($nombre).'%')->orderBy('descripcion', 'ASC');
@@ -262,8 +264,20 @@ class UaController extends Controller{
     }
 
     //EXPORTAR E IMPORTAR EXCEL
-    public function importExcel(){
+    public function importExcel(Request $request){
 
+        try{
+            $file = $request -> file('ua-excel');
+            Excel::import(new UaImport, $file);
+            $res = ['ok' => true];
+
+            return response() -> json($res);
+
+        }catch(Exception $ex){
+            $res = ['ok' => false];
+       
+            return response() -> json($res);
+        }
     }
 
     public function exportExcel(){

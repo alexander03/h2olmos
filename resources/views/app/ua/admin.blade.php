@@ -28,9 +28,15 @@
 					{!! Form::button('<i class="material-icons">add</i>Nuevo', array('class' => 'btn btn-info btn-sm', 'id' => 'btnNuevo', 'onclick' => 'modal (\''.URL::route($ruta["create"], array('listar'=>'SI')).'\', \''.$titulo_registrar.'\', this);')) !!}
 				</div>
 				<div class="form-group">
-					<a href="{{ route('ua.excel.import') }}" class="ml-1 btn btn-sm btn-primary">
+					{{-- <form action="{{ route('ua.excel.import') }}" method="post" enctype="multipart/form-data">
+						@csrf --}}
+						{{--  --}}
+						
+					{{-- </form> --}}
+					<a href="#" class="ml-1 btn btn-sm btn-primary js-import-excel">
 						<i class="material-icons">cloud_upload</i> Importar
 					</a>
+					<input class="js-import-excel-file" type="file" accept=".xls, .xlsx">
 					<a href="{{ route('ua.excel.export') }}" class="btn btn-sm btn-dark">
 						<i class="material-icons">cloud_download</i> Exportar
 					</a>
@@ -40,6 +46,31 @@
             	<div class="table-responsive" id="listado{{ $entidad }}">
 			</div>
 		</div>
+	</div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="modalError" tabindex="-1" role="dialog"aria-hidden="true">
+	<div class="modal-dialog" role="document">
+	  <div class="modal-content">
+		<div class="modal-header">
+		  <h4 class="modal-title">Error</h4>
+		  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		  </button>
+		</div>
+		<div class="modal-body">
+			<section>
+				<h3 class="text-danger text-center">Error al importar</h3>
+				<p class="text-center text-secondary">
+					No se pudo importar, el formato no coincide o existen datos repetidos.
+				</p>
+				<div class="d-flex justify-content-center">
+					<button class="btn btn-success" data-dismiss="modal">Aceptar</button>
+				</div>
+			</section>
+		</div>
+	  </div>
 	</div>
 </div>
 
@@ -53,5 +84,6 @@
 				buscar('{{ $entidad }}');
 			}
 		});
+		doImportExcel();
 	});
 </script>
