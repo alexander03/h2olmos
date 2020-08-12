@@ -20,12 +20,9 @@ class MantCorrPrev extends Controller
     protected $tituloEliminar  = 'Eliminar repuesto';
     protected $tituloActivar  = 'Activar repuesto';
     protected $rutas           = array(
-        'checklistvehicular' => 'mantcorrprev.checklistvehicular', 
-        'create' => 'repuestos.create',
-        'edit'   => 'repuestos.edit', 
-        'delete' => 'repuestos.eliminar',
-        'activar' => 'repuestos.activar',
+        'createchecklistvehicular' => 'mantcorrprev.createchecklistvehicular', 
         'search' => 'mantcorrprev.buscar',
+        'store' => 'mantcorrprev.store',
         'index'  => 'mantcorrprev.index',
     );
 
@@ -76,5 +73,25 @@ class MantCorrPrev extends Controller
         $ruta             = $this->rutas;
         
         return view($this->folderview.'.admin')->with(compact('entidad', 'title', 'tituloCheckListVehicular', 'ruta'));
+    }
+
+    public function createchecklistvehicular(Request $request)
+    {
+        $listar   = Libreria::getParam($request->input('listar'), 'NO');
+        $entidad  = 'Repuesto';
+        $repuesto = null;
+        $formData = array('repuestos.store');
+        $formData = array('route' => $formData, 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
+        $boton    = 'Registrar';
+        $arrUnidades = Unidad::getAll();
+        $cboUnidades = array('' => 'Seleccione');
+        foreach($arrUnidades as $k=>$v){
+            $cboUnidades += array($v->id=>$v->descripcion);
+        }
+        return view($this->folderview.'.mant_checklistvehicular')->with(compact('repuesto', 'formData', 'entidad', 'boton', 'cboUnidades', 'listar'));
+    }
+
+    public function store(Request $request) {
+
     }
 }

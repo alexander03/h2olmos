@@ -130,6 +130,7 @@ Route::group(['middleware' => 'auth'], function () {
 	//Rutas para mantenimiento correctivo y preventivo
 	Route::resource('mantcorrprev', 'MantCorrPrev', array('except' => array('show')));
 	Route::post('mantcorrprev/buscar', 'MantCorrPrev@buscar')->name('mantcorrprev.buscar');
+	Route::get('mantcorrprev/createchecklistvehicular', 'MantCorrPrev@createchecklistvehicular')->name('mantcorrprev.createchecklistvehicular');
 
 	Route::post('grupomenu/buscar', 'GrupomenuController@buscar')->name('grupomenu.buscar');
     Route::get('grupomenu/eliminar/{id}/{listarluego}', 'GrupomenuController@eliminar')->name('grupomenu.eliminar');
