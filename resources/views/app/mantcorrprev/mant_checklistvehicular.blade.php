@@ -11,12 +11,12 @@
 	</div>
 	<div class="form-group col-4">
 		<div class="col-lg-12 col-md-12 col-sm-12">
-			{!! Form::select('categoria', array('' => 'Seleccione Tipo Unidad', 'equipo'=> 'EQUIPO', 'vehiculo' => 'VEHICULO'), null, array('class' => 'form-control input-xs', 'id' => 'categoria')) !!}
+			{!! Form::select('categoria', array('' => 'SELECCIONE TIPO UNIDAD', 'equipo'=> 'EQUIPO', 'vehiculo' => 'VEHICULO'), null, array('class' => 'form-control input-xs', 'id' => 'categoria')) !!}
 		</div>
 	</div>
 	<div class="form-group col-4">
 		<div class="col-lg-12 col-md-12 col-sm-12">
-			{!! Form::select('categoria', array('' => 'Seleccione Unidad', '1'=> 'CAMION VOLQUETE', '2' => 'COMPACTADORA'), null, array('class' => 'form-control input-xs', 'id' => 'categoria')) !!}
+			{!! Form::select('categoria', array('' => 'SELECCIONE UNIDAD', '1'=> 'CAMION VOLQUETE', '2' => 'COMPACTADORA'), null, array('class' => 'form-control input-xs', 'id' => 'categoria')) !!}
 		</div>
 	</div>
 </div>
@@ -24,13 +24,13 @@
 	<div class="form-group col-3">
 		{!! Form::label('kilometrajeinicial', 'Kilometraje inicial:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
 		<div class="col-lg-12 col-md-12 col-sm-12">
-			{!! Form::text('kilometrajeinicial', null, array('class' => 'form-control input-xs solo-lectura', 'id' => 'kilometrajeinicial')) !!}
+			{!! Form::number('kilometrajeinicial', null, array('class' => 'form-control input-xs solo-lectura', 'id' => 'kilometrajeinicial')) !!}
 		</div>
 	</div>
 	<div class="form-group col-3">
 		{!! Form::label('kilometrajefinal', 'Kilometraje final:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
 		<div class="col-lg-12 col-md-12 col-sm-12">
-			{!! Form::text('kilometrajefinal', null, array('class' => 'form-control input-xs solo-lectura', 'id' => 'kilometrajefinal')) !!}
+			{!! Form::number('kilometrajefinal', null, array('class' => 'form-control input-xs solo-lectura', 'id' => 'kilometrajefinal')) !!}
 		</div>
 	</div>
 	<div class="form-group col-6">
