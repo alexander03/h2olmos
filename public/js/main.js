@@ -1,3 +1,4 @@
+// Autocomplete
 const doSearchUA = () => {
     // The autoComplete.js Engine instance creator
     var autoCompletejs = new autoComplete({
@@ -93,3 +94,41 @@ const doSearchUA = () => {
     });
 };
 
+//Fetch UA import Excel
+const doImportExcel = () => {
+
+    document.querySelector('.js-import-excel').addEventListener(
+        'click', 
+        (event) => document.querySelector('.js-import-excel-file').click()
+    );
+
+    document.querySelector('.js-import-excel-file').addEventListener(
+        'change', 
+        async (event) => {
+
+            const file = event.target.files[0];
+            if(file.type.includes('application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') || 
+                file.type.includes('application/vnd.ms-excel')){
+
+                    const formData = new FormData();
+                    formData.append('ua-excel', file);
+        
+                    const headers = new Headers();
+                    headers.append('X-CSRF-TOKEN', document.querySelector('meta[name="csrf-token"]').content);
+                    const config = {
+                        headers,
+                        method:'POST',
+                        body: formData
+                    };
+                        
+                    const res = await fetch('/ua/importar', config);
+                    const { ok } = await res.json();
+                    
+                    //Carga tabla
+                    if(ok) buscarCompaginado('', 'Accion realizada correctamente', 'Ua', 'OK');
+                    else $('#modalError').modal('show');
+    
+            }
+        }
+    );
+};

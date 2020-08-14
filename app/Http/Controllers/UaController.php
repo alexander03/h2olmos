@@ -10,6 +10,10 @@ use App\Unidad;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\UaExport;
+use App\Imports\UaImport;
+use Exception;
 
 class UaController extends Controller{
     protected $folderview      = 'app.ua';
@@ -28,7 +32,7 @@ class UaController extends Controller{
 
         $pagina           = $request->input('page');
         $filas            = $request->input('filas');
-        $entidad          = 'Propietario';
+        $entidad          = 'Ua';
         $nombre           = Libreria::getParam($request->input('descripcion'));
         $codigo           = Libreria::getParam($request -> input('codigo'));
         $resultado        = Ua::where('descripcion', 'LIKE', '%'.strtoupper($nombre).'%')->orderBy('descripcion', 'ASC');
@@ -251,10 +255,34 @@ class UaController extends Controller{
     //PETICION GET QUE DEVUELVE TODOS LOS DATOS
     public function searchAutocomplete($query){
 
-        $consulta = "select id, codigo, descripcion from ua where 
+        $consulta = "select id, codigo, descripcion from ua where
+            deleted_at IS NULL AND
             codigo LIKE '%".$query."%' OR descripcion LIKE '%".$query."%'";
         $res = DB::select($consulta);
         
         return response() -> json($res);
     }
+
+    //EXPORTAR E IMPORTAR EXCEL
+    public function importExcel(Request $request){
+
+        try{
+            $file = $request -> file('ua-excel');
+            Excel::import(new UaImport, $file);
+            $res = ['ok' => true];
+
+            return response() -> json($res);
+
+        }catch(Exception $ex){
+            $res = ['ok' => false];
+       
+            return response() -> json($res);
+        }
+    }
+
+    public function exportExcel(){
+
+        return Excel::download(new UaExport, 'ua-list.xlsx');
+    }
 }
+
