@@ -48,6 +48,11 @@ class OpcionmenuTableSeeder extends Seeder
             'icono' => 'myicon',
             'orden' => 6,
             'grupomenu_id' => 1],
+            ['descripcion' => 'Concesionarias',
+            'link' => 'concesionarias',
+            'icono' => 'myicon',
+            'orden' => 7,
+            'grupomenu_id' => 1],
         ]);
         DB::table('opcionmenu')->insert([
             'descripcion' => 'Tipo de horas',

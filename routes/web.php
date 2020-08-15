@@ -127,9 +127,14 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::post('trabajos/buscar', 'TrabajoController@buscar')->name('trabajos.buscar');
 	Route::get('trabajos/eliminar/{id}/{listarluego}', 'TrabajoController@eliminar')->name('trabajos.eliminar');
 	Route::resource('trabajos', 'TrabajoController', array('except' => array('show')));
+	//Rutas para las concesionarias
+	Route::post('concesionarias/buscar', 'ConcesionariaController@buscar')->name('concesionarias.buscar');
+	Route::get('concesionarias/eliminar/{id}/{listarluego}', 'ConcesionariaController@eliminar')->name('concesionarias.eliminar');
+	Route::resource('concesionarias', 'ConcesionariaController', array('except' => array('show')));
 	//Rutas para mantenimiento correctivo y preventivo
 	Route::resource('mantcorrprev', 'MantCorrPrev', array('except' => array('show')));
 	Route::post('mantcorrprev/buscar', 'MantCorrPrev@buscar')->name('mantcorrprev.buscar');
+	Route::get('mantcorrprev/createrepuesto', 'MantCorrPrev@createrepuesto')->name('mantcorrprev.createrepuesto');
 
 	Route::post('grupomenu/buscar', 'GrupomenuController@buscar')->name('grupomenu.buscar');
     Route::get('grupomenu/eliminar/{id}/{listarluego}', 'GrupomenuController@eliminar')->name('grupomenu.eliminar');
