@@ -1,30 +1,28 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use Validator;
-use App\Equipo;
+use App\Vehiculo;
 use App\Area;
 use App\Brand;
-use App\Ua;
 use App\Contratista;
 use Illuminate\Http\Request;
 use App\Librerias\Libreria;
-use App\Rules\SearchUaPadre;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
-class EquipoController extends Controller
+
+class VehiculoController extends Controller
 {
-    protected $folderview      = 'app.equipo';
-    protected $tituloAdmin     = 'Equipo';
-    protected $tituloRegistrar = 'Registrar equipo';
-    protected $tituloModificar = 'Modificar equipo';
-    protected $tituloEliminar  = 'Eliminar equipo';
-    protected $rutas           = array('create' => 'equipo.create', 
-            'edit'   => 'equipo.edit', 
-            'delete' => 'equipo.eliminar',
-            'search' => 'equipo.buscar',
-            'index'  => 'equipo.index',
+    protected $folderview      = 'app.vehiculo';
+    protected $tituloAdmin     = 'Vehiculo';
+    protected $tituloRegistrar = 'Registrar vehiculo';
+    protected $tituloModificar = 'Modificar vehiculo';
+    protected $tituloEliminar  = 'Eliminar vehiculo';
+    protected $rutas           = array('create' => 'vehiculo.create', 
+            'edit'   => 'vehiculo.edit', 
+            'delete' => 'vehiculo.eliminar',
+            'search' => 'vehiculo.buscar',
+            'index'  => 'vehiculo.index',
         );
 
        /**
@@ -42,32 +40,40 @@ class EquipoController extends Controller
     {
         $pagina           = $request->input('page');
         $filas            = $request->input('filas');
-        $entidad          = 'Equipo';
+        $entidad          = 'Vehiculo';
 
-        $codigo     	  = Libreria::getParam($request->input('codigo'));
-        $descripcion      = Libreria::getParam($request->input('descripcion'));
+        $ua     	  = Libreria::getParam($request->input('ua'));
+        $placa      = Libreria::getParam($request->input('placa'));
+  
 
         $filtro           = array();
-        $filtro[]         = ['codigo', 'LIKE', '%'.strtoupper($codigo).'%'];
-        $filtro[]         = ['descripcion', 'LIKE', '%'.strtoupper($descripcion).'%'];
+        $filtro[]         = ['ua', 'LIKE', '%'.strtoupper($ua).'%'];
+        $filtro[]         = ['placa', 'LIKE', '%'.strtoupper($placa).'%'];
 /*
         if($ua_id != 0 ){
 			$filtro[]         = ['ua_id', '=', $ua_id];        	
         }
 */
-        $resultado        = Equipo::where($filtro)->orderBy('descripcion', 'ASC');
+        $resultado        = Vehiculo::where($filtro)->orderBy('ua', 'ASC');
 
         $lista            = $resultado->get();
         $cabecera         = array();
         $cabecera[]       = array('valor' => '#', 'numero' => '1');
-        $cabecera[]       = array('valor' => 'Código', 'numero' => '1');
-        $cabecera[]       = array('valor' => 'Descripción', 'numero' => '1');
+        $cabecera[]       = array('valor' => 'Ua', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Modelo', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Marca', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Año de Fbr', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Placa', 'numero' => '1');
+        $cabecera[]       = array('valor' => 'Motor', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Contratista', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Area', 'numero' => '1');
+        $cabecera[]       = array('valor' => 'Asientos', 'numero' => '1');
+        $cabecera[]       = array('valor' => 'Chasis', 'numero' => '1');
+        $cabecera[]       = array('valor' => 'Carrocería', 'numero' => '1');
+        $cabecera[]       = array('valor' => 'Color', 'numero' => '1');
+        $cabecera[]       = array('valor' => 'Vencimiento SOAT', 'numero' => '1');
+        $cabecera[]       = array('valor' => 'Vencimiento GPS', 'numero' => '1');
+        $cabecera[]       = array('valor' => 'Vencimiento RTV', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Operaciones', 'numero' => '2');
         
         $titulo_modificar = $this->tituloModificar;
@@ -94,7 +100,7 @@ class EquipoController extends Controller
      */
     public function index()
     {
-        $entidad          = 'Equipo';
+        $entidad          = 'Vehiculo';
         $title            = $this->tituloAdmin;
         $titulo_registrar = $this->tituloRegistrar;
         $ruta             = $this->rutas;
@@ -106,7 +112,7 @@ class EquipoController extends Controller
             $cboUa += array($v->id=>$v->descripcion . '-' .$v->codigo);
         }
 */
-        return view($this->folderview.'.admin')->with(compact('entidad', 'title', 'titulo_registrar', 'ruta' ));
+        return view($this->folderview.'.admin')->with(compact('entidad', 'title', 'titulo_registrar', 'ruta'));
     }
 
     /**
@@ -117,8 +123,8 @@ class EquipoController extends Controller
     public function create(Request $request)
     {
         $listar   = Libreria::getParam($request->input('listar'), 'NO');
-        $entidad  = 'Equipo';
-        $equipo = null;
+        $entidad  = 'Vehiculo';
+        $vehiculo = null;
 
         $marcas = Brand::orderBy('descripcion','asc')->get();
         $cboMarca = array();
@@ -152,10 +158,10 @@ class EquipoController extends Controller
 */
 
 
-        $formData = array('equipo.store');
+        $formData = array('vehiculo.store');
         $formData = array('route' => $formData, 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
         $boton    = 'Registrar'; 
-        return view($this->folderview.'.mant')->with(compact('equipo', 'formData', 'entidad', 'boton', 'listar', 'cboMarca', 'cboArea', 'cboContratista'));
+        return view($this->folderview.'.mant')->with(compact('vehiculo', 'formData', 'entidad', 'boton', 'listar', 'cboMarca', 'cboArea', 'cboContratista'));
     }
 
     /**
@@ -167,54 +173,67 @@ class EquipoController extends Controller
     public function store(Request $request)
     {
         $listar     = Libreria::getParam($request->input('listar'), 'NO');
-        $reglas     = array('codigo' 				=> 'required|max:10',
-    						'descripcion' 			=> 'required|max:22',
+        $reglas     = array('ua' 				=> 'required|max:10',
     						'modelo' 				=> 'required|max:20',
     						'marca_id' 				=> 'numeric|min:1',
                             'placa'                 => 'max:15',
-    						'anio' 					=> 'required',
+    						'anio' 					=> 'required|numeric',
     						'contratista_id'  		=> 'numeric|min:1',
-//    						'ua_id' 				=> ['required', new SearchUaPadre() ]
-//    						'fechavencimientosoat'  => 'required',
-//    						'fechavencimientogps'   => 'required',
-//    						'fechavencimientortv'   => 'required'
+    						'asientos'				=> 'required|numeric',
+    						'area_id' 				=> 'numeric|min:1',
+    						'color' 				=> 'required|max:20',
+    						'chasis' 				=> 'required|max:20',
+    						'fechavencimientosoat'  => 'required',
+    						'fechavencimientogps'   => 'required',
+    						'fechavencimientortv'   => 'required'
                         );
         $mensajes = array(
-        	'codigo.required'         		  => 'Debe ingresar un código',
-            'codigo.max'                      => 'El código sobrepasa los 10 carácteres',
-            'descripcion.required' 		      => 'Debe ingresar una descripcion',
-            'descripcion.max'                 => 'La descripcion sobrepasa los 22 carácteres',
+        	'ua.required'         		  => 'Debe ingresar un código de ua',
+            'codigo.max'                      => 'El código de ua sobrepasa los 10 carácteres',
             'modelo.required'         		  => 'Debe ingresar el modelo',
             'modelo.max'                      => 'El modelo sobrepasa los 20 carácteres',
             'marca_id.min'  	  		  	  => 'Debe asignar una marca',
+            'area_id.min'  	  		  	  	  => 'Debe asignar una area',
             'placa.max'                       => 'La placa sobrepasa los 15 carácteres',
-            'anio.required'    				  => 'Debe ingresar la fecha de fabricación',
+            'anio.required'    				  => 'Debe ingresar un año de fabricación',
+            'anio.numeric'    				  => 'Debe ingresar un año valido',
+            'asientos.required'				  => 'Debe ingresar el número de aisentos',
+            'asientos.numeric'				  => 'Debe ingresar un número valido',
+            'color.required'				  => 'Debe ingresar un color',
+            'color.max'				 		  => 'El color sobrepasa los 20 carácteres',
+            'chasis.required'				  => 'Debe ingresar el codigo de chasis',
+            'chasis.max'				 	  => 'El chasis sobrepasa los 20 carácteres',
             'contratista_id.min'   	  		  => 'Debe asignar un contratista',
-//            'ua_id.required'		  		  => 'Debe asignar una ua',
-//            'fechavencimientosoat.required'   => 'Debe ingresar la fecha de vencimiento de SOAT',
-//            'fechavencimientogps.required'    => 'Debe ingresar la fecha de vencimiento de GPS',
-//            'fechavencimientortv.required'    => 'Debe ingresar la fecha de vencimiento de RTV'
+            'fechavencimientosoat.required'   => 'Debe ingresar la fecha de vencimiento de SOAT',
+            'fechavencimientogps.required'    => 'Debe ingresar la fecha de vencimiento de GPS',
+            'fechavencimientortv.required'    => 'Debe ingresar la fecha de vencimiento de RTV'
             );
         $validacion = Validator::make($request->all(), $reglas, $mensajes);
         if ($validacion->fails()) {
             return $validacion->messages()->toJson();
         }
         $error = DB::transaction(function() use($request){
-            $equipo = new Equipo();
-            $equipo->codigo 	 		  = strtoupper($request->input('codigo'));
-            $equipo->descripcion 		  = strtoupper($request->input('descripcion'));
-            $equipo->modelo 			  = strtoupper($request->input('modelo'));
-            $equipo->marca_id 			  = $request->input('marca_id');
-            $equipo->anio 				  = $request->input('anio');
-            $equipo->contratista_id 	  = $request->input('contratista_id');
+            $vehiculo = new Vehiculo();
+            $vehiculo->ua 	 		  = strtoupper($request->input('ua'));
+            $vehiculo->modelo 			  = strtoupper($request->input('modelo'));
+            $vehiculo->marca_id 			  = $request->input('marca_id');
+            $vehiculo->anio 				  = $request->input('anio');
+            $vehiculo->contratista_id 	  = $request->input('contratista_id');
 
+            $vehiculo->fechavencimientosoat = $request->input('fechavencimientosoat');
+            $vehiculo->fechavencimientogps  = $request->input('fechavencimientogps');
+            $vehiculo->fechavencimientortv  = $request->input('fechavencimientortv');
             
-            if($request->input('area_id') != 0){
-            	$equipo->area_id 				  = $request->input('area_id');
-            }
+            $vehiculo->area_id 				  = $request->input('area_id');
+            $vehiculo->placa 				  = $request->input('placa');
+            $vehiculo->motor 				  = $request->input('motor');
+            $vehiculo->asientos 				  = $request->input('asientos');
+            $vehiculo->chasis 				  = $request->input('chasis');
+            $vehiculo->carroceria 				  = $request->input('carroceria');
+            $vehiculo->color 				  = $request->input('color');
+            
 
-
-            $equipo->save();
+            $vehiculo->save();
         });
         return is_null($error) ? "OK" : $error;
     }
@@ -238,12 +257,12 @@ class EquipoController extends Controller
      */
     public function edit($id, Request $request)
     {
-        $existe = Libreria::verificarExistencia($id, 'equipo');
+        $existe = Libreria::verificarExistencia($id, 'vehiculo');
         if ($existe !== true) {
             return $existe;
         }
         $listar   = Libreria::getParam($request->input('listar'), 'NO');
-        $equipo = Equipo::find($id);
+        $vehiculo = Vehiculo::find($id);
 
         $marcas = Brand::orderBy('descripcion','asc')->get();
         $cboMarca = array();
@@ -278,11 +297,11 @@ class EquipoController extends Controller
             $cboUa += array($v->id=>$v->descripcion . '-' .$v->codigo);
         }        
 */
-        $entidad  = 'Equipo';
-        $formData = array('equipo.update', $id);
+        $entidad  = 'Vehiculo';
+        $formData = array('vehiculo.update', $id);
         $formData = array('route' => $formData, 'method' => 'PUT', 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
         $boton    = 'Modificar';
-        return view($this->folderview.'.mant')->with(compact('equipo', 'formData', 'entidad', 'boton', 'listar', 'cboMarca', 'cboArea', 'cboContratista'));
+        return view($this->folderview.'.mant')->with(compact('vehiculo', 'formData', 'entidad', 'boton', 'listar', 'cboMarca', 'cboArea' ,'cboContratista'));
     }
 
     /**
@@ -294,54 +313,71 @@ class EquipoController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $existe = Libreria::verificarExistencia($id, 'equipo');
+        $existe = Libreria::verificarExistencia($id, 'vehiculo');
         if ($existe !== true) {
             return $existe;
         }
-        $reglas     = array('codigo'                => 'required|max:10',
-                            'descripcion'           => 'required|max:22',
-                            'modelo'                => 'required|max:20',
-                            'marca_id'              => 'numeric|min:1',
+        $reglas     = array('ua' 					=> 'required|max:10',
+    						'modelo' 				=> 'required|max:20',
+    						'marca_id' 				=> 'numeric|min:1',
                             'placa'                 => 'max:15',
-                            'anio'                  => 'required',
-                            'contratista_id'        => 'numeric|min:1',
-//                            'ua_id'                 => ['required', new SearchUaPadre() ]
-//                            'fechavencimientosoat'  => 'required',
-//                            'fechavencimientogps'   => 'required',
-//                            'fechavencimientortv'   => 'required'
+    						'anio' 					=> 'required|numeric',
+    						'asientos'				=> 'required|numeric',
+    						'contratista_id'  		=> 'numeric|min:1',
+    						'area_id' 				=> 'numeric|min:1',
+    						'color'					=> 'required|max:20',
+    						'chasis' 				=> 'required|max:20',
+    						'fechavencimientosoat'  => 'required',
+    						'fechavencimientogps'   => 'required',
+    						'fechavencimientortv'   => 'required'
                         );
         $mensajes = array(
-        	'codigo.required'                => 'Debe ingresar un código',
-            'codigo.max'                      => 'El código sobrepasa los 10 carácteres',
-            'descripcion.required'            => 'Debe ingresar una descripcion',
-            'descripcion.max'                 => 'La descripcion sobrepasa los 22 carácteres',
-            'modelo.required'                 => 'Debe ingresar el modelo',
+        	'ua.required'         		  => 'Debe ingresar un código de ua',
+            'codigo.max'                      => 'El código de ua sobrepasa los 10 carácteres',
+            'modelo.required'         		  => 'Debe ingresar el modelo',
             'modelo.max'                      => 'El modelo sobrepasa los 20 carácteres',
-            'marca_id.min'                    => 'Debe asignar una marca',
+            'marca_id.min'  	  		  	  => 'Debe asignar una marca',
+            'area_id.min'					  => 'Deve asignar un area',
             'placa.max'                       => 'La placa sobrepasa los 15 carácteres',
-            'anio.required'                   => 'Debe ingresar la fecha de fabricación',
-            'contratista_id.min'              => 'Debe asignar un contratista',
-//            'ua_id.required'                  => 'Debe asignar una ua',
-//            'fechavencimientosoat.required'   => 'Debe ingresar la fecha de vencimiento de SOAT',
-//            'fechavencimientogps.required'    => 'Debe ingresar la fecha de vencimiento de GPS',
-//            'fechavencimientortv.required'    => 'Debe ingresar la fecha de vencimiento de RTV'
+            'anio.required'    				  => 'Debe ingresar un año de fabricación',
+            'anio.numeric'    				  => 'Debe ingresar un año valido',
+            'asientos.required'				  => 'Debe ingresar el número de aisentos',
+            'asientos.numeric'				  => 'Debe ingresar un número valido',
+            'color.required'				  => 'Debe ingresar un color',
+            'color.max'				 		  => 'El color sobrepasa los 20 carácteres',
+            'chasis.required'				  => 'Debe ingresar el codigo de chasis',
+            'chasis.max'				 	  => 'El chasis sobrepasa los 20 carácteres',
+            'contratista_id.min'   	  		  => 'Debe asignar un contratista',
+            'fechavencimientosoat.required'   => 'Debe ingresar la fecha de vencimiento de SOAT',
+            'fechavencimientogps.required'    => 'Debe ingresar la fecha de vencimiento de GPS',
+            'fechavencimientortv.required'    => 'Debe ingresar la fecha de vencimiento de RTV'
             );
         $validacion = Validator::make($request->all(), $reglas, $mensajes);
         if ($validacion->fails()) {
             return $validacion->messages()->toJson();
         } 
         $error = DB::transaction(function() use($request, $id){
-            $equipo = Equipo::find($id);
-            $equipo->codigo 	 		  = strtoupper($request->input('codigo'));
-            $equipo->descripcion 		  = strtoupper($request->input('descripcion'));
-            $equipo->modelo 			  = strtoupper($request->input('modelo'));
-            $equipo->marca_id 			  = $request->input('marca_id');
-            $equipo->anio 				  = $request->input('anio');
-            $equipo->contratista_id 	  = $request->input('contratista_id');
-            if($request->input('area_id') != 0){
-            	$equipo->area_id 				  = $request->input('area_id');
-            }
-            $equipo->save();
+            $vehiculo =  Vehiculo::find($id);
+            $vehiculo->ua 	 		  = strtoupper($request->input('ua'));
+            $vehiculo->modelo 			  = strtoupper($request->input('modelo'));
+            $vehiculo->marca_id 			  = $request->input('marca_id');
+            $vehiculo->anio 				  = $request->input('anio');
+            $vehiculo->contratista_id 	  = $request->input('contratista_id');
+
+            $vehiculo->fechavencimientosoat = $request->input('fechavencimientosoat');
+            $vehiculo->fechavencimientogps  = $request->input('fechavencimientogps');
+            $vehiculo->fechavencimientortv  = $request->input('fechavencimientortv');
+            
+            $vehiculo->area_id 				  = $request->input('area_id');
+            $vehiculo->placa 				  = $request->input('placa');
+            $vehiculo->motor 				  = $request->input('motor');
+            $vehiculo->asientos 				  = $request->input('asientos');
+            $vehiculo->chasis 				  = $request->input('chasis');
+            $vehiculo->carroceria 				  = $request->input('carroceria');
+            $vehiculo->color 				  = $request->input('color');
+            
+
+            $vehiculo->save();
         });
         return is_null($error) ? "OK" : $error;
     }
@@ -354,20 +390,20 @@ class EquipoController extends Controller
      */
     public function destroy($id)
     {
-        $existe = Libreria::verificarExistencia($id, 'equipo');
+        $existe = Libreria::verificarExistencia($id, 'vehiculo');
         if ($existe !== true) {
             return $existe;
         }
         $error = DB::transaction(function() use($id){
-            $equipo = Equipo::find($id);
-            $equipo->delete();
+            $vehiculo = Vehiculo::find($id);
+            $vehiculo->delete();
         });
         return is_null($error) ? "OK" : $error;
     }
 
     public function eliminar($id, $listarLuego)
     {
-        $existe = Libreria::verificarExistencia($id, 'equipo');
+        $existe = Libreria::verificarExistencia($id, 'vehiculo');
         if ($existe !== true) {
             return $existe;
         }
@@ -376,17 +412,16 @@ class EquipoController extends Controller
             $listar = $listarLuego;
         }
         $mensaje = true;
-        $modelo   = Equipo::find($id);
-        $entidad  = 'Equipo';
-        $formData = array('route' => array('equipo.destroy', $id), 'method' => 'DELETE', 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
+        $modelo   = Vehiculo::find($id);
+        $entidad  = 'Vehiculo';
+        $formData = array('route' => array('vehiculo.destroy', $id), 'method' => 'DELETE', 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
         $boton    = 'Eliminar';
         return view('app.confirmarEliminar')->with(compact('modelo', 'formData', 'entidad', 'boton', 'listar','mensaje'));
     }
 
-    public function searchAutocomplete($query){
+    public function autocomplete(){
+        $uas = Ua::select('codigo','descripcion')->get();
 
-        $res = Equipo::select('id','codigo','descripcion')->where('codigo','LIKE', '%' .$query .'%')->get();
-        
-        return response() -> json($res);
+        return response() -> json($uas);
     }
 }
