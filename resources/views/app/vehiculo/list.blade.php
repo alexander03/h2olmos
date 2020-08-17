@@ -18,8 +18,7 @@
 		@foreach ($lista as $key => $value)
 		<tr>
 			<td>{{ $contador }}</td>
-			<td>{{ $value->codigo }}</td>
-			<td>{{ $value->descripcion }}</td>
+			<td>{{ $value->ua }}</td>
 			<td>{{ $value->modelo }}</td>
 			<td>
 				@if($value->marca)
@@ -28,6 +27,7 @@
 			</td>
 			<td>{{ $value->anio }}</td>
 			<td>{{ $value->placa }}</td>
+			<td>{{ $value->motor }}</td>
 			<td>
 				@if($value->contratista)
 					{{ $value->contratista->razonsocial }}
@@ -38,6 +38,13 @@
 					{{ $value->area->descripcion }}
 				@endif
 			</td>
+			<td>{{ $value->asientos }}</td>
+			<td>{{ $value->chasis }}</td>
+			<td>{{ $value->carroceria }}</td>
+			<td>{{ $value->color }}</td>
+			<td>{{ $value->fechavencimientosoat }}</td>
+			<td>{{ $value->fechavencimientogps }}</td>
+			<td>{{ $value->fechavencimientortv }}</td>
 			<td>{!! Form::button('<i class="material-icons">edit</i>', array('onclick' => 'modal (\''.URL::route($ruta["edit"], array($value->id, 'listar'=>'SI')).'\', \''.$titulo_modificar.'\', this);', 'class' => 'btn btn-primary btn-link btn-sm','rel'=>'tooltip','title'=>'Editar')) !!}</td>
 			<td>{!! Form::button('<i class="material-icons">close</i>', array('onclick' => 'modal (\''.URL::route($ruta["delete"], array($value->id, 'SI')).'\', \''.$titulo_eliminar.'\', this);', 'class' => 'btn btn-danger btn-link btn-sm','rel'=>'tooltip','title'=>'Eliminar')) !!}</td>
 		</tr>

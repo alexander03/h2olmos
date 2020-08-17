@@ -85,6 +85,11 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('tipohora/eliminar/{id}/{listarluego}', 'TipohoraController@eliminar')->name('tipohora.eliminar');
 	Route::resource('tipohora', 'TipohoraController', array('except' => array('show')));
 
+	//Rutas Tipohora
+	Route::post('controldiario/buscar', 'ControlDiarioController@buscar')->name('controldiario.buscar');
+	Route::get('controldiario/eliminar/{id}/{listarluego}', 'ControlDiarioController@eliminar')->name('controldiario.eliminar');
+	Route::resource('controldiario', 'ControlDiarioController', array('except' => array('show')));
+
 	//Rutas Grifo
 	Route::post('grifo/buscar', 'GrifoController@buscar')->name('grifo.buscar');
 	Route::get('grifo/eliminar/{id}/{listarluego}', 'GrifoController@eliminar')->name('grifo.eliminar');
@@ -93,7 +98,13 @@ Route::group(['middleware' => 'auth'], function () {
 	//Rutas Equipo
 	Route::post('equipo/buscar', 'EquipoController@buscar')->name('equipo.buscar');
 	Route::get('equipo/eliminar/{id}/{listarluego}', 'EquipoController@eliminar')->name('equipo.eliminar');
+	Route::get('equipo/search/{query}', 'EquipoController@searchAutocomplete')->name('equipo.search');
 	Route::resource('equipo', 'EquipoController', array('except' => array('show')));
+	
+	//Rutas Vehiculo
+	Route::post('vehiculo/buscar', 'VehiculoController@buscar')->name('vehiculo.buscar');
+	Route::get('vehiculo/eliminar/{id}/{listarluego}', 'VehiculoController@eliminar')->name('vehiculo.eliminar');
+	Route::resource('vehiculo', 'VehiculoController', array('except' => array('show')));
 	
 		
 	//Rutas para las marcas (brands)
