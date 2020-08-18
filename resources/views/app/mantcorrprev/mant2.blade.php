@@ -25,9 +25,12 @@
 		<p class="text-warning ">Datos Generales</p> 
 	</div>
 	<div class="form-group col-lg-6 col-md-6 col-sm-6">
-		{!! Form::label('ua', 'UA de Unidad:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
-		<div class="col-lg-12 col-md-12 col-sm-12">
-			{!! Form::number('ua', null, array('class' => 'form-control input-xs', 'id' => 'ua', 'maxlength' => '100')) !!}
+		<div class="container">
+			<label for="ua" class="col-lg-8 col-md-8 col-sm-8 control-label">UA:
+				<label id="buscarporUA" style="color:black" onclick="buscarporUA()" onmouseout="this.style.color='black'" onmouseover="this.style.color='orange';">Comprobar
+				</label>
+			</label>
+			{!! Form::number('ua1', null, array('class' => 'form-control input-xs', 'id' => 'uabuscar', 'maxlength' => '100')) !!}
 		</div>
 	</div>
 	<div class="form-group col-lg-6 col-md-6 col-sm-6">
@@ -98,7 +101,7 @@
 			<div class='form-group col-lg-3 col-md-3 col-sm-3'>
 				{!! Form::label('cod', 'CODIGO', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
 				<div class='col-lg-12 col-md-12 col-sm-12'>
-					{!! Form::number('codigo', null, array('class' => 'form-control input-xs', 'id' => 'codigo1', 'maxlength' => '100')) !!}
+					{!! Form::text('codigo', null, array('class' => 'form-control input-xs', 'id' => 'codigo1', 'maxlength' => '100')) !!}
 				</div>
 			</div>
 			<div class='form-group col-lg-3 col-md-3 col-sm-3'>
@@ -142,6 +145,51 @@
 		})
 	}); 	
 
+	function buscarporUA(){
+		
+
+// 		//alert("gg nomas");
+// 		var uanumero= document.getElementById('uabuscar').value;
+// 		var informe = "dd";
+// 		$.ajax("mantcorrprev/buscarporua?ua="+uanumero, function(data) {
+			
+// 			informe+=data.value;
+// 			/*if (data!=null) {
+// 				alert(data);
+// 			}else{
+// 				alert("No existe Unidad con UA"+uanumero);
+//        		}*/
+// });
+// 		alert(informe);
+
+		var uanumero= document.getElementById('uabuscar').value;
+
+		var serviceURL = "mantcorrprev/buscarporua?ua="+uanumero;
+
+            $.ajax({
+                type: "GET",
+                url: serviceURL,
+                data: param = "",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: successFunc,
+                error: errorFunc
+            });
+
+            function successFunc(data, status) {
+            var str =  JSON.stringify(data['gg']);    
+                alert(str.substr(1, str.length-2));
+            }
+            function errorFunc() {
+                alert('error al digitar');
+            }
+        
+
+
+
+	}
+
+
 	function agregarfila(){
 		a++;
 		document.getElementById('lista').innerHTML+=`<div class='row container'><div class='form-group col-lg-2 col-md-2 col-sm-2 bmd-form-group'>
@@ -164,7 +212,7 @@
 	<div class='form-group col-lg-3 col-md-3 col-sm-3 bmd-form-group'>
 		<label for='codigo' class='col-lg-12 col-md-12 col-sm-12 control-label bmd-label-static'>CODIGO</label>
 		<div class='col-lg-12 col-md-12 col-sm-12'>
-			<input class='form-control input-xs' id='codigo${a}' maxlength='100' type='number'>
+			<input class='form-control input-xs' id='codigo${a}' maxlength='100' type='text'>
 		</div>
 	</div>
 	<div class='form-group col-lg-3 col-md-3 col-sm-3 bmd-form-group'>
