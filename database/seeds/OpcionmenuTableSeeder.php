@@ -62,6 +62,20 @@ class OpcionmenuTableSeeder extends Seeder
             'grupomenu_id' => 1
         ]);
         DB::table('opcionmenu')->insert([
+            'descripcion' => 'Vehículos',
+            'link' => 'vehiculo',
+            'icono' => 'vehiculo',
+            'orden' => 4,
+            'grupomenu_id' => 1
+        ]);
+        DB::table('opcionmenu')->insert([
+            'descripcion' => 'Ctrl de equipos',
+            'link' => 'controldiario',
+            'icono' => 'controldiario',
+            'orden' => 4,
+            'grupomenu_id' => 1
+        ]);
+        DB::table('opcionmenu')->insert([
             'descripcion' => 'Grifos',
             'link' => 'grifo',
             'icono' => 'myicon',

@@ -11,12 +11,14 @@
 			{!! Form::hidden('page', 1, array('id' => 'page')) !!}
 			{!! Form::hidden('accion', 'listar', array('id' => 'accion')) !!}
 			<div class="col-2 col-sm-2 col-md-2 col-lg-2">
-				{!! Form::label('codigo', 'Código:') !!}
-				{!! Form::text('codigo', '', array('class' => 'form-control', 'id' => 'codigo')) !!}
+				{!! Form::label('placa', 'Placa:') !!}
+				{!! Form::text('placa', '', array('class' => 'form-control', 'id' => 'placa')) !!}
 			</div>
+
 			<div class="col-2 col-sm-2 col-md-2 col-lg-2">
-				{!! Form::label('descripcion', 'Descripción:') !!}
-				{!! Form::text('descripcion', '', array('class' => 'form-control', 'id' => 'descripcion')) !!}
+				{!! Form::label('ua', 'UA:') !!}
+				{!! Form::text('ua', '', array('class' => 'form-control', 'id' => 'ua')) !!}
+
 			</div>
 			<div class="col-2 col-sm-2 col-md-2 col-lg-2">
 				{!! Form::label('filas', 'Filas a mostrar:')!!}
