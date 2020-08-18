@@ -181,7 +181,7 @@
                 alert(str.substr(1, str.length-2));
             }
             function errorFunc() {
-                alert('error al digitar');
+                alert('borraron la columna ua_id de tabla equipos, rehacer funcion -buscarporua- de controller mantprevcorr');
             }
         
 
