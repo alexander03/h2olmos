@@ -6,6 +6,8 @@ use Validator;
 use Illuminate\Http\Request;
 use App\Repuesto;
 use App\Unidad;
+use App\Equipo;
+use App\Ua;
 use App\Librerias\Libreria;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
@@ -24,6 +26,7 @@ class MantCorrPrev extends Controller
         'checklistvehicular' => 'mantcorrprev.checklistvehicular', 
         'create' => 'repuestos.create',
         'createrepuesto' => 'mantcorrprev.createrepuesto',
+        'buscarporua' => 'mantcorrprev.buscarporua',
         'edit'   => 'repuestos.edit', 
         'delete' => 'repuestos.eliminar',
         'activar' => 'repuestos.activar',
@@ -100,5 +103,19 @@ class MantCorrPrev extends Controller
         $formData = array('route' => $formData, 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
         $boton    = 'Registrar'; 
         return view($this->folderview.'.mant2')->with(compact('repuesto', 'oTipos','formData', 'entidad','oConcesionarias', 'boton', 'listar'));
+    }
+
+    public function buscarporua(Request $request){
+        $resultado = Ua::where('codigo', '=',$request->get("ua"))->get();
+        
+        if (count($resultado)>0) {
+            $eq = Equipo::where('ua_id', '=',$resultado[0]->id)->get();
+
+            if (count($eq)>0) {
+                return json_encode(array('gg'=>"UA correcta: ".$eq[0]['descripcion']));
+            }else{
+            return json_encode(array('gg'=>'LA UA NO TIENE EQUIPO'));}
+        }else{
+        return json_encode(array('gg'=>'NO EXISTE UA'));}
     }
 }
