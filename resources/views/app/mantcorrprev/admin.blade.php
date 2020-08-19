@@ -20,8 +20,9 @@
 						</div>
 						<div class="col-12 col-sm-4 col-md-2 col-lg-8 d-flex justify-content-around align-items-center">
 							{!! Form::button('<i class="material-icons">search</i>Buscar', array('class' => 'btn btn-success p-2 pl-1 pr-1', 'id' => 'btnBuscar', 'onclick' => 'buscar(\''.$entidad.'\')')) !!}
-							{!! Form::button('<i class="material-icons">add</i>Registrar Check list', array('class' => 'btn btn-primary p-2 pl-1 pr-1', 'id' => 'btnNuevo', 'onclick' => 'modal (\''.URL::route($ruta["create"], array('listar'=>'SI')).'\', \''.$tituloCheckListVehicular.'\', this);')) !!}
+							{!! Form::button('<i class="material-icons">add</i>Registrar Check list', array('class' => 'btn btn-primary p-2 pl-1 pr-1', 'id' => 'btnNuevo', 'onclick' => 'modal (\''.URL::route($ruta["createchecklistvehicular"], array('listar'=>'SI')).'\', \''.$tituloCheckListVehicular.'\', this);')) !!}
 							{!! Form::button('<i class="material-icons">add</i>Registrar Repuestos', array('class' => 'btn btn-info p-2 pl-1 pr-1', 'id' => 'btnNuevo', 'onclick' => 'modal (\''.URL::route($ruta["createrepuesto"], array('listar'=>'SI')).'\', \''.$tituloRegistrar.'\', this);')) !!}
+
 						</div>
 						{!! Form::close() !!}
 						{{-- <div class="table-responsive" id="listado{{ $entidad }}">
