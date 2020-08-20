@@ -18,6 +18,7 @@
 		@foreach ($lista as $key => $value)
 		<tr>
 			<td class="text-nowrap">{{ $contador }}</td>
+			<td class="text-nowrap">{{ $value -> fecha_abastecimiento }}</td>
 			<td class="text-nowrap">{{ $value -> grifo -> descripcion }}</td>
 			<td class="text-nowrap">{{ $value -> tipo_combustible }}</td>
 			<td class="text-nowrap">{{ $value -> conductor -> nombres }} {{ $value -> conductor -> apellidos }}</td>

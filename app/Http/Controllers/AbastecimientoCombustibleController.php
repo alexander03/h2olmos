@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\AbastecimientoCombustible;
+use App\Conductor;
+use App\Equipo;
 use App\Librerias\Libreria;
 use App\Rules\SearchUaPadre;
 use App\Rules\SelectDifZero;
@@ -13,6 +15,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\UaExport;
+use App\Grifo;
 use App\Imports\UaImport;
 use App\Rules\SearchConductorRule;
 use App\Rules\SearchEquipo;
@@ -44,6 +47,7 @@ class AbastecimientoCombustibleController extends Controller{
         $lista            = $resultado->get();
         $cabecera         = array();
         $cabecera[]       = array('valor' => '#', 'numero' => '1');
+        $cabecera[]       = array('valor' => 'Fecha de abastecimiento', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Grifo', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Tipo de combustible', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Conductor', 'numero' => '1');
@@ -135,11 +139,27 @@ class AbastecimientoCombustibleController extends Controller{
         $error = DB::transaction(function() use($request){
             $abastecimiento = new AbastecimientoCombustible();
             $abastecimiento -> fecha_abastecimiento = $request -> input('fecha_abastecimiento');
-            $abastecimiento -> grifo_id = $request -> input('grifo_id');
+            //BUSCAR GRIFO
+            if($request -> input('grifo_id')){
+                $grifoDB =  Grifo::where('descripcion', $request -> input('grifo_id')) -> get();
+                $abastecimiento -> grifo_id = (!($grifoDB -> isEmpty())) ? $grifoDB[0] -> id : null;
+            }
             $abastecimiento -> tipo_combustible = $request -> input('tipo_combustible');
-            $abastecimiento -> conductor_id = $request -> input('conductor_id');
-            $abastecimiento -> ua_id = $request -> input('ua_id');
-            $abastecimiento -> equipo_id = $request -> input('equipo_id');
+            //BUSCAR CONDUCTOR
+            if($request -> input('conductor_id')){
+                $conductorDB =  Conductor::where('dni', $request -> input('conductor_id')) -> get();
+                $abastecimiento -> conductor_id = (!($conductorDB -> isEmpty())) ? $conductorDB[0] -> id : null;
+            }
+            //BUSCAR UA
+            if($request -> input('ua_id')){
+                $uaDB =  Ua::where('codigo', $request -> input('ua_id')) -> get();
+                $abastecimiento -> ua_id = (!($uaDB -> isEmpty())) ? $uaDB[0] -> id : null;
+            }
+            //BUSCAR EQUIPO
+            if($request -> input('equipo_id')){
+                $equipoDB =  Equipo::where('codigo', $request -> input('equipo_id')) -> get();
+                $abastecimiento -> equipo_id = (!($equipoDB -> isEmpty())) ? $equipoDB[0] -> id : null;
+            }
             $abastecimiento -> qtdgl = $request -> input('qtdgl');
             $abastecimiento -> qtdl = $request -> input('qtdl');
             $abastecimiento -> km = $request -> input('km');
@@ -207,11 +227,27 @@ class AbastecimientoCombustibleController extends Controller{
         $error = DB::transaction(function() use($request, $id){
             $abastecimiento = AbastecimientoCombustible::find($id);
             $abastecimiento -> fecha_abastecimiento = $request -> input('fecha_abastecimiento');
-            $abastecimiento -> grifo_id = $request -> input('grifo_id');
+            //BUSCAR GRIFO
+            if($request -> input('grifo_id')){
+                $grifoDB =  Grifo::where('descripcion', $request -> input('grifo_id')) -> get();
+                $abastecimiento -> grifo_id = (!($grifoDB -> isEmpty())) ? $grifoDB[0] -> id : null;
+            }
             $abastecimiento -> tipo_combustible = $request -> input('tipo_combustible');
-            $abastecimiento -> conductor_id = $request -> input('conductor_id');
-            $abastecimiento -> ua_id = $request -> input('ua_id');
-            $abastecimiento -> equipo_id = $request -> input('equipo_id');
+            //BUSCAR CONDUCTOR
+            if($request -> input('conductor_id')){
+                $conductorDB =  Conductor::where('dni', $request -> input('conductor_id')) -> get();
+                $abastecimiento -> conductor_id = (!($conductorDB -> isEmpty())) ? $conductorDB[0] -> id : null;
+            }
+            //BUSCAR UA
+            if($request -> input('ua_id')){
+                $uaDB =  Ua::where('codigo', $request -> input('ua_id')) -> get();
+                $abastecimiento -> ua_id = (!($uaDB -> isEmpty())) ? $uaDB[0] -> id : null;
+            }
+            //BUSCAR EQUIPO
+            if($request -> input('equipo_id')){
+                $equipoDB =  Equipo::where('codigo', $request -> input('equipo_id')) -> get();
+                $abastecimiento -> equipo_id = (!($equipoDB -> isEmpty())) ? $equipoDB[0] -> id : null;
+            }
             $abastecimiento -> qtdgl = $request -> input('qtdgl');
             $abastecimiento -> qtdl = $request -> input('qtdl');
             $abastecimiento -> km = $request -> input('km');
