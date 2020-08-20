@@ -66,7 +66,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('opcionmenu/eliminar/{id}/{listarluego}', 'OpcionmenuController@eliminar')->name('opcionmenu.eliminar');
 	Route::resource('opcionmenu', 'OpcionmenuController', array('except' => array('show')));
 
-	//Propietario - ua - unidad
+	//Rutas propietario - ua - unidad
 	Route::post('propietario/buscar', 'PropietarioController@buscar')->name('propietario.buscar');
 	Route::get('propietario/eliminar/{id}/{listarluego}', 'PropietarioController@eliminar')->name('propietario.eliminar');
 	Route::resource('propietario', 'PropietarioController');
@@ -81,6 +81,11 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::post('unidad/buscar', 'UnidadController@buscar')->name('unidad.buscar');
 	Route::get('unidad/eliminar/{id}/{listarluego}', 'UnidadController@eliminar')->name('unidad.eliminar');
 	Route::resource('unidad', 'UnidadController');
+	
+	//Rutas abastecimiento de combustible
+	Route::post('abastecimiento/buscar', 'AbastecimientoCombustibleController@buscar')->name('abastecimiento.buscar');
+	Route::get('abastecimiento/eliminar/{id}/{listarluego}', 'AbastecimientoCombustibleController@eliminar')->name('abastecimiento.eliminar');
+	Route::resource('abastecimiento', 'AbastecimientoCombustibleController');
 
     //Rutas Tipohora
 	Route::post('tipohora/buscar', 'TipohoraController@buscar')->name('tipohora.buscar');

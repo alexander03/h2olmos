@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class OpcionmenuTableSeeder extends Seeder
 {
@@ -11,6 +12,30 @@ class OpcionmenuTableSeeder extends Seeder
      */
     public function run()
     {
+        DB::table('opcionmenu')->insert([
+            [
+            'descripcion' => 'Ua',
+            'link' => 'ua',
+            'icono' => 'myicon',
+            'orden' => 1,
+            'grupomenu_id' => 1
+            ],
+            [
+            'descripcion' => 'Propietarios',
+            'link' => 'propietario',
+            'icono' => 'myicon',
+            'orden' => 1,
+            'grupomenu_id' => 1
+            ],
+            [
+            'descripcion' => 'Unidades',
+            'link' => 'unidad',
+            'icono' => 'myicon',
+            'orden' => 1,
+            'grupomenu_id' => 1
+            ]
+        ]);
+
         DB::table('opcionmenu')->insert([
             'descripcion' => 'Marcas',
             'link' => 'marcas',
@@ -93,6 +118,14 @@ class OpcionmenuTableSeeder extends Seeder
         DB::table('opcionmenu')->insert([
             'descripcion' => 'Mant. corr. y prev.',
             'link' => 'mantcorrprev',
+            'icono' => 'myicon',
+            'orden' => 1,
+            'grupomenu_id' => 3
+        ]);
+
+        DB::table('opcionmenu')->insert([
+            'descripcion' => 'Abast. combustible',
+            'link' => 'abastecimiento',
             'icono' => 'myicon',
             'orden' => 1,
             'grupomenu_id' => 3
