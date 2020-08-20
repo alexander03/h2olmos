@@ -25,7 +25,7 @@ class CreatePropietariosTable extends Migration
             $table->string('hra');
             $table->string('hrb');
             $table->string('hrc');
-            $table->integer('km');
+            $table->float('km');
             $table->text('observacion');
             $table->string('ubicacion');
             $table->unsignedBigInteger('ua_id');

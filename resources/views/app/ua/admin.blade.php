@@ -28,11 +28,6 @@
 					{!! Form::button('<i class="material-icons">add</i>Nuevo', array('class' => 'btn btn-info btn-sm', 'id' => 'btnNuevo', 'onclick' => 'modal (\''.URL::route($ruta["create"], array('listar'=>'SI')).'\', \''.$titulo_registrar.'\', this);')) !!}
 				</div>
 				<div class="form-group">
-					{{-- <form action="{{ route('ua.excel.import') }}" method="post" enctype="multipart/form-data">
-						@csrf --}}
-						{{--  --}}
-						
-					{{-- </form> --}}
 					<a href="#" class="ml-1 btn btn-sm btn-primary js-import-excel">
 						<i class="material-icons">cloud_upload</i> Importar
 					</a>
