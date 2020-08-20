@@ -180,7 +180,7 @@ const doSearchGrifo = () => {
 //Autocomplete Conductor
 const doSearchConductor = () => {
 
-    var autoCompletejsGrifo = new autoComplete({
+    var autoCompletejsConductor = new autoComplete({
         data: {
             src: async () => {
                 // Loading placeholder text
@@ -241,8 +241,8 @@ const doSearchConductor = () => {
         onSelection: feedback => { //VA NUESTRA LOGICA
             document.querySelector("#autoComplete_list3").innerText = '';
             const selection = feedback.selection.value;
-            document.querySelector(".js-conductor-id").value = `${ selection.nombres } ${ selection.apellidos }`;
-            document.querySelector(".js-conductor-desc").innerText = selection.dni;
+            document.querySelector(".js-conductor-id").value = selection.dni;
+            document.querySelector(".js-conductor-desc").innerText = `${ selection.nombres } ${ selection.apellidos }`; 
             // console.log(feedback);
         }
     });
@@ -253,6 +253,93 @@ const doSearchConductor = () => {
       const resultsList = document.querySelector("#autoComplete_list3");
     
       document.querySelector(".js-conductor-id").addEventListener(eventType, function() {
+        // Hide results list & show other elemennts
+        if (eventType === "blur") {
+          resultsList.style.display = "none";
+        } else if (eventType === "focus") {
+          // Show results list & hide other elemennts
+          resultsList.style.display = "block";
+        }
+      });
+    });
+};
+
+//Autocomplete Equipo
+const doSearchEquipo = () => {
+
+    var autoCompletejsEquipo = new autoComplete({
+        data: {
+            src: async () => {
+                // Loading placeholder text
+                document
+                    .querySelector(".js-equipo-id")
+                    .setAttribute("placeholder", "Loading...");
+       
+                // Fetch External Data Source
+                const headers = new Headers();
+                headers.append('X-CSRF-TOKEN', document.querySelector('meta[name="csrf-token"]').content);
+                const config = {
+                    headers,
+                    method:'GET'
+                };
+                  //Query
+                const query = document.querySelector('.js-equipo-id').value;
+                const source = await fetch(
+                    `abastecimiento/search/equipo/${query}` , config
+                );
+                let data = await source.json();
+                // Post loading placeholder text
+                // Returns Fetched data
+                return data;
+            },
+            key: ["codigo", "descripcion"],
+            cache: false
+        },
+        sort: (a, b) => {
+            if (a.match < b.match) return -1;
+            if (a.match > b.match) return 1;
+            return 0;
+        },
+        selector: ".js-equipo-id",
+        threshold: 1,
+        debounce: 0,
+        searchEngine: "strict",
+        highlight: true,
+        maxResults: 5,
+        resultsList: {
+            render: true,
+            container: source => {
+                source.setAttribute("id", "autoComplete_list");
+                source.setAttribute("class", "u-search-ua__result");
+            },
+            destination: document.querySelector(".js-equipo-id"),
+            position: "afterend",
+            element: "ul"
+        },
+        resultItem: {
+            content: (data, source) => {
+                source.innerHTML = data.match;
+            },
+            element: "li"
+        },
+        noResults: () => {
+            document.querySelector("#autoComplete_list4").innerText = 'Sin resultados';
+        },
+        onSelection: feedback => { //VA NUESTRA LOGICA
+            document.querySelector("#autoComplete_list4").innerText = '';
+            const selection = feedback.selection.value;
+            document.querySelector(".js-equipo-id").value = selection.codigo;
+            document.querySelector(".js-equipo-desc").innerText = selection.descripcion;
+            // console.log(feedback);
+        }
+    });
+    
+    // Toggle event for search input
+    // showing & hidding results list onfocus / blur
+    ["focus", "blur"].forEach(function(eventType) {
+      const resultsList = document.querySelector("#autoComplete_list4");
+    
+      document.querySelector(".js-equipo-id").addEventListener(eventType, function() {
         // Hide results list & show other elemennts
         if (eventType === "blur") {
           resultsList.style.display = "none";

@@ -14,6 +14,9 @@ use Illuminate\Support\Facades\Validator;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\UaExport;
 use App\Imports\UaImport;
+use App\Rules\SearchConductorRule;
+use App\Rules\SearchEquipo;
+use App\Rules\SearchGrifoRule;
 use Exception;
 
 use function PHPSTORM_META\map;
@@ -98,13 +101,13 @@ class AbastecimientoCombustibleController extends Controller{
 
     public function store(Request $request){
     
-        $reglas     = [
+        $reglas = [
             'fecha_abastecimiento' => 'required',
-            'grifo_id' => 'required',
+            'grifo_id' => ['required', new SearchGrifoRule()],
             'tipo_combustible' => 'required',
-            'conductor_id' => 'required',
-            'ua_id' => 'required',
-            'equipo_id' => 'required',
+            'conductor_id' => ['required', new SearchConductorRule()],
+            'ua_id' => ['required', new SearchUaPadre()],
+            'equipo_id' => ['required', new SearchEquipo()],
             'qtdgl' => 'required',
             'qtdl' => 'required',
             'km' => 'required',
@@ -166,18 +169,19 @@ class AbastecimientoCombustibleController extends Controller{
 
     public function update(Request $request, $id){
 
-        $reglas     = [
+        $reglas = [
             'fecha_abastecimiento' => 'required',
-            'grifo_id' => 'required',
+            'grifo_id' => ['required', new SearchGrifoRule()],
             'tipo_combustible' => 'required',
-            'conductor_id' => 'required',
-            'ua_id' => 'required',
-            'equipo_id' => 'required',
+            'conductor_id' => ['required', new SearchConductorRule()],
+            'ua_id' => ['required', new SearchUaPadre()],
+            'equipo_id' => ['required', new SearchEquipo()],
             'qtdgl' => 'required',
             'qtdl' => 'required',
             'km' => 'required',
             'abastecimiento_dia' => 'required'
         ];
+
         $mensajes = [
             'fecha_abastecimiento.required' => 'Su fecha de abastecimiento es requerida',
             'grifo_id.required' => 'El grifo es requerido',

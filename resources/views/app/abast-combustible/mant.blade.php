@@ -37,13 +37,17 @@ if ($abastecimiento !== NULL) {
 	<div class="form-group col-12 col-md-6 p-3">
 		<label for="id-conductor" class="pl-3">Conductor</label>
 		<div class="u-ua-style js-conductor-desc">
-			<?php if($abastecimiento) if(isset($abastecimiento -> conductor)) echo $abastecimiento -> conductor -> dni; else echo 'Sin dni';?>
+			<?php if($abastecimiento) 
+				if(isset($abastecimiento -> conductor)) 
+				echo $abastecimiento -> conductor -> nombres.' '.$abastecimiento -> conductor -> apellidos; 
+				else echo 'Sin dni';
+			?>
 		</div>
 		<input type="text" 
 			name="conductor_id" 
 			id="id-conductor" 
 			class="form-control js-conductor-id" 
-			value="<?php if($abastecimiento) echo $abastecimiento -> conductor -> nombres.' '.$abastecimiento -> conductor -> apellidos?>">
+			value="<?php if($abastecimiento) echo $abastecimiento -> conductor -> dni?>">
 		<small id="autoComplete_list3" class="text-danger"></small>
 	</div>
 	<div class="form-group col-12 col-md-6 p-3 u-search-ua">
@@ -60,11 +64,15 @@ if ($abastecimiento !== NULL) {
 	</div>
 	<div class="form-group col-12 col-md-6 p-3">
 		<label for="id-equipo" class="pl-3">Equipo</label>
+		<div class="u-ua-style js-equipo-desc">
+			<?php if($abastecimiento) if(isset($abastecimiento -> equipo)) echo $abastecimiento -> equipo -> descripcion; else echo 'Sin descripcion';?>
+		</div>
 		<input type="text" 
 			name="equipo_id" 
 			id="id-equipo" 
-			class="form-control" 
-			value="<?php if($abastecimiento) echo $abastecimiento -> equipo -> descripcion?>">
+			class="form-control js-equipo-id" 
+			value="<?php if($abastecimiento) echo $abastecimiento -> equipo -> codigo?>">
+		<small id="autoComplete_list4" class="text-danger"></small>
 	</div>
 	<div class="form-group col-12 col-md-6 p-3">
 		<label for="id-qtdgl" class="pl-3">QTD(GL)</label>
@@ -114,5 +122,6 @@ if ($abastecimiento !== NULL) {
 		doSearchUA();
 		doSearchGrifo();
 		doSearchConductor();
+		doSearchEquipo();
 	}); 
 </script>

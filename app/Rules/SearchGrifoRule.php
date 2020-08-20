@@ -2,11 +2,11 @@
 
 namespace App\Rules;
 
-use App\Ua;
+use App\Grifo;
 use Exception;
 use Illuminate\Contracts\Validation\Rule;
 
-class SearchUaPadre implements Rule{
+class SearchGrifoRule implements Rule{
 
     private $nombAtt = "";
 
@@ -23,8 +23,8 @@ class SearchUaPadre implements Rule{
 
         if($value){
             try{
-                $uaDB =  Ua::where('codigo', $value) -> get();
-                if( !$uaDB -> isEmpty() ) return true;
+                $grifoDB =  Grifo::where('descripcion', $value) -> get();
+                if( !$grifoDB -> isEmpty() ) return true;
                 else return false; 
 
             }catch(Exception $error){
@@ -42,6 +42,6 @@ class SearchUaPadre implements Rule{
      */
     public function message(){
 
-        return 'No se encontro una UA con ese código.';
+        return 'No se encontro una grifo con esa descripción';
     }
 }
