@@ -247,5 +247,38 @@ class AbastecimientoCombustibleController extends Controller{
         });
         return is_null($error) ? "OK" : $error;
     }
+
+    //PETICION GET QUE DEVUELVE TODOS LOS DATOS GRIFO
+    public function searchAutocompleteGrifo($query){
+    
+        $consulta = "select id, descripcion from grifo where
+            deleted_at IS NULL AND
+            descripcion LIKE '%{$query}%'";
+        $res = DB::select($consulta);
+        
+        return response() -> json($res);
+    }
+
+    //PETICION GET QUE DEVUELVE TODOS LOS DATOS CONDUCTOR
+    public function searchAutocompleteConductor($query){
+
+        $consulta = "select id, nombres, apellidos, dni from conductor where
+            deleted_at IS NULL AND
+            apellidos LIKE UPPER('%".$query."%') OR dni LIKE '%".$query."%'";
+        $res = DB::select($consulta);
+        
+        return response() -> json($res);
+    }
+
+    //PETICION GET QUE DEVUELVE TODOS LOS DATOS EQUIPO
+    public function searchAutocompleteEquipo($query){
+
+        $consulta = "select id, codigo, descripcion from equipo where
+            deleted_at IS NULL AND
+            codigo LIKE '%".$query."%' OR descripcion LIKE '%".$query."%'";
+        $res = DB::select($consulta);
+        
+        return response() -> json($res);
+    }
 }
 

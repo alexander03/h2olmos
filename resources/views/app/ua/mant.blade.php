@@ -50,6 +50,7 @@ if ($ua !== NULL) {
 			name="ua_padre_id"
 			class="form-control js-ua-id" 
 			value="<?php if($ua) if($ua -> ua_padre_id)echo $ua -> uaPadre($ua -> ua_padre_id)[0] -> codigo; else echo '';?>">
+		<small id="autoComplete_list1" class="text-danger"></small>
 	</div>
 	<div class="form-group col-md-6 p-3">
 		<label for="id-unidad" class="pl-3">Unidad</label>

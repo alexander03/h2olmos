@@ -22,8 +22,9 @@ if ($abastecimiento !== NULL) {
 		<input type="text" 
 			name="grifo_id" 
 			id="id-grifo" 
-			class="form-control" 
+			class="form-control js-grifo-id" 
 			value="<?php if($abastecimiento) echo $abastecimiento -> grifo -> descripcion ?>">
+		<small id="autoComplete_list2" class="text-danger"></small>
 	</div>
 	<div class="form-group col-12 col-md-6 p-3">
 		<label for="id-tipo-comb" class="pl-3">Tipo de combustible</label>
@@ -35,19 +36,27 @@ if ($abastecimiento !== NULL) {
 	</div>
 	<div class="form-group col-12 col-md-6 p-3">
 		<label for="id-conductor" class="pl-3">Conductor</label>
+		<div class="u-ua-style js-conductor-desc">
+			<?php if($abastecimiento) if(isset($abastecimiento -> conductor)) echo $abastecimiento -> conductor -> dni; else echo 'Sin dni';?>
+		</div>
 		<input type="text" 
 			name="conductor_id" 
 			id="id-conductor" 
-			class="form-control" 
+			class="form-control js-conductor-id" 
 			value="<?php if($abastecimiento) echo $abastecimiento -> conductor -> nombres.' '.$abastecimiento -> conductor -> apellidos?>">
+		<small id="autoComplete_list3" class="text-danger"></small>
 	</div>
-	<div class="form-group col-12 col-md-6 p-3">
-		<label for="id-ua" class="pl-3">Ua</label>
+	<div class="form-group col-12 col-md-6 p-3 u-search-ua">
+		<label for="id-ua" class="pl-3">Código Ua</label>
+		<div class="u-ua-style js-ua-desc">
+			<?php if($abastecimiento) if(isset($abastecimiento -> ua)) echo $abastecimiento -> ua -> descripcion; else echo 'Sin ua';?>
+		</div>
 		<input type="text" 
 			name="ua_id" 
 			id="id-ua" 
-			class="form-control" 
-			value="<?php if($abastecimiento) echo $abastecimiento -> ua -> descripcion?>">
+			class="form-control js-ua-id" 
+			value="<?php if($abastecimiento) echo $abastecimiento -> ua -> codigo?>">
+		<small id="autoComplete_list1" class="text-danger"></small>
 	</div>
 	<div class="form-group col-12 col-md-6 p-3">
 		<label for="id-equipo" class="pl-3">Equipo</label>
@@ -103,5 +112,7 @@ if ($abastecimiento !== NULL) {
 		configurarAnchoModal('800');
 		init(IDFORMMANTENIMIENTO+'{!! $entidad !!}', 'M', '{!! $entidad !!}');
 		doSearchUA();
+		doSearchGrifo();
+		doSearchConductor();
 	}); 
 </script>
