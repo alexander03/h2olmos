@@ -24,12 +24,14 @@ class UaImport implements ToModel
             -> get();
         $row[6] = $unidad_id[0] -> id;
         //Conversión explicita de datos ua padre
-         $ua_padre_id = Ua::select('id')
-            -> where('codigo', 'LIKE', $row[7])
-            -> get();
-        (count($ua_padre_id) > 0) ? 
-        $row[7] = $ua_padre_id[0] -> id :
-        $row[7] = null;
+        if(isset($row[7])){
+            $ua_padre_id = Ua::select('id')
+                -> where('codigo', 'LIKE', $row[7])
+                -> get();
+            (count($ua_padre_id) > 0) ? 
+            $row[7] = $ua_padre_id[0] -> id :
+            $row[7] = null;
+        }
         
         return new Ua([
             'codigo' => $row[0],
