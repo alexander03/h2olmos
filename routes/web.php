@@ -58,6 +58,13 @@ Route::group(['middleware' => 'auth'], function () {
 
 Route::group(['middleware' => 'auth'], function () {
 	Route::resource('user', 'UserController', ['except' => ['show']]);
+	Route::post('user/buscar', 'UserController@buscar')->name('user.buscar');
+
+	Route::get('user/eliminar/{id}/{listarluego}', 'UserController@eliminar')->name('user.eliminar');
+	Route::resource('user', 'UserController', array('except' => array('show')));
+	Route::get('user/activar/{id}/{listarluego}', 'UserController@activar')->name('user.activar');
+	Route::get('user/reactivar/{id}', 'UserController@reactivar')->name('repuestos.reactivar');
+
 	Route::get('profile', ['as' => 'profile.edit', 'uses' => 'ProfileController@edit']);
 	Route::put('profile', ['as' => 'profile.update', 'uses' => 'ProfileController@update']);
 	Route::put('profile/password', ['as' => 'profile.password', 'uses' => 'ProfileController@password']);
