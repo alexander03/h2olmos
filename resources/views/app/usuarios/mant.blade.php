@@ -3,9 +3,9 @@
 {!! Form::model($user, $formData) !!}	
 {!! Form::hidden('listar', $listar, array('id' => 'listar')) !!}
 <div class="form-group">
-	{!! Form::label('tipousuario_id', 'Tipo de usuario:', array('class' => 'col-sm-12 control-label')) !!}
+	{!! Form::label('tipouser_id', 'Tipo de usuario:', array('class' => 'col-sm-12 control-label')) !!}
 	<div class="col-sm-12">
-		{{-- {!! Form::select('tipousuario_id', $cboUnidades, null, array('class' => 'form-control input-xs', 'id' => 'tipousuario_id')) !!} --}}
+		{!! Form::select('tipouser_id', $cboTipousers, null, array('class' => 'form-control input-xs', 'id' => 'tipouser_id')) !!}
 	</div>
 </div>
 <div class="form-group">
@@ -15,9 +15,9 @@
 	</div>
 </div>
 <div class="form-group">
-	{!! Form::label('usuario', 'Usuario:', array('class' => 'col-sm-12 control-label')) !!}
+	{!! Form::label('username', 'Usuario:', array('class' => 'col-sm-12 control-label')) !!}
 	<div class="col-sm-12">
-		{!! Form::text('usuario', null, array('class' => 'form-control input-xs', 'id' => 'usuario')) !!}
+		{!! Form::text('username', null, array('class' => 'form-control input-xs', 'id' => 'username')) !!}
 	</div>
 </div>
 <div class="form-group">

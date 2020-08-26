@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\User;
+use App\Tipouser;
+use Validator;
 use App\Http\Requests\UserRequest;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
@@ -42,13 +44,14 @@ class UserController extends Controller
         $entidad          = 'User';
         $filter           = Libreria::getParam($request->input('filter'));
         $estado           = $request->input('estado');
-        $resultado        = User::getFilter($estado, $filter);
+        $tipouser_id      = $request->input('tipouser_id');
+        $resultado        = User::getFilter($estado, $filter, $tipouser_id);
         $lista            = $resultado->get();
         $cabecera         = array();
         $cabecera[]       = array('valor' => '#', 'numero' => '1');
-        $cabecera[]       = array('valor' => 'Username', 'numero' => '1');
-        $cabecera[]       = array('valor' => 'Tipo de usuario', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Persona', 'numero' => '1');
+        $cabecera[]       = array('valor' => 'Tipo de usuario', 'numero' => '1');
+        $cabecera[]       = array('valor' => 'Username', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Operaciones', 'numero' => '2');
         $titulo_modificar = $this->tituloModificar;
         $titulo_eliminar  = $this->tituloEliminar;
@@ -74,7 +77,12 @@ class UserController extends Controller
         $title            = $this->tituloAdmin;
         $titulo_registrar = $this->tituloRegistrar;
         $ruta             = $this->rutas;
-        return view($this->folderview.'.admin')->with(compact('entidad', 'title', 'titulo_registrar', 'ruta'));
+        $arrTipousers      = Tipouser::getAll();
+        $cboTipousers = array('all' => 'TODOS');
+        foreach($arrTipousers as $k=>$v){
+            $cboTipousers += array($v->id=>$v->descripcion);
+        }
+        return view($this->folderview.'.admin')->with(compact('entidad', 'title', 'titulo_registrar', 'cboTipousers', 'ruta'));
 
     }
 
@@ -86,25 +94,25 @@ class UserController extends Controller
         $formData = array('user.store');
         $formData = array('route' => $formData, 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
         $boton    = 'Registrar';
-        // $arrUnidades = Unidad::getAll();
-        // $cboUnidades = array('' => 'Seleccione');
-        // foreach($arrUnidades as $k=>$v){
-        //     $cboUnidades += array($v->id=>$v->descripcion);
-        // }
-        return view($this->folderview.'.mant')->with(compact('user', 'formData', 'entidad', 'boton', 'listar'));
+        $arrTipousers      = Tipouser::getAll();
+        $cboTipousers = array('' => 'Seleccione');
+        foreach($arrTipousers as $k=>$v){
+            $cboTipousers += array($v->id=>$v->descripcion);
+        }
+        return view($this->folderview.'.mant')->with(compact('user', 'formData', 'entidad', 'cboTipousers', 'boton', 'listar'));
     }
 
     public function store(Request $request) {
 
         $listar     = Libreria::getParam($request->input('listar'), 'NO');
         $reglas     = array(
-            'tipousuario_id' => 'required',
+            'tipouser_id' => 'required',
             'name' => 'required',
             'username' => 'required',
             'password' => 'required'
         );
         $mensajes = array(
-            'tipousuario_id.required' => 'Debe seleccionar un tipo de usuario',
+            'tipouser_id.required' => 'Debe seleccionar un tipo de usuario',
             'name.required' => 'Debe ingresar el nombre de la persona',
             'username.required' => 'Debe ingresar el usuario',
             'password.required' => 'Debe ingresar la contraseña',
@@ -115,10 +123,10 @@ class UserController extends Controller
         }
         $error = DB::transaction(function() use($request){
             $user = new User();
-            $user->tipousuario_id= $request->input('tipousuario_id');
+            $user->tipouser_id= $request->input('tipouser_id');
             $user->name= mb_strtoupper($request->input('name'), 'utf-8');
-            $user->username= mb_strtoupper($request->input('username'), 'utf-8');
-            $user->password= Hash::make(mb_strtoupper($request->input('password'), 'utf-8'));
+            $user->username= $request->input('username');
+            $user->password= Hash::make($request->input('password'));
             $user->save();
         });
         return is_null($error) ? "OK" : $error;
@@ -132,17 +140,17 @@ class UserController extends Controller
             return $existe;
         }
         $listar   = Libreria::getParam($request->input('listar'), 'NO');
-        $user = Repuesto::find($id);
+        $user = User::find($id);
         $entidad  = 'User';
         $formData = array('user.update', $id);
         $formData = array('route' => $formData, 'method' => 'PUT', 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
         $boton    = 'Modificar';
-        // $arrUnidades = Unidad::getAll();
-        // $cboUnidades = array('' => 'Seleccione');
-        // foreach($arrUnidades as $k=>$v){
-        //     $cboUnidades += array($v->id=>$v->descripcion);
-        // }
-        return view($this->folderview.'.mant')->with(compact('user', 'formData', 'entidad', 'boton', 'cboUnidades', 'listar'));
+        $arrTipousers      = Tipouser::getAll();
+        $cboTipousers = array('' => 'Seleccione');
+        foreach($arrTipousers as $k=>$v){
+            $cboTipousers += array($v->id=>$v->descripcion);
+        }
+        return view($this->folderview.'.mant')->with(compact('user', 'formData', 'entidad', 'boton', 'cboTipousers', 'listar'));
     }
 
     public function update(Request $request, $id)
@@ -152,13 +160,13 @@ class UserController extends Controller
             return $existe;
         }
         $reglas = array(
-            'tipousuario_id' => 'required',
+            'tipouser_id' => 'required',
             'name' => 'required',
             'username' => 'required',
             'password' => 'required'
         );
         $mensajes = array(
-            'tipousuario_id.required' => 'Debe seleccionar un tipo de usuario',
+            'tipouser_id.required' => 'Debe seleccionar un tipo de usuario',
             'name.required' => 'Debe ingresar el nombre de la persona',
             'username.required' => 'Debe ingresar el usuario',
             'password.required' => 'Debe ingresar la contraseña',
@@ -171,10 +179,10 @@ class UserController extends Controller
 
         $error = DB::transaction(function() use($request, $id){
             $user = User::find($id);
-            $user->tipousuario_id= $request->input('tipousuario_id');
+            $user->tipouser_id= $request->input('tipouser_id');
             $user->name= mb_strtoupper($request->input('name'), 'utf-8');
-            $user->username= mb_strtoupper($request->input('username'), 'utf-8');
-            $user->password= Hash::make(mb_strtoupper($request->input('password'), 'utf-8'));
+            $user->username= $request->input('username');
+            $user->password= Hash::make($request->input('password'));
             $user->save();
         });
         return is_null($error) ? "OK" : $error;

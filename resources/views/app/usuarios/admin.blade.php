@@ -15,12 +15,12 @@
 							{!! Form::select('estado', array('all' => 'TODOS', 'activos' => 'ACTIVOS', 'desactivados' => 'DESACTIVADOS'), 'activos', array('class' => 'form-control input-xs', 'onchange' => 'buscar(\''.$entidad.'\')', 'id' => 'estado')) !!}
 						</div>
 						<div class="col-8 col-sm-9 col-md-3 col-lg-3">
-							{!! Form::label('filter', 'Codigo/descripción:') !!}
+							{!! Form::label('filter', 'Username/Nombre:') !!}
 							{!! Form::text('filter', '', array('class' => 'form-control input-xs', 'id' => 'filter')) !!}
 						</div>
 						<div class="col-9 col-sm-6 col-md-3 col-lg-3">
-							{!! Form::label('unidad', 'Unidad:') !!}
-							{{-- {!! Form::select('unidad', $cboUnidades, 'all', array('class' => 'form-control input-xs', 'onchange' => 'buscar(\''.$entidad.'\')', 'id' => 'unidad')) !!} --}}
+							{!! Form::label('tipouser_id', 'Tipo:') !!}
+							{!! Form::select('tipouser_id', $cboTipousers, 'all', array('class' => 'form-control input-xs', 'onchange' => 'buscar(\''.$entidad.'\')', 'id' => 'tipouser_id')) !!}
 						</div>
 						<div class="col-3 col-sm-2 col-md-2 col-lg-1">
 							{!! Form::label('filas', 'Filas')!!}

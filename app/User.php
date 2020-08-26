@@ -38,8 +38,9 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function scopegetFilter($query, $estado, $filter) {
-        return $query->where(function($subquery) use ($estado) {
+    public function scopegetFilter($query, $estado, $filter, $tipouser_id) {
+        return $query->join('tipouser', 'users.tipouser_id', 'tipouser.id')
+            ->where(function($subquery) use ($estado) {
                 if($estado === 'activos') $subquery->whereNull('users.deleted_at');
                 elseif($estado === 'desactivados') $subquery->whereNotNull('users.deleted_at');
             })
@@ -47,7 +48,10 @@ class User extends Authenticatable
                 $subquery->where('users.username', strtoupper($filter))
                     ->orWhere('users.name', 'LIKE', '%'.strtoupper($filter).'%');
             })
+            ->where(function($subquery) use ($tipouser_id) {
+                if($tipouser_id !== 'all') $subquery->where('users.tipouser_id', $tipouser_id);
+            })
             ->orderBy('users.name', 'ASC')->withTrashed()
-            ->select('users.name', 'users.username');
+            ->select('users.id','users.name', 'users.username', 'tipouser.descripcion as tipouser');
     }
 }

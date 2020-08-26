@@ -28,7 +28,8 @@ class UsersTableSeeder extends Seeder
             'password' => Hash::make('gonzalo'),
             'tipouser_id' => 1,
             'created_at' => now(),
-            'updated_at' => now()
+            'updated_at' => now(),
+            'deleted_at' => now()
         ]);
         DB::table('users')->insert([
             'name' => 'Marta Garrido Leca',

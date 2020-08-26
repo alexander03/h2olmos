@@ -15,4 +15,8 @@ class Tipouser extends Model
     	return $this->hasMany('App\Permiso');
     }
 
+    public function scopegetAll($query) {
+        return $query->select('id', 'descripcion')->orderBy('descripcion', 'ASC')->get();
+    }
+
 }
