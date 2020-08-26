@@ -12,6 +12,7 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         $this->call([
+            TipouserTableSeeder::class,
             UsersTableSeeder::class,
             MarcaTableSeeder::class,
             GrupomenuTableSeeder::class,
@@ -19,7 +20,7 @@ class DatabaseSeeder extends Seeder
             UnidadTableSeeder::class,
             RepuestoTableSeeder::class,
             ContratistaTableSeeder::class,
-            ConcesionariaTableSeeder::class,
+            // ConcesionariaTableSeeder::class,
             ConductorTableSeeder::class,
             AreaTableSeeder::class,
             TrabajoTableSeeder::class,
@@ -28,7 +29,6 @@ class DatabaseSeeder extends Seeder
             UaTableSeeder::class,
             EquipoTableSeeder::class,
             PropietariosTableSeeder::class,
-            TipouserTableSeeder::class,
             PermisoTableSeeder::class
         ]);
     }
