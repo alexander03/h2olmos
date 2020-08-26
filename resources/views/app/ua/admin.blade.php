@@ -3,7 +3,7 @@
     <div class="row">
       <div class="col-md-12">
         <div class="card">
-          <div class="card-header card-header-primary">
+          <div class="card-header card-header-info">
             <h4 class="card-title ">{{ $title }}</h4>
           </div>
           <div class="card-body">
@@ -36,7 +36,7 @@
 						<i class="material-icons">cloud_download</i> Exportar
 					</a>
 				</div>
-			
+				
 				{!! Form::close() !!}
             	<div class="table-responsive" id="listado{{ $entidad }}">
 			</div>
@@ -58,7 +58,8 @@
 			<section>
 				<h3 class="text-danger text-center">Error al importar</h3>
 				<p class="text-center text-secondary">
-					No se pudo importar, el formato no coincide o existen datos repetidos.
+					No se pudo importar, el formato no coincide, 
+					existen datos repetidos o códigos no existentes.
 				</p>
 				<div class="d-flex justify-content-center">
 					<button class="btn btn-success" data-dismiss="modal">Aceptar</button>

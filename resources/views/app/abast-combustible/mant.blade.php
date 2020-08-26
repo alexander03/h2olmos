@@ -15,7 +15,7 @@ if ($abastecimiento !== NULL) {
 			name="fecha_abastecimiento" 
 			id="id-fa" 
 			class="form-control" 
-			value="<?php if($abastecimiento) echo $abastecimiento -> fecha_abastecimiento ?>">
+			value="<?php if($abastecimiento) echo $abastecimiento -> fecha_abastecimiento; else echo date('yy-m-d')?>">
 	</div>
 	<div class="form-group col-12 col-md-6 p-3">
 		<label for="id-grifo" class="pl-3">Grifo</label>

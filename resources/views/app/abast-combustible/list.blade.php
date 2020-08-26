@@ -23,6 +23,7 @@
 			<td class="text-nowrap">{{ $value -> tipo_combustible }}</td>
 			<td class="text-nowrap">{{ $value -> conductor -> nombres }} {{ $value -> conductor -> apellidos }}</td>
             <td class="text-nowrap">{{ $value -> conductor -> dni }}</td>
+            <td class="text-nowrap">{{ $value -> ua -> codigo }}</td>
             <td class="text-nowrap">{{ $value -> ua -> descripcion }}</td>
 			<td class="text-nowrap">{{ $value -> equipo -> descripcion }}</td>
 			<td class="text-nowrap">{{ $value -> equipo -> marca -> descripcion }}</td>

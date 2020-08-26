@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\AbastecimientoCombustible;
 use App\Conductor;
 use App\Equipo;
+use App\Exports\AbastecimientoCombustibleExport;
 use App\Librerias\Libreria;
 use App\Rules\SearchUaPadre;
 use App\Rules\SelectDifZero;
@@ -42,8 +43,32 @@ class AbastecimientoCombustibleController extends Controller{
         $pagina           = $request->input('page');
         $filas            = $request->input('filas');
         $entidad          = 'AbastecimientoCombustible';
-        $nombre             = Libreria::getParam($request->input('descripcion'));
-        $resultado        = AbastecimientoCombustible::where('fecha_abastecimiento', 'LIKE', '%'.strtoupper($nombre).'%')->orderBy('fecha_abastecimiento', 'ASC');
+        $fechaQuery       = Libreria::getParam($request->input('date_abastecimiento'));
+        $codigoUaQuery    = Libreria::getParam($request->input('codigo_ua'));
+        $grifoQuery       = Libreria::getParam($request->input('grifo'));
+        $placaQuery       = Libreria::getParam($request->input('placa'));
+        //Buscar ua 
+        if( isset($codigoUaQuery) )
+            $uaDB = Ua::select('id') -> where('codigo', 'LIKE', "%{$codigoUaQuery}%") -> first();   
+        $uaId = (isset( $uaDB )) ? $uaDB -> id : null;
+        //Buscar grifo
+        if( isset($grifoQuery) )
+            $grifoDB = Grifo::select('id') -> where('descripcion', 'LIKE', "%{$grifoQuery}%") -> first();
+        $grifoId = (isset( $grifoDB )) ? $grifoDB -> id : null;
+        //Buscar equipo
+        if( isset($placaQuery) )
+            $equipoDB = Equipo::select('id') -> where('placa', 'LIKE', "%{$placaQuery}%") -> first();
+        $equipoId = (isset( $equipoDB )) ? $equipoDB -> id : null;
+        //Resultado
+        $resultado        = AbastecimientoCombustible::
+            where([
+                ['fecha_abastecimiento', 'LIKE', '%'.$fechaQuery.'%'],
+                ['ua_id', 'LIKE', "%{$uaId}%"],
+                ['grifo_id', 'LIKE', "%{$grifoId}%"],
+                ['equipo_id', 'LIKE', "%{$equipoId}%"]   
+            ]) 
+            -> orderBy('fecha_abastecimiento', 'ASC');
+    
         $lista            = $resultado->get();
         $cabecera         = array();
         $cabecera[]       = array('valor' => '#', 'numero' => '1');
@@ -52,7 +77,8 @@ class AbastecimientoCombustibleController extends Controller{
         $cabecera[]       = array('valor' => 'Tipo de combustible', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Conductor', 'numero' => '1');
         $cabecera[]       = array('valor' => 'DNI', 'numero' => '1');
-        $cabecera[]       = array('valor' => 'Ua', 'numero' => '1');
+        $cabecera[]       = array('valor' => 'Codigo UA', 'numero' => '1');
+        $cabecera[]       = array('valor' => 'UA', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Unidad', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Marca', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Modelo', 'numero' => '1');
@@ -319,6 +345,12 @@ class AbastecimientoCombustibleController extends Controller{
         $res = DB::select($consulta);
         
         return response() -> json($res);
+    }
+
+    //EXPORT EXCEL
+    public function exportExcel(){
+
+        return Excel::download(new AbastecimientoCombustibleExport, 'abast-combustible-list.xlsx');
     }
 }
 
