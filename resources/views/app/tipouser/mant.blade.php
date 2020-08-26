@@ -26,7 +26,7 @@ if ($tipouser !== NULL) {
 
 						$tipouser->whereHas('permisos', function($query) use($opcionmenu){
 							$query->where('opcionmenu_id',$opcionmenu->id);
-						})->count() > 0
+						})->where('id',$tipouser->id)->count() > 0
 
 				)
 					checked
