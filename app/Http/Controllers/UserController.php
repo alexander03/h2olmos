@@ -188,8 +188,55 @@ class UserController extends Controller
         return is_null($error) ? "OK" : $error;
     }
 
+    public function eliminar($id, $listarLuego)
+    {
+        $existe = Libreria::verificarExistencia($id, 'users');
+        if ($existe !== true) {
+            return $existe;
+        }
+        $listar = "NO";
+        if (!is_null(Libreria::obtenerParametro($listarLuego))) {
+            $listar = $listarLuego;
+        }
+        $mensaje=true;
+        $modelo   = User::find($id);
+        $entidad  = 'User';
+        $formData = array('route' => array('user.destroy', $id), 'method' => 'DELETE', 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
+        $boton    = 'Eliminar';
+        return view('app.confirmarEliminar')->with(compact('modelo', 'formData', 'entidad', 'boton', 'listar','mensaje'));
+    }
 
+    public function destroy($id)
+    {
+        $existe = Libreria::verificarExistencia($id, 'users');
+        if ($existe !== true) {
+            return $existe;
+        }
+        $error = DB::transaction(function() use($id){
+            $user = User::find($id);
+            $user->delete();
+        });
+        return is_null($error) ? "OK" : $error;
+    }
     
+    public function activar($id, $listarLuego){
+        $listar = "NO";
+        if (!is_null(Libreria::obtenerParametro($listarLuego))) {
+            $listar = $listarLuego;
+        }
+        $modelo   = User::find($id);
+        $entidad  = 'User';
+        $formData = array('route' => array('user.reactivar', $id), 'method' => 'GET', 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
+        $boton    = 'Activar';
+        return view('app.confirmar')->with(compact('modelo', 'formData', 'entidad', 'boton', 'listar'));
+    }
+
+    public function reactivar($id){
+        $error = DB::transaction(function() use($id){
+            User::onlyTrashed()->where('id', $id)->restore();
+        });
+        return is_null($error) ? "OK" : $error;
+    }
     
     // public function index(User $model)
     // {

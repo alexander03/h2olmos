@@ -52,6 +52,6 @@ class User extends Authenticatable
                 if($tipouser_id !== 'all') $subquery->where('users.tipouser_id', $tipouser_id);
             })
             ->orderBy('users.name', 'ASC')->withTrashed()
-            ->select('users.id','users.name', 'users.username', 'tipouser.descripcion as tipouser');
+            ->select('users.id','users.name', 'users.username', 'users.deleted_at', 'tipouser.descripcion as tipouser');
     }
 }
