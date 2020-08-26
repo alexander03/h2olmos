@@ -85,9 +85,10 @@ Route::group(['middleware' => 'auth'], function () {
 	//Rutas abastecimiento de combustible
 	Route::post('abastecimiento/buscar', 'AbastecimientoCombustibleController@buscar')->name('abastecimiento.buscar');
 	Route::get('abastecimiento/eliminar/{id}/{listarluego}', 'AbastecimientoCombustibleController@eliminar')->name('abastecimiento.eliminar');
-	Route::get('abastecimiento/search/grifo/{query}', 'AbastecimientoCombustibleController@searchAutocompleteGrifo')->name('ua.search.grifo');
-	Route::get('abastecimiento/search/conductor/{query}', 'AbastecimientoCombustibleController@searchAutocompleteConductor')->name('ua.search.conductor');
-	Route::get('abastecimiento/search/equipo/{query}', 'AbastecimientoCombustibleController@searchAutocompleteEquipo')->name('ua.search.equipo');
+	Route::get('abastecimiento/search/grifo/{query}', 'AbastecimientoCombustibleController@searchAutocompleteGrifo')->name('abastecimiento.search.grifo');
+	Route::get('abastecimiento/search/conductor/{query}', 'AbastecimientoCombustibleController@searchAutocompleteConductor')->name('abastecimiento.search.conductor');
+	Route::get('abastecimiento/search/equipo/{query}', 'AbastecimientoCombustibleController@searchAutocompleteEquipo')->name('abastecimiento.search.equipo');
+	Route::get('abastecimiento/exportar', 'AbastecimientoCombustibleController@exportExcel')->name('abastecimiento.excel.export');
 	Route::resource('abastecimiento', 'AbastecimientoCombustibleController');
 
     //Rutas Tipohora
