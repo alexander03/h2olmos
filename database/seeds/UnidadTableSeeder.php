@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class UnidadTableSeeder extends Seeder
 {
@@ -12,27 +13,27 @@ class UnidadTableSeeder extends Seeder
     public function run()
     {
         DB::table('unidad')->insert([
-            'descripcion' => 'CAMIONETA',
+            'descripcion' => 'MES',
             'created_at' => now(),
             'updated_at' => now()
         ]);
         DB::table('unidad')->insert([
-            'descripcion' => 'CAMION',
+            'descripcion' => 'VB',
             'created_at' => now(),
             'updated_at' => now()
         ]);
         DB::table('unidad')->insert([
-            'descripcion' => 'VOLQUETE',
+            'descripcion' => 'METRO CÚBICO',
             'created_at' => now(),
             'updated_at' => now()
         ]);
         DB::table('unidad')->insert([
-            'descripcion' => 'EXCAVADORA',
+            'descripcion' => 'KILOMETRO',
             'created_at' => now(),
             'updated_at' => now()
         ]);
         DB::table('unidad')->insert([
-            'descripcion' => 'CARGADOR FRONTAL',
+            'descripcion' => 'GLB',
             'created_at' => now(),
             'updated_at' => now()
         ]);
