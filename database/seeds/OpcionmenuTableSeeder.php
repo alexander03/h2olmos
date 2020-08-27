@@ -101,6 +101,13 @@ class OpcionmenuTableSeeder extends Seeder
             'grupomenu_id' => 1
         ]);
         DB::table('opcionmenu')->insert([
+            'descripcion' => 'Tipo de users',
+            'link' => 'tipouser',
+            'icono' => 'controldiario',
+            'orden' => 4,
+            'grupomenu_id' => 2
+        ]);
+        DB::table('opcionmenu')->insert([
             'descripcion' => 'Grifos',
             'link' => 'grifo',
             'icono' => 'myicon',
@@ -129,6 +136,15 @@ class OpcionmenuTableSeeder extends Seeder
             'icono' => 'myicon',
             'orden' => 1,
             'grupomenu_id' => 3
+        ]);
+
+        //SISTEMA
+        DB::table('opcionmenu')->insert([
+            'descripcion' => 'Usuario',
+            'link' => 'user',
+            'icono' => 'myicon',
+            'orden' => 1,
+            'grupomenu_id' => 2
         ]);
 
     }

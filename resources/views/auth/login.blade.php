@@ -15,18 +15,18 @@
             <h4 class="card-title"><strong>{{ __('Login') }}</strong></h4>
           </div>
           <div class="card-body">
-            <div class="bmd-form-group{{ $errors->has('email') ? ' has-danger' : '' }}">
+            <div class="bmd-form-group{{ $errors->has('username') ? ' has-danger' : '' }}">
               <div class="input-group">
                 <div class="input-group-prepend">
                   <span class="input-group-text">
                     <i class="material-icons">login</i>
                   </span>
                 </div>
-                <input type="text" name="email" class="form-control" placeholder="{{ __('Email...') }}" value="{{ old('email', 'admin@material.com') }}" required>
+                <input type="text" name="username" class="form-control" placeholder="username" value="admin" required>
               </div>
-              @if ($errors->has('email'))
-                <div id="email-error" class="error text-danger pl-3" for="email" style="display: block;">
-                  <strong>{{ $errors->first('email') }}</strong>
+              @if ($errors->has('username'))
+                <div id="username-error" class="error text-danger pl-3" for="username" style="display: block;">
+                  <strong>{{ $errors->first('username') }}</strong>
                 </div>
               @endif
             </div>
@@ -37,7 +37,7 @@
                     <i class="material-icons">lock_outline</i>
                   </span>
                 </div>
-                <input type="password" name="password" id="password" class="form-control" placeholder="{{ __('Password...') }}" value="{{ !$errors->has('password') ? "admin" : "" }}" required>
+                <input type="password" name="password" id="password" class="form-control" placeholder="contraseña" value="admin" required>
               </div>
               @if ($errors->has('password'))
                 <div id="password-error" class="error text-danger pl-3" for="password" style="display: block;">

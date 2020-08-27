@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTipousuarioTable extends Migration
+class CreateTipouserTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,11 @@ class CreateTipousuarioTable extends Migration
      */
     public function up()
     {
-        Schema::create('tipousuario', function (Blueprint $table) {
+        Schema::create('tipouser', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('descripcion','20');
-            $table->timestamps();
+            $table->string('descripcion');
             $table->softDeletes();
+            $table->timestamps();
         });
     }
 
@@ -28,6 +28,6 @@ class CreateTipousuarioTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tipousuario');
+        Schema::dropIfExists('tipouser');
     }
 }

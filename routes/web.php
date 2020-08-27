@@ -58,6 +58,12 @@ Route::group(['middleware' => 'auth'], function () {
 
 Route::group(['middleware' => 'auth'], function () {
 	Route::resource('user', 'UserController', ['except' => ['show']]);
+	Route::post('user/buscar', 'UserController@buscar')->name('user.buscar');
+
+	Route::get('user/eliminar/{id}/{listarluego}', 'UserController@eliminar')->name('user.eliminar');
+	Route::get('user/activar/{id}/{listarluego}', 'UserController@activar')->name('user.activar');
+	Route::get('user/reactivar/{id}', 'UserController@reactivar')->name('user.reactivar');
+
 	Route::get('profile', ['as' => 'profile.edit', 'uses' => 'ProfileController@edit']);
 	Route::put('profile', ['as' => 'profile.update', 'uses' => 'ProfileController@update']);
 	Route::put('profile/password', ['as' => 'profile.password', 'uses' => 'ProfileController@password']);
@@ -116,6 +122,11 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::post('vehiculo/buscar', 'VehiculoController@buscar')->name('vehiculo.buscar');
 	Route::get('vehiculo/eliminar/{id}/{listarluego}', 'VehiculoController@eliminar')->name('vehiculo.eliminar');
 	Route::resource('vehiculo', 'VehiculoController', array('except' => array('show')));
+
+	//tipo user
+	Route::post('tipouser/buscar', 'TipoUserController@buscar')->name('tipouser.buscar');
+	Route::get('tipouser/eliminar/{id}/{listarluego}', 'TipoUserController@eliminar')->name('tipouser.eliminar');
+	Route::resource('tipouser', 'TipoUserController', array('except' => array('show')));
 	
 		
 	//Rutas para las marcas (brands)

@@ -1,4 +1,3 @@
-{{-- TODO: CORREGIR los estilos del nav de la paginacion --}}
 <div class="content">
   <div class="container-fluid">
     <div class="row">
@@ -15,23 +14,19 @@
 							{!! Form::label('estado', 'Estado:') !!}
 							{!! Form::select('estado', array('all' => 'TODOS', 'activos' => 'ACTIVOS', 'desactivados' => 'DESACTIVADOS'), 'activos', array('class' => 'form-control input-xs', 'onchange' => 'buscar(\''.$entidad.'\')', 'id' => 'estado')) !!}
 						</div>
-						<div class="col-8 col-sm-7 col-md-3 col-lg-3">
-							{!! Form::label('filter', 'Apellido/Nombre o DNI:') !!}
+						<div class="col-8 col-sm-9 col-md-3 col-lg-3">
+							{!! Form::label('filter', 'Username/Nombre:') !!}
 							{!! Form::text('filter', '', array('class' => 'form-control input-xs', 'id' => 'filter')) !!}
 						</div>
-						<div class="col-3 col-sm-2 col-md-1 col-lg-1">
-							{!! Form::label('categoria_id', 'Categoría:') !!}
-							{!! Form::select('categoria_id', $arrCategorias, 'all', array('class' => 'form-control input-xs', 'onchange' => 'buscar(\''.$entidad.'\')', 'id' => 'categoria_id')) !!}
+						<div class="col-9 col-sm-6 col-md-3 col-lg-3">
+							{!! Form::label('tipouser_id', 'Tipo:') !!}
+							{!! Form::select('tipouser_id', $cboTipousers, 'all', array('class' => 'form-control input-xs', 'onchange' => 'buscar(\''.$entidad.'\')', 'id' => 'tipouser_id')) !!}
 						</div>
-						<div class="col-6 col-sm-6 col-md-3 col-lg-3">
-							{!! Form::label('contratista', 'Contratista:') !!}
-							{!! Form::select('contratista', $cboContratista, 'all', array('class' => 'form-control input-xs', 'onchange' => 'buscar(\''.$entidad.'\')', 'id' => 'contratista')) !!}
-						</div>
-						<div class="col-3 col-sm-2 col-md-1 col-lg-1">
+						<div class="col-3 col-sm-2 col-md-2 col-lg-1">
 							{!! Form::label('filas', 'Filas')!!}
 							{!! Form::selectRange('filas', 1, 30, 20, array('class' => 'form-control input-xs', 'onchange' => 'buscar(\''.$entidad.'\')')) !!}
 						</div>
-						<div class="col-12 col-sm-4 col-md-2 col-lg-2 d-flex justify-content-around align-items-center">
+						<div class="col-12 col-sm-4 col-md-2 col-lg-3 d-flex justify-content-around align-items-center">
 							{!! Form::button('<i class="material-icons">search</i>Buscar', array('class' => 'btn btn-success p-2 pl-1 pr-1', 'id' => 'btnBuscar', 'onclick' => 'buscar(\''.$entidad.'\')')) !!}
 							{!! Form::button('<i class="material-icons">add</i>Nuevo', array('class' => 'btn btn-info p-2 pl-1 pr-1', 'id' => 'btnNuevo', 'onclick' => 'modal (\''.URL::route($ruta["create"], array('listar'=>'SI')).'\', \''.$titulo_registrar.'\', this);')) !!}
 						</div>
