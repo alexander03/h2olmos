@@ -247,7 +247,7 @@ class ControlDiarioController extends Controller
             return $existe;
         }
         $listar   = Libreria::getParam($request->input('listar'), 'NO');
-        $vehiculo = Vehiculo::find($id);
+        $controldiario = Controldiario::find($id);
 
      
 /*        $uas = Ua::orderBy('descripcion','asc')->get();
@@ -259,21 +259,21 @@ class ControlDiarioController extends Controller
         }        
 */		
         $thoras = Tipohora::orderBy('codigo','asc')->get();
-        $cboUa = array();
-        $cboUa += array('0' => 'Selecione UA');
+        $cboThoras = array();
+        $cboThoras += array('0' => 'Horas de trabajo');
         foreach($thoras as $k=>$v){
             $cboThoras += array($v->id=>$v->descripcion . '-' .$v->codigo);
         }
 
         $cboTurnos = array();
-        $cboTurnos += array(0 => 'Diurno');
-        $cboTurnos += array(1 => 'Nocturno');
+        $cboTurnos += array(1 => 'Diurno');
+        $cboTurnos += array(0 => 'Nocturno');
 
-        $entidad  = 'Vehiculo';
-        $formData = array('vehiculo.update', $id);
+        $entidad  = 'Controldiario';
+        $formData = array('controldiario.update', $id);
         $formData = array('route' => $formData, 'method' => 'PUT', 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
         $boton    = 'Modificar';
-        return view($this->folderview.'.mant')->with(compact('vehiculo', 'cboTurnos', 'formData', 'entidad', 'boton', 'listar','cboThoras'));
+        return view($this->folderview.'.mant')->with(compact('controldiario', 'cboTurnos', 'formData', 'entidad', 'boton', 'listar','cboThoras'));
     }
 
     /**
@@ -318,7 +318,7 @@ class ControlDiarioController extends Controller
             return $validacion->messages()->toJson();
         } 
         $error = DB::transaction(function() use($request, $id){
-            $vehiculo =  Vehiculo::find($id);
+            $equipo =  Equipo::find($id);
             $equipoDB = Equipo::where('codigo',$request->input('equipo_id')-> get());  
             $controldiario->equipo_id 	 		  = $equipoDB[0]->id;
             
@@ -337,7 +337,7 @@ class ControlDiarioController extends Controller
 	        $controldiario->fecha 		= $request -> input('fecha');
             
 
-            $vehiculo->save();
+            $equipo->save();
         });
         return is_null($error) ? "OK" : $error;
     }
@@ -355,8 +355,8 @@ class ControlDiarioController extends Controller
             return $existe;
         }
         $error = DB::transaction(function() use($id){
-            $vehiculo = Vehiculo::find($id);
-            $vehiculo->delete();
+            $equipo = Equipo::find($id);
+            $equipo->delete();
         });
         return is_null($error) ? "OK" : $error;
     }
@@ -374,7 +374,7 @@ class ControlDiarioController extends Controller
         $mensaje = true;
         $modelo   = Controldiario::find($id);
         $entidad  = 'controldiario';
-        $formData = array('route' => array('vehiculo.destroy', $id), 'method' => 'DELETE', 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
+        $formData = array('route' => array('equipo.destroy', $id), 'method' => 'DELETE', 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
         $boton    = 'Eliminar';
         return view('app.confirmarEliminar')->with(compact('modelo', 'formData', 'entidad', 'boton', 'listar','mensaje'));
     }

@@ -12,8 +12,8 @@ class GrifoTableSeeder extends Seeder
      */
     public function run()
     {
-     App\Grifo::create(['descripcion' => 'Mi grifo']);   
-     App\Grifo::create(['descripcion' => 'Gran grifo']); 
-     App\Grifo::create(['descripcion' => 'Buen grifo']);   
+     App\Grifo::create(['descripcion' => 'LEON DE ORO']);   
+     App\Grifo::create(['descripcion' => 'PECSA']); 
+     App\Grifo::create(['descripcion' => 'PRIMAX']);   
     }
 }
