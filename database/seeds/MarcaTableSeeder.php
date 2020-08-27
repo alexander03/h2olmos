@@ -22,17 +22,17 @@ class MarcaTableSeeder extends Seeder
             'updated_at' => now()
         ]);
         DB::table('marca')->insert([
-            'descripcion' => 'RELUX',
+            'descripcion' => 'HITACHI',
             'created_at' => now(),
             'updated_at' => now()
         ]);
         DB::table('marca')->insert([
-            'descripcion' => 'PIRAMIDE',
+            'descripcion' => 'VOLVO',
             'created_at' => now(),
             'updated_at' => now()
         ]);
         DB::table('marca')->insert([
-            'descripcion' => 'BERTOLINI',
+            'descripcion' => 'SANY',
             'created_at' => now(),
             'updated_at' => now()
         ]);

@@ -11,30 +11,30 @@ class UnidadTableSeeder extends Seeder
      */
     public function run()
     {
-        // DB::table('unidad')->insert([
-        //     'descripcion' => '',
-        //     'created_at' => now(),
-        //     'updated_at' => now()
-        // ]);
-        // DB::table('unidad')->insert([
-        //     'descripcion' => '',
-        //     'created_at' => now(),
-        //     'updated_at' => now()
-        // ]);
-        // DB::table('unidad')->insert([
-        //     'descripcion' => '',
-        //     'created_at' => now(),
-        //     'updated_at' => now()
-        // ]);
-        // DB::table('unidad')->insert([
-        //     'descripcion' => '',
-        //     'created_at' => now(),
-        //     'updated_at' => now()
-        // ]);
-        // DB::table('unidad')->insert([
-        //     'descripcion' => '',
-        //     'created_at' => now(),
-        //     'updated_at' => now()
-        // ]);
+        DB::table('unidad')->insert([
+            'descripcion' => '',
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
+        DB::table('unidad')->insert([
+            'descripcion' => '',
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
+        DB::table('unidad')->insert([
+            'descripcion' => '',
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
+        DB::table('unidad')->insert([
+            'descripcion' => '',
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
+        DB::table('unidad')->insert([
+            'descripcion' => '',
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
     }
 }
