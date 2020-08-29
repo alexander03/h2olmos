@@ -15,6 +15,7 @@ class EquipoTableSeeder extends Seeder
             'codigo' => '1234567FD',
             'descripcion' => 'GRUPO GENERADOR',
             'modelo' => 'P33-1',
+            'placa' => '172084TB',
             'marca_id' => 1,
             'contratista_id' => 1,
             'anio' => '2010',

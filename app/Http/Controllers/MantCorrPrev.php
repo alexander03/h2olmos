@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Validator;
 use Illuminate\Http\Request;
-use App\Repuesto;
+use App\Checklistvehicular;
 use App\Unidad;
 use App\Equipo;
 use App\Ua;
@@ -44,17 +44,21 @@ class MantCorrPrev extends Controller
     {
         $pagina           = $request->input('page');
         $filas            = $request->input('filas');
-        $entidad          = 'Repuesto';
+        $entidad          = 'Checklistvehicular';
         $filter           = Libreria::getParam($request->input('filter'));
         $estado           = $request->input('estado');
         $unidad           = $request->input('unidad');
-        $resultado        = Repuesto::getFilter($estado, $filter, $unidad);
+        $resultado        = Checklistvehicular::getFilter($estado, $filter);
         $lista            = $resultado->get();
+        return $lista;
         $cabecera         = array();
         $cabecera[]       = array('valor' => '#', 'numero' => '1');
-        $cabecera[]       = array('valor' => 'Código', 'numero' => '1');
-        $cabecera[]       = array('valor' => 'Descripción', 'numero' => '1');
-        $cabecera[]       = array('valor' => 'Unidad', 'numero' => '1');
+        $cabecera[]       = array('valor' => 'F. Registro', 'numero' => '1');
+        $cabecera[]       = array('valor' => 'Equipo/Vehiculo', 'numero' => '1');
+        $cabecera[]       = array('valor' => 'K. Inicial', 'numero' => '1');
+        $cabecera[]       = array('valor' => 'K. Final', 'numero' => '1');
+        $cabecera[]       = array('valor' => 'Lider del area', 'numero' => '1');
+        $cabecera[]       = array('valor' => 'Conductor', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Operaciones', 'numero' => '2');
         $titulo_modificar = $this->tituloModificar;
         $titulo_eliminar  = $this->tituloEliminar;

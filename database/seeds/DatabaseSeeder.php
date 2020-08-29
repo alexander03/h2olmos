@@ -30,7 +30,7 @@ class DatabaseSeeder extends Seeder
             EquipoTableSeeder::class,
             PropietariosTableSeeder::class,
             PermisoTableSeeder::class,
-            // ChecklistvehicularTableSeeder::class
+            ChecklistvehicularTableSeeder::class
         ]);
     }
 }
