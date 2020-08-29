@@ -1,6 +1,61 @@
+@php
+	if($checklistvehicular == null) {//Nuevo
+		$sistema_electrico = [
+			(object) ['id' => 'freno_emergencia', 'titulo' => 'Freno de emergencia', 'estado' => null],
+			(object) ['id' => 'funcionamiento_tablero', 'titulo' => 'Funcionamiento de tablero','estado' => null],
+			(object) ['id' => 'estado_bateria_funcionamiento', 'titulo' => 'Estado de batería y funcionamiento', 'estado' => null],
+			(object) ['id' => 'funcionamiento_claxon', 'titulo' => 'Funcionamiento de claxon', 'estado' => null],
+			(object) ['id' => 'luces_retroceso_pirata', 'titulo' => 'Luces de retroceso pirata','estado' => null],
+			(object) ['id' => 'luces_direccional', 'titulo' => 'Luces direccional','estado' => null],
+			(object) ['id' => 'faros_neblineros', 'titulo' => 'Faros neblineros','estado' => null],
+			(object) ['id' => 'faros_delanteros', 'titulo' => 'Faros delanteros','estado' => null],
+			(object) ['id' => 'faros_posteriores', 'titulo' => 'Faros posteriores','estado' => null],
+			(object) ['id' => 'alarma_retroceso', 'titulo' => 'Alarma de retroceso','estado' => null],
+		];
+		$sistema_mecanico = [
+			(object) ['id' => 'nivel_liquido_freno', 'titulo' => 'Nivel liquido de freno', 'estado' => null],
+			(object) ['id' => 'sistema_direccion', 'titulo' => 'Sistema de dirección', 'estado' => null],
+			(object) ['id' => 'palancas_cambios', 'titulo' => 'Palancas de cambios', 'estado' => null],
+			(object) ['id' => 'estado_neumaticos', 'titulo' => 'Estado de neumáticos', 'estado' => null],
+			(object) ['id' => 'llantas_repuesto', 'titulo' => 'Llantas de repuesto', 'estado' => null],
+			(object) ['id' => 'ajustes_tuercas', 'titulo' => 'Ajustes de tuercas', 'estado' => null],
+			(object) ['id' => 'presion_llantas_libras', 'titulo' => 'Presion de llantas en libras', 'estado' => null],
+			(object) ['id' => 'cinturon_seguridad_conductor', 'titulo' => 'Cinturon de seguridad conductor', 'estado' => null],
+			(object) ['id' => 'cinturon_seguridad_pasajeros', 'titulo' => 'Cinturon de seguridad pasajeros', 'estado' => null],
+			(object) ['id' => 'suspension', 'titulo' => 'Suspensión', 'estado' => null],
+
+			(object) ['id' => 'sistema_freno', 'titulo' => 'Sistema de freno', 'estado' => null],
+			(object) ['id' => 'pernos_neumaticos', 'titulo' => 'Pernos de neumáticos', 'estado' => null],
+			(object) ['id' => 'nivel_aceite', 'titulo' => 'Nivel de aceite', 'estado' => null],
+			(object) ['id' => 'espejos_int_ext', 'titulo' => 'Espejos int y ext', 'estado' => null],
+			(object) ['id' => 'parachoques', 'titulo' => 'Parachoques', 'estado' => null],
+			(object) ['id' => 'parabrisas_ventanas', 'titulo' => 'Parabrisas y ventanas', 'estado' => null],
+			(object) ['id' => 'puertas_cabina', 'titulo' => 'Puertas de cabina', 'estado' => null],
+			(object) ['id' => 'puertas_tolva', 'titulo' => 'Puertas de tolva', 'estado' => null],
+			(object) ['id' => 'plumillas', 'titulo' => 'Plumillas', 'estado' => null],
+			(object) ['id' => 'estado_carroceria', 'titulo' => 'Estado de carrocería', 'estado' => null],
+		];
+		$accesorios = [
+			(object) ['id' => 'estuche_herramientas', 'titulo' => 'Estuche de herramientas', 'estado' => null],
+			(object) ['id' => 'estado_carga_extintor', 'titulo' => 'Estado y carga de extintor', 'estado' => null],
+			(object) ['id' => 'botiquin', 'titulo' => 'Botiquín', 'estado' => null],
+			(object) ['id' => 'cable_remolque', 'titulo' => 'Cable de remolque', 'estado' => null],
+			(object) ['id' => 'tacos_seguridad_cuña_2', 'titulo' => 'Tacos de seguridad cuña(2)', 'estado' => null],
+			(object) ['id' => 'llave_ruedas', 'titulo' => 'Llave de ruedas', 'estado' => null],
+			(object) ['id' => 'kit_antiderrames', 'titulo' => 'Kit antiderrames', 'estado' => null],
+			(object) ['id' => 'limpieza_unidad', 'titulo' => 'Limpieza de la unidad', 'estado' => null],
+		];
+		$documentos = [
+			(object) ['id' => 'tarjeta_propiedad', 'titulo' => 'Tarjeta de propiedad', 'estado' => null],
+			(object) ['id' => 'soat', 'titulo' => 'SOAT', 'estado' => null],
+			(object) ['id' => 'licencia_conducir', 'titulo' => 'Licencia de conducir', 'estado' => null],
+			(object) ['id' => 'revision_tecnica', 'titulo' => 'Revisión técnica', 'estado' => null],
+		];
+	}
+@endphp
 
 <div id="divMensajeError{!! $entidad !!}"></div>
-{!! Form::model($repuesto, $formData) !!}	
+{!! Form::model($checklistvehicular, $formData) !!}	
 {!! Form::hidden('listar', $listar, array('id' => 'listar')) !!}
 <div class="form-row">
 	<div class="form-group col-4">
@@ -60,96 +115,17 @@
 						<th class="text-center">NO</th>
 					</thead>
 					<tbody class="table__personal-body">
-						<tr>
-							<td>Freno de emergencia</td>
-							<td class="text-center">
-								{!! Form::radio('freno_emergencia', 'si',false) !!}
-							</td>
-							<td class="text-center">
-								{!! Form::radio('freno_emergencia', 'no',false) !!}
-							</td>
-						</tr>
-						<tr>
-							<td>Funcionamiento de tablero</td>
-							<td class="text-center">
-								{!! Form::radio('funcionamiento_tablero', 'si',false) !!}
-							</td>
-							<td class="text-center">
-								{!! Form::radio('funcionamiento_tablero', 'no',false) !!}
-							</td>
-						</tr>
-						<tr>
-							<td>Estado de bateria y funcionamiento</td>
-							<td class="text-center">
-								{!! Form::radio('estado_bateria', 'si',false) !!}
-							</td>
-							<td class="text-center">
-								{!! Form::radio('estado_bateria', 'no',false) !!}
-							</td>
-						</tr>
-						<tr>
-							<td>Funcionamiento de claxon</td>
-							<td class="text-center">
-								{!! Form::radio('funcionamiento_claxon', 'si',false) !!}
-							</td>
-							<td class="text-center">
-								{!! Form::radio('funcionamiento_claxon', 'no',false) !!}
-							</td>
-						</tr>
-						<tr>
-							<td>Luces de retroceso pirata</td>
-							<td class="text-center">
-								{!! Form::radio('luces_retroceso_pirata', 'si',false) !!}
-							</td>
-							<td class="text-center">
-								{!! Form::radio('luces_retroceso_pirata', 'no',false) !!}
-							</td>
-						</tr>
-						<tr>
-							<td>Luz direccional</td>
-							<td class="text-center">
-								{!! Form::radio('luz_direccional', 'si',false) !!}
-							</td>
-							<td class="text-center">
-								{!! Form::radio('luz_direccional', 'no',false) !!}
-							</td>
-						</tr>
-						<tr>
-							<td>Faros neblineros</td>
-							<td class="text-center">
-								{!! Form::radio('faros_neblineros', 'si',false) !!}
-							</td>
-							<td class="text-center">
-								{!! Form::radio('faros_neblineros', 'no',false) !!}
-							</td>
-						</tr>
-						<tr>
-							<td>Faros delanteros</td>
-							<td class="text-center">
-								{!! Form::radio('faros_delanteros', 'si',false) !!}
-							</td>
-							<td class="text-center">
-								{!! Form::radio('faros_delanteros', 'no',false) !!}
-							</td>
-						</tr>
-						<tr>
-							<td>Faros posteriores</td>
-							<td class="text-center">
-								{!! Form::radio('faros_posteriores', 'si',false) !!}
-							</td>
-							<td class="text-center">
-								{!! Form::radio('faros_posteriores', 'no',false) !!}
-							</td>
-						</tr>
-						<tr>
-							<td>Alarma de retroceso</td>
-							<td class="text-center">
-								{!! Form::radio('alarma_retroceso', 'si',false) !!}
-							</td>
-							<td class="text-center">
-								{!! Form::radio('alarma_retroceso', 'no',false) !!}
-							</td>
-						</tr>
+						@foreach ($sistema_electrico as $item)
+							<tr>
+								<td>{{ $item->titulo }}</td>
+								<td class="text-center">
+									{!! Form::radio( $item->id, 'si', $item->estado ? true : false) !!}
+								</td>
+								<td class="text-center">
+									{!! Form::radio( $item->id, 'no', $item->estado !== null && !$item->estado ? true : false) !!}
+								</td>
+							</tr>
+						@endforeach
 					</tbody>
 				</table>
 			</div>
@@ -161,96 +137,17 @@
 						<th class="text-uppercase text-center">No</th>
 					</thead>
 					<tbody class="table__personal-body">
-						<tr>
-							<td>Nivel liquido de freno</td>
-							<td class="text-center">
-								{!! Form::radio('nivel_liquido_freno', 'si',false) !!}
-							</td>
-							<td class="text-center">
-								{!! Form::radio('nivel_liquido_freno', 'no',false) !!}
-							</td>
-						</tr>
-						<tr>
-							<td>Sistema de dirección</td>
-							<td class="text-center">
-								{!! Form::radio('sistema_direccion', 'si',false) !!}
-							</td>
-							<td class="text-center">
-								{!! Form::radio('sistema_direccion', 'no',false) !!}
-							</td>
-						</tr>
-						<tr>
-							<td>Palancas de cambios</td>
-							<td class="text-center">
-								{!! Form::radio('palancas_cambios', 'si',false) !!}
-							</td>
-							<td class="text-center">
-								{!! Form::radio('palancas_cambios', 'no',false) !!}
-							</td>
-						</tr>
-						<tr>
-							<td>Estado de neumáticos</td>
-							<td class="text-center">
-								{!! Form::radio('estado_neumaticos', 'si',false) !!}
-							</td>
-							<td class="text-center">
-								{!! Form::radio('estado_neumaticos', 'no',false) !!}
-							</td>
-						</tr>
-						<tr>
-							<td>LLantas de repuesto</td>
-							<td class="text-center">
-								{!! Form::radio('llantas_repuesto', 'si',false) !!}
-							</td>
-							<td class="text-center">
-								{!! Form::radio('llantas_repuesto', 'no',false) !!}
-							</td>
-						</tr>
-						<tr>
-							<td>Ajustes de tuercas</td>
-							<td class="text-center">
-								{!! Form::radio('ajustes_tuercas', 'si',false) !!}
-							</td>
-							<td class="text-center">
-								{!! Form::radio('ajustes_tuercas', 'no',false) !!}
-							</td>
-						</tr>
-						<tr>
-							<td>Presion de llantas en libras</td>
-							<td class="text-center">
-								{!! Form::radio('presion_llantas_libras', 'si',false) !!}
-							</td>
-							<td class="text-center">
-								{!! Form::radio('presion_llantas_libras', 'no',false) !!}
-							</td>
-						</tr>
-						<tr>
-							<td>Cinturon de seguridad conductor</td>
-							<td class="text-center">
-								{!! Form::radio('cinturon_seguridad_conductor', 'si',false) !!}
-							</td>
-							<td class="text-center">
-								{!! Form::radio('cinturon_seguridad_conductor', 'no',false) !!}
-							</td>
-						</tr>
-						<tr>
-							<td>Cinturón de seguridad pasajeros</td>
-							<td class="text-center">
-								{!! Form::radio('cinturon_seguridad_pasajeros', 'si',false) !!}
-							</td>
-							<td class="text-center">
-								{!! Form::radio('cinturon_seguridad_pasajeros', 'no',false) !!}
-							</td>
-						</tr>
-						<tr>
-							<td>Suspensión</td>
-							<td class="text-center">
-								{!! Form::radio('suspension', 'si',false) !!}
-							</td>
-							<td class="text-center">
-								{!! Form::radio('suspension', 'no',false) !!}
-							</td>
-						</tr>
+						@for ($i = 0; $i < 10; $i++)
+							<tr>
+								<td>{{ $sistema_mecanico[$i]->titulo }}</td>
+								<td class="text-center">
+									{!! Form::radio( $sistema_mecanico[$i]->id, 'si', $sistema_mecanico[$i]->estado ? true : false) !!}
+								</td>
+								<td class="text-center">
+									{!! Form::radio( $sistema_mecanico[$i]->id, 'no', $sistema_mecanico[$i]->estado !== null && !$sistema_mecanico[$i]->estado ? true : false) !!}
+								</td>
+							</tr>
+						@endfor
 					</tbody>
 				</table>
 			</div>
@@ -262,96 +159,17 @@
 						<th class="text-uppercase text-center">No</th>
 					</thead>
 					<tbody class="table__personal-body">
-						<tr>
-							<td>Sistema de freno</td>
-							<td class="text-center">
-								{!! Form::radio('sistema_freno', 'si',false) !!}
-							</td>
-							<td class="text-center">
-								{!! Form::radio('sistema_freno', 'no',false) !!}
-							</td>
-						</tr>
-						<tr>
-							<td>Pernos de neumáticos</td>
-							<td class="text-center">
-								{!! Form::radio('pernos_neumaticos', 'si',false) !!}
-							</td>
-							<td class="text-center">
-								{!! Form::radio('pernos_neumaticos', 'no',false) !!}
-							</td>
-						</tr>
-						<tr>
-							<td>Nivel de aceite</td>
-							<td class="text-center">
-								{!! Form::radio('nivel_aceite', 'si',false) !!}
-							</td>
-							<td class="text-center">
-								{!! Form::radio('nivel_aceite', 'no',false) !!}
-							</td>
-						</tr>
-						<tr>
-							<td>Espejos int y ext</td>
-							<td class="text-center">
-								{!! Form::radio('espejos_int_ext', 'si',false) !!}
-							</td>
-							<td class="text-center">
-								{!! Form::radio('espejos_int_ext', 'no',false) !!}
-							</td>
-						</tr>
-						<tr>
-							<td>Parachoques</td>
-							<td class="text-center">
-								{!! Form::radio('parachoques', 'si',false) !!}
-							</td>
-							<td class="text-center">
-								{!! Form::radio('parachoques', 'no',false) !!}
-							</td>
-						</tr>
-						<tr>
-							<td>Parabrisas y ventanas</td>
-							<td class="text-center">
-								{!! Form::radio('parabrisas_ventanas', 'si',false) !!}
-							</td>
-							<td class="text-center">
-								{!! Form::radio('parabrisas_ventanas', 'no',false) !!}
-							</td>
-						</tr>
-						<tr>
-							<td>Puertas de cabina</td>
-							<td class="text-center">
-								{!! Form::radio('pernos_neumaticos', 'si',false) !!}
-							</td>
-							<td class="text-center">
-								{!! Form::radio('pernos_neumaticos', 'no',false) !!}
-							</td>
-						</tr>
-						<tr>
-							<td>Puertas de tolva</td>
-							<td class="text-center">
-								{!! Form::radio('puertas_tolva', 'si',false) !!}
-							</td>
-							<td class="text-center">
-								{!! Form::radio('puertas_tolva', 'no',false) !!}
-							</td>
-						</tr>
-						<tr>
-							<td>Plumillas</td>
-							<td class="text-center">
-								{!! Form::radio('plumillas', 'si',false) !!}
-							</td>
-							<td class="text-center">
-								{!! Form::radio('plumillas', 'no',false) !!}
-							</td>
-						</tr>
-						<tr>
-							<td>Estado de carrocería</td>
-							<td class="text-center">
-								{!! Form::radio('estado_carroceria', 'si',false) !!}
-							</td>
-							<td class="text-center">
-								{!! Form::radio('estado_carroceria', 'no',false) !!}
-							</td>
-						</tr>
+						@for ($i = 10; $i < count($sistema_mecanico); $i++)
+							<tr>
+								<td>{{ $sistema_mecanico[$i]->titulo }}</td>
+								<td class="text-center">
+									{!! Form::radio( $sistema_mecanico[$i]->id, 'si', $sistema_mecanico[$i]->estado ? true : false) !!}
+								</td>
+								<td class="text-center">
+									{!! Form::radio( $sistema_mecanico[$i]->id, 'no', $sistema_mecanico[$i]->estado !== null && !$sistema_mecanico[$i]->estado ? true : false) !!}
+								</td>
+							</tr>
+						@endfor
 					</tbody>
 				</table>
 			</div>
@@ -363,78 +181,17 @@
 						<th class="text-uppercase text-center">No</th>
 					</thead>
 					<tbody class="table__personal-body">
-						<tr>
-							<td>Estuche de herramientas</td>
-							<td class="text-center">
-								{!! Form::radio('estuche_herramientas', 'si',false) !!}
-							</td>
-							<td class="text-center">
-								{!! Form::radio('estuche_herramientas', 'no',false) !!}
-							</td>
-						</tr>
-						<tr>
-							<td>Estado y carga de extintor</td>
-							<td class="text-center">
-								{!! Form::radio('estado_carga_extintor', 'si',false) !!}
-							</td>
-							<td class="text-center">
-								{!! Form::radio('estado_carga_extintor', 'no',false) !!}
-							</td>
-						</tr>
-						<tr>
-							<td>Botiquin</td>
-							<td class="text-center">
-								{!! Form::radio('botiquin', 'si',false) !!}
-							</td>
-							<td class="text-center">
-								{!! Form::radio('botiquin', 'no',false) !!}
-							</td>
-						</tr>
-						<tr>
-							<td>Cable de remolque</td>
-							<td class="text-center">
-								{!! Form::radio('cable_remolque', 'si',false) !!}
-							</td>
-							<td class="text-center">
-								{!! Form::radio('cable_remolque', 'no',false) !!}
-							</td>
-						</tr>
-						<tr>
-							<td>Tacos de seguridad cuña (2)</td>
-							<td class="text-center">
-								{!! Form::radio('tacos_seguridad', 'si',false) !!}
-							</td>
-							<td class="text-center">
-								{!! Form::radio('tacos_seguridad', 'no',false) !!}
-							</td>
-						</tr>
-						<tr>
-							<td>LLave de ruedas</td>
-							<td class="text-center">
-								{!! Form::radio('llave_ruedas', 'si',false) !!}
-							</td>
-							<td class="text-center">
-								{!! Form::radio('llave_ruedas', 'no',false) !!}
-							</td>
-						</tr>
-						<tr>
-							<td>Kit antiderrames</td>
-							<td class="text-center">
-								{!! Form::radio('kit_antiderrames', 'si',false) !!}
-							</td>
-							<td class="text-center">
-								{!! Form::radio('kit_antiderrames', 'no',false) !!}
-							</td>
-						</tr>
-						<tr>
-							<td>Limpieza de la unidad</td>
-							<td class="text-center">
-								{!! Form::radio('limpieza_unidad', 'si',false) !!}
-							</td>
-							<td class="text-center">
-								{!! Form::radio('limpieza_unidad', 'no',false) !!}
-							</td>
-						</tr>
+						@foreach ($accesorios as $item)
+							<tr>
+								<td>{{ $item->titulo }}</td>
+								<td class="text-center">
+									{!! Form::radio( $item->id, 'si', $item->estado ? true : false) !!}
+								</td>
+								<td class="text-center">
+									{!! Form::radio( $item->id, 'no', $item->estado !== null && !$item->estado ? true : false) !!}
+								</td>
+							</tr>
+						@endforeach
 					</tbody>
 				</table>
 			</div>
@@ -446,42 +203,17 @@
 						<th class="text-uppercase text-center">No</th>
 					</thead>
 					<tbody class="table__personal-body">
-						<tr>
-							<td>Tarjeta de propiedad</td>
-							<td class="text-center">
-								{!! Form::radio('estuche_herramientas', 'si',false) !!}
-							</td>
-							<td class="text-center">
-								{!! Form::radio('estuche_herramientas', 'no',false) !!}
-							</td>
-						</tr>
-						<tr>
-							<td>SOAT</td>
-							<td class="text-center">
-								{!! Form::radio('soat', 'si',false) !!}
-							</td>
-							<td class="text-center">
-								{!! Form::radio('soat', 'no',false) !!}
-							</td>
-						</tr>
-						<tr>
-							<td>Licencia de conducir</td>
-							<td class="text-center">
-								{!! Form::radio('licencia_conducir', 'si',false) !!}
-							</td>
-							<td class="text-center">
-								{!! Form::radio('licencia_conducir', 'no',false) !!}
-							</td>
-						</tr>
-						<tr>
-							<td>Revisión técnica</td>
-							<td class="text-center">
-								{!! Form::radio('revision_tecnica', 'si',false) !!}
-							</td>
-							<td class="text-center">
-								{!! Form::radio('revision_tecnica', 'no',false) !!}
-							</td>
-						</tr>
+						@foreach ($documentos as $item)
+							<tr>
+								<td>{{ $item->titulo }}</td>
+								<td class="text-center">
+									{!! Form::radio( $item->id, 'si', $item->estado ? true : false) !!}
+								</td>
+								<td class="text-center">
+									{!! Form::radio( $item->id, 'no', $item->estado !== null && !$item->estado ? true : false) !!}
+								</td>
+							</tr>
+						@endforeach
 					</tbody>
 				</table>
 			</div>
