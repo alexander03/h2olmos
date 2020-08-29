@@ -59,9 +59,9 @@
 {!! Form::hidden('listar', $listar, array('id' => 'listar')) !!}
 <div class="form-row">
 	<div class="form-group col-4">
-		{!! Form::label('fecharegistro', 'F. Registro:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
+		{!! Form::label('fecha_registro', 'F. Registro:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
 		<div class="col-lg-12 col-md-12 col-sm-12">
-			{!! Form::date('fecharegistro', null, array('class' => 'form-control input-xs', 'id' => 'fecharegistro', 'min' => date('Y-m-d') )) !!}
+			{!! Form::date('fecha_registro', null, array('class' => 'form-control input-xs', 'id' => 'fecha_registro', 'min' => date('Y-m-d') )) !!}
 		</div>
 	</div>
 	<div class="form-group col-4">
@@ -243,7 +243,20 @@
 		init(IDFORMMANTENIMIENTO+'{!! $entidad !!}', 'M', '{!! $entidad !!}');
 
 
+		const getDateCurrent = () => {
+			console.log('getDateCurrent');
+			const fecha = new Date();
+			let mes = fecha.getMonth()+1;
+			let dia = fecha.getDate();
+			const ano = fecha.getFullYear(); 
+			if(dia<10) dia='0' + dia; 
+			if(mes<10) mes='0' + mes;
+			document.getElementById('fecha_registro').value = ano+"-"+mes+"-"+dia;
+		}
+		getDateCurrent();
+		
 	}); 
+
 </script>
 <style>
 	.table__personal-body {
