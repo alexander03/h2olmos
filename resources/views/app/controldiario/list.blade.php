@@ -44,31 +44,41 @@
 					{{ $value->tipohora->descripcion }}
 				@endif
 			</td>
-			<td>{{ $value->turno }}</td>
+			<td>
+				@if($value->turno)
+					Diurno
+				@else
+					Nocturno
+				@endif
+
+			</td>
 			<td>{{ $value->viajes }}</td>
 			<td>{{ $value->inicio }}</td>
 			<td>{{ $value->acceso }}</td>
 			<td>
-				@if($value->ua_origen)
+				@if($value->uaorigen_id)
 					{{ $value->ua_origen->codigo }}
 				@endif
 			</td>
 			<td>
-				@if( $value->ua_origen)
+				@if( $value->uaorigen_id)
 					{{ $value->ua_origen->descripcion }}
 				@endif
 			</td>
 			<td>{{ $value->destino }}</td>
 			<td>
-				@if($value->ua_destino)
+				@if($value->uadestino_id)
 					{{ $value->ua_destino->codigo }}
 				@endif
 			</td>
 			<td>
-				@if($value->ua_destino)
+				@if($value->uadestino_id)
 					{{ $value->ua_destino->descripcion }}
 				@endif
 			</td>
+			<td></td>
+			<td></td>
+			<td></td>
 			<td>{!! Form::button('<i class="material-icons">edit</i>', array('onclick' => 'modal (\''.URL::route($ruta["edit"], array($value->id, 'listar'=>'SI')).'\', \''.$titulo_modificar.'\', this);', 'class' => 'btn btn-primary btn-link btn-sm','rel'=>'tooltip','title'=>'Editar')) !!}</td>
 			<td>{!! Form::button('<i class="material-icons">close</i>', array('onclick' => 'modal (\''.URL::route($ruta["delete"], array($value->id, 'SI')).'\', \''.$titulo_eliminar.'\', this);', 'class' => 'btn btn-danger btn-link btn-sm','rel'=>'tooltip','title'=>'Eliminar')) !!}</td>
 		</tr>

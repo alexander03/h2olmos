@@ -18,13 +18,16 @@ if ($controldiario !== NULL) {
 <div class="form-group">
 	{!! Form::label('equipo_id', 'Ua equipo:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
 	<div class="col-lg-12 col-md-12 col-sm-12">
-		{!! Form::text('equipo_id', null, array('class' => 'form-control input-xs js-equipo', 'id' => 'equipo_id')) !!}
+		<input type="text" name="equipo_id" id="equipo_id" class="form-control js-ua-id input-xs" 
+		value="@if($controldiario){{$controldiario->equipo->codigo}}@endif">
+		
 	</div>
 </div>
 <div class="form-group">
 	{!! Form::label('ua_id', 'Ua :', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
 	<div class="col-lg-12 col-md-12 col-sm-12">
-		{!! Form::text('ua_id', null, array('class' => 'form-control js-ua-id input-xs', 'id' => 'ua_id')) !!}
+		<input type="text" name="equipo_id" id="equipo_id" class="form-control js-ua-id input-xs" 
+		value="@if($controldiario){{$controldiario->ua->codigo}}@endif">
 	</div>
 </div>
 <div class="form-group">

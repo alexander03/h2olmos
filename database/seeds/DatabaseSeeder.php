@@ -30,6 +30,8 @@ class DatabaseSeeder extends Seeder
             EquipoTableSeeder::class,
             PropietariosTableSeeder::class,
             PermisoTableSeeder::class,
+            VehiculoTableSeeder::class,
+            ControlDiarioTableSeeder::class,
             ChecklistvehicularTableSeeder::class
         ]);
     }
