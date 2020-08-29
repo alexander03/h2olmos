@@ -16,7 +16,7 @@ use App\Concesionaria;
 class MantCorrPrev extends Controller
 {
     protected $folderview      = 'app.mantcorrprev';
-    protected $tituloAdmin     = 'Mantenimiento Correctivo Preventivo';
+    protected $tituloAdmin     = 'Check list vehicular';
     protected $tituloCheckListVehicular = 'Nuevo Check List Vehicular';
     protected $tituloRegistrar = 'Registro de Repuesto Vehicular';
     protected $tituloModificar = 'Modificar repuesto';
@@ -87,38 +87,6 @@ class MantCorrPrev extends Controller
     }
 
 
-    public function createrepuesto(Request $request)
-    {
-        $listar   = Libreria::getParam($request->input('listar'), 'NO');
-        $entidad  = 'Repuesto';
-        $repuesto = null;
-        $arrConcesionarias = Concesionaria::getAll();
-        $oConcesionarias = array('' => 'Seleccione Concesionaria');
-        foreach($arrConcesionarias as $k=>$v){
-            $oConcesionarias += array($v->id=>$v->razonsocial);
-        }
-        $oTipos=array('' => 'Seleccione Tipo');
-        $oTipos+=array('1' => 'Preventivo');
-        $oTipos+=array('2' => 'Correctivo');
-        $formData = array('mantcorrprev.createrepuesto');
-        $formData = array('route' => $formData, 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
-        $boton    = 'Registrar'; 
-        return view($this->folderview.'.mant2')->with(compact('repuesto', 'oTipos','formData', 'entidad','oConcesionarias', 'boton', 'listar'));
-    }
-
-    public function buscarporua(Request $request){
-        $resultado = Ua::where('codigo', '=',$request->get("ua"))->get();
-        
-        if (count($resultado)>0) {
-            $eq = Equipo::where('ua_id', '=',$resultado[0]->id)->get();
-
-            if (count($eq)>0) {
-                return json_encode(array('gg'=>"UA correcta: ".$eq[0]['descripcion']));
-            }else{
-            return json_encode(array('gg'=>'LA UA NO TIENE EQUIPO'));}
-        }else{
-        return json_encode(array('gg'=>'NO EXISTE UA'));}
-    }
 
     public function createchecklistvehicular(Request $request)
     {
