@@ -50,7 +50,6 @@ class MantCorrPrev extends Controller
         $unidad           = $request->input('unidad');
         $resultado        = Checklistvehicular::getFilter($estado, $filter);
         $lista            = $resultado->get();
-        return $lista;
         $cabecera         = array();
         $cabecera[]       = array('valor' => '#', 'numero' => '1');
         $cabecera[]       = array('valor' => 'F. Registro', 'numero' => '1');
