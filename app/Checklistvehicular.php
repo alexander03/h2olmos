@@ -16,7 +16,10 @@ class Checklistvehicular extends Model
     ];
 
     protected $casts = [
-        'sistema_electronico' => 'array'
+        'sistema_electronico' => 'array',
+        'sistema_mecanico' => 'array',
+        'accesorios' => 'array',
+        'documentos' => 'array',
     ];
 
     public function scopegetFilter($query, $filter) {
