@@ -28,7 +28,7 @@ class MantCorrPrev extends Controller
         // 'createrepuesto' => 'mantcorrprev.createrepuesto',
         'buscarporua' => 'mantcorrprev.buscarporua',
         'edit'   => 'mantcorrprev.edit', 
-        'delete' => 'mantcorrprev.eliminar',
+        // 'delete' => 'mantcorrprev.eliminar',
         'activar' => 'mantcorrprev.activar',
         'search' => 'mantcorrprev.buscar',
         'store' => 'mantcorrprev.store',
