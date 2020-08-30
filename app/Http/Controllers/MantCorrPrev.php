@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Checklistvehicular;
 use App\Unidad;
 use App\Equipo;
+use App\Vehiculo;
 use App\Ua;
 use App\Librerias\Libreria;
 use Illuminate\Support\Facades\DB;
@@ -104,8 +105,13 @@ class MantCorrPrev extends Controller
         return view($this->folderview.'.mant_checklistvehicular')->with(compact('checklistvehicular', 'formData', 'entidad', 'boton', 'listar'));
     }
 
-
     public function store(Request $request) {
 
+    }
+
+    public function existeUnidad(Request $request) {
+        $res = Equipo::withTrashed()->where('placa', $request->placa)->first();
+        if($res != null) return ['unidad' => $res];
+        return [ 'unidad' => Vehiculo::withTrashed()->where('placa', $request->placa)->first()];
     }
 }

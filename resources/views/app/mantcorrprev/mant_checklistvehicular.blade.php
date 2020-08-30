@@ -64,14 +64,19 @@
 			{!! Form::date('fecha_registro', null, array('class' => 'form-control input-xs', 'id' => 'fecha_registro', 'min' => date('Y-m-d') )) !!}
 		</div>
 	</div>
-	<div class="form-group col-4">
+	<div class="form-group col-2">
+		{!! Form::label('unidad_placa', 'Unidad placa:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
 		<div class="col-lg-12 col-md-12 col-sm-12">
-			{!! Form::select('categoria', array('' => 'SELECCIONE TIPO UNIDAD', 'equipo'=> 'EQUIPO', 'vehiculo' => 'VEHICULO'), null, array('class' => 'form-control input-xs', 'id' => 'categoria')) !!}
+			{!! Form::text('unidad_placa', null, array('class' => 'form-control input-xs solo-lectura', 'id' => 'unidad_placa')) !!}
 		</div>
 	</div>
-	<div class="form-group col-4">
+	<div class="form-group col-1">
+		<i id="loader-unidad" class="fa fa-spinner fa-lg text-info" aria-hidden="true"></i>
+	</div>
+	<div class="form-group col-5">
+		{!! Form::label('unidad_descripcion', 'Unidad descripción:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
 		<div class="col-lg-12 col-md-12 col-sm-12">
-			{!! Form::select('categoria', array('' => 'SELECCIONE UNIDAD', '1'=> 'CAMION VOLQUETE', '2' => 'COMPACTADORA'), null, array('class' => 'form-control input-xs', 'id' => 'categoria')) !!}
+			{!! Form::text('unidad_descripcion', null, array('class' => 'form-control input-xs solo-lectura', 'id' => 'unidad_descripcion', 'readonly' => $readOnly)) !!}
 		</div>
 	</div>
 </div>
@@ -225,11 +230,6 @@
 	</div>
 </div>
 
-
-
-
-
-
 <div class="form-group">
 	<div class="col-lg-12 col-md-12 col-sm-12 text-right">
 		{!! Form::button('<i class="fa fa-check fa-lg"></i> '.$boton, array('class' => 'btn btn-success btn-sm', 'id' => 'btnGuardar', 'onclick' => 'guardar(\''.$entidad.'\', this)')) !!}
@@ -237,14 +237,25 @@
 	</div>
 </div>
 {!! Form::close() !!}
+
+<style>
+	.solo-lectura:read-only {
+		background-color: transparent;
+		cursor: not-allowed;
+	}
+	.hidden {
+		display: none;
+	}
+</style>
 <script type="text/javascript">
 	$(document).ready(function() {
 		configurarAnchoModal('900');
 		init(IDFORMMANTENIMIENTO+'{!! $entidad !!}', 'M', '{!! $entidad !!}');
 
+		const inputUnidadPlaca = document.getElementById('unidad_placa');
+		const inputUnidadDescripcion = document.getElementById('unidad_descripcion');
 
 		const getDateCurrent = () => {
-			console.log('getDateCurrent');
 			const fecha = new Date();
 			let mes = fecha.getMonth()+1;
 			let dia = fecha.getDate();
@@ -254,6 +265,22 @@
 			document.getElementById('fecha_registro').value = ano+"-"+mes+"-"+dia;
 		}
 		getDateCurrent();
+
+		inputUnidadPlaca.addEventListener('keyup', async (e) => {
+			const placa = e.target.value;
+			let unidadDescripcion;
+			if(placa.length >= 6) unidad = await consultarUnidad(placa);
+			inputUnidadDescripcion.value = unidad.descripcion;
+
+		});
+
+		const consultarUnidad = async (placa = '') => {
+			const uri = `./existeunidad?placa=${placa}`;
+			return fetch(uri)
+			.then(res => res.status === 200 ? res.json() : console.error(`Error al cosultar Conductor en la db: ${res.status}`))
+			.then(res => res.unidad)
+			.catch(err => console.log(`Error en consultarUnidad(): ${err}`))
+		}
 		
 	}); 
 
