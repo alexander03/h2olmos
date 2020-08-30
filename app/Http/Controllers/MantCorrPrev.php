@@ -8,6 +8,7 @@ use App\Checklistvehicular;
 use App\Unidad;
 use App\Equipo;
 use App\Vehiculo;
+use App\Conductor;
 use App\Ua;
 use App\Librerias\Libreria;
 use Illuminate\Support\Facades\DB;
@@ -97,12 +98,12 @@ class MantCorrPrev extends Controller
         $formData = array('mantcorrprev.store');
         $formData = array('route' => $formData, 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
         $boton    = 'Registrar';
-        // $arrUnidades = Unidad::getAll();
-        // $cboUnidades = array('' => 'Seleccione');
-        // foreach($arrUnidades as $k=>$v){
-        //     $cboUnidades += array($v->id=>$v->descripcion);
-        // }
-        return view($this->folderview.'.mant_checklistvehicular')->with(compact('checklistvehicular', 'formData', 'entidad', 'boton', 'listar'));
+        $arrUnidades = Conductor::getAll();
+        $cboConductores = array('' => 'Seleccione');
+        foreach($arrUnidades as $k=>$v){
+            $cboConductores += array($v->id => $v->nombres . $v->apellidos);
+        }
+        return view($this->folderview.'.mant_checklistvehicular')->with(compact('checklistvehicular', 'formData', 'entidad', 'cboConductores', 'boton', 'listar'));
     }
 
     public function store(Request $request) {

@@ -35,4 +35,10 @@ class Conductor extends Model
             ->orderBy('conductor.apellidos', 'ASC')
             ->select('conductor.id','conductor.nombres', 'conductor.apellidos', 'conductor.dni', 'conductor.categoria', 'conductor.licencia', 'conductor.fechavencimiento', 'conductor.deleted_at', 'contratista.razonsocial as contratista_razonsocial')->withTrashed();
     }
+
+    public function scopegetAll($query) {
+        return $query->select('id', 'nombres', 'apellidos')->orderBy('apellidos', 'ASC')->get();
+    }
+
+
 }

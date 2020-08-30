@@ -71,12 +71,12 @@
 		</div>
 	</div>
 	<div class="form-group col-1">
-		<i id="loader-unidad" class="fa fa-spinner fa-lg text-info" aria-hidden="true"></i>
+		<i id="loader-unidad" class="fa fa-spinner fa-lg text-info" aria-hidden="true" hidden></i>
 	</div>
 	<div class="form-group col-5">
 		{!! Form::label('unidad_descripcion', 'Unidad descripción:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
 		<div class="col-lg-12 col-md-12 col-sm-12">
-			{!! Form::text('unidad_descripcion', null, array('class' => 'form-control input-xs solo-lectura', 'id' => 'unidad_descripcion', 'readonly' => $readOnly)) !!}
+			{!! Form::text('unidad_descripcion', null, array('class' => 'form-control input-xs solo-lectura', 'id' => 'unidad_descripcion', 'readonly' => true)) !!}
 		</div>
 	</div>
 </div>
@@ -104,7 +104,7 @@
 	<div class="form-group col-6">
 		{!! Form::label('conductor_id', 'Conductor:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
 		<div class="col-lg-12 col-md-12 col-sm-12">
-			{!! Form::select('conductor_id', array(''=>'Seleccione', '1' => 'PACHERREZ PUYEN ERICK STALYN', '2' => 'TORRES BERNAL ELIAS'), null, array('class' => 'form-control input-xs', 'id' => 'conductor_id')) !!}
+			{!! Form::select('conductor_id', $cboConductores, null, array('class' => 'form-control input-xs', 'id' => 'conductor_id')) !!}
 		</div>
 	</div>
 </div>
@@ -259,18 +259,33 @@
 			const fecha = new Date();
 			let mes = fecha.getMonth()+1;
 			let dia = fecha.getDate();
-			const ano = fecha.getFullYear(); 
-			if(dia<10) dia='0' + dia; 
-			if(mes<10) mes='0' + mes;
+			const ano = fecha.getFullYear();
+			if(dia<10) dia = '0' + dia;
+			if(mes<10) mes = '0' + mes;
 			document.getElementById('fecha_registro').value = ano+"-"+mes+"-"+dia;
 		}
 		getDateCurrent();
 
 		inputUnidadPlaca.addEventListener('keyup', async (e) => {
 			const placa = e.target.value;
-			let unidadDescripcion;
-			if(placa.length >= 6) unidad = await consultarUnidad(placa);
-			inputUnidadDescripcion.value = unidad.descripcion;
+			inputUnidadDescripcion.value = 'Buscando...';
+			const loaderUnidad = document.getElementById('loader-unidad');
+			if(placa.length > 0){
+				loaderUnidad.removeAttribute('hidden');
+			} else {
+				loaderUnidad.setAttribute('hidden', true);
+				inputUnidadDescripcion.value = '';
+			}
+
+			if(placa.length >=6) {
+				const unidad = await consultarUnidad(placa);
+				if(unidad != null) {
+					inputUnidadDescripcion.value = unidad.descripcion;
+					loaderUnidad.removeAttribute('hidden');
+				} else {
+					inputUnidadDescripcion.value = 'Buscando...';
+				}
+			}
 
 		});
 
