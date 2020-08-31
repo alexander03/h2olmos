@@ -107,9 +107,53 @@ class MantCorrPrev extends Controller
     }
 
     public function store(Request $request) {
-        $sistema_electrico = json_decode($request->input('sistema_electrico'));
-
         
+        
+        $listar     = Libreria::getParam($request->input('listar'), 'NO');
+        // $reglas     = array(
+            //     'codigo' => 'required|digits:7|unique:repuesto,codigo',
+            //     'descripcion' => 'required|max:100|unique:repuesto,descripcion',
+            //     'unidad_id' => 'required'
+            // );
+            // $mensajes = array(
+                //     'codigo.required' => 'Debe ingresar un código',
+                //     'codigo.unique' => 'Este código ya existe',
+                //     'codigo.digits' => 'El código debe tener 7 cifras',
+                //     'descripcion.required' => 'Debe ingresar una descripcion',
+                //     'descripcion.unique' => 'Esta descripción ya existe',
+                //     'descripcion.max' => 'La descripcion debe tener max. 100 caracteres',
+                //     'unidad_id.required' => 'Debe seleccionar una unidad'
+                // );
+                // $validacion = Validator::make($request->all(), $reglas, $mensajes);
+                // if ($validacion->fails()) {
+                    //     return $validacion->messages()->toJson();
+                    // }
+        $error = DB::transaction(function() use($request){
+            
+            $checklistvehicular = new Checklistvehicular();
+            // $checklistvehicular->codigo= mb_strtoupper($request->input('codigo'), 'utf-8');
+            // $checklistvehicular->descripcion= mb_strtoupper($request->input('descripcion'), 'utf-8');
+            $checklistvehicular->fecha_registro= $request->input('fecha_registro');
+            $checklistvehicular->equipo_id= 1;
+            // $placa = $request->input('fecha_registro');
+
+
+
+            $checklistvehicular->k_inicial = $request->input('k_inicial');
+            $checklistvehicular->k_final = $request->input('k_final');
+            $checklistvehicular->lider_area = mb_strtoupper($request->input('lider_area'), 'utf-8');
+            $checklistvehicular->conductor_id= $request->input('conductor_id');
+            $checklistvehicular->observaciones = $request->input('observaciones');
+            $checklistvehicular->sistema_electrico = json_decode($request->input('sistema_electrico'));
+
+            
+            $checklistvehicular->save();
+
+
+
+
+        });
+        return is_null($error) ? "OK" : $error;
     }
 
     public function existeUnidad(Request $request) {

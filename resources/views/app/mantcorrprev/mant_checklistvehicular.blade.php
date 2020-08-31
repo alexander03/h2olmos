@@ -77,26 +77,27 @@
 		{!! Form::label('unidad_descripcion', 'Unidad descripción:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
 		<div class="col-lg-12 col-md-12 col-sm-12">
 			{!! Form::text('unidad_descripcion', null, array('class' => 'form-control input-xs solo-lectura', 'id' => 'unidad_descripcion', 'readonly' => true)) !!}
+			<input name="unidad_id" id="unidad_id" type="text" class="hidden" value="">
 		</div>
 	</div>
 </div>
 <div class="form-row">
 	<div class="form-group col-3">
-		{!! Form::label('kilometrajeinicial', 'Kilometraje inicial:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
+		{!! Form::label('k_inicial', 'Kilometraje inicial:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
 		<div class="col-lg-12 col-md-12 col-sm-12">
-			{!! Form::number('kilometrajeinicial', null, array('class' => 'form-control input-xs solo-lectura', 'id' => 'kilometrajeinicial')) !!}
+			{!! Form::number('k_inicial', null, array('class' => 'form-control input-xs solo-lectura', 'id' => 'k_inicial')) !!}
 		</div>
 	</div>
 	<div class="form-group col-3">
-		{!! Form::label('kilometrajefinal', 'Kilometraje final:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
+		{!! Form::label('k_final', 'Kilometraje final:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
 		<div class="col-lg-12 col-md-12 col-sm-12">
-			{!! Form::number('kilometrajefinal', null, array('class' => 'form-control input-xs solo-lectura', 'id' => 'kilometrajefinal')) !!}
+			{!! Form::number('k_final', null, array('class' => 'form-control input-xs solo-lectura', 'id' => 'k_final')) !!}
 		</div>
 	</div>
 	<div class="form-group col-6">
-		{!! Form::label('liderarea', 'Lider del área:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
+		{!! Form::label('lider_area', 'Lider del área:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
 		<div class="col-lg-12 col-md-12 col-sm-12">
-			{!! Form::text('liderarea', null, array('class' => 'form-control input-xs solo-lectura', 'id' => 'liderarea')) !!}
+			{!! Form::text('lider_area', null, array('class' => 'form-control input-xs solo-lectura', 'id' => 'lider_area')) !!}
 		</div>
 	</div>
 </div>
@@ -225,7 +226,7 @@
 			</div>
 			<div class="col-4">
 				<h5>Observaciones e incidentes</h5>
-				<textarea name="observaciones_incidentes" class="form-control" rows="9" cols="26"></textarea>
+				<textarea name="observaciones" class="form-control" rows="9" cols="26"></textarea>
 			</div>
 		</div>
 	</div>
@@ -255,6 +256,7 @@
 
 		const inputUnidadPlaca = document.getElementById('unidad_placa');
 		const inputUnidadDescripcion = document.getElementById('unidad_descripcion');
+		const inputUnidadId = document.getElementById('unidad_id');
 
 		const getDateCurrent = () => {
 			const fecha = new Date();
@@ -282,6 +284,7 @@
 				const unidad = await consultarUnidad(placa);
 				if(unidad != null) {
 					inputUnidadDescripcion.value = unidad.descripcion;
+					inputUnidadId.value = unidad.id;
 					loaderUnidad.removeAttribute('hidden');
 				} else {
 					inputUnidadDescripcion.placeholder = 'Buscando...';
@@ -322,8 +325,8 @@
 			});
 
 			const listSistemaElectrico = document.querySelectorAll("input[data-type='sistema_electrico']");
-			const filtrado = Array.from(listSistemaElectrico).filter((el, index) => index % 2 == 0);
-			filtrado.forEach(el => {
+			const filtradoSistemaElectrico = Array.from(listSistemaElectrico).filter((el, index) => index % 2 == 0);
+			filtradoSistemaElectrico.forEach(el => {
 				const brothers = document.querySelectorAll(`input[data-type='sistema_electrico'][name=${el.name}]`);
 				const arrBrothers = Array.from(brothers);
 
@@ -343,6 +346,8 @@
 			});
 
 			// console.log(arrObjects)
+			document.getElementById('sistema_electrico').value = JSON.stringify(arrObjects);
+			console.log(document.getElementById('sistema_electrico').value)
 		});
 		
 	}); 

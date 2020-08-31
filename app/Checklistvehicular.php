@@ -16,7 +16,7 @@ class Checklistvehicular extends Model
     ];
 
     protected $casts = [
-        'sistema_electronico' => 'array',
+        'sistema_electrico' => 'array',
         'sistema_mecanico' => 'array',
         'accesorios' => 'array',
         'documentos' => 'array',
