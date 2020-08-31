@@ -9,7 +9,7 @@ class Controldiario extends Model
 {
     use SoftDeletes;
     protected $table = 'controldiario';
-    protected $dates = ['deleted_at','fecha'];
+    protected $dates = ['deleted_at'];
 
     public function tipohora()
     {
