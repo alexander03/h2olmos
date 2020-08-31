@@ -1,16 +1,16 @@
 @php
 	if($checklistvehicular == null) {//Nuevo
 		$sistema_electrico = [
-			(object) ['id' => 'freno_emergencia', 'titulo' => 'Freno de emergencia', 'estado' => true],
-			(object) ['id' => 'funcionamiento_tablero', 'titulo' => 'Funcionamiento de tablero','estado' => true],
-			(object) ['id' => 'estado_bateria_funcionamiento', 'titulo' => 'Estado de batería y funcionamiento', 'estado' => true],
-			(object) ['id' => 'funcionamiento_claxon', 'titulo' => 'Funcionamiento de claxon', 'estado' => false],
-			(object) ['id' => 'luces_retroceso_pirata', 'titulo' => 'Luces de retroceso pirata','estado' => false],
-			(object) ['id' => 'luces_direccional', 'titulo' => 'Luces direccional','estado' => null],
-			(object) ['id' => 'faros_neblineros', 'titulo' => 'Faros neblineros','estado' => null],
-			(object) ['id' => 'faros_delanteros', 'titulo' => 'Faros delanteros','estado' => null],
-			(object) ['id' => 'faros_posteriores', 'titulo' => 'Faros posteriores','estado' => null],
-			(object) ['id' => 'alarma_retroceso', 'titulo' => 'Alarma de retroceso','estado' => null],
+			(object) ['orden' => 1, 'id' => 'freno_emergencia', 'titulo' => 'Freno de emergencia', 'estado' => true],
+			(object) ['orden' => 2, 'id' => 'funcionamiento_tablero', 'titulo' => 'Funcionamiento de tablero','estado' => true],
+			(object) ['orden' => 3, 'id' => 'estado_bateria_funcionamiento', 'titulo' => 'Estado de batería y funcionamiento', 'estado' => true],
+			(object) ['orden' => 4, 'id' => 'funcionamiento_claxon', 'titulo' => 'Funcionamiento de claxon', 'estado' => false],
+			(object) ['orden' => 5, 'id' => 'luces_retroceso_pirata', 'titulo' => 'Luces de retroceso pirata','estado' => false],
+			(object) ['orden' => 6, 'id' => 'luces_direccional', 'titulo' => 'Luces direccional','estado' => null],
+			(object) ['orden' => 7, 'id' => 'faros_neblineros', 'titulo' => 'Faros neblineros','estado' => null],
+			(object) ['orden' => 8, 'id' => 'faros_delanteros', 'titulo' => 'Faros delanteros','estado' => null],
+			(object) ['orden' => 9, 'id' => 'faros_posteriores', 'titulo' => 'Faros posteriores','estado' => null],
+			(object) ['orden' => 10,'id' => 'alarma_retroceso', 'titulo' => 'Alarma de retroceso','estado' => null],
 		];
 		$sistema_mecanico = [
 			(object) ['id' => 'nivel_liquido_freno', 'titulo' => 'Nivel liquido de freno', 'estado' => true],
@@ -124,10 +124,10 @@
 							<tr>
 								<td>{{ $item->titulo }}</td>
 								<td class="text-center">
-									{!! Form::radio( $item->id, 'si', $item->estado ? true : false, ['data-type' => 'sistema_electrico', 'data-titulo' => $item->titulo]) !!}
+									{!! Form::radio( $item->id, 'si', $item->estado ? true : false, ['data-type' => 'sistema_electrico', 'data-titulo' => $item->titulo, 'data-orden' => $item->orden]) !!}
 								</td>
 								<td class="text-center">
-									{!! Form::radio( $item->id, 'no', $item->estado !== null && !$item->estado ? true : false, ['data-type' => 'sistema_electrico', 'data-titulo' => $item->titulo]) !!}
+									{!! Form::radio( $item->id, 'no', $item->estado !== null && !$item->estado ? true : false, ['data-type' => 'sistema_electrico', 'data-titulo' => $item->titulo, 'data-orden' => $item->orden]) !!}
 								</td>
 							</tr>
 						@endforeach
@@ -300,8 +300,8 @@
 
 		// const listSistemaElectrico = document.querySelectorAll("input[data-type='sistema_electrico'][checked='checked']");
 		// const arrSistemaElectrico = Array.from(listSistemaElectrico);
-
 		$("input[data-type='sistema_electrico']").change(function(){
+			const arrObjects = [];
 			const el = $(this)[0];
 			const brothers = document.querySelectorAll(`input[data-type='sistema_electrico'][name=${el.name}]`);
 			Array.from(brothers).forEach(element => {
@@ -309,17 +309,29 @@
 			});
 			el.setAttribute('checked', 'checked');
 
-			const listSistemaElectrico = document.querySelectorAll("input[data-type='sistema_electrico'][checked='checked']");
-			Array.from(listSistemaElectrico).forEach(el => {
+			const listSistemaElectricoChecked = document.querySelectorAll("input[data-type='sistema_electrico'][checked='checked']");
+			Array.from(listSistemaElectricoChecked).forEach(el => {
 				myObject = {
+					orden: el.dataset.orden,
 					id: el.name,
 					title: el.dataset.titulo,
 					estado: el.value == 'si' ? true: false
 				};
-				console.log(myObject)
+				arrObjects.push(myObject);
+				console.log(arrObjects)
 			});
 
-			
+			const listSistemaElectrico = document.querySelectorAll("input[data-type='sistema_electrico']");
+			Array.from(listSistemaElectrico).forEach(el => {
+				const brothers = document.querySelectorAll(`input[data-type='sistema_electrico'][name=${el.name}]`);
+				const arrBrothers = Array.from(brothers);
+				for (const item of arrBrothers) {
+					//TODO: Aqui me quedé pensando en la logica que aplicaré
+					console.log(item)
+				}
+			});
+
+
 		});
 		
 	}); 
