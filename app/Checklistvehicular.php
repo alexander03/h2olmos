@@ -22,10 +22,13 @@ class Checklistvehicular extends Model
         'documentos' => 'array',
     ];
 
-    public function scopegetFilter($query, $filter) {
+    public function scopegetFilter($query, $fecha_registro) {
         return $query->leftjoin('equipo', 'equipo.id', '=', 'checklistvehicular.equipo_id')
             ->leftjoin('vehiculo', 'vehiculo.id', 'checklistvehicular.vehiculo_id')
             ->join('conductor', 'conductor.id', 'checklistvehicular.conductor_id')
+            ->where(function($subquery) use ($fecha_registro) {
+                if($fecha_registro !== null) $subquery->where('checklistvehicular.fecha_registro', $fecha_registro);
+            })
             ->orderBy('checklistvehicular.id', 'DESC')->withTrashed()
             ->select('checklistvehicular.id', 'checklistvehicular.fecha_registro', 'equipo.placa as equipo_placa', 'equipo.descripcion as equipo_descripcion', 'vehiculo.placa as vehiculo_placa', 'checklistvehicular.k_inicial', 'checklistvehicular.k_final', 'checklistvehicular.lider_area', 'conductor.nombres as conductor_nombres', 'conductor.apellidos as conductor_apellidos', 'checklistvehicular.sistema_electrico');
     }

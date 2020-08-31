@@ -11,8 +11,8 @@
 						{!! Form::hidden('page', 1, array('id' => 'page')) !!}
 						{!! Form::hidden('accion', 'listar', array('id' => 'accion')) !!}
 						<div class="col-4">
-							{!! Form::label('filter', 'Buscar por...') !!}
-							{!! Form::text('filter', '', array('class' => 'form-control input-xs', 'id' => 'filter')) !!}
+							{!! Form::label('fecha_registro', 'Buscar por Fecha de Registro') !!}
+							{!! Form::date('fecha_registro', '', array('class' => 'form-control input-xs', 'id' => 'fecha_registro')) !!}
 						</div>
 						<div class="col-4">
 							{!! Form::label('filas', 'Filas')!!}
