@@ -77,7 +77,7 @@ class MantCorrPrev extends Controller
             $request->replace(array('page' => $paginaactual));
             return view($this->folderview.'.list')->with(compact('lista', 'paginacion', 'inicio', 'fin', 'entidad', 'cabecera', 'titulo_modificar', 'titulo_eliminar','titulo_registrar', 'titulo_activar','ruta'));
         }
-        // return view($this->folderview.'.list')->with(compact('lista', 'entidad'));
+        return view($this->folderview.'.list')->with(compact('lista', 'entidad'));
     }
 
     public function index()

@@ -24,8 +24,8 @@
 
 						</div>
 						{!! Form::close() !!}
-						{{-- <div class="table-responsive" id="listado{{ $entidad }}">
-						</div> --}}
+						<div class="table-responsive" id="listado{{ $entidad }}">
+						</div>
 					</div>
 				</div>
 			</div>

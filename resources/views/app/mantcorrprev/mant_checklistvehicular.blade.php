@@ -1,11 +1,11 @@
 @php
 	if($checklistvehicular == null) {//Nuevo
 		$sistema_electrico = [
-			(object) ['orden' => 1, 'id' => 'freno_emergencia', 'titulo' => 'Freno de emergencia', 'estado' => true],
-			(object) ['orden' => 2, 'id' => 'funcionamiento_tablero', 'titulo' => 'Funcionamiento de tablero','estado' => true],
-			(object) ['orden' => 3, 'id' => 'estado_bateria_funcionamiento', 'titulo' => 'Estado de batería y funcionamiento', 'estado' => true],
-			(object) ['orden' => 4, 'id' => 'funcionamiento_claxon', 'titulo' => 'Funcionamiento de claxon', 'estado' => false],
-			(object) ['orden' => 5, 'id' => 'luces_retroceso_pirata', 'titulo' => 'Luces de retroceso pirata','estado' => false],
+			(object) ['orden' => 1, 'id' => 'freno_emergencia', 'titulo' => 'Freno de emergencia', 'estado' => null],
+			(object) ['orden' => 2, 'id' => 'funcionamiento_tablero', 'titulo' => 'Funcionamiento de tablero','estado' => null],
+			(object) ['orden' => 3, 'id' => 'estado_bateria_funcionamiento', 'titulo' => 'Estado de batería y funcionamiento', 'estado' => null],
+			(object) ['orden' => 4, 'id' => 'funcionamiento_claxon', 'titulo' => 'Funcionamiento de claxon', 'estado' => null],
+			(object) ['orden' => 5, 'id' => 'luces_retroceso_pirata', 'titulo' => 'Luces de retroceso pirata','estado' => null],
 			(object) ['orden' => 6, 'id' => 'luces_direccional', 'titulo' => 'Luces direccional','estado' => null],
 			(object) ['orden' => 7, 'id' => 'faros_neblineros', 'titulo' => 'Faros neblineros','estado' => null],
 			(object) ['orden' => 8, 'id' => 'faros_delanteros', 'titulo' => 'Faros delanteros','estado' => null],
@@ -13,9 +13,9 @@
 			(object) ['orden' => 10,'id' => 'alarma_retroceso', 'titulo' => 'Alarma de retroceso','estado' => null],
 		];
 		$sistema_mecanico = [
-			(object) ['id' => 'nivel_liquido_freno', 'titulo' => 'Nivel liquido de freno', 'estado' => true],
-			(object) ['id' => 'sistema_direccion', 'titulo' => 'Sistema de dirección', 'estado' => true],
-			(object) ['id' => 'palancas_cambios', 'titulo' => 'Palancas de cambios', 'estado' => true],
+			(object) ['id' => 'nivel_liquido_freno', 'titulo' => 'Nivel liquido de freno', 'estado' => null],
+			(object) ['id' => 'sistema_direccion', 'titulo' => 'Sistema de dirección', 'estado' => null],
+			(object) ['id' => 'palancas_cambios', 'titulo' => 'Palancas de cambios', 'estado' => null],
 			(object) ['id' => 'estado_neumaticos', 'titulo' => 'Estado de neumáticos', 'estado' => null],
 			(object) ['id' => 'llantas_repuesto', 'titulo' => 'Llantas de repuesto', 'estado' => null],
 			(object) ['id' => 'ajustes_tuercas', 'titulo' => 'Ajustes de tuercas', 'estado' => null],
@@ -347,7 +347,6 @@
 
 			// console.log(arrObjects)
 			document.getElementById('sistema_electrico').value = JSON.stringify(arrObjects);
-			console.log(document.getElementById('sistema_electrico').value)
 		});
 		
 	}); 

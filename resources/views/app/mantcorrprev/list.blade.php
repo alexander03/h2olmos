@@ -18,17 +18,19 @@
 		@foreach ($lista as $key => $value)
 		<tr>
 			<td>{{ $contador }}</td>
-			<td>{{ $value->codigo }}</td>
-			<td>{{ $value->descripcion }}</td>
+			<td>{{ $value->fecha_registro }}</td>
+			<td>{{ $value->equipo_descripcion }}</td>
+			<td>{{ $value->k_inicial }}</td>
+			<td>{{ $value->k_final }}</td>
+			<td>{{ $value->lider_area }}</td>
+			<td>{{ $value->conductor_nombres . ' ' . $value->conductor_apellidos }}</td>
 			
-			<td>{{ $value->unidad_descripcion }}</td>
-
 			<td>{!! Form::button('<i class="material-icons">edit</i>', array('onclick' => 'modal (\''.URL::route($ruta["edit"], array($value->id, 'listar'=>'SI')).'\', \''.$titulo_modificar.'\', this);', 'class' => 'btn btn-primary btn-link btn-sm','rel'=>'tooltip','title'=>'Editar')) !!}</td>
-			@if (!$value->deleted_at)
+			{{-- @if (!$value->deleted_at)
 			<td>{!! Form::button('<i class="material-icons">close</i>', array('onclick' => 'modal (\''.URL::route($ruta["delete"], array($value->id, 'SI')).'\', \''.$titulo_eliminar.'\', this);', 'class' => 'btn btn-danger btn-link btn-sm','rel'=>'tooltip','title'=>'Eliminar')) !!}</td>
 			@else
 			<td>{!! Form::button('<i class="material-icons">done</i>', array('onclick' => 'modal (\''.URL::route($ruta["activar"], array($value->id, 'SI')).'\', \''.$titulo_activar.'\', this);', 'class' => 'btn btn-success btn-link btn-sm','rel'=>'tooltip','title'=>'Activar')) !!}</td>
-			@endif
+			@endif --}}
 		</tr>
 		<?php
 		$contador = $contador + 1;
