@@ -107,7 +107,9 @@ class MantCorrPrev extends Controller
     }
 
     public function store(Request $request) {
+        $sistema_electrico = json_decode($request->input('sistema_electrico'));
 
+        
     }
 
     public function existeUnidad(Request $request) {

@@ -1,11 +1,11 @@
 @php
 	if($checklistvehicular == null) {//Nuevo
 		$sistema_electrico = [
-			(object) ['id' => 'freno_emergencia', 'titulo' => 'Freno de emergencia', 'estado' => null],
-			(object) ['id' => 'funcionamiento_tablero', 'titulo' => 'Funcionamiento de tablero','estado' => null],
-			(object) ['id' => 'estado_bateria_funcionamiento', 'titulo' => 'Estado de batería y funcionamiento', 'estado' => null],
-			(object) ['id' => 'funcionamiento_claxon', 'titulo' => 'Funcionamiento de claxon', 'estado' => null],
-			(object) ['id' => 'luces_retroceso_pirata', 'titulo' => 'Luces de retroceso pirata','estado' => null],
+			(object) ['id' => 'freno_emergencia', 'titulo' => 'Freno de emergencia', 'estado' => true],
+			(object) ['id' => 'funcionamiento_tablero', 'titulo' => 'Funcionamiento de tablero','estado' => true],
+			(object) ['id' => 'estado_bateria_funcionamiento', 'titulo' => 'Estado de batería y funcionamiento', 'estado' => true],
+			(object) ['id' => 'funcionamiento_claxon', 'titulo' => 'Funcionamiento de claxon', 'estado' => false],
+			(object) ['id' => 'luces_retroceso_pirata', 'titulo' => 'Luces de retroceso pirata','estado' => false],
 			(object) ['id' => 'luces_direccional', 'titulo' => 'Luces direccional','estado' => null],
 			(object) ['id' => 'faros_neblineros', 'titulo' => 'Faros neblineros','estado' => null],
 			(object) ['id' => 'faros_delanteros', 'titulo' => 'Faros delanteros','estado' => null],
@@ -13,9 +13,9 @@
 			(object) ['id' => 'alarma_retroceso', 'titulo' => 'Alarma de retroceso','estado' => null],
 		];
 		$sistema_mecanico = [
-			(object) ['id' => 'nivel_liquido_freno', 'titulo' => 'Nivel liquido de freno', 'estado' => null],
-			(object) ['id' => 'sistema_direccion', 'titulo' => 'Sistema de dirección', 'estado' => null],
-			(object) ['id' => 'palancas_cambios', 'titulo' => 'Palancas de cambios', 'estado' => null],
+			(object) ['id' => 'nivel_liquido_freno', 'titulo' => 'Nivel liquido de freno', 'estado' => true],
+			(object) ['id' => 'sistema_direccion', 'titulo' => 'Sistema de dirección', 'estado' => true],
+			(object) ['id' => 'palancas_cambios', 'titulo' => 'Palancas de cambios', 'estado' => true],
 			(object) ['id' => 'estado_neumaticos', 'titulo' => 'Estado de neumáticos', 'estado' => null],
 			(object) ['id' => 'llantas_repuesto', 'titulo' => 'Llantas de repuesto', 'estado' => null],
 			(object) ['id' => 'ajustes_tuercas', 'titulo' => 'Ajustes de tuercas', 'estado' => null],
@@ -124,13 +124,14 @@
 							<tr>
 								<td>{{ $item->titulo }}</td>
 								<td class="text-center">
-									{!! Form::radio( $item->id, 'si', $item->estado ? true : false) !!}
+									{!! Form::radio( $item->id, 'si', $item->estado ? true : false, ['data-type' => 'sistema_electrico', 'data-titulo' => $item->titulo]) !!}
 								</td>
 								<td class="text-center">
-									{!! Form::radio( $item->id, 'no', $item->estado !== null && !$item->estado ? true : false) !!}
+									{!! Form::radio( $item->id, 'no', $item->estado !== null && !$item->estado ? true : false, ['data-type' => 'sistema_electrico', 'data-titulo' => $item->titulo]) !!}
 								</td>
 							</tr>
 						@endforeach
+						<input name="sistema_electrico" id="sistema_electrico" type="text" class="hidden" value="">
 					</tbody>
 				</table>
 			</div>
@@ -268,13 +269,13 @@
 
 		inputUnidadPlaca.addEventListener('keyup', async (e) => {
 			const placa = e.target.value;
-			inputUnidadDescripcion.value = 'Buscando...';
+			inputUnidadDescripcion.placeholder = 'Buscando...';
 			const loaderUnidad = document.getElementById('loader-unidad');
 			if(placa.length > 0){
 				loaderUnidad.removeAttribute('hidden');
 			} else {
 				loaderUnidad.setAttribute('hidden', true);
-				inputUnidadDescripcion.value = '';
+				inputUnidadDescripcion.placeholder = '';
 			}
 
 			if(placa.length >=6) {
@@ -283,7 +284,7 @@
 					inputUnidadDescripcion.value = unidad.descripcion;
 					loaderUnidad.removeAttribute('hidden');
 				} else {
-					inputUnidadDescripcion.value = 'Buscando...';
+					inputUnidadDescripcion.placeholder = 'Buscando...';
 				}
 			}
 
@@ -296,6 +297,30 @@
 			.then(res => res.unidad)
 			.catch(err => console.log(`Error en consultarUnidad(): ${err}`))
 		}
+
+		// const listSistemaElectrico = document.querySelectorAll("input[data-type='sistema_electrico'][checked='checked']");
+		// const arrSistemaElectrico = Array.from(listSistemaElectrico);
+
+		$("input[data-type='sistema_electrico']").change(function(){
+			const el = $(this)[0];
+			const brothers = document.querySelectorAll(`input[data-type='sistema_electrico'][name=${el.name}]`);
+			Array.from(brothers).forEach(element => {
+				element.removeAttribute('checked');
+			});
+			el.setAttribute('checked', 'checked');
+
+			const listSistemaElectrico = document.querySelectorAll("input[data-type='sistema_electrico'][checked='checked']");
+			Array.from(listSistemaElectrico).forEach(el => {
+				myObject = {
+					id: el.name,
+					title: el.dataset.titulo,
+					estado: el.value == 'si' ? true: false
+				};
+				console.log(myObject)
+			});
+
+			
+		});
 		
 	}); 
 
