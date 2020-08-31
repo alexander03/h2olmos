@@ -318,20 +318,31 @@
 					estado: el.value == 'si' ? true: false
 				};
 				arrObjects.push(myObject);
-				console.log(arrObjects)
+				// console.log(arrObjects)
 			});
 
 			const listSistemaElectrico = document.querySelectorAll("input[data-type='sistema_electrico']");
-			Array.from(listSistemaElectrico).forEach(el => {
+			const filtrado = Array.from(listSistemaElectrico).filter((el, index) => index % 2 == 0);
+			filtrado.forEach(el => {
 				const brothers = document.querySelectorAll(`input[data-type='sistema_electrico'][name=${el.name}]`);
 				const arrBrothers = Array.from(brothers);
+
+				let haveChecked = false;
 				for (const item of arrBrothers) {
-					//TODO: Aqui me quedé pensando en la logica que aplicaré
-					console.log(item)
+					if(item.getAttribute('checked') != null) haveChecked = true;
+				}
+				if(haveChecked == false ) {
+					myObject = {
+						orden: el.dataset.orden,
+						id: el.name,
+						title: el.dataset.titulo,
+						estado: null
+					};
+					arrObjects.push(myObject);
 				}
 			});
 
-
+			// console.log(arrObjects)
 		});
 		
 	}); 
