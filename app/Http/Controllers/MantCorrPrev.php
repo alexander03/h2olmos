@@ -131,13 +131,16 @@ class MantCorrPrev extends Controller
         $error = DB::transaction(function() use($request){
             
             $checklistvehicular = new Checklistvehicular();
-            // $checklistvehicular->codigo= mb_strtoupper($request->input('codigo'), 'utf-8');
-            // $checklistvehicular->descripcion= mb_strtoupper($request->input('descripcion'), 'utf-8');
             $checklistvehicular->fecha_registro= $request->input('fecha_registro');
-            $checklistvehicular->equipo_id= 1;
-            // $placa = $request->input('fecha_registro');
 
-
+            $placa = $request->input('unidad_placa');
+            $equipo = Equipo::where('placa', $placa)->first();
+            if($equipo != null) {
+                $checklistvehicular->equipo_id= $equipo->id;
+            }else {
+                $vehiculo = Vehiculo::where('placa', $placa)->first();
+                $checklistvehicular->vehiculo_id= $vehiculo->id;
+            }
 
             $checklistvehicular->k_inicial = $request->input('k_inicial');
             $checklistvehicular->k_final = $request->input('k_final');
