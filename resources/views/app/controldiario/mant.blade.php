@@ -33,10 +33,10 @@ if ($controldiario !== NULL) {
 			{!! Form::label('ua_id', 'Ua :', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
 			<div class="col-lg-12 col-md-12 col-sm-12">
 				<div class="u-ua-style js-ua-desc">
-					<?php if($controldiario) echo $controldiario ->ua->descripcion; ?>
+					<?php if($controldiario && $controldiario->ua_id) echo $controldiario ->ua->descripcion; ?>
 				</div>
 				<input type="text" name="ua_id[]" id="ua_id" class="form-control js-ua-id input-xs" 
-				value="@if($controldiario){{$controldiario->ua->codigo}}@endif">
+				value="@if($controldiario && $controldiario->ua_id ){{$controldiario->ua->codigo}}@endif">
 				<small id="autoComplete_list1" class="text-danger"></small>
 			</div>
 		</div>

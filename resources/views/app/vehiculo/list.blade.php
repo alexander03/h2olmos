@@ -40,7 +40,13 @@
 			</td>
 			<td>{{ $value->asientos }}</td>
 			<td>{{ $value->chasis }}</td>
-			<td>{{ $value->carroceria }}</td>
+			<td>
+				@if($value->carroceria == 0)
+					PICK UP
+				@else
+					SUV
+				@endif
+			</td>
 			<td>{{ $value->color }}</td>
 			<td>{{ $value->fechavencimientosoat }}</td>
 			<td>{{ $value->fechavencimientogps }}</td>

@@ -43,8 +43,10 @@
 				@endif
 			</td>
 			<td>
-				@if($value->tipohora_id && $value->tipohora_id !=1 )
+				@if($value->tipohora_id )
 					{{ $value->tipohora->descripcion }}
+				@else
+					Horas de trabajo
 				@endif
 			</td>
 			<td>

@@ -22,7 +22,7 @@ class VehiculoTableSeeder extends Seeder
             'marca_id' => 2,
             'color' => 'BLANCO PERLA',
             'chasis' => '8AJHA8CD3J607589',
-            'carroceria' => 'PICK UP',
+            'carroceria' => 0,
             'contratista_id' => 1,
             'created_at' => now(),
             'updated_at' => now()
@@ -39,7 +39,7 @@ class VehiculoTableSeeder extends Seeder
             'marca_id' => 2,
             'color' => 'BLANCO PERLA',
             'chasis' => '8AJHA8CD3J606784',
-            'carroceria' => 'PICK UP',
+            'carroceria' => 0,
             'contratista_id' => 1,
             'created_at' => now(),
             'updated_at' => now()
