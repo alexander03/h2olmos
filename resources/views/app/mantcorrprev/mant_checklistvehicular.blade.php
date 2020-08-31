@@ -13,43 +13,43 @@
 			(object) ['orden' => 10,'id' => 'alarma_retroceso', 'titulo' => 'Alarma de retroceso','estado' => null],
 		];
 		$sistema_mecanico = [
-			(object) ['id' => 'nivel_liquido_freno', 'titulo' => 'Nivel liquido de freno', 'estado' => null],
-			(object) ['id' => 'sistema_direccion', 'titulo' => 'Sistema de dirección', 'estado' => null],
-			(object) ['id' => 'palancas_cambios', 'titulo' => 'Palancas de cambios', 'estado' => null],
-			(object) ['id' => 'estado_neumaticos', 'titulo' => 'Estado de neumáticos', 'estado' => null],
-			(object) ['id' => 'llantas_repuesto', 'titulo' => 'Llantas de repuesto', 'estado' => null],
-			(object) ['id' => 'ajustes_tuercas', 'titulo' => 'Ajustes de tuercas', 'estado' => null],
-			(object) ['id' => 'presion_llantas_libras', 'titulo' => 'Presion de llantas en libras', 'estado' => null],
-			(object) ['id' => 'cinturon_seguridad_conductor', 'titulo' => 'Cinturon de seguridad conductor', 'estado' => null],
-			(object) ['id' => 'cinturon_seguridad_pasajeros', 'titulo' => 'Cinturon de seguridad pasajeros', 'estado' => null],
-			(object) ['id' => 'suspension', 'titulo' => 'Suspensión', 'estado' => null],
+			(object) ['orden' => 1, 'id' => 'nivel_liquido_freno', 'titulo' => 'Nivel liquido de freno', 'estado' => null],
+			(object) ['orden' => 2, 'id' => 'sistema_direccion', 'titulo' => 'Sistema de dirección', 'estado' => null],
+			(object) ['orden' => 3, 'id' => 'palancas_cambios', 'titulo' => 'Palancas de cambios', 'estado' => null],
+			(object) ['orden' => 4, 'id' => 'estado_neumaticos', 'titulo' => 'Estado de neumáticos', 'estado' => null],
+			(object) ['orden' => 5, 'id' => 'llantas_repuesto', 'titulo' => 'Llantas de repuesto', 'estado' => null],
+			(object) ['orden' => 6, 'id' => 'ajustes_tuercas', 'titulo' => 'Ajustes de tuercas', 'estado' => null],
+			(object) ['orden' => 7, 'id' => 'presion_llantas_libras', 'titulo' => 'Presion de llantas en libras', 'estado' => null],
+			(object) ['orden' => 8, 'id' => 'cinturon_seguridad_conductor', 'titulo' => 'Cinturon de seguridad conductor', 'estado' => null],
+			(object) ['orden' => 9, 'id' => 'cinturon_seguridad_pasajeros', 'titulo' => 'Cinturon de seguridad pasajeros', 'estado' => null],
+			(object) ['orden' => 10, 'id' => 'suspension', 'titulo' => 'Suspensión', 'estado' => null],
 
-			(object) ['id' => 'sistema_freno', 'titulo' => 'Sistema de freno', 'estado' => null],
-			(object) ['id' => 'pernos_neumaticos', 'titulo' => 'Pernos de neumáticos', 'estado' => null],
-			(object) ['id' => 'nivel_aceite', 'titulo' => 'Nivel de aceite', 'estado' => null],
-			(object) ['id' => 'espejos_int_ext', 'titulo' => 'Espejos int y ext', 'estado' => null],
-			(object) ['id' => 'parachoques', 'titulo' => 'Parachoques', 'estado' => null],
-			(object) ['id' => 'parabrisas_ventanas', 'titulo' => 'Parabrisas y ventanas', 'estado' => null],
-			(object) ['id' => 'puertas_cabina', 'titulo' => 'Puertas de cabina', 'estado' => null],
-			(object) ['id' => 'puertas_tolva', 'titulo' => 'Puertas de tolva', 'estado' => null],
-			(object) ['id' => 'plumillas', 'titulo' => 'Plumillas', 'estado' => null],
-			(object) ['id' => 'estado_carroceria', 'titulo' => 'Estado de carrocería', 'estado' => null],
+			(object) ['orden' => 11, 'id' => 'sistema_freno', 'titulo' => 'Sistema de freno', 'estado' => null],
+			(object) ['orden' => 12, 'id' => 'pernos_neumaticos', 'titulo' => 'Pernos de neumáticos', 'estado' => null],
+			(object) ['orden' => 13, 'id' => 'nivel_aceite', 'titulo' => 'Nivel de aceite', 'estado' => null],
+			(object) ['orden' => 14, 'id' => 'espejos_int_ext', 'titulo' => 'Espejos int y ext', 'estado' => null],
+			(object) ['orden' => 15, 'id' => 'parachoques', 'titulo' => 'Parachoques', 'estado' => null],
+			(object) ['orden' => 16, 'id' => 'parabrisas_ventanas', 'titulo' => 'Parabrisas y ventanas', 'estado' => null],
+			(object) ['orden' => 17, 'id' => 'puertas_cabina', 'titulo' => 'Puertas de cabina', 'estado' => null],
+			(object) ['orden' => 18, 'id' => 'puertas_tolva', 'titulo' => 'Puertas de tolva', 'estado' => null],
+			(object) ['orden' => 19, 'id' => 'plumillas', 'titulo' => 'Plumillas', 'estado' => null],
+			(object) ['orden' => 20, 'id' => 'estado_carroceria', 'titulo' => 'Estado de carrocería', 'estado' => null],
 		];
 		$accesorios = [
-			(object) ['id' => 'estuche_herramientas', 'titulo' => 'Estuche de herramientas', 'estado' => null],
-			(object) ['id' => 'estado_carga_extintor', 'titulo' => 'Estado y carga de extintor', 'estado' => null],
-			(object) ['id' => 'botiquin', 'titulo' => 'Botiquín', 'estado' => null],
-			(object) ['id' => 'cable_remolque', 'titulo' => 'Cable de remolque', 'estado' => null],
-			(object) ['id' => 'tacos_seguridad_cuña_2', 'titulo' => 'Tacos de seguridad cuña(2)', 'estado' => null],
-			(object) ['id' => 'llave_ruedas', 'titulo' => 'Llave de ruedas', 'estado' => null],
-			(object) ['id' => 'kit_antiderrames', 'titulo' => 'Kit antiderrames', 'estado' => null],
-			(object) ['id' => 'limpieza_unidad', 'titulo' => 'Limpieza de la unidad', 'estado' => null],
+			(object) ['orden' => 1, 'id' => 'estuche_herramientas', 'titulo' => 'Estuche de herramientas', 'estado' => null],
+			(object) ['orden' => 2, 'id' => 'estado_carga_extintor', 'titulo' => 'Estado y carga de extintor', 'estado' => null],
+			(object) ['orden' => 3, 'id' => 'botiquin', 'titulo' => 'Botiquín', 'estado' => null],
+			(object) ['orden' => 4, 'id' => 'cable_remolque', 'titulo' => 'Cable de remolque', 'estado' => null],
+			(object) ['orden' => 5, 'id' => 'tacos_seguridad_cuña_2', 'titulo' => 'Tacos de seguridad cuña(2)', 'estado' => null],
+			(object) ['orden' => 6, 'id' => 'llave_ruedas', 'titulo' => 'Llave de ruedas', 'estado' => null],
+			(object) ['orden' => 7, 'id' => 'kit_antiderrames', 'titulo' => 'Kit antiderrames', 'estado' => null],
+			(object) ['orden' => 8, 'id' => 'limpieza_unidad', 'titulo' => 'Limpieza de la unidad', 'estado' => null],
 		];
 		$documentos = [
-			(object) ['id' => 'tarjeta_propiedad', 'titulo' => 'Tarjeta de propiedad', 'estado' => null],
-			(object) ['id' => 'soat', 'titulo' => 'SOAT', 'estado' => null],
-			(object) ['id' => 'licencia_conducir', 'titulo' => 'Licencia de conducir', 'estado' => null],
-			(object) ['id' => 'revision_tecnica', 'titulo' => 'Revisión técnica', 'estado' => null],
+			(object) ['orden' => 1, 'id' => 'tarjeta_propiedad', 'titulo' => 'Tarjeta de propiedad', 'estado' => null],
+			(object) ['orden' => 2, 'id' => 'soat', 'titulo' => 'SOAT', 'estado' => null],
+			(object) ['orden' => 3, 'id' => 'licencia_conducir', 'titulo' => 'Licencia de conducir', 'estado' => null],
+			(object) ['orden' => 4, 'id' => 'revision_tecnica', 'titulo' => 'Revisión técnica', 'estado' => null],
 		];
 	}
 @endphp
@@ -148,10 +148,10 @@
 							<tr>
 								<td>{{ $sistema_mecanico[$i]->titulo }}</td>
 								<td class="text-center">
-									{!! Form::radio( $sistema_mecanico[$i]->id, 'si', $sistema_mecanico[$i]->estado ? true : false) !!}
+									{!! Form::radio( $sistema_mecanico[$i]->id, 'si', $sistema_mecanico[$i]->estado ? true : false, ['data-type' => 'sistema_mecanico', 'data-titulo' => $sistema_mecanico[$i]->titulo, 'data-orden' => $sistema_mecanico[$i]->orden]) !!}
 								</td>
 								<td class="text-center">
-									{!! Form::radio( $sistema_mecanico[$i]->id, 'no', $sistema_mecanico[$i]->estado !== null && !$sistema_mecanico[$i]->estado ? true : false) !!}
+									{!! Form::radio( $sistema_mecanico[$i]->id, 'no', $sistema_mecanico[$i]->estado !== null && !$sistema_mecanico[$i]->estado ? true : false, ['data-type' => 'sistema_mecanico', 'data-titulo' => $sistema_mecanico[$i]->titulo, 'data-orden' => $sistema_mecanico[$i]->orden]) !!}
 								</td>
 							</tr>
 						@endfor
@@ -170,13 +170,14 @@
 							<tr>
 								<td>{{ $sistema_mecanico[$i]->titulo }}</td>
 								<td class="text-center">
-									{!! Form::radio( $sistema_mecanico[$i]->id, 'si', $sistema_mecanico[$i]->estado ? true : false) !!}
+									{!! Form::radio( $sistema_mecanico[$i]->id, 'si', $sistema_mecanico[$i]->estado ? true : false, ['data-type' => 'sistema_mecanico', 'data-titulo' => $sistema_mecanico[$i]->titulo, 'data-orden' => $sistema_mecanico[$i]->orden]) !!}
 								</td>
 								<td class="text-center">
-									{!! Form::radio( $sistema_mecanico[$i]->id, 'no', $sistema_mecanico[$i]->estado !== null && !$sistema_mecanico[$i]->estado ? true : false) !!}
+									{!! Form::radio( $sistema_mecanico[$i]->id, 'no', $sistema_mecanico[$i]->estado !== null && !$sistema_mecanico[$i]->estado ? true : false, ['data-type' => 'sistema_mecanico', 'data-titulo' => $sistema_mecanico[$i]->titulo, 'data-orden' => $sistema_mecanico[$i]->orden]) !!}
 								</td>
 							</tr>
 						@endfor
+						<input name="sistema_mecanico" id="sistema_mecanico" type="text" class="hidden" value="">
 					</tbody>
 				</table>
 			</div>
@@ -285,7 +286,7 @@
 				if(unidad != null) {
 					inputUnidadDescripcion.value = unidad.descripcion;
 					inputUnidadId.value = unidad.id;
-					loaderUnidad.removeAttribute('hidden');
+					loaderUnidad.setAttribute('hidden', true);
 				} else {
 					inputUnidadDescripcion.placeholder = 'Buscando...';
 				}
@@ -301,8 +302,7 @@
 			.catch(err => console.log(`Error en consultarUnidad(): ${err}`))
 		}
 
-		// const listSistemaElectrico = document.querySelectorAll("input[data-type='sistema_electrico'][checked='checked']");
-		// const arrSistemaElectrico = Array.from(listSistemaElectrico);
+		//SISTEMA ELECTRICO
 		$("input[data-type='sistema_electrico']").change(function(){
 			const arrObjects = [];
 			const el = $(this)[0];
@@ -344,9 +344,54 @@
 					arrObjects.push(myObject);
 				}
 			});
-
 			// console.log(arrObjects)
 			document.getElementById('sistema_electrico').value = JSON.stringify(arrObjects);
+		});
+
+		//SISTEMA MECANICO
+		$("input[data-type='sistema_mecanico']").change(function(){
+			const arrObjects = [];
+			const el = $(this)[0];
+			const brothers = document.querySelectorAll(`input[data-type='sistema_mecanico'][name=${el.name}]`);
+			Array.from(brothers).forEach(element => {
+				element.removeAttribute('checked');
+			});
+			el.setAttribute('checked', 'checked');
+
+			const listSistemaMecanicoChecked = document.querySelectorAll("input[data-type='sistema_mecanico'][checked='checked']");
+			Array.from(listSistemaMecanicoChecked).forEach(el => {
+				myObject = {
+					orden: el.dataset.orden,
+					id: el.name,
+					title: el.dataset.titulo,
+					estado: el.value == 'si' ? true: false
+				};
+				arrObjects.push(myObject);
+				// console.log(arrObjects)
+			});
+
+			const listSistemaMecanico = document.querySelectorAll("input[data-type='sistema_mecanico']");
+			const filtradoSistemaMecanico = Array.from(listSistemaMecanico).filter((el, index) => index % 2 == 0);
+			filtradoSistemaMecanico.forEach(el => {
+				const brothers = document.querySelectorAll(`input[data-type='sistema_mecanico'][name=${el.name}]`);
+				const arrBrothers = Array.from(brothers);
+
+				let haveChecked = false;
+				for (const item of arrBrothers) {
+					if(item.getAttribute('checked') != null) haveChecked = true;
+				}
+				if(haveChecked == false ) {
+					myObject = {
+						orden: el.dataset.orden,
+						id: el.name,
+						title: el.dataset.titulo,
+						estado: null
+					};
+					arrObjects.push(myObject);
+				}
+			});
+			console.log(arrObjects)
+			document.getElementById('sistema_mecanico').value = JSON.stringify(arrObjects);
 		});
 		
 	}); 

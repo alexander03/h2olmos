@@ -148,6 +148,7 @@ class MantCorrPrev extends Controller
             $checklistvehicular->conductor_id= $request->input('conductor_id');
             $checklistvehicular->observaciones = $request->input('observaciones');
             $checklistvehicular->sistema_electrico = json_decode($request->input('sistema_electrico'));
+            $checklistvehicular->sistema_mecanico = json_decode($request->input('sistema_mecanico'));
 
             
             $checklistvehicular->save();
