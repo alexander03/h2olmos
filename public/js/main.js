@@ -1,12 +1,12 @@
 // Autocomplete UA
-const doSearchUA = () => {
+const doSearchUA = (input = '.js-ua-id', descr = '.js-ua-desc', resultNull = '#autoComplete_list1') => {
 
     var autoCompletejsUA = new autoComplete({
         data: {
             src: async () => {
                 // Loading placeholder text
                 document
-                    .querySelector(".js-ua-id")
+                    .querySelector(input)
                     .setAttribute("placeholder", "Loading...");
        
                 // Fetch External Data Source
@@ -17,7 +17,7 @@ const doSearchUA = () => {
                     method:'GET'
                 };
                   //Query
-                const query = document.querySelector('.js-ua-id').value;
+                const query = document.querySelector(input).value;
                 const source = await fetch(
                     `ua/search/${query}` , config
                 );
@@ -40,7 +40,7 @@ const doSearchUA = () => {
             if (a.match > b.match) return 1;
             return 0;
         },
-        selector: ".js-ua-id",
+        selector: input,
         threshold: 1,
         debounce: 0,
         searchEngine: "strict",
@@ -52,7 +52,7 @@ const doSearchUA = () => {
                 source.setAttribute("id", "autoComplete_list");
                 source.setAttribute("class", "u-search-ua__result");
             },
-            destination: document.querySelector(".js-ua-id"),
+            destination: document.querySelector(input),
             position: "afterend",
             element: "ul"
         },
@@ -63,13 +63,13 @@ const doSearchUA = () => {
             element: "li"
         },
         noResults: () => {
-            document.querySelector("#autoComplete_list1").innerText = 'Sin resultados';
+            document.querySelector(resultNull).innerText = 'Sin resultados';
         },
         onSelection: feedback => { //VA NUESTRA LOGICA
-            document.querySelector("#autoComplete_list1").innerText = '';
+            document.querySelector(resultNull).innerText = '';
             const selection = feedback.selection.value;
-            document.querySelector(".js-ua-id").value = selection.codigo;
-            document.querySelector(".js-ua-desc").innerText = selection.descripcion;
+            document.querySelector(input).value = selection.codigo;
+            document.querySelector(descr).innerText = selection.descripcion;
             // console.log(feedback);
         }
     });
@@ -77,9 +77,9 @@ const doSearchUA = () => {
     // Toggle event for search input
     // showing & hidding results list onfocus / blur
     ["focus", "blur"].forEach(function(eventType) {
-      const resultsList = document.querySelector("#autoComplete_list1");
+      const resultsList = document.querySelector(resultNull);
     
-      document.querySelector(".js-ua-id").addEventListener(eventType, function() {
+      document.querySelector(input).addEventListener(eventType, function() {
         // Hide results list & show other elemennts
         if (eventType === "blur") {
           resultsList.style.display = "none";

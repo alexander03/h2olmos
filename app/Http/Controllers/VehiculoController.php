@@ -183,9 +183,11 @@ class VehiculoController extends Controller
     						'area_id' 				=> 'numeric|min:1',
     						'color' 				=> 'required|max:20',
     						'chasis' 				=> 'required|max:20',
+/*
     						'fechavencimientosoat'  => 'required',
     						'fechavencimientogps'   => 'required',
     						'fechavencimientortv'   => 'required'
+*/
                         );
         $mensajes = array(
         	'ua.required'         		  => 'Debe ingresar un código de ua',
@@ -204,9 +206,11 @@ class VehiculoController extends Controller
             'chasis.required'				  => 'Debe ingresar el codigo de chasis',
             'chasis.max'				 	  => 'El chasis sobrepasa los 20 carácteres',
             'contratista_id.min'   	  		  => 'Debe asignar un contratista',
+/*
             'fechavencimientosoat.required'   => 'Debe ingresar la fecha de vencimiento de SOAT',
             'fechavencimientogps.required'    => 'Debe ingresar la fecha de vencimiento de GPS',
             'fechavencimientortv.required'    => 'Debe ingresar la fecha de vencimiento de RTV'
+*/
             );
         $validacion = Validator::make($request->all(), $reglas, $mensajes);
         if ($validacion->fails()) {
@@ -219,11 +223,11 @@ class VehiculoController extends Controller
             $vehiculo->marca_id 			  = $request->input('marca_id');
             $vehiculo->anio 				  = $request->input('anio');
             $vehiculo->contratista_id 	  = $request->input('contratista_id');
-
+/*
             $vehiculo->fechavencimientosoat = $request->input('fechavencimientosoat');
             $vehiculo->fechavencimientogps  = $request->input('fechavencimientogps');
             $vehiculo->fechavencimientortv  = $request->input('fechavencimientortv');
-            
+*/            
             $vehiculo->area_id 				  = $request->input('area_id');
             $vehiculo->placa 				  = $request->input('placa');
             $vehiculo->motor 				  = $request->input('motor');
@@ -327,9 +331,11 @@ class VehiculoController extends Controller
     						'area_id' 				=> 'numeric|min:1',
     						'color'					=> 'required|max:20',
     						'chasis' 				=> 'required|max:20',
+/*
     						'fechavencimientosoat'  => 'required',
     						'fechavencimientogps'   => 'required',
     						'fechavencimientortv'   => 'required'
+*/
                         );
         $mensajes = array(
         	'ua.required'         		  => 'Debe ingresar un código de ua',
@@ -348,9 +354,11 @@ class VehiculoController extends Controller
             'chasis.required'				  => 'Debe ingresar el codigo de chasis',
             'chasis.max'				 	  => 'El chasis sobrepasa los 20 carácteres',
             'contratista_id.min'   	  		  => 'Debe asignar un contratista',
+/*
             'fechavencimientosoat.required'   => 'Debe ingresar la fecha de vencimiento de SOAT',
             'fechavencimientogps.required'    => 'Debe ingresar la fecha de vencimiento de GPS',
             'fechavencimientortv.required'    => 'Debe ingresar la fecha de vencimiento de RTV'
+*/
             );
         $validacion = Validator::make($request->all(), $reglas, $mensajes);
         if ($validacion->fails()) {
@@ -363,11 +371,11 @@ class VehiculoController extends Controller
             $vehiculo->marca_id 			  = $request->input('marca_id');
             $vehiculo->anio 				  = $request->input('anio');
             $vehiculo->contratista_id 	  = $request->input('contratista_id');
-
+/*
             $vehiculo->fechavencimientosoat = $request->input('fechavencimientosoat');
             $vehiculo->fechavencimientogps  = $request->input('fechavencimientogps');
             $vehiculo->fechavencimientortv  = $request->input('fechavencimientortv');
-            
+*/            
             $vehiculo->area_id 				  = $request->input('area_id');
             $vehiculo->placa 				  = $request->input('placa');
             $vehiculo->motor 				  = $request->input('motor');

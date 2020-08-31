@@ -60,7 +60,7 @@ if ($vehiculo !== NULL) {
 <div class="form-group ">
 	{!! Form::label('carroceria', 'Carrocería:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
 	<div class="col-lg-12 col-md-12 col-sm-12">
-		{!! Form::text('carroceria', null, array('class' => 'form-control input-xs', 'id' => 'carroceria')) !!}
+		{!! Form::select('carroceria',['0'=>'PICK UP', '1' => 'SUV'] ,null, array('class' => 'form-control input-xs', 'id' => 'carroceria')) !!}
 	</div>
 </div>
 <div class="form-group">
@@ -79,24 +79,6 @@ if ($vehiculo !== NULL) {
 	{!! Form::label('area_id', 'Area:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
 	<div class="col-lg-12 col-md-12 col-sm-12">
 		{!! Form::select('area_id', $cboArea, null, array('class' => 'form-control input-xs', 'id' => 'area_id')) !!}
-	</div>
-</div>
-<div class="form-group ">
-	{!! Form::label('fechavencimientosoat', 'Fecha V SOAT:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label ')) !!}
-	<div class="col-lg-12 col-md-12 col-sm-12">
-		{!! Form::date('fechavencimientosoat', null, array('class' => 'form-control input-xs ', 'id' => 'fechavencimientosoat')) !!}
-	</div>
-</div>
-<div class="form-group ">
-	{!! Form::label('fechavencimientogps', 'Fecha V GPS:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
-	<div class="col-lg-12 col-md-12 col-sm-12">
-		{!! Form::date('fechavencimientogps', null, array('class' => 'form-control input-xs', 'id' => 'fechavencimientogps')) !!}
-	</div>
-</div>
-<div class="form-group ">
-	{!! Form::label('fechavencimientortv', 'Fecha V RTV:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
-	<div class="col-lg-12 col-md-12 col-sm-12">
-		{!! Form::date('fechavencimientortv', null, array('class' => 'form-control input-xs', 'id' => 'fechavencimientortv')) !!}
 	</div>
 </div>
 <div class="form-group ">

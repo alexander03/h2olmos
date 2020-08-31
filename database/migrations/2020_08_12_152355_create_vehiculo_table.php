@@ -28,11 +28,14 @@ class CreateVehiculoTable extends Migration
             $table->unsignedBigInteger('contratista_id');
             $table->foreign('contratista_id')->references('id')->on('contratista');
             $table->string('chasis',20);
-            $table->string('carroceria',10);
+//            $table->string('carroceria',10);
+            $table->boolean('carroceria');
             $table->string('color',20);
+/*
             $table->date('fechavencimientosoat')->nullable();
             $table->date('fechavencimientogps')->nullable();
             $table->date('fechavencimientortv')->nullable();
+*/
             $table->timestamps();
             $table->softDeletes();
         });

@@ -98,7 +98,7 @@ class OpcionmenuTableSeeder extends Seeder
             'link' => 'controldiario',
             'icono' => 'controldiario',
             'orden' => 4,
-            'grupomenu_id' => 1
+            'grupomenu_id' => 3
         ]);
         DB::table('opcionmenu')->insert([
             'descripcion' => 'Tipo de users',
