@@ -19,7 +19,7 @@ class DatabaseSeeder extends Seeder
             UnidadTableSeeder::class,
             RepuestoTableSeeder::class,
             ContratistaTableSeeder::class,
-            //ConcesionariaTableSeeder::class,
+            // ConcesionariaTableSeeder::class,
             ConductorTableSeeder::class,
             AreaTableSeeder::class,
             TrabajoTableSeeder::class,
