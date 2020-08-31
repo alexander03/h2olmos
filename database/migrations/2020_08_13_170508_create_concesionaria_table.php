@@ -17,6 +17,7 @@ class CreateConcesionariaTable extends Migration
             $table->bigIncrements('id');
             $table->string('ruc', 11)->unique();
             $table->string('razonsocial');
+            $table->string('abreviatura',15);
             $table->timestamps();
             $table->softDeletes();
         });

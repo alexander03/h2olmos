@@ -27,7 +27,9 @@ class DatabaseSeeder extends Seeder
             GrifoTableSeeder::class,
             UaTableSeeder::class,
             EquipoTableSeeder::class,
-            PropietariosTableSeeder::class
+            PropietariosTableSeeder::class,
+            UserConcesionariaSeeder::class,
+            RegRepVehSeeder::class
         ]);
     }
 }

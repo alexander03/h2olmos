@@ -97,6 +97,13 @@ class OpcionmenuTableSeeder extends Seeder
             'orden' => 1,
             'grupomenu_id' => 3
         ]);
+        DB::table('opcionmenu')->insert([
+            'descripcion' => 'Reg.Rep.Vehicular',
+            'link' => 'regrepveh',
+            'icono' => 'myicon',
+            'orden' => 1,
+            'grupomenu_id' => 3
+        ]);
 
     }
 }

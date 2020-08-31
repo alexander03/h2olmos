@@ -8,6 +8,12 @@
 	</div>
 </div>
 <div class="form-group">
+	{!! Form::label('abreviatura', 'Abreviatura:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
+	<div class="col-lg-12 col-md-12 col-sm-12">
+		{!! Form::text('abreviatura', null, array('class' => 'form-control input-xs', 'id' => 'abreviatura', 'maxlength' => '150')) !!}
+	</div>
+</div>
+<div class="form-group">
 	{!! Form::label('ruc', 'RUC:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
 	<div class="col-lg-12 col-md-12 col-sm-12">
 		{!! Form::text('ruc', null, array('class' => 'form-control input-xs', 'id' => 'ruc', 'maxlength' => '11')) !!}

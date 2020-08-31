@@ -152,6 +152,16 @@ Route::group(['middleware' => 'auth'], function () {
 	
 	Route::get('mantcorrprev/createchecklistvehicular', 'MantCorrPrev@createchecklistvehicular')->name('mantcorrprev.createchecklistvehicular');
 
+	//Rutas para Registro Repuesto Vehicular
+	Route::resource('regrepveh', 'RegRepVehController', array('except' => array('show')));
+	Route::post('regrepveh/buscar', 'RegRepVehController@buscar')->name('regrepveh.buscar');
+	Route::get('regrepveh/eliminar/{id}/{listarluego}', 'RegRepVehController@eliminar')->name('regrepveh.eliminar');
+	Route::get('regrepveh/createrepuesto', 'RegRepVehController@createrepuesto')->name('regrepveh.createrepuesto');
+	Route::get('regrepveh/buscarporua', 'RegRepVehController@buscarporua')->name('regrepveh.buscarporua');
+	Route::post('regrepveh/store', 'RegRepVehController@store')->name('regrepveh.createregrepveh');
+	Route::get('userconcesionaria/concesionaria/{id}', 'UserConcesionariaController@concesionaria')->name('userconcesionaria.concesionaria');
+
+
 	Route::post('grupomenu/buscar', 'GrupomenuController@buscar')->name('grupomenu.buscar');
     Route::get('grupomenu/eliminar/{id}/{listarluego}', 'GrupomenuController@eliminar')->name('grupomenu.eliminar');
 	Route::resource('grupomenu', 'GrupomenuController', array('except' => array('show')));

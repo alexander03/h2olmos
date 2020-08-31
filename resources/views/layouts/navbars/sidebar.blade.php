@@ -1,6 +1,7 @@
 <?php
 use App\Grupomenu;
 use App\Opcionmenu;
+use App\Http\Controllers\UserConcesionariaController;
 ?>
 <div class="sidebar" data-color="orange" data-background-color="white" data-image="{{ asset('material') }}/img/sidebar-1.jpg">
   <!--
@@ -8,9 +9,33 @@ use App\Opcionmenu;
 
       Tip 2: you can also add an image using data-image tag
   -->
-  <div class="logo">
-    <a href="https://#/" class="simple-text logo-normal">
-      {{ __('H2OLMOS') }}
+  <div class="logo"  style="z-index: 20">
+    <a  class="simple-text logo-normal">
+      <a class="simple-text logo-normal" id="navbarDropdownProfile" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <?php
+        $a= new UserConcesionariaController();
+        echo $a->actual();
+        //{{ __('H2OLMOS') }}
+        ?>
+        
+      </a>
+      <div class="dropdown-menu dropdown-menu-right">
+        <?php
+        $a= new UserConcesionariaController();
+      $data = $a->devolverConce(auth()->user()->id)->get();
+      foreach ($data as $key => $val) {
+        echo '<a class="dropdown-item" onclick="location.reload()" href="http://localhost:8000/userconcesionaria/concesionaria/'.$val->id.'">'.$val->razonsocial.'</a>';
+        /*echo '<a class="dropdown-item" onclick="$.ajax({
+                type: `GET`,
+                url: `http://localhost:8000/userconcesionaria/cambiara/'.$val->id.'`,
+                data: param = ``,
+                contentType: `application/json; charset=utf-8`,
+                dataType: `json`,
+                success: location.reload()
+            }); " >'.$val->razonsocial.'</a>';*/
+      }
+        ?>
+      </div>
     </a>
   </div>
   <div class="sidebar-wrapper">
