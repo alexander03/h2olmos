@@ -193,13 +193,14 @@
 							<tr>
 								<td>{{ $item->titulo }}</td>
 								<td class="text-center">
-									{!! Form::radio( $item->id, 'si', $item->estado ? true : false) !!}
+									{!! Form::radio( $item->id, 'si', $item->estado ? true : false, ['data-type' => 'accesorios', 'data-titulo' => $item->titulo, 'data-orden' => $item->orden]) !!}
 								</td>
 								<td class="text-center">
-									{!! Form::radio( $item->id, 'no', $item->estado !== null && !$item->estado ? true : false) !!}
+									{!! Form::radio( $item->id, 'no', $item->estado !== null && !$item->estado ? true : false, ['data-type' => 'accesorios', 'data-titulo' => $item->titulo, 'data-orden' => $item->orden]) !!}
 								</td>
 							</tr>
 						@endforeach
+						<input name="accesorios" id="accesorios" type="text" class="hidden" value="">
 					</tbody>
 				</table>
 			</div>
@@ -215,13 +216,14 @@
 							<tr>
 								<td>{{ $item->titulo }}</td>
 								<td class="text-center">
-									{!! Form::radio( $item->id, 'si', $item->estado ? true : false) !!}
+									{!! Form::radio( $item->id, 'si', $item->estado ? true : false, ['data-type' => 'documentos', 'data-titulo' => $item->titulo, 'data-orden' => $item->orden]) !!}
 								</td>
 								<td class="text-center">
-									{!! Form::radio( $item->id, 'no', $item->estado !== null && !$item->estado ? true : false) !!}
+									{!! Form::radio( $item->id, 'no', $item->estado !== null && !$item->estado ? true : false, ['data-type' => 'documentos', 'data-titulo' => $item->titulo, 'data-orden' => $item->orden]) !!}
 								</td>
 							</tr>
 						@endforeach
+						<input name="documentos" id="documentos" type="text" class="hidden" value="">
 					</tbody>
 				</table>
 			</div>
@@ -394,6 +396,98 @@
 			document.getElementById('sistema_mecanico').value = JSON.stringify(arrObjects);
 		});
 		
+		//ACCESORIOS
+		$("input[data-type='accesorios']").change(function(){
+			const arrObjects = [];
+			const el = $(this)[0];
+			const brothers = document.querySelectorAll(`input[data-type='accesorios'][name=${el.name}]`);
+			Array.from(brothers).forEach(element => {
+				element.removeAttribute('checked');
+			});
+			el.setAttribute('checked', 'checked');
+
+			const listAccesoriosChecked = document.querySelectorAll("input[data-type='accesorios'][checked='checked']");
+			Array.from(listAccesoriosChecked).forEach(el => {
+				myObject = {
+					orden: el.dataset.orden,
+					id: el.name,
+					title: el.dataset.titulo,
+					estado: el.value == 'si' ? true: false
+				};
+				arrObjects.push(myObject);
+				// console.log(arrObjects)
+			});
+
+			const listAccesorios = document.querySelectorAll("input[data-type='accesorios']");
+			const filtradoAccesorios = Array.from(listAccesorios).filter((el, index) => index % 2 == 0);
+			filtradoAccesorios.forEach(el => {
+				const brothers = document.querySelectorAll(`input[data-type='accesorios'][name=${el.name}]`);
+				const arrBrothers = Array.from(brothers);
+
+				let haveChecked = false;
+				for (const item of arrBrothers) {
+					if(item.getAttribute('checked') != null) haveChecked = true;
+				}
+				if(haveChecked == false ) {
+					myObject = {
+						orden: el.dataset.orden,
+						id: el.name,
+						title: el.dataset.titulo,
+						estado: null
+					};
+					arrObjects.push(myObject);
+				}
+			});
+			// console.log(arrObjects)
+			document.getElementById('accesorios').value = JSON.stringify(arrObjects);
+		});
+
+		//DOCUMENTOS
+		$("input[data-type='documentos']").change(function(){
+			const arrObjects = [];
+			const el = $(this)[0];
+			const brothers = document.querySelectorAll(`input[data-type='documentos'][name=${el.name}]`);
+			Array.from(brothers).forEach(element => {
+				element.removeAttribute('checked');
+			});
+			el.setAttribute('checked', 'checked');
+
+			const listDocumentosChecked = document.querySelectorAll("input[data-type='documentos'][checked='checked']");
+			Array.from(listDocumentosChecked).forEach(el => {
+				myObject = {
+					orden: el.dataset.orden,
+					id: el.name,
+					title: el.dataset.titulo,
+					estado: el.value == 'si' ? true: false
+				};
+				arrObjects.push(myObject);
+				// console.log(arrObjects)
+			});
+
+			const listDocumentos = document.querySelectorAll("input[data-type='documentos']");
+			const filtradoDocumentos = Array.from(listDocumentos).filter((el, index) => index % 2 == 0);
+			filtradoDocumentos.forEach(el => {
+				const brothers = document.querySelectorAll(`input[data-type='documentos'][name=${el.name}]`);
+				const arrBrothers = Array.from(brothers);
+
+				let haveChecked = false;
+				for (const item of arrBrothers) {
+					if(item.getAttribute('checked') != null) haveChecked = true;
+				}
+				if(haveChecked == false ) {
+					myObject = {
+						orden: el.dataset.orden,
+						id: el.name,
+						title: el.dataset.titulo,
+						estado: null
+					};
+					arrObjects.push(myObject);
+				}
+			});
+			console.log(arrObjects)
+			document.getElementById('documentos').value = JSON.stringify(arrObjects);
+		});
+
 	}); 
 
 </script>
