@@ -15,7 +15,7 @@ class CreateVehiculodocumentTable extends Migration
     {
         Schema::create('vehiculodocument', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->bigInteger('vehiculo_id');
+            $table->unsignedBigInteger('vehiculo_id');
             $table->date('fecha');
             $table->string('tipo',5);
 //            $table->bigInteger('tipovehiculodocument_id');

@@ -9,9 +9,9 @@ class Concesionaria extends Model
 {
     protected $table = 'concesionaria';
     //use SoftDeletes;
-    protected $fillable = ['ruc', 'razonsocial'];
+    protected $fillable = ['ruc', 'razonsocial', 'abreviatura'];
 
     public function scopegetAll($query) {
-        return $query->select('id', 'razonsocial')->orderBy('razonsocial', 'ASC')->get();
+        return $query->select('id', 'razonsocial', 'abreviatura')->orderBy('razonsocial', 'ASC')->get();
     }
 }
