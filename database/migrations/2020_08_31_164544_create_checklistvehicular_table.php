@@ -34,6 +34,7 @@ class CreateChecklistvehicularTable extends Migration
             $table->string('observaciones')->nullable();
 
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

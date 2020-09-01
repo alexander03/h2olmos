@@ -67,7 +67,7 @@
 	<div class="form-group col-2">
 		{!! Form::label('unidad_placa', 'Unidad placa:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
 		<div class="col-lg-12 col-md-12 col-sm-12">
-			{!! Form::text('unidad_placa', null, array('class' => 'form-control input-xs solo-lectura', 'id' => 'unidad_placa')) !!}
+			{!! Form::text('unidad_placa', $unidad_placa, array('class' => 'form-control input-xs solo-lectura', 'id' => 'unidad_placa')) !!}
 		</div>
 	</div>
 	<div class="form-group col-1">
@@ -76,7 +76,7 @@
 	<div class="form-group col-5">
 		{!! Form::label('unidad_descripcion', 'Unidad descripción:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
 		<div class="col-lg-12 col-md-12 col-sm-12">
-			{!! Form::text('unidad_descripcion', null, array('class' => 'form-control input-xs solo-lectura', 'id' => 'unidad_descripcion', 'readonly' => true)) !!}
+			{!! Form::text('unidad_descripcion', $unidad_descripcion, array('class' => 'form-control input-xs solo-lectura', 'id' => 'unidad_descripcion', 'readonly' => true)) !!}
 			<input name="unidad_id" id="unidad_id" type="text" class="hidden" value="">
 		</div>
 	</div>

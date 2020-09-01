@@ -96,19 +96,20 @@ class MantCorrPrev extends Controller
         $listar   = Libreria::getParam($request->input('listar'), 'NO');
         $entidad  = 'Checklistvehicular';
         $checklistvehicular = null;
+        $unidad_placa = null;
+        $unidad_descripcion = null;
         $formData = array('mantcorrprev.store');
         $formData = array('route' => $formData, 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
         $boton    = 'Registrar';
-        $arrUnidades = Conductor::getAll();
+        $arrConductores = Conductor::getAll();
         $cboConductores = array('' => 'Seleccione');
-        foreach($arrUnidades as $k=>$v){
+        foreach($arrConductores as $k=>$v){
             $cboConductores += array($v->id => $v->nombres . $v->apellidos);
         }
-        return view($this->folderview.'.mant_checklistvehicular')->with(compact('checklistvehicular', 'formData', 'entidad', 'cboConductores', 'boton', 'listar'));
+        return view($this->folderview.'.mant_checklistvehicular')->with(compact('checklistvehicular', 'formData', 'entidad', 'unidad_placa', 'unidad_descripcion', 'cboConductores', 'boton', 'listar'));
     }
 
     public function store(Request $request) {
-        
         
         $listar     = Libreria::getParam($request->input('listar'), 'NO');
         // $reglas     = array(
@@ -161,6 +162,37 @@ class MantCorrPrev extends Controller
 
         });
         return is_null($error) ? "OK" : $error;
+    }
+
+    public function edit($id, Request $request)
+    {
+        $existe = Libreria::verificarExistencia($id, 'checklistvehicular');
+        if ($existe !== true) {
+            return $existe;
+        }
+        $listar   = Libreria::getParam($request->input('listar'), 'NO');
+        $checklistvehicular = Checklistvehicular::find($id);
+        
+        if($checklistvehicular->equipo_id != '') {
+            $equipo = Equipo::find($checklistvehicular->equipo_id);
+            $unidad_placa = $equipo->placa;
+            $unidad_descripcion = $equipo->descripcion;
+        } else {
+            $vehiculo = Vehiculo::find($checklistvehicular->vehiculo_id);
+            $unidad_placa = $vehiculo->placa;
+            $unidad_descripcion = $vehiculo->descripcion;
+        }
+
+        $entidad  = 'Checklistvehicular';
+        $formData = array('mantcorrprev.update', $id);
+        $formData = array('route' => $formData, 'method' => 'PUT', 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
+        $boton    = 'Modificar';
+        $arrConductores      = Conductor::getAll();
+        $cboConductores = array('' => 'Seleccione');
+        foreach($arrContratista as $k=>$v){
+            $cboConductores += array($v->id => $v->nombres . $v->apellidos);
+        }
+        return view($this->folderview.'.mant')->with(compact('checklistvehicular', 'formData', 'entidad', 'boton', 'unidad_placa', 'unidad_descripcion', 'cboConductores', 'listar'));
     }
 
     public function existeUnidad(Request $request) {
