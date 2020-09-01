@@ -189,10 +189,18 @@ class MantCorrPrev extends Controller
         $boton    = 'Modificar';
         $arrConductores      = Conductor::getAll();
         $cboConductores = array('' => 'Seleccione');
-        foreach($arrContratista as $k=>$v){
+        foreach($arrConductores as $k=>$v){
             $cboConductores += array($v->id => $v->nombres . $v->apellidos);
         }
-        return view($this->folderview.'.mant')->with(compact('checklistvehicular', 'formData', 'entidad', 'boton', 'unidad_placa', 'unidad_descripcion', 'cboConductores', 'listar'));
+
+        $sistema_electrico = $checklistvehicular->sistema_electrico;
+        $sistema_mecanico = $checklistvehicular->sistema_mecanico;
+        $accesorios = $checklistvehicular->accesorios;
+        $documentos = $checklistvehicular->documentos;
+
+        // return implode($cboConductores);
+
+        return view($this->folderview.'.mant_checklistvehicular')->with(compact('checklistvehicular', 'formData', 'entidad', 'boton', 'unidad_placa', 'unidad_descripcion', 'cboConductores', 'sistema_electrico', 'sistema_mecanico', 'accesorios', 'documentos', 'listar'));
     }
 
     public function existeUnidad(Request $request) {

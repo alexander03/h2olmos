@@ -51,7 +51,11 @@
 			(object) ['orden' => 3, 'id' => 'licencia_conducir', 'titulo' => 'Licencia de conducir', 'estado' => null],
 			(object) ['orden' => 4, 'id' => 'revision_tecnica', 'titulo' => 'Revisión técnica', 'estado' => null],
 		];
+
 	}
+
+	// echo(implode($sistema_electrico));
+	// echo(implode($cboConductores));
 @endphp
 
 <div id="divMensajeError{!! $entidad !!}"></div>
@@ -109,7 +113,7 @@
 		</div>
 	</div>
 </div>
-<div class="form-row">
+{{-- <div class="form-row">
 	<div class="container">
 		<h5>Revisión de accesorios</h5>
 		<div class="row">
@@ -233,7 +237,7 @@
 			</div>
 		</div>
 	</div>
-</div>
+</div> --}}
 
 <div class="form-group">
 	<div class="col-lg-12 col-md-12 col-sm-12 text-right">
