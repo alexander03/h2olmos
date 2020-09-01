@@ -39,12 +39,14 @@ class ConcesionariaController extends Controller
         $entidad          = 'Concesionaria';
         $nombre           = Libreria::getParam($request->input('razonsocial'));
         $resultado        = Concesionaria::where('razonsocial', 'LIKE', '%'.strtoupper($nombre).'%')
-                            ->orWhere('ruc', 'LIKE', '%'.strtoupper($nombre).'%')->orderBy('razonsocial', 'ASC');
+                            ->orWhere('ruc', 'LIKE', '%'.strtoupper($nombre).'%')
+                            ->orWhere('abreviatura', 'LIKE', '%'.strtoupper($nombre).'%')->orderBy('razonsocial', 'ASC');
         $lista            = $resultado->get();
         $cabecera         = array();
         $cabecera[]       = array('valor' => '#', 'numero' => '1');
         $cabecera[]       = array('valor' => 'RUC', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Razon Social', 'numero' => '1');
+        $cabecera[]       = array('valor' => 'Abreviatura', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Operaciones', 'numero' => '2');
         
         $titulo_modificar = $this->tituloModificar;
@@ -87,11 +89,12 @@ class ConcesionariaController extends Controller
     public function store(Request $request)
     {
         $listar     = Libreria::getParam($request->input('listar'), 'NO');
-        $reglas     = array('razonsocial' => 'required|max:100','ruc' => 'required|max:11|min:11');
+        $reglas     = array('razonsocial' => 'required|max:100','ruc' => 'required|max:11|min:11','abreviatura' => 'required|max:15|min:1');
         $mensajes = array(
             'razonsocial.required' => 'Debe ingresar una razonsocial',
             'razonsocial.max' => 'La razonsocial debe tener max. 100 caracteres',
             'ruc.required' => 'Debe ingresar un RUC',
+            'abreviatura.required' => 'Abreviatura debe tener entre 1 y 15 caracteres',
             'ruc.max' => 'El RUC debe tener 11 dígitos',
             'ruc.min' => 'El RUC debe tener 11 dígitos'
         );
@@ -103,6 +106,7 @@ class ConcesionariaController extends Controller
             $concesionaria = new Concesionaria();
             $concesionaria->razonsocial= strtoupper($request->input('razonsocial'));
             $concesionaria->ruc= strtoupper($request->input('ruc'));
+            $concesionaria->abreviatura= strtoupper($request->input('abreviatura'));
             $concesionaria->save();
         });
         return is_null($error) ? "OK" : $error;
@@ -129,10 +133,14 @@ class ConcesionariaController extends Controller
         if ($existe !== true) {
             return $existe;
         }
-        $reglas     = array('razonsocial' => 'required|max:100');
+        $reglas     = array('razonsocial' => 'required|max:100','ruc' => 'required|max:11|min:11','abreviatura' => 'required|max:15|min:1');
         $mensajes = array(
-            'razonsocial.required'         => 'Debe ingresar una descripción',
-            'razonsocial.max' => 'La razonsocial debe tener max. 100 caracteres'
+            'razonsocial.required' => 'Debe ingresar una razonsocial',
+            'razonsocial.max' => 'La razonsocial debe tener max. 100 caracteres',
+            'ruc.required' => 'Debe ingresar un RUC',
+            'abreviatura.required' => 'Abreviatura debe tener entre 1 y 15 caracteres',
+            'ruc.max' => 'El RUC debe tener 11 dígitos',
+            'ruc.min' => 'El RUC debe tener 11 dígitos'
         );
         $validacion = Validator::make($request->all(), $reglas, $mensajes);
         if ($validacion->fails()) {
@@ -142,6 +150,7 @@ class ConcesionariaController extends Controller
             $concesionaria = Concesionaria::find($id);
             $concesionaria->razonsocial= strtoupper($request->input('razonsocial'));
             $concesionaria->ruc= strtoupper($request->input('ruc'));
+            $concesionaria->abreviatura= strtoupper($request->input('abreviatura'));
             $concesionaria->save();
         });
         return is_null($error) ? "OK" : $error;

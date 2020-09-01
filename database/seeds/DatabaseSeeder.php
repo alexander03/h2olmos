@@ -20,7 +20,7 @@ class DatabaseSeeder extends Seeder
             UnidadTableSeeder::class,
             RepuestoTableSeeder::class,
             ContratistaTableSeeder::class,
-            // ConcesionariaTableSeeder::class,
+            ConcesionariaTableSeeder::class,
             ConductorTableSeeder::class,
             AreaTableSeeder::class,
             TrabajoTableSeeder::class,
@@ -32,7 +32,10 @@ class DatabaseSeeder extends Seeder
             VehiculoTableSeeder::class,
             ControlDiarioTableSeeder::class,
             PermisoTableSeeder::class,
-            ChecklistvehicularTableSeeder::class
+            ChecklistvehicularTableSeeder::class,
+            AbastecimientoCombustibleTableSeeder::class,
+            UserConcesionariaSeeder::class,
+            RegRepVehSeeder::class
         ]);
     }
 }
