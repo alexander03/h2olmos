@@ -1,5 +1,7 @@
 @php
+	$edit = true;
 	if($checklistvehicular == null) {//Nuevo
+		$edit = false;
 		$sistema_electrico = [
 			['orden' => 1, 'id' => 'freno_emergencia', 'titulo' => 'Freno de emergencia', 'estado' => null],
 			['orden' => 2, 'id' => 'funcionamiento_tablero', 'titulo' => 'Funcionamiento de tablero','estado' => null],
@@ -108,6 +110,9 @@
 		<div class="col-lg-12 col-md-12 col-sm-12">
 			{!! Form::select('conductor_id', $cboConductores, null, array('class' => 'form-control input-xs', 'id' => 'conductor_id')) !!}
 		</div>
+	</div>
+	<div class="col-6 d-flex align-items-center justify-content-end">
+		{!! Form::button('<i class="material-icons">edit</i> Editar', array('class' => 'btn btn-warning btn-sm mr-5', 'id' => 'btn', 'hidden' => !$edit)) !!}
 	</div>
 </div>
 <div class="form-row">
@@ -348,7 +353,7 @@
 					arrObjects.push(myObject);
 				}
 			});
-			console.log(arrObjects)
+			// console.log(arrObjects)
 			document.getElementById('sistema_electrico').value = JSON.stringify(arrObjects);
 		});
 
