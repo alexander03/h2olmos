@@ -267,6 +267,7 @@
 		const inputUnidadDescripcion = document.getElementById('unidad_descripcion');
 		const inputUnidadId = document.getElementById('unidad_id');
 
+		//TODO: Revisarlo al final
 		const getDateCurrent = () => {
 			const fecha = new Date();
 			let mes = fecha.getMonth()+1;
@@ -274,8 +275,11 @@
 			const ano = fecha.getFullYear();
 			if(dia<10) dia = '0' + dia;
 			if(mes<10) mes = '0' + mes;
-			document.getElementById('fecha_registro').value = ano+"-"+mes+"-"+dia;
-			console.log(document.getElementById('fecha_registro').value)
+
+			const inputFechaRegistro = document.getElementById('fecha_registro');
+			console.log('antes: ', inputFechaRegistro.value);
+			inputFechaRegistro.value = ano+"-"+mes+"-"+dia;
+			console.log('despues: ', inputFechaRegistro.value);
 		}
 		getDateCurrent();
 
@@ -496,7 +500,7 @@
 			document.getElementById('documentos').value = JSON.stringify(arrObjects);
 		});
 
-	}); 
+	});
 
 </script>
 <style>
