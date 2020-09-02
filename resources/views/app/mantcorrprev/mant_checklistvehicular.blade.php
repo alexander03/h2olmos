@@ -112,7 +112,7 @@
 		</div>
 	</div>
 	<div class="col-6 d-flex align-items-center justify-content-end">
-		{!! Form::button('<i class="material-icons">edit</i> Editar', array('class' => 'btn btn-warning btn-sm mr-5', 'id' => 'btn', 'hidden' => $modalNuevo)) !!}
+		{!! Form::button('<i class="material-icons">edit</i> Editar', array('class' => 'btn btn-warning btn-sm mr-5', 'id' => 'btn-editar', 'hidden' => $modalNuevo)) !!}
 	</div>
 </div>
 <div class="form-row">
@@ -268,6 +268,8 @@
 		const inputUnidadPlaca = document.getElementById('unidad_placa');
 		const inputUnidadDescripcion = document.getElementById('unidad_descripcion');
 		const inputUnidadId = document.getElementById('unidad_id');
+
+		const btnEditar = document.getElementById('btn-editar');
 
 		//TODO: Revisarlo al final
 		const getDateCurrent = () => {
@@ -502,6 +504,19 @@
 			document.getElementById('documentos').value = JSON.stringify(arrObjects);
 		});
 
+		btnEditar.addEventListener('click', () => {
+			const inputsReadonly = document.querySelectorAll("[readonly]");
+			Array.from(inputsReadonly).map(el => {
+				el.removeAttribute('readonly');
+			});
+			const inputsDisabled = document.querySelectorAll("[disabled]");
+			Array.from(inputsDisabled).map(el => {
+				el.removeAttribute('disabled');
+			});
+
+			const btnGuardar = document.getElementById('btnGuardar');
+			btnGuardar.removeAttribute('hidden');
+		});
 	});
 
 </script>
