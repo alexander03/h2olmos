@@ -16,6 +16,18 @@ if ($controldiario !== NULL) {
 	</div>
 </div>
 <div class="form-group">
+	{!! Form::label('horometro_inicial', 'Horometro inicial :', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
+	<div class="col-lg-12 col-md-12 col-sm-12">
+		{!! Form::text('horometro_inicial', null, array('class' => 'form-control input-xs', 'id' => 'horometro_inicial')) !!}
+	</div>
+</div>
+<div class="form-group">
+	{!! Form::label('horometro_final', 'Horometro final :', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
+	<div class="col-lg-12 col-md-12 col-sm-12">
+		{!! Form::text('horometro_final', null, array('class' => 'form-control input-xs', 'id' => 'horometro_final')) !!}
+	</div>
+</div>
+<div class="form-group">
 	{!! Form::label('equipo_id', 'Ua equipo:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
 	<div class="col-lg-12 col-md-12 col-sm-12">
 		<div class="u-ua-style js-equipo-desc"></div>
@@ -24,9 +36,11 @@ if ($controldiario !== NULL) {
 		<small id="autoComplete_list4" class="text-danger"></small>
 	</div>
 </div>
-<p class="h6 text-secondary ml-3 " style="display: inline;">Horarios</p> 
-{!! Form::button('<i class="fa fa-plus fa-lg"></i>', array('class' => 'btn btn-success btn-sm', 'id' => 'btnAgregarHora', 'onclick' => 'nuevaFila(this);' , 'data-filas' => '1')) !!}
-{!! Form::button('<i class="fa fa-minus fa-lg"></i>', array('class' => 'btn btn-success btn-sm', 'id' => 'btnAgregarHora', 'onclick' => 'quitarFila(this);' , 'data-filas' => '1')) !!}
+<div class="@if($controldiario) d-none @endif">
+	<p class="h6 text-secondary ml-3" style="display: inline;">Horarios</p> 
+	{!! Form::button('<i class="fa fa-plus fa-lg"></i>', array('class' => 'btn btn-success btn-sm', 'id' => 'btnAgregarHora', 'onclick' => 'nuevaFila(this);' , 'data-filas' => '1')) !!}
+	{!! Form::button('<i class="fa fa-minus fa-lg"></i>', array('class' => 'btn btn-success btn-sm', 'id' => 'btnAgregarHora', 'onclick' => 'quitarFila(this);' , 'data-filas' => '1')) !!}
+</div>
 <div id='filas-horarios'>
 	<div class="item mt-3 col-lg-12 col-md-12 col-sm-12">
 		<div class="form-group ">		
@@ -57,6 +71,12 @@ if ($controldiario !== NULL) {
 				{!! Form::label('tipohora_id', 'Tipo de hora:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
 				<div class="col-lg-12 col-md-12 col-sm-12">
 					{!! Form::select('tipohora_id[]',$cboThoras, null, array('class' => 'form-control input-xs', 'id' => 'tipohora_id')) !!}
+				</div>
+			</div>
+			<div class="form-group col-md-12">
+				{!! Form::label('observaciones', 'Observaciones:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
+				<div class="col-lg-12 col-md-12 col-sm-12">
+					{!! Form::text('observaciones[]', null, array('class' => 'form-control input-xs', 'id' => 'observaciones')) !!}
 				</div>
 			</div>
 		</div>
@@ -164,6 +184,12 @@ if ($controldiario !== NULL) {
 						<div class="form-group col-md-6">
 							<label for="tipohora_id_${Num}" class="col-lg-12 col-md-12 col-sm-12 control-label">Tipo de hora: : </label>
 							<div class="col-lg-12 col-md-12 col-sm-12">
+							</div>
+						</div>
+						<div class="form-group col-md-12 mt-12">
+							<label For="observaciones_${Num}" class="col-lg-12 col-md-12 col-sm-12 control-label">Observaciones : </label>
+							<div class="col-lg-12 col-md-12 col-sm-12 mt-2">
+								<input type="text" class="form-control input-xs" name="observaciones[]" id='observaciones_${Num}'>
 							</div>
 						</div>
 					</div>

@@ -47,6 +47,38 @@ use App\Http\Controllers\UserConcesionariaController;
         </a>
       </li-->
       <?php
+        $opciones_coleccion = Auth::user()->tipouser->opcionesmenu;
+        $OpcionesFiltro = array();
+        foreach($opciones_coleccion as $opcion){
+          $OpcionesFiltro[] = [$opcion->id];
+        };
+        $data = Grupomenu::whereHas('opcionesmenu', function($query) use($OpcionesFiltro){
+          $query->whereIn('id',$OpcionesFiltro);
+        })->orderBy('orden','asc')->get();
+        foreach ($data as $key => $val) {
+          echo '<li class="nav-item">
+                  <a class="nav-link" data-toggle="collapse" href="#'.$val->id.'">
+                    <i class="material-icons">'.$val->icono.'</i>
+                    <p>'.$val->descripcion.'<b class="caret"></b>
+                    </p>
+                  </a>
+                  <div class="collapse" id="'.$val->id.'">
+                    <ul class="nav">';  
+          $data2 = $opciones_coleccion->where('grupomenu_id','=',$val->id);
+          foreach($data2 as $k => $v){
+            echo '<li class="nav-item" id="'.$v->link.'">
+                    <a class="nav-link" onclick="cargarRuta(\''.URL::to($v->link).'\', \'container\',\''.$v->link.'\');">
+                    <i class="material-icons">'.$v->icono.'</i>
+                      <span class="sidebar-normal">'.$v->descripcion.'</span>
+                    </a>
+                  </li>';
+          }
+          echo '</ul>
+              </div>
+            </li>';
+        }
+      ?>
+      <?php /*                        MENU LATERAL ORIGINAL            
       $data = Grupomenu::orderBy('orden','asc')->get();
       foreach ($data as $key => $val) {
         echo '<li class="nav-item">
@@ -69,7 +101,8 @@ use App\Http\Controllers\UserConcesionariaController;
         echo '</ul>
             </div>
           </li>';
-      }
+      }*/
+
       ?>
       <?php /*
       <li class="nav-item {{ ($activePage == 'profile' || $activePage == 'user-management') ? ' active' : '' }}">

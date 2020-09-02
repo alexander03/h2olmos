@@ -12,7 +12,7 @@ class VehiculoTableSeeder extends Seeder
     public function run()
     {
         DB::table('vehiculo')->insert([
-            'ua' => '66015H01',
+            'ua' => '66015H13',
             'placa' => 'M6E-769',
             'motor' => '1GD0346765',
             'modelo' => 'HILUX',
@@ -29,7 +29,7 @@ class VehiculoTableSeeder extends Seeder
         ]); 
 
         DB::table('vehiculo')->insert([
-            'ua' => '66015H01',
+            'ua' => '66015H12',
             'placa' => 'M6E-766',
             'motor' => '1GD0343626',
             'modelo' => 'HILUX',

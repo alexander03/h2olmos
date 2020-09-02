@@ -11,8 +11,12 @@ class Tipouser extends Model
     protected $table = 'tipouser';
     protected $dates = ['deleted_at'];
 
-    public function permisos(){
-    	return $this->hasMany('App\Permiso');
+    public function accesos(){
+    	return $this->hasMany('App\Acceso');
+    }
+
+    public function opcionesmenu(){
+    	return $this->belongsToMany('App\Opcionmenu','acceso');
     }
 
     public function scopegetAll($query) {

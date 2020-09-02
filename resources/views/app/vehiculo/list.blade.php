@@ -48,9 +48,7 @@
 				@endif
 			</td>
 			<td>{{ $value->color }}</td>
-			<td>{{ $value->fechavencimientosoat }}</td>
-			<td>{{ $value->fechavencimientogps }}</td>
-			<td>{{ $value->fechavencimientortv }}</td>
+			<td>{!! Form::button('<i class="material-icons">info</i>', array('onclick' => 'modal (\''.URL::route('vehiculodocument.index', array('vehiculo_id' =>$value->id, 'listar'=>'NO')).'\',  \'Registros: Documentos de vehiculo\' , this);', 'class' => 'btn btn-info btn-link btn-sm','rel'=>'tooltip','title'=>'Registros')) !!}</td>
 			<td>{!! Form::button('<i class="material-icons">edit</i>', array('onclick' => 'modal (\''.URL::route($ruta["edit"], array($value->id, 'listar'=>'SI')).'\', \''.$titulo_modificar.'\', this);', 'class' => 'btn btn-primary btn-link btn-sm','rel'=>'tooltip','title'=>'Editar')) !!}</td>
 			<td>{!! Form::button('<i class="material-icons">close</i>', array('onclick' => 'modal (\''.URL::route($ruta["delete"], array($value->id, 'SI')).'\', \''.$titulo_eliminar.'\', this);', 'class' => 'btn btn-danger btn-link btn-sm','rel'=>'tooltip','title'=>'Eliminar')) !!}</td>
 		</tr>

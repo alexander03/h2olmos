@@ -54,4 +54,8 @@ class User extends Authenticatable
             ->orderBy('users.name', 'ASC')->withTrashed()
             ->select('users.id','users.name', 'users.username', 'users.deleted_at', 'tipouser.descripcion as tipouser');
     }
+
+    public function tipouser(){
+        return $this->belongsTo('App\Tipouser');
+    }
 }

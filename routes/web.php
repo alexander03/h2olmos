@@ -123,6 +123,11 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('vehiculo/eliminar/{id}/{listarluego}', 'VehiculoController@eliminar')->name('vehiculo.eliminar');
 	Route::resource('vehiculo', 'VehiculoController', array('except' => array('show')));
 
+	//Rutas VehiculoDocument
+	Route::post('vehiculodocument/buscar', 'VehiculoDocumentController@buscar')->name('vehiculodocument.buscar');
+	Route::get('vehiculodocument/eliminar/{id}/{listarluego}', 'VehiculoDocumentController@eliminar')->name('vehiculodocument.eliminar');
+	Route::resource('vehiculodocument', 'VehiculoDocumentController', array('except' => array('show')));
+
 	//tipo user
 	Route::post('tipouser/buscar', 'TipoUserController@buscar')->name('tipouser.buscar');
 	Route::get('tipouser/eliminar/{id}/{listarluego}', 'TipoUserController@eliminar')->name('tipouser.eliminar');

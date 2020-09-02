@@ -71,9 +71,12 @@ class VehiculoController extends Controller
         $cabecera[]       = array('valor' => 'Chasis', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Carrocería', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Color', 'numero' => '1');
+        $cabecera[]       = array('valor' => 'Registros', 'numero' => '1');
+/*
         $cabecera[]       = array('valor' => 'Vencimiento SOAT', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Vencimiento GPS', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Vencimiento RTV', 'numero' => '1');
+*/
         $cabecera[]       = array('valor' => 'Operaciones', 'numero' => '2');
         
         $titulo_modificar = $this->tituloModificar;
@@ -182,6 +185,7 @@ class VehiculoController extends Controller
     						'asientos'				=> 'required|numeric',
     						'area_id' 				=> 'numeric|min:1',
     						'color' 				=> 'required|max:20',
+//                            'unidad'                => 'required|max:25',
     						'chasis' 				=> 'required|max:20',
 /*
     						'fechavencimientosoat'  => 'required',
@@ -203,6 +207,8 @@ class VehiculoController extends Controller
             'asientos.numeric'				  => 'Debe ingresar un número valido',
             'color.required'				  => 'Debe ingresar un color',
             'color.max'				 		  => 'El color sobrepasa los 20 carácteres',
+//            'unidad.required'                 => 'Debe ingresar descripción de la unidad',
+//            'unidad.max'                      => 'El unidad sobrepasa los 25 carácteres',
             'chasis.required'				  => 'Debe ingresar el codigo de chasis',
             'chasis.max'				 	  => 'El chasis sobrepasa los 20 carácteres',
             'contratista_id.min'   	  		  => 'Debe asignar un contratista',
@@ -223,7 +229,8 @@ class VehiculoController extends Controller
             $vehiculo->marca_id 			  = $request->input('marca_id');
             $vehiculo->anio 				  = $request->input('anio');
             $vehiculo->contratista_id 	  = $request->input('contratista_id');
-/*
+/*            
+            $vehiculo->unidad                = $request->input('unidad'); 
             $vehiculo->fechavencimientosoat = $request->input('fechavencimientosoat');
             $vehiculo->fechavencimientogps  = $request->input('fechavencimientogps');
             $vehiculo->fechavencimientortv  = $request->input('fechavencimientortv');
@@ -331,6 +338,7 @@ class VehiculoController extends Controller
     						'area_id' 				=> 'numeric|min:1',
     						'color'					=> 'required|max:20',
     						'chasis' 				=> 'required|max:20',
+//                            'unidad'                => 'required|max:25',
 /*
     						'fechavencimientosoat'  => 'required',
     						'fechavencimientogps'   => 'required',
@@ -351,6 +359,8 @@ class VehiculoController extends Controller
             'asientos.numeric'				  => 'Debe ingresar un número valido',
             'color.required'				  => 'Debe ingresar un color',
             'color.max'				 		  => 'El color sobrepasa los 20 carácteres',
+//            'unidad.required'                 => 'Debe ingresar descripción de la unidad',
+//            'unidad.max'                      => 'El unidad sobrepasa los 25 carácteres',
             'chasis.required'				  => 'Debe ingresar el codigo de chasis',
             'chasis.max'				 	  => 'El chasis sobrepasa los 20 carácteres',
             'contratista_id.min'   	  		  => 'Debe asignar un contratista',
@@ -375,8 +385,8 @@ class VehiculoController extends Controller
             $vehiculo->fechavencimientosoat = $request->input('fechavencimientosoat');
             $vehiculo->fechavencimientogps  = $request->input('fechavencimientogps');
             $vehiculo->fechavencimientortv  = $request->input('fechavencimientortv');
-*/            
-            $vehiculo->area_id 				  = $request->input('area_id');
+            $vehiculo->unidad                = $request->input('unidad');  
+*/          $vehiculo->area_id 				  = $request->input('area_id');
             $vehiculo->placa 				  = $request->input('placa');
             $vehiculo->motor 				  = $request->input('motor');
             $vehiculo->asientos 				  = $request->input('asientos');

@@ -24,7 +24,7 @@ if ($tipouser !== NULL) {
 			<input type="checkbox"   name="opcionmenu[]" id="{{$opcionmenu->id}}" value="{{$opcionmenu->id}}"
 				@if($tipouser &&  
 
-						$tipouser->whereHas('permisos', function($query) use($opcionmenu){
+						$tipouser->whereHas('accesos', function($query) use($opcionmenu){
 							$query->where('opcionmenu_id',$opcionmenu->id);
 						})->where('id',$tipouser->id)->count() > 0
 

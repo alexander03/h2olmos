@@ -17,6 +17,7 @@ class CreateVehiculoTable extends Migration
             $table->bigIncrements('id');
             $table->string('ua',10);
             $table->string('placa',15);
+//            $table->string('unidad',25);
             $table->string('motor',20);
             $table->string('modelo',20);
             $table->integer('asientos');

@@ -65,7 +65,7 @@ class ControlDiarioController extends Controller
         								})->orWhereHas('equipo', function($query) use($filtro){
         									$query->where($filtro[1][0],$filtro[1][1],$filtro[1][2])
         									->orWhere($filtro[2][0],$filtro[2][1],$filtro[2][2]);
-        								})->orderBy('fecha', 'ASC');
+        								})->orderBy('fecha', 'desc');
 
         $lista            = $resultado->get();
         $cabecera         = array();
@@ -80,6 +80,8 @@ class ControlDiarioController extends Controller
         $cabecera[]       = array('valor' => 'Descripción', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Tipo de hora', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Turno', 'numero' => '1');
+        $cabecera[]       = array('valor' => 'Horómetro inicial', 'numero' => '1');
+        $cabecera[]       = array('valor' => 'Horómetro final', 'numero' => '1');
         /*
         $cabecera[]       = array('valor' => 'Viajes', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Inicio', 'numero' => '1');
@@ -178,15 +180,22 @@ class ControlDiarioController extends Controller
         $reglas     = array('equipo_id' 			=> [new SearchEquipo()],
     						'tipohora_id.*' 			=> 'numeric',
                             'turno'                 => 'boolean',
+                            'horometro_inicial'     => 'required|numeric',
+                            'horometro_final'       => 'required|numeric|gt:horometro_inicial',
     						'hora_inicio.*'			=> 'required',
-    						'hora_fin.*'				=> 'required', //|after:hora_inicio
+    						'hora_fin.*'		    => 'required', //|after:hora_inicio
     						'fecha'  				=> 'date'
                         );
         $mensajes = array(
             'tipohora_id.*.numeric'  	  		  => 'Tipo de hora inválido',
-            'turno.boolean'                   => 'Ingrese un turno válido',
+            'turno.boolean'                       => 'Ingrese un turno válido',
             'hora_inicio.*.required'			  => 'Debe una hora de inicio válida',
             'hora_fin.*.required'    			  => 'Debe una hora de finalzación válida',
+            'horometro_inicial.required'          => 'Ingrese el horómetro inicial',
+            'horometro_final.required'            => 'Ingrese el horómetro final',
+            'horometro_inicial.numeric'             => 'Ingrese el horómetro inicial',
+            'horometro_final.numeric'               => 'Ingrese el horómetro final',
+            'horometro_final.gt'               => 'El horómetro final es menor que el inicial',
         //    'hora_fin.*.after'    			  => 'Debe una hora de finalzación es menor que la hora de inicio',
             'fecha.date'					  => 'Debe ingresar una fecha válida'
             );
@@ -220,7 +229,10 @@ class ControlDiarioController extends Controller
                 $controldiario->hora_inicio = $request -> input('hora_inicio.'. $key);
                 $controldiario->hora_fin    = $request -> input('hora_fin.'. $key);
                 $controldiario->fecha       = $request -> input('fecha');
+                $controldiario->horometro_inicial       = $request -> input('horometro_inicial');
+                $controldiario->horometro_final       = $request -> input('horometro_final');
                 $controldiario->turno       = $request -> input('turno');
+                $controldiario->observaciones       = $request -> input('observaciones.'. $key);
 
                 $controldiario->save();    
             }
@@ -299,6 +311,8 @@ class ControlDiarioController extends Controller
         $reglas     = array('equipo_id'             => [new SearchEquipo()],
                             'tipohora_id.0'             => 'numeric',
                             'turno'                 => 'boolean',
+                            'horometro_inicial'     => 'required|numeric',
+                            'horometro_final'       => 'required|numeric|gt:horometro_inicial',
                             'hora_inicio.0'         => 'required',
                             'hora_fin.0'                => 'required', //|after:hora_inicio
                             'fecha'                 => 'date'
@@ -308,6 +322,11 @@ class ControlDiarioController extends Controller
             'turno.boolean'                   => 'Ingrese un turno válido',
             'hora_inicio.0.required'              => 'Debe una hora de inicio válida',
             'hora_fin.*.required'                 => 'Debe una hora de finalzación válida',
+            'horometro_inicial.required'          => 'Ingrese el horómetro inicial',
+            'horometro_final.required'            => 'Ingrese el horómetro final',
+            'horometro_inicial.numeric'           => 'Ingrese el horómetro inicial',
+            'horometro_final.numeric'             => 'Ingrese el horómetro final',
+            'horometro_final.gt'               => 'El horómetro final es menor que el inicial',
         //    'hora_fin.*.after'                  => 'Debe una hora de finalzación es menor que la hora de inicio',
             'fecha.date'                      => 'Debe ingresar una fecha válida'
             );
@@ -339,8 +358,11 @@ class ControlDiarioController extends Controller
 
 	        $controldiario->hora_inicio = $request -> input('hora_inicio.0');
 	        $controldiario->hora_fin 	= $request -> input('hora_fin.0');
+            $controldiario->horometro_inicial       = $request -> input('horometro_inicial');
+            $controldiario->horometro_final       = $request -> input('horometro_final');
 	        $controldiario->fecha 		= $request ->input('fecha');
             $controldiario->turno       = $request -> input('turno');
+            $controldiario->observaciones       = $request -> input('observaciones.0');
 
             $controldiario->save();
         });

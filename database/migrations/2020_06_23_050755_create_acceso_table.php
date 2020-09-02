@@ -15,9 +15,9 @@ class CreateAccesoTable extends Migration
     {
         Schema::create('acceso', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->bigInteger('tipousuario_id')->unsigned()->nullable();
+            $table->bigInteger('tipouser_id')->unsigned()->nullable();
             $table->bigInteger('opcionmenu_id')->unsigned()->nullable();
-            $table->foreign('tipousuario_id')->references('id')->on('tipouser')->onDelete('restrict')->onUpdate('restrict');
+            $table->foreign('tipouser_id')->references('id')->on('tipouser')->onDelete('restrict')->onUpdate('restrict');
             $table->foreign('opcionmenu_id')->references('id')->on('opcionmenu')->onDelete('restrict')->onUpdate('restrict');
             $table->timestamps();
             $table->softDeletes();

@@ -20,8 +20,13 @@ class CreateControldiarioTable extends Migration
             $table->unsignedBigInteger('ua_id')->nullable();
             $table->foreign('ua_id')->references('id')->on('ua');
             $table->boolean('turno');
+            $table->float('horometro_inicial',6,2);
+            $table->float('horometro_final',6,2);
             $table->time('hora_inicio');
             $table->time('hora_fin');
+            $table->unsignedBigInteger('tipohora_id')->nullable();
+            $table->foreign('tipohora_id')->references('id')->on('tipohora');
+/*
             $table->integer('viajes')->nullable();
             $table->integer('inicio')->nullable();
             $table->integer('acceso')->nullable();
@@ -30,11 +35,10 @@ class CreateControldiarioTable extends Migration
             $table->integer('destino')->nullable();
             $table->unsignedBigInteger('uadestino_id')->nullable();
             $table->foreign('uadestino_id')->references('id')->on('ua');
-            $table->unsignedBigInteger('tipohora_id')->nullable();
-            $table->foreign('tipohora_id')->references('id')->on('tipohora');
             $table->float('horometro_inicial')->nullable();
             $table->float('horometro_final')->nullable();
             $table->string('material')->nullable();
+*/
             $table->date('fecha');
             $table->longText('observaciones')->nullable();
             $table->softDeletes();

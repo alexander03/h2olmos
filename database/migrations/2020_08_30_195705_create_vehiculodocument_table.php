@@ -21,6 +21,7 @@ class CreateVehiculodocumentTable extends Migration
 //            $table->bigInteger('tipovehiculodocument_id');
             $table->foreign('vehiculo_id')->references('id')->on('vehiculo')->onDelete('restrict')->onUpdate('restrict');
 //            $table->foreign('tipovehiculodocument_id')->references('id')->on('tipovehiculodocument')->onDelete('restrict')->onUpdate('restrict');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

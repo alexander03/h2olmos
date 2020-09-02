@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Librerias\Libreria;
 use App\Tipouser;
-use App\Permiso;
+use App\Acceso;
 use Validator;
 use App\Grupomenu;
 use Illuminate\Support\Facades\DB;
@@ -122,10 +122,10 @@ class TipoUserController extends Controller
             $tipouser->save();
 
             foreach ($request->input('opcionmenu') as $opcionmenu) {
-            	$permiso = new Permiso();
-            	$permiso->opcionmenu_id = (int) $opcionmenu;
-            	$permiso->tipouser_id = $tipouser->id;
-            	$permiso->save();
+            	$acceso = new Acceso();
+            	$acceso->opcionmenu_id = (int) $opcionmenu;
+            	$acceso->tipouser_id = $tipouser->id;
+            	$acceso->save();
             }
 
         });
@@ -176,12 +176,12 @@ class TipoUserController extends Controller
             $tipouser = Tipouser::find($id);
             $tipouser->descripcion = strtoupper($request->input('descripcion'));
             
-            $OpcionMenuOriginal = $tipouser->permisos()->get();
+            $OpcionMenuOriginal = $tipouser->accesos()->get();
 
             $OpcionMenuNuevo = $request->input('opcionmenu');
 
-            $tipouser->save();
 
+            $tipouser->save();
             foreach ($OpcionMenuNuevo as $checkbox => $value) {
             	if($OpcionMenuOriginal->count() == 0 || empty($OpcionMenuNuevo)){
             		break;
@@ -200,9 +200,10 @@ class TipoUserController extends Controller
 
             foreach ( $OpcionMenuNuevo as $nuevo) {
 
-	            	$permiso = new Permiso();
-	            	$permiso->opcionmenu_id = (int) $nuevo;
-	            	$permiso->tipouser_id = $tipouser->id;
+	            	$acceso = new Acceso();
+	            	$acceso->opcionmenu_id = (int) $nuevo;
+	            	$acceso->tipouser_id = $tipouser->id;
+                    $acceso->save();
 
             }
 
