@@ -198,8 +198,6 @@ class MantCorrPrev extends Controller
         $accesorios = $checklistvehicular->accesorios;
         $documentos = $checklistvehicular->documentos;
 
-        // return implode($cboConductores);
-
         return view($this->folderview.'.mant_checklistvehicular')->with(compact('checklistvehicular', 'formData', 'entidad', 'boton', 'unidad_placa', 'unidad_descripcion', 'cboConductores', 'sistema_electrico', 'sistema_mecanico', 'accesorios', 'documentos', 'listar'));
     }
 
