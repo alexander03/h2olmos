@@ -1,7 +1,7 @@
 @php
-	$edit = true;
+	$modalNuevo = false;
 	if($checklistvehicular == null) {//Nuevo
-		$edit = false;
+		$modalNuevo = true;
 		$sistema_electrico = [
 			['orden' => 1, 'id' => 'freno_emergencia', 'titulo' => 'Freno de emergencia', 'estado' => null],
 			['orden' => 2, 'id' => 'funcionamiento_tablero', 'titulo' => 'Funcionamiento de tablero','estado' => null],
@@ -70,7 +70,7 @@
 	<div class="form-group col-2">
 		{!! Form::label('unidad_placa', 'Unidad placa:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
 		<div class="col-lg-12 col-md-12 col-sm-12">
-			{!! Form::text('unidad_placa', $unidad_placa, array('class' => 'form-control input-xs solo-lectura', 'id' => 'unidad_placa')) !!}
+			{!! Form::text('unidad_placa', $unidad_placa, array('class' => 'form-control input-xs solo-lectura', 'id' => 'unidad_placa', 'readonly' => !$modalNuevo)) !!}
 		</div>
 	</div>
 	<div class="form-group col-1">
@@ -112,7 +112,7 @@
 		</div>
 	</div>
 	<div class="col-6 d-flex align-items-center justify-content-end">
-		{!! Form::button('<i class="material-icons">edit</i> Editar', array('class' => 'btn btn-warning btn-sm mr-5', 'id' => 'btn', 'hidden' => !$edit)) !!}
+		{!! Form::button('<i class="material-icons">edit</i> Editar', array('class' => 'btn btn-warning btn-sm mr-5', 'id' => 'btn', 'hidden' => $modalNuevo)) !!}
 	</div>
 </div>
 <div class="form-row">
@@ -275,6 +275,7 @@
 			if(dia<10) dia = '0' + dia;
 			if(mes<10) mes = '0' + mes;
 			document.getElementById('fecha_registro').value = ano+"-"+mes+"-"+dia;
+			console.log(document.getElementById('fecha_registro').value)
 		}
 		getDateCurrent();
 
