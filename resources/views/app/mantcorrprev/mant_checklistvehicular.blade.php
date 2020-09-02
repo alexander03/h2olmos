@@ -64,7 +64,7 @@
 	<div class="form-group col-4">
 		{!! Form::label('fecha_registro', 'F. Registro:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
 		<div class="col-lg-12 col-md-12 col-sm-12">
-			{!! Form::date('fecha_registro', null, array('class' => 'form-control input-xs', 'id' => 'fecha_registro', 'min' => date('Y-m-d') )) !!}
+			{!! Form::date('fecha_registro', null, array('class' => 'form-control input-xs solo-lectura', 'id' => 'fecha_registro', 'min' => date('Y-m-d'), 'readonly' => !$modalNuevo )) !!}
 		</div>
 	</div>
 	<div class="form-group col-2">
@@ -88,19 +88,19 @@
 	<div class="form-group col-3">
 		{!! Form::label('k_inicial', 'Kilometraje inicial:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
 		<div class="col-lg-12 col-md-12 col-sm-12">
-			{!! Form::number('k_inicial', null, array('class' => 'form-control input-xs solo-lectura', 'id' => 'k_inicial')) !!}
+			{!! Form::number('k_inicial', null, array('class' => 'form-control input-xs solo-lectura', 'id' => 'k_inicial', 'readonly' => !$modalNuevo)) !!}
 		</div>
 	</div>
 	<div class="form-group col-3">
 		{!! Form::label('k_final', 'Kilometraje final:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
 		<div class="col-lg-12 col-md-12 col-sm-12">
-			{!! Form::number('k_final', null, array('class' => 'form-control input-xs solo-lectura', 'id' => 'k_final')) !!}
+			{!! Form::number('k_final', null, array('class' => 'form-control input-xs solo-lectura', 'id' => 'k_final', 'readonly' => !$modalNuevo)) !!}
 		</div>
 	</div>
 	<div class="form-group col-6">
 		{!! Form::label('lider_area', 'Lider del área:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
 		<div class="col-lg-12 col-md-12 col-sm-12">
-			{!! Form::text('lider_area', null, array('class' => 'form-control input-xs solo-lectura', 'id' => 'lider_area')) !!}
+			{!! Form::text('lider_area', null, array('class' => 'form-control input-xs solo-lectura', 'id' => 'lider_area', 'readonly' => !$modalNuevo)) !!}
 		</div>
 	</div>
 </div>
@@ -108,7 +108,7 @@
 	<div class="form-group col-6">
 		{!! Form::label('conductor_id', 'Conductor:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
 		<div class="col-lg-12 col-md-12 col-sm-12">
-			{!! Form::select('conductor_id', $cboConductores, null, array('class' => 'form-control input-xs', 'id' => 'conductor_id')) !!}
+			{!! Form::select('conductor_id', $cboConductores, null, array('class' => 'form-control input-xs', 'id' => 'conductor_id', 'disabled' => !$modalNuevo)) !!}
 		</div>
 	</div>
 	<div class="col-6 d-flex align-items-center justify-content-end">
@@ -131,10 +131,10 @@
 							<tr>
 								<td>{{ $item['titulo'] }}</td>
 								<td class="text-center">
-									{!! Form::radio( $item['id'], 'si', $item['estado'] ? true : false, ['data-type' => 'sistema_electrico', 'data-titulo' => $item['titulo'], 'data-orden' => $item['orden']]) !!}
+									{!! Form::radio( $item['id'], 'si', $item['estado'] ? true : false, ['data-type' => 'sistema_electrico', 'data-titulo' => $item['titulo'], 'data-orden' => $item['orden'], 'disabled' => !$modalNuevo ]) !!}
 								</td>
 								<td class="text-center">
-									{!! Form::radio( $item['id'], 'no', $item['estado'] !== null && !$item['estado'] ? true : false, ['data-type' => 'sistema_electrico', 'data-titulo' => $item['titulo'], 'data-orden' => $item['orden']]) !!}
+									{!! Form::radio( $item['id'], 'no', $item['estado'] !== null && !$item['estado'] ? true : false, ['data-type' => 'sistema_electrico', 'data-titulo' => $item['titulo'], 'data-orden' => $item['orden'], 'disabled' => !$modalNuevo ]) !!}
 								</td>
 							</tr>
 						@endforeach
@@ -154,10 +154,10 @@
 							<tr>
 								<td>{{ $sistema_mecanico[$i]['titulo'] }}</td>
 								<td class="text-center">
-									{!! Form::radio( $sistema_mecanico[$i]['id'], 'si', $sistema_mecanico[$i]['estado'] ? true : false, ['data-type' => 'sistema_mecanico', 'data-titulo' => $sistema_mecanico[$i]['titulo'], 'data-orden' => $sistema_mecanico[$i]['orden']]) !!}
+									{!! Form::radio( $sistema_mecanico[$i]['id'], 'si', $sistema_mecanico[$i]['estado'] ? true : false, ['data-type' => 'sistema_mecanico', 'data-titulo' => $sistema_mecanico[$i]['titulo'], 'data-orden' => $sistema_mecanico[$i]['orden'], 'disabled' => !$modalNuevo ]) !!}
 								</td>
 								<td class="text-center">
-									{!! Form::radio( $sistema_mecanico[$i]['id'], 'no', $sistema_mecanico[$i]['estado'] !== null && !$sistema_mecanico[$i]['estado'] ? true : false, ['data-type' => 'sistema_mecanico', 'data-titulo' => $sistema_mecanico[$i]['titulo'], 'data-orden' => $sistema_mecanico[$i]['orden']]) !!}
+									{!! Form::radio( $sistema_mecanico[$i]['id'], 'no', $sistema_mecanico[$i]['estado'] !== null && !$sistema_mecanico[$i]['estado'] ? true : false, ['data-type' => 'sistema_mecanico', 'data-titulo' => $sistema_mecanico[$i]['titulo'], 'data-orden' => $sistema_mecanico[$i]['orden'], 'disabled' => !$modalNuevo]) !!}
 								</td>
 							</tr>
 						@endfor
@@ -176,10 +176,10 @@
 							<tr>
 								<td>{{ $sistema_mecanico[$i]['titulo'] }}</td>
 								<td class="text-center">
-									{!! Form::radio( $sistema_mecanico[$i]['id'], 'si', $sistema_mecanico[$i]['estado'] ? true : false, ['data-type' => 'sistema_mecanico', 'data-titulo' => $sistema_mecanico[$i]['titulo'], 'data-orden' => $sistema_mecanico[$i]['orden']]) !!}
+									{!! Form::radio( $sistema_mecanico[$i]['id'], 'si', $sistema_mecanico[$i]['estado'] ? true : false, ['data-type' => 'sistema_mecanico', 'data-titulo' => $sistema_mecanico[$i]['titulo'], 'data-orden' => $sistema_mecanico[$i]['orden'], 'disabled' => !$modalNuevo]) !!}
 								</td>
 								<td class="text-center">
-									{!! Form::radio( $sistema_mecanico[$i]['id'], 'no', $sistema_mecanico[$i]['estado'] !== null && !$sistema_mecanico[$i]['estado'] ? true : false, ['data-type' => 'sistema_mecanico', 'data-titulo' => $sistema_mecanico[$i]['titulo'], 'data-orden' => $sistema_mecanico[$i]['orden']]) !!}
+									{!! Form::radio( $sistema_mecanico[$i]['id'], 'no', $sistema_mecanico[$i]['estado'] !== null && !$sistema_mecanico[$i]['estado'] ? true : false, ['data-type' => 'sistema_mecanico', 'data-titulo' => $sistema_mecanico[$i]['titulo'], 'data-orden' => $sistema_mecanico[$i]['orden'], 'disabled' => !$modalNuevo]) !!}
 								</td>
 							</tr>
 						@endfor
@@ -199,10 +199,10 @@
 							<tr>
 								<td>{{ $item['titulo'] }}</td>
 								<td class="text-center">
-									{!! Form::radio( $item['id'], 'si', $item['estado'] ? true : false, ['data-type' => 'accesorios', 'data-titulo' => $item['titulo'], 'data-orden' => $item['orden']]) !!}
+									{!! Form::radio( $item['id'], 'si', $item['estado'] ? true : false, ['data-type' => 'accesorios', 'data-titulo' => $item['titulo'], 'data-orden' => $item['orden'], 'disabled' => !$modalNuevo]) !!}
 								</td>
 								<td class="text-center">
-									{!! Form::radio( $item['id'], 'no', $item['estado'] !== null && !$item['estado'] ? true : false, ['data-type' => 'accesorios', 'data-titulo' => $item['titulo'], 'data-orden' => $item['orden']]) !!}
+									{!! Form::radio( $item['id'], 'no', $item['estado'] !== null && !$item['estado'] ? true : false, ['data-type' => 'accesorios', 'data-titulo' => $item['titulo'], 'data-orden' => $item['orden'], 'disabled' => !$modalNuevo]) !!}
 								</td>
 							</tr>
 						@endforeach
@@ -222,10 +222,10 @@
 							<tr>
 								<td>{{ $item['titulo'] }}</td>
 								<td class="text-center">
-									{!! Form::radio( $item['id'], 'si', $item['estado'] ? true : false, ['data-type' => 'documentos', 'data-titulo' => $item['titulo'], 'data-orden' => $item['orden']]) !!}
+									{!! Form::radio( $item['id'], 'si', $item['estado'] ? true : false, ['data-type' => 'documentos', 'data-titulo' => $item['titulo'], 'data-orden' => $item['orden'], 'disabled' => !$modalNuevo]) !!}
 								</td>
 								<td class="text-center">
-									{!! Form::radio( $item['id'], 'no', $item['estado'] !== null && !$item['estado'] ? true : false, ['data-type' => 'documentos', 'data-titulo' => $item['titulo'], 'data-orden' => $item['orden']]) !!}
+									{!! Form::radio( $item['id'], 'no', $item['estado'] !== null && !$item['estado'] ? true : false, ['data-type' => 'documentos', 'data-titulo' => $item['titulo'], 'data-orden' => $item['orden'], 'disabled' => !$modalNuevo]) !!}
 								</td>
 							</tr>
 						@endforeach
@@ -235,7 +235,7 @@
 			</div>
 			<div class="col-4">
 				<h5>Observaciones e incidentes</h5>
-				<textarea name="observaciones" class="form-control" rows="9" cols="26"></textarea>
+				{!! Form::textarea('observaciones', null, ['class' => 'form-control solo-lectura', 'rows' => '9', 'cols' => '26', 'readonly' => !$modalNuevo]) !!}
 			</div>
 		</div>
 	</div>
@@ -243,7 +243,7 @@
 
 <div class="form-group">
 	<div class="col-lg-12 col-md-12 col-sm-12 text-right">
-		{!! Form::button('<i class="fa fa-check fa-lg"></i> '.$boton, array('class' => 'btn btn-success btn-sm', 'id' => 'btnGuardar', 'onclick' => 'guardar(\''.$entidad.'\', this)')) !!}
+		{!! Form::button('<i class="fa fa-check fa-lg"></i> '.$boton, array('class' => 'btn btn-success btn-sm', 'id' => 'btnGuardar', 'onclick' => 'guardar(\''.$entidad.'\', this)', 'hidden' => !$modalNuevo)) !!}
 		{!! Form::button('<i class="fa fa-exclamation fa-lg"></i> Cancelar', array('class' => 'btn btn-warning btn-sm', 'id' => 'btnCancelar'.$entidad, 'onclick' => 'cerrarModal();')) !!}
 	</div>
 </div>
@@ -257,6 +257,8 @@
 	.hidden {
 		display: none;
 	}
+	
+
 </style>
 <script type="text/javascript">
 	$(document).ready(function() {
@@ -277,9 +279,9 @@
 			if(mes<10) mes = '0' + mes;
 
 			const inputFechaRegistro = document.getElementById('fecha_registro');
-			console.log('antes: ', inputFechaRegistro.value);
+			// console.log('antes: ', inputFechaRegistro.value);
 			inputFechaRegistro.value = ano+"-"+mes+"-"+dia;
-			console.log('despues: ', inputFechaRegistro.value);
+			// console.log('despues: ', inputFechaRegistro.value);
 		}
 		getDateCurrent();
 

@@ -72,6 +72,7 @@ class ChecklistvehicularTableSeeder extends Seeder
                 ['orden' => 3,'id' => 'licencia_conducir', 'titulo' => 'Licencia de conducir', 'estado' => true],
                 ['orden' => 4,'id' => 'revision_tecnica', 'titulo' => 'Revisión técnica', 'estado' => true],
             ],
+            'observaciones' => 'Los faroles delanteras necesitan una buena limpieza',
             'created_at' => $now,
         ]);
         Checklistvehicular::create([
@@ -133,6 +134,7 @@ class ChecklistvehicularTableSeeder extends Seeder
                 ['orden' => 3,'id' => 'licencia_conducir', 'titulo' => 'Licencia de conducir', 'estado' => true],
                 ['orden' => 4,'id' => 'revision_tecnica', 'titulo' => 'Revisión técnica', 'estado' => true],
             ],
+            'observaciones' => 'Necesita un cambio en los cinturones de seguridad traseras',
             'created_at' => $now,
         ]);
     }
