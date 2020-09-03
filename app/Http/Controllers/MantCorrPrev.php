@@ -239,10 +239,11 @@ class MantCorrPrev extends Controller
             $checklistvehicular->lider_area = mb_strtoupper($request->input('lider_area'), 'utf-8');
             $checklistvehicular->conductor_id= $request->input('conductor_id');
             $checklistvehicular->observaciones = $request->input('observaciones');
-            $checklistvehicular->sistema_electrico = json_decode($request->input('sistema_electrico'));
-            $checklistvehicular->sistema_mecanico = json_decode($request->input('sistema_mecanico'));
-            $checklistvehicular->accesorios = json_decode($request->input('accesorios'));
-            $checklistvehicular->documentos = json_decode($request->input('documentos'));
+
+            if($request->input('sistema_electrico') != null) $checklistvehicular->sistema_electrico = json_decode($request->input('sistema_electrico'));
+            if($request->input('sistema_mecanico') != null) $checklistvehicular->sistema_mecanico = json_decode($request->input('sistema_mecanico'));
+            if($request->input('accesorios') != null) $checklistvehicular->accesorios = json_decode($request->input('accesorios'));
+            if($request->input('documentos') != null) $checklistvehicular->documentos = json_decode($request->input('documentos'));
             
             $checklistvehicular->save();
         });

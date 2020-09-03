@@ -267,7 +267,7 @@
 
 		const inputUnidadPlaca = document.getElementById('unidad_placa');
 		const inputUnidadDescripcion = document.getElementById('unidad_descripcion');
-		const inputUnidadId = document.getElementById('unidad_id');
+		// const inputUnidadId = document.getElementById('unidad_id');
 
 		const btnEditar = document.getElementById('btn-editar');
 
@@ -303,7 +303,7 @@
 				const unidad = await consultarUnidad(placa);
 				if(unidad != null) {
 					inputUnidadDescripcion.value = unidad.descripcion;
-					inputUnidadId.value = unidad.id;
+					// inputUnidadId.value = unidad.id;
 					loaderUnidad.setAttribute('hidden', true);
 				} else {
 					inputUnidadDescripcion.placeholder = 'Buscando...';
@@ -335,7 +335,7 @@
 				myObject = {
 					orden: el.dataset.orden,
 					id: el.name,
-					title: el.dataset.titulo,
+					titulo: el.dataset.titulo,
 					estado: el.value == 'si' ? true: false
 				};
 				arrObjects.push(myObject);
@@ -356,7 +356,7 @@
 					myObject = {
 						orden: el.dataset.orden,
 						id: el.name,
-						title: el.dataset.titulo,
+						titulo: el.dataset.titulo,
 						estado: null
 					};
 					arrObjects.push(myObject);
@@ -381,7 +381,7 @@
 				myObject = {
 					orden: el.dataset.orden,
 					id: el.name,
-					title: el.dataset.titulo,
+					titulo: el.dataset.titulo,
 					estado: el.value == 'si' ? true: false
 				};
 				arrObjects.push(myObject);
@@ -402,7 +402,7 @@
 					myObject = {
 						orden: el.dataset.orden,
 						id: el.name,
-						title: el.dataset.titulo,
+						titulo: el.dataset.titulo,
 						estado: null
 					};
 					arrObjects.push(myObject);
@@ -427,7 +427,7 @@
 				myObject = {
 					orden: el.dataset.orden,
 					id: el.name,
-					title: el.dataset.titulo,
+					titulo: el.dataset.titulo,
 					estado: el.value == 'si' ? true: false
 				};
 				arrObjects.push(myObject);
@@ -448,7 +448,7 @@
 					myObject = {
 						orden: el.dataset.orden,
 						id: el.name,
-						title: el.dataset.titulo,
+						titulo: el.dataset.titulo,
 						estado: null
 					};
 					arrObjects.push(myObject);
@@ -473,7 +473,7 @@
 				myObject = {
 					orden: el.dataset.orden,
 					id: el.name,
-					title: el.dataset.titulo,
+					titulo: el.dataset.titulo,
 					estado: el.value == 'si' ? true: false
 				};
 				arrObjects.push(myObject);
@@ -494,7 +494,7 @@
 					myObject = {
 						orden: el.dataset.orden,
 						id: el.name,
-						title: el.dataset.titulo,
+						titulo: el.dataset.titulo,
 						estado: null
 					};
 					arrObjects.push(myObject);
