@@ -267,7 +267,6 @@
 
 		const inputUnidadPlaca = document.getElementById('unidad_placa');
 		const inputUnidadDescripcion = document.getElementById('unidad_descripcion');
-		// const inputUnidadId = document.getElementById('unidad_id');
 
 		const btnEditar = document.getElementById('btn-editar');
 
@@ -302,8 +301,9 @@
 			if(placa.length >=6) {
 				const unidad = await consultarUnidad(placa);
 				if(unidad != null) {
-					inputUnidadDescripcion.value = unidad.descripcion;
-					// inputUnidadId.value = unidad.id;
+					if(unidad.modelo) inputUnidadDescripcion.value = unidad.modelo;
+					if(unidad.descripcion) inputUnidadDescripcion.value = unidad.descripcion;
+
 					loaderUnidad.setAttribute('hidden', true);
 				} else {
 					inputUnidadDescripcion.placeholder = 'Buscando...';
