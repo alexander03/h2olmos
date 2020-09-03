@@ -1,56 +1,59 @@
 @php
+	$modalNuevo = false;
 	if($checklistvehicular == null) {//Nuevo
+		$modalNuevo = true;
 		$sistema_electrico = [
-			(object) ['orden' => 1, 'id' => 'freno_emergencia', 'titulo' => 'Freno de emergencia', 'estado' => null],
-			(object) ['orden' => 2, 'id' => 'funcionamiento_tablero', 'titulo' => 'Funcionamiento de tablero','estado' => null],
-			(object) ['orden' => 3, 'id' => 'estado_bateria_funcionamiento', 'titulo' => 'Estado de batería y funcionamiento', 'estado' => null],
-			(object) ['orden' => 4, 'id' => 'funcionamiento_claxon', 'titulo' => 'Funcionamiento de claxon', 'estado' => null],
-			(object) ['orden' => 5, 'id' => 'luces_retroceso_pirata', 'titulo' => 'Luces de retroceso pirata','estado' => null],
-			(object) ['orden' => 6, 'id' => 'luces_direccional', 'titulo' => 'Luces direccional','estado' => null],
-			(object) ['orden' => 7, 'id' => 'faros_neblineros', 'titulo' => 'Faros neblineros','estado' => null],
-			(object) ['orden' => 8, 'id' => 'faros_delanteros', 'titulo' => 'Faros delanteros','estado' => null],
-			(object) ['orden' => 9, 'id' => 'faros_posteriores', 'titulo' => 'Faros posteriores','estado' => null],
-			(object) ['orden' => 10,'id' => 'alarma_retroceso', 'titulo' => 'Alarma de retroceso','estado' => null],
+			['orden' => 1, 'id' => 'freno_emergencia', 'titulo' => 'Freno de emergencia', 'estado' => null],
+			['orden' => 2, 'id' => 'funcionamiento_tablero', 'titulo' => 'Funcionamiento de tablero','estado' => null],
+			['orden' => 3, 'id' => 'estado_bateria_funcionamiento', 'titulo' => 'Estado de batería y funcionamiento', 'estado' => null],
+			['orden' => 4, 'id' => 'funcionamiento_claxon', 'titulo' => 'Funcionamiento de claxon', 'estado' => null],
+			['orden' => 5, 'id' => 'luces_retroceso_pirata', 'titulo' => 'Luces de retroceso pirata','estado' => null],
+			['orden' => 6, 'id' => 'luces_direccional', 'titulo' => 'Luces direccional','estado' => null],
+			['orden' => 7, 'id' => 'faros_neblineros', 'titulo' => 'Faros neblineros','estado' => null],
+			['orden' => 8, 'id' => 'faros_delanteros', 'titulo' => 'Faros delanteros','estado' => null],
+			['orden' => 9, 'id' => 'faros_posteriores', 'titulo' => 'Faros posteriores','estado' => null],
+			['orden' => 10,'id' => 'alarma_retroceso', 'titulo' => 'Alarma de retroceso','estado' => null],
 		];
 		$sistema_mecanico = [
-			(object) ['orden' => 1, 'id' => 'nivel_liquido_freno', 'titulo' => 'Nivel liquido de freno', 'estado' => null],
-			(object) ['orden' => 2, 'id' => 'sistema_direccion', 'titulo' => 'Sistema de dirección', 'estado' => null],
-			(object) ['orden' => 3, 'id' => 'palancas_cambios', 'titulo' => 'Palancas de cambios', 'estado' => null],
-			(object) ['orden' => 4, 'id' => 'estado_neumaticos', 'titulo' => 'Estado de neumáticos', 'estado' => null],
-			(object) ['orden' => 5, 'id' => 'llantas_repuesto', 'titulo' => 'Llantas de repuesto', 'estado' => null],
-			(object) ['orden' => 6, 'id' => 'ajustes_tuercas', 'titulo' => 'Ajustes de tuercas', 'estado' => null],
-			(object) ['orden' => 7, 'id' => 'presion_llantas_libras', 'titulo' => 'Presion de llantas en libras', 'estado' => null],
-			(object) ['orden' => 8, 'id' => 'cinturon_seguridad_conductor', 'titulo' => 'Cinturon de seguridad conductor', 'estado' => null],
-			(object) ['orden' => 9, 'id' => 'cinturon_seguridad_pasajeros', 'titulo' => 'Cinturon de seguridad pasajeros', 'estado' => null],
-			(object) ['orden' => 10, 'id' => 'suspension', 'titulo' => 'Suspensión', 'estado' => null],
+			['orden' => 1, 'id' => 'nivel_liquido_freno', 'titulo' => 'Nivel liquido de freno', 'estado' => null],
+			['orden' => 2, 'id' => 'sistema_direccion', 'titulo' => 'Sistema de dirección', 'estado' => null],
+			['orden' => 3, 'id' => 'palancas_cambios', 'titulo' => 'Palancas de cambios', 'estado' => null],
+			['orden' => 4, 'id' => 'estado_neumaticos', 'titulo' => 'Estado de neumáticos', 'estado' => null],
+			['orden' => 5, 'id' => 'llantas_repuesto', 'titulo' => 'Llantas de repuesto', 'estado' => null],
+			['orden' => 6, 'id' => 'ajustes_tuercas', 'titulo' => 'Ajustes de tuercas', 'estado' => null],
+			['orden' => 7, 'id' => 'presion_llantas_libras', 'titulo' => 'Presion de llantas en libras', 'estado' => null],
+			['orden' => 8, 'id' => 'cinturon_seguridad_conductor', 'titulo' => 'Cinturon de seguridad conductor', 'estado' => null],
+			['orden' => 9, 'id' => 'cinturon_seguridad_pasajeros', 'titulo' => 'Cinturon de seguridad pasajeros', 'estado' => null],
+			['orden' => 10, 'id' => 'suspension', 'titulo' => 'Suspensión', 'estado' => null],
 
-			(object) ['orden' => 11, 'id' => 'sistema_freno', 'titulo' => 'Sistema de freno', 'estado' => null],
-			(object) ['orden' => 12, 'id' => 'pernos_neumaticos', 'titulo' => 'Pernos de neumáticos', 'estado' => null],
-			(object) ['orden' => 13, 'id' => 'nivel_aceite', 'titulo' => 'Nivel de aceite', 'estado' => null],
-			(object) ['orden' => 14, 'id' => 'espejos_int_ext', 'titulo' => 'Espejos int y ext', 'estado' => null],
-			(object) ['orden' => 15, 'id' => 'parachoques', 'titulo' => 'Parachoques', 'estado' => null],
-			(object) ['orden' => 16, 'id' => 'parabrisas_ventanas', 'titulo' => 'Parabrisas y ventanas', 'estado' => null],
-			(object) ['orden' => 17, 'id' => 'puertas_cabina', 'titulo' => 'Puertas de cabina', 'estado' => null],
-			(object) ['orden' => 18, 'id' => 'puertas_tolva', 'titulo' => 'Puertas de tolva', 'estado' => null],
-			(object) ['orden' => 19, 'id' => 'plumillas', 'titulo' => 'Plumillas', 'estado' => null],
-			(object) ['orden' => 20, 'id' => 'estado_carroceria', 'titulo' => 'Estado de carrocería', 'estado' => null],
+			['orden' => 11, 'id' => 'sistema_freno', 'titulo' => 'Sistema de freno', 'estado' => null],
+			['orden' => 12, 'id' => 'pernos_neumaticos', 'titulo' => 'Pernos de neumáticos', 'estado' => null],
+			['orden' => 13, 'id' => 'nivel_aceite', 'titulo' => 'Nivel de aceite', 'estado' => null],
+			['orden' => 14, 'id' => 'espejos_int_ext', 'titulo' => 'Espejos int y ext', 'estado' => null],
+			['orden' => 15, 'id' => 'parachoques', 'titulo' => 'Parachoques', 'estado' => null],
+			['orden' => 16, 'id' => 'parabrisas_ventanas', 'titulo' => 'Parabrisas y ventanas', 'estado' => null],
+			['orden' => 17, 'id' => 'puertas_cabina', 'titulo' => 'Puertas de cabina', 'estado' => null],
+			['orden' => 18, 'id' => 'puertas_tolva', 'titulo' => 'Puertas de tolva', 'estado' => null],
+			['orden' => 19, 'id' => 'plumillas', 'titulo' => 'Plumillas', 'estado' => null],
+			['orden' => 20, 'id' => 'estado_carroceria', 'titulo' => 'Estado de carrocería', 'estado' => null],
 		];
 		$accesorios = [
-			(object) ['orden' => 1, 'id' => 'estuche_herramientas', 'titulo' => 'Estuche de herramientas', 'estado' => null],
-			(object) ['orden' => 2, 'id' => 'estado_carga_extintor', 'titulo' => 'Estado y carga de extintor', 'estado' => null],
-			(object) ['orden' => 3, 'id' => 'botiquin', 'titulo' => 'Botiquín', 'estado' => null],
-			(object) ['orden' => 4, 'id' => 'cable_remolque', 'titulo' => 'Cable de remolque', 'estado' => null],
-			(object) ['orden' => 5, 'id' => 'tacos_seguridad_cuña_2', 'titulo' => 'Tacos de seguridad cuña(2)', 'estado' => null],
-			(object) ['orden' => 6, 'id' => 'llave_ruedas', 'titulo' => 'Llave de ruedas', 'estado' => null],
-			(object) ['orden' => 7, 'id' => 'kit_antiderrames', 'titulo' => 'Kit antiderrames', 'estado' => null],
-			(object) ['orden' => 8, 'id' => 'limpieza_unidad', 'titulo' => 'Limpieza de la unidad', 'estado' => null],
+			['orden' => 1, 'id' => 'estuche_herramientas', 'titulo' => 'Estuche de herramientas', 'estado' => null],
+			['orden' => 2, 'id' => 'estado_carga_extintor', 'titulo' => 'Estado y carga de extintor', 'estado' => null],
+			['orden' => 3, 'id' => 'botiquin', 'titulo' => 'Botiquín', 'estado' => null],
+			['orden' => 4, 'id' => 'cable_remolque', 'titulo' => 'Cable de remolque', 'estado' => null],
+			['orden' => 5, 'id' => 'tacos_seguridad_cuña_2', 'titulo' => 'Tacos de seguridad cuña(2)', 'estado' => null],
+			['orden' => 6, 'id' => 'llave_ruedas', 'titulo' => 'Llave de ruedas', 'estado' => null],
+			['orden' => 7, 'id' => 'kit_antiderrames', 'titulo' => 'Kit antiderrames', 'estado' => null],
+			['orden' => 8, 'id' => 'limpieza_unidad', 'titulo' => 'Limpieza de la unidad', 'estado' => null],
 		];
 		$documentos = [
-			(object) ['orden' => 1, 'id' => 'tarjeta_propiedad', 'titulo' => 'Tarjeta de propiedad', 'estado' => null],
-			(object) ['orden' => 2, 'id' => 'soat', 'titulo' => 'SOAT', 'estado' => null],
-			(object) ['orden' => 3, 'id' => 'licencia_conducir', 'titulo' => 'Licencia de conducir', 'estado' => null],
-			(object) ['orden' => 4, 'id' => 'revision_tecnica', 'titulo' => 'Revisión técnica', 'estado' => null],
+			['orden' => 1, 'id' => 'tarjeta_propiedad', 'titulo' => 'Tarjeta de propiedad', 'estado' => null],
+			['orden' => 2, 'id' => 'soat', 'titulo' => 'SOAT', 'estado' => null],
+			['orden' => 3, 'id' => 'licencia_conducir', 'titulo' => 'Licencia de conducir', 'estado' => null],
+			['orden' => 4, 'id' => 'revision_tecnica', 'titulo' => 'Revisión técnica', 'estado' => null],
 		];
+
 	}
 @endphp
 
@@ -61,13 +64,13 @@
 	<div class="form-group col-4">
 		{!! Form::label('fecha_registro', 'F. Registro:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
 		<div class="col-lg-12 col-md-12 col-sm-12">
-			{!! Form::date('fecha_registro', null, array('class' => 'form-control input-xs', 'id' => 'fecha_registro', 'min' => date('Y-m-d') )) !!}
+			{!! Form::date('fecha_registro', null, array('class' => 'form-control input-xs solo-lectura', 'id' => 'fecha_registro', 'min' => date('Y-m-d'), 'readonly' => !$modalNuevo )) !!}
 		</div>
 	</div>
 	<div class="form-group col-2">
 		{!! Form::label('unidad_placa', 'Unidad placa:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
 		<div class="col-lg-12 col-md-12 col-sm-12">
-			{!! Form::text('unidad_placa', null, array('class' => 'form-control input-xs solo-lectura', 'id' => 'unidad_placa')) !!}
+			{!! Form::text('unidad_placa', $unidad_placa, array('class' => 'form-control input-xs solo-lectura', 'id' => 'unidad_placa', 'readonly' => !$modalNuevo)) !!}
 		</div>
 	</div>
 	<div class="form-group col-1">
@@ -76,8 +79,8 @@
 	<div class="form-group col-5">
 		{!! Form::label('unidad_descripcion', 'Unidad descripción:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
 		<div class="col-lg-12 col-md-12 col-sm-12">
-			{!! Form::text('unidad_descripcion', null, array('class' => 'form-control input-xs solo-lectura', 'id' => 'unidad_descripcion', 'readonly' => true)) !!}
-			<input name="unidad_id" id="unidad_id" type="text" class="hidden" value="">
+			{!! Form::text('unidad_descripcion', $unidad_descripcion, array('class' => 'form-control input-xs solo-lectura', 'id' => 'unidad_descripcion', 'readonly' => true)) !!}
+			{{-- <input name="unidad_id" id="unidad_id" type="text" class="hidden" value=""> --}}
 		</div>
 	</div>
 </div>
@@ -85,19 +88,19 @@
 	<div class="form-group col-3">
 		{!! Form::label('k_inicial', 'Kilometraje inicial:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
 		<div class="col-lg-12 col-md-12 col-sm-12">
-			{!! Form::number('k_inicial', null, array('class' => 'form-control input-xs solo-lectura', 'id' => 'k_inicial')) !!}
+			{!! Form::number('k_inicial', null, array('class' => 'form-control input-xs solo-lectura', 'id' => 'k_inicial', 'readonly' => !$modalNuevo)) !!}
 		</div>
 	</div>
 	<div class="form-group col-3">
 		{!! Form::label('k_final', 'Kilometraje final:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
 		<div class="col-lg-12 col-md-12 col-sm-12">
-			{!! Form::number('k_final', null, array('class' => 'form-control input-xs solo-lectura', 'id' => 'k_final')) !!}
+			{!! Form::number('k_final', null, array('class' => 'form-control input-xs solo-lectura', 'id' => 'k_final', 'readonly' => !$modalNuevo)) !!}
 		</div>
 	</div>
 	<div class="form-group col-6">
 		{!! Form::label('lider_area', 'Lider del área:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
 		<div class="col-lg-12 col-md-12 col-sm-12">
-			{!! Form::text('lider_area', null, array('class' => 'form-control input-xs solo-lectura', 'id' => 'lider_area')) !!}
+			{!! Form::text('lider_area', null, array('class' => 'form-control input-xs solo-lectura', 'id' => 'lider_area', 'readonly' => !$modalNuevo)) !!}
 		</div>
 	</div>
 </div>
@@ -105,8 +108,11 @@
 	<div class="form-group col-6">
 		{!! Form::label('conductor_id', 'Conductor:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
 		<div class="col-lg-12 col-md-12 col-sm-12">
-			{!! Form::select('conductor_id', $cboConductores, null, array('class' => 'form-control input-xs', 'id' => 'conductor_id')) !!}
+			{!! Form::select('conductor_id', $cboConductores, null, array('class' => 'form-control input-xs', 'id' => 'conductor_id', 'disabled' => !$modalNuevo)) !!}
 		</div>
+	</div>
+	<div class="col-6 d-flex align-items-center justify-content-end">
+		{!! Form::button('<i class="material-icons">edit</i> Editar', array('class' => 'btn btn-warning btn-sm mr-5', 'id' => 'btn-editar', 'hidden' => $modalNuevo)) !!}
 	</div>
 </div>
 <div class="form-row">
@@ -123,12 +129,12 @@
 					<tbody class="table__personal-body">
 						@foreach ($sistema_electrico as $item)
 							<tr>
-								<td>{{ $item->titulo }}</td>
+								<td>{{ $item['titulo'] }}</td>
 								<td class="text-center">
-									{!! Form::radio( $item->id, 'si', $item->estado ? true : false, ['data-type' => 'sistema_electrico', 'data-titulo' => $item->titulo, 'data-orden' => $item->orden]) !!}
+									{!! Form::radio( $item['id'], 'si', $item['estado'] ? true : false, ['data-type' => 'sistema_electrico', 'data-titulo' => $item['titulo'], 'data-orden' => $item['orden'], 'disabled' => !$modalNuevo ]) !!}
 								</td>
 								<td class="text-center">
-									{!! Form::radio( $item->id, 'no', $item->estado !== null && !$item->estado ? true : false, ['data-type' => 'sistema_electrico', 'data-titulo' => $item->titulo, 'data-orden' => $item->orden]) !!}
+									{!! Form::radio( $item['id'], 'no', $item['estado'] !== null && !$item['estado'] ? true : false, ['data-type' => 'sistema_electrico', 'data-titulo' => $item['titulo'], 'data-orden' => $item['orden'], 'disabled' => !$modalNuevo ]) !!}
 								</td>
 							</tr>
 						@endforeach
@@ -146,12 +152,12 @@
 					<tbody class="table__personal-body">
 						@for ($i = 0; $i < 10; $i++)
 							<tr>
-								<td>{{ $sistema_mecanico[$i]->titulo }}</td>
+								<td>{{ $sistema_mecanico[$i]['titulo'] }}</td>
 								<td class="text-center">
-									{!! Form::radio( $sistema_mecanico[$i]->id, 'si', $sistema_mecanico[$i]->estado ? true : false, ['data-type' => 'sistema_mecanico', 'data-titulo' => $sistema_mecanico[$i]->titulo, 'data-orden' => $sistema_mecanico[$i]->orden]) !!}
+									{!! Form::radio( $sistema_mecanico[$i]['id'], 'si', $sistema_mecanico[$i]['estado'] ? true : false, ['data-type' => 'sistema_mecanico', 'data-titulo' => $sistema_mecanico[$i]['titulo'], 'data-orden' => $sistema_mecanico[$i]['orden'], 'disabled' => !$modalNuevo ]) !!}
 								</td>
 								<td class="text-center">
-									{!! Form::radio( $sistema_mecanico[$i]->id, 'no', $sistema_mecanico[$i]->estado !== null && !$sistema_mecanico[$i]->estado ? true : false, ['data-type' => 'sistema_mecanico', 'data-titulo' => $sistema_mecanico[$i]->titulo, 'data-orden' => $sistema_mecanico[$i]->orden]) !!}
+									{!! Form::radio( $sistema_mecanico[$i]['id'], 'no', $sistema_mecanico[$i]['estado'] !== null && !$sistema_mecanico[$i]['estado'] ? true : false, ['data-type' => 'sistema_mecanico', 'data-titulo' => $sistema_mecanico[$i]['titulo'], 'data-orden' => $sistema_mecanico[$i]['orden'], 'disabled' => !$modalNuevo]) !!}
 								</td>
 							</tr>
 						@endfor
@@ -168,12 +174,12 @@
 					<tbody class="table__personal-body">
 						@for ($i = 10; $i < count($sistema_mecanico); $i++)
 							<tr>
-								<td>{{ $sistema_mecanico[$i]->titulo }}</td>
+								<td>{{ $sistema_mecanico[$i]['titulo'] }}</td>
 								<td class="text-center">
-									{!! Form::radio( $sistema_mecanico[$i]->id, 'si', $sistema_mecanico[$i]->estado ? true : false, ['data-type' => 'sistema_mecanico', 'data-titulo' => $sistema_mecanico[$i]->titulo, 'data-orden' => $sistema_mecanico[$i]->orden]) !!}
+									{!! Form::radio( $sistema_mecanico[$i]['id'], 'si', $sistema_mecanico[$i]['estado'] ? true : false, ['data-type' => 'sistema_mecanico', 'data-titulo' => $sistema_mecanico[$i]['titulo'], 'data-orden' => $sistema_mecanico[$i]['orden'], 'disabled' => !$modalNuevo]) !!}
 								</td>
 								<td class="text-center">
-									{!! Form::radio( $sistema_mecanico[$i]->id, 'no', $sistema_mecanico[$i]->estado !== null && !$sistema_mecanico[$i]->estado ? true : false, ['data-type' => 'sistema_mecanico', 'data-titulo' => $sistema_mecanico[$i]->titulo, 'data-orden' => $sistema_mecanico[$i]->orden]) !!}
+									{!! Form::radio( $sistema_mecanico[$i]['id'], 'no', $sistema_mecanico[$i]['estado'] !== null && !$sistema_mecanico[$i]['estado'] ? true : false, ['data-type' => 'sistema_mecanico', 'data-titulo' => $sistema_mecanico[$i]['titulo'], 'data-orden' => $sistema_mecanico[$i]['orden'], 'disabled' => !$modalNuevo]) !!}
 								</td>
 							</tr>
 						@endfor
@@ -191,12 +197,12 @@
 					<tbody class="table__personal-body">
 						@foreach ($accesorios as $item)
 							<tr>
-								<td>{{ $item->titulo }}</td>
+								<td>{{ $item['titulo'] }}</td>
 								<td class="text-center">
-									{!! Form::radio( $item->id, 'si', $item->estado ? true : false, ['data-type' => 'accesorios', 'data-titulo' => $item->titulo, 'data-orden' => $item->orden]) !!}
+									{!! Form::radio( $item['id'], 'si', $item['estado'] ? true : false, ['data-type' => 'accesorios', 'data-titulo' => $item['titulo'], 'data-orden' => $item['orden'], 'disabled' => !$modalNuevo]) !!}
 								</td>
 								<td class="text-center">
-									{!! Form::radio( $item->id, 'no', $item->estado !== null && !$item->estado ? true : false, ['data-type' => 'accesorios', 'data-titulo' => $item->titulo, 'data-orden' => $item->orden]) !!}
+									{!! Form::radio( $item['id'], 'no', $item['estado'] !== null && !$item['estado'] ? true : false, ['data-type' => 'accesorios', 'data-titulo' => $item['titulo'], 'data-orden' => $item['orden'], 'disabled' => !$modalNuevo]) !!}
 								</td>
 							</tr>
 						@endforeach
@@ -214,12 +220,12 @@
 					<tbody class="table__personal-body">
 						@foreach ($documentos as $item)
 							<tr>
-								<td>{{ $item->titulo }}</td>
+								<td>{{ $item['titulo'] }}</td>
 								<td class="text-center">
-									{!! Form::radio( $item->id, 'si', $item->estado ? true : false, ['data-type' => 'documentos', 'data-titulo' => $item->titulo, 'data-orden' => $item->orden]) !!}
+									{!! Form::radio( $item['id'], 'si', $item['estado'] ? true : false, ['data-type' => 'documentos', 'data-titulo' => $item['titulo'], 'data-orden' => $item['orden'], 'disabled' => !$modalNuevo]) !!}
 								</td>
 								<td class="text-center">
-									{!! Form::radio( $item->id, 'no', $item->estado !== null && !$item->estado ? true : false, ['data-type' => 'documentos', 'data-titulo' => $item->titulo, 'data-orden' => $item->orden]) !!}
+									{!! Form::radio( $item['id'], 'no', $item['estado'] !== null && !$item['estado'] ? true : false, ['data-type' => 'documentos', 'data-titulo' => $item['titulo'], 'data-orden' => $item['orden'], 'disabled' => !$modalNuevo]) !!}
 								</td>
 							</tr>
 						@endforeach
@@ -229,7 +235,7 @@
 			</div>
 			<div class="col-4">
 				<h5>Observaciones e incidentes</h5>
-				<textarea name="observaciones" class="form-control" rows="9" cols="26"></textarea>
+				{!! Form::textarea('observaciones', null, ['class' => 'form-control solo-lectura', 'rows' => '9', 'cols' => '26', 'readonly' => !$modalNuevo]) !!}
 			</div>
 		</div>
 	</div>
@@ -237,7 +243,7 @@
 
 <div class="form-group">
 	<div class="col-lg-12 col-md-12 col-sm-12 text-right">
-		{!! Form::button('<i class="fa fa-check fa-lg"></i> '.$boton, array('class' => 'btn btn-success btn-sm', 'id' => 'btnGuardar', 'onclick' => 'guardar(\''.$entidad.'\', this)')) !!}
+		{!! Form::button('<i class="fa fa-check fa-lg"></i> '.$boton, array('class' => 'btn btn-success btn-sm', 'id' => 'btnGuardar', 'onclick' => 'guardar(\''.$entidad.'\', this)', 'hidden' => !$modalNuevo)) !!}
 		{!! Form::button('<i class="fa fa-exclamation fa-lg"></i> Cancelar', array('class' => 'btn btn-warning btn-sm', 'id' => 'btnCancelar'.$entidad, 'onclick' => 'cerrarModal();')) !!}
 	</div>
 </div>
@@ -251,6 +257,8 @@
 	.hidden {
 		display: none;
 	}
+	
+
 </style>
 <script type="text/javascript">
 	$(document).ready(function() {
@@ -259,8 +267,11 @@
 
 		const inputUnidadPlaca = document.getElementById('unidad_placa');
 		const inputUnidadDescripcion = document.getElementById('unidad_descripcion');
-		const inputUnidadId = document.getElementById('unidad_id');
+		// const inputUnidadId = document.getElementById('unidad_id');
 
+		const btnEditar = document.getElementById('btn-editar');
+
+		//TODO: Revisarlo al final
 		const getDateCurrent = () => {
 			const fecha = new Date();
 			let mes = fecha.getMonth()+1;
@@ -268,13 +279,18 @@
 			const ano = fecha.getFullYear();
 			if(dia<10) dia = '0' + dia;
 			if(mes<10) mes = '0' + mes;
-			document.getElementById('fecha_registro').value = ano+"-"+mes+"-"+dia;
+
+			const inputFechaRegistro = document.getElementById('fecha_registro');
+			// console.log('antes: ', inputFechaRegistro.value);
+			inputFechaRegistro.value = ano+"-"+mes+"-"+dia;
+			// console.log('despues: ', inputFechaRegistro.value);
 		}
 		getDateCurrent();
 
 		inputUnidadPlaca.addEventListener('keyup', async (e) => {
 			const placa = e.target.value;
 			inputUnidadDescripcion.placeholder = 'Buscando...';
+			inputUnidadDescripcion.value = '';
 			const loaderUnidad = document.getElementById('loader-unidad');
 			if(placa.length > 0){
 				loaderUnidad.removeAttribute('hidden');
@@ -287,7 +303,7 @@
 				const unidad = await consultarUnidad(placa);
 				if(unidad != null) {
 					inputUnidadDescripcion.value = unidad.descripcion;
-					inputUnidadId.value = unidad.id;
+					// inputUnidadId.value = unidad.id;
 					loaderUnidad.setAttribute('hidden', true);
 				} else {
 					inputUnidadDescripcion.placeholder = 'Buscando...';
@@ -319,7 +335,7 @@
 				myObject = {
 					orden: el.dataset.orden,
 					id: el.name,
-					title: el.dataset.titulo,
+					titulo: el.dataset.titulo,
 					estado: el.value == 'si' ? true: false
 				};
 				arrObjects.push(myObject);
@@ -340,7 +356,7 @@
 					myObject = {
 						orden: el.dataset.orden,
 						id: el.name,
-						title: el.dataset.titulo,
+						titulo: el.dataset.titulo,
 						estado: null
 					};
 					arrObjects.push(myObject);
@@ -365,7 +381,7 @@
 				myObject = {
 					orden: el.dataset.orden,
 					id: el.name,
-					title: el.dataset.titulo,
+					titulo: el.dataset.titulo,
 					estado: el.value == 'si' ? true: false
 				};
 				arrObjects.push(myObject);
@@ -386,7 +402,7 @@
 					myObject = {
 						orden: el.dataset.orden,
 						id: el.name,
-						title: el.dataset.titulo,
+						titulo: el.dataset.titulo,
 						estado: null
 					};
 					arrObjects.push(myObject);
@@ -411,7 +427,7 @@
 				myObject = {
 					orden: el.dataset.orden,
 					id: el.name,
-					title: el.dataset.titulo,
+					titulo: el.dataset.titulo,
 					estado: el.value == 'si' ? true: false
 				};
 				arrObjects.push(myObject);
@@ -432,7 +448,7 @@
 					myObject = {
 						orden: el.dataset.orden,
 						id: el.name,
-						title: el.dataset.titulo,
+						titulo: el.dataset.titulo,
 						estado: null
 					};
 					arrObjects.push(myObject);
@@ -457,7 +473,7 @@
 				myObject = {
 					orden: el.dataset.orden,
 					id: el.name,
-					title: el.dataset.titulo,
+					titulo: el.dataset.titulo,
 					estado: el.value == 'si' ? true: false
 				};
 				arrObjects.push(myObject);
@@ -478,7 +494,7 @@
 					myObject = {
 						orden: el.dataset.orden,
 						id: el.name,
-						title: el.dataset.titulo,
+						titulo: el.dataset.titulo,
 						estado: null
 					};
 					arrObjects.push(myObject);
@@ -488,7 +504,20 @@
 			document.getElementById('documentos').value = JSON.stringify(arrObjects);
 		});
 
-	}); 
+		btnEditar.addEventListener('click', () => {
+			const inputsReadonly = document.querySelectorAll("[readonly]");
+			Array.from(inputsReadonly).map(el => {
+				el.removeAttribute('readonly');
+			});
+			const inputsDisabled = document.querySelectorAll("[disabled]");
+			Array.from(inputsDisabled).map(el => {
+				el.removeAttribute('disabled');
+			});
+
+			const btnGuardar = document.getElementById('btnGuardar');
+			btnGuardar.removeAttribute('hidden');
+		});
+	});
 
 </script>
 <style>

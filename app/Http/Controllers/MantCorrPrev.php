@@ -96,19 +96,20 @@ class MantCorrPrev extends Controller
         $listar   = Libreria::getParam($request->input('listar'), 'NO');
         $entidad  = 'Checklistvehicular';
         $checklistvehicular = null;
+        $unidad_placa = null;
+        $unidad_descripcion = null;
         $formData = array('mantcorrprev.store');
         $formData = array('route' => $formData, 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
         $boton    = 'Registrar';
-        $arrUnidades = Conductor::getAll();
+        $arrConductores = Conductor::getAll();
         $cboConductores = array('' => 'Seleccione');
-        foreach($arrUnidades as $k=>$v){
+        foreach($arrConductores as $k=>$v){
             $cboConductores += array($v->id => $v->nombres . $v->apellidos);
         }
-        return view($this->folderview.'.mant_checklistvehicular')->with(compact('checklistvehicular', 'formData', 'entidad', 'cboConductores', 'boton', 'listar'));
+        return view($this->folderview.'.mant_checklistvehicular')->with(compact('checklistvehicular', 'formData', 'entidad', 'unidad_placa', 'unidad_descripcion', 'cboConductores', 'boton', 'listar'));
     }
 
     public function store(Request $request) {
-        
         
         $listar     = Libreria::getParam($request->input('listar'), 'NO');
         // $reglas     = array(
@@ -152,13 +153,99 @@ class MantCorrPrev extends Controller
             $checklistvehicular->sistema_mecanico = json_decode($request->input('sistema_mecanico'));
             $checklistvehicular->accesorios = json_decode($request->input('accesorios'));
             $checklistvehicular->documentos = json_decode($request->input('documentos'));
-
             
             $checklistvehicular->save();
 
+        });
+        return is_null($error) ? "OK" : $error;
+    }
 
+    public function edit($id, Request $request)
+    {
+        $existe = Libreria::verificarExistencia($id, 'checklistvehicular');
+        if ($existe !== true) {
+            return $existe;
+        }
+        $listar   = Libreria::getParam($request->input('listar'), 'NO');
+        $checklistvehicular = Checklistvehicular::find($id);
+        
+        if($checklistvehicular->equipo_id != '') {
+            $equipo = Equipo::find($checklistvehicular->equipo_id);
+            $unidad_placa = $equipo->placa;
+            $unidad_descripcion = $equipo->descripcion;
+        } else {
+            $vehiculo = Vehiculo::find($checklistvehicular->vehiculo_id);
+            $unidad_placa = $vehiculo->placa;
+            $unidad_descripcion = $vehiculo->descripcion;
+        }
 
+        $entidad  = 'Checklistvehicular';
+        $formData = array('mantcorrprev.update', $id);
+        $formData = array('route' => $formData, 'method' => 'PUT', 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
+        $boton    = 'Modificar';
+        $arrConductores      = Conductor::getAll();
+        $cboConductores = array('' => 'Seleccione');
+        foreach($arrConductores as $k=>$v){
+            $cboConductores += array($v->id => $v->nombres . $v->apellidos);
+        }
 
+        $sistema_electrico = $checklistvehicular->sistema_electrico;
+        $sistema_mecanico = $checklistvehicular->sistema_mecanico;
+        $accesorios = $checklistvehicular->accesorios;
+        $documentos = $checklistvehicular->documentos;
+
+        return view($this->folderview.'.mant_checklistvehicular')->with(compact('checklistvehicular', 'formData', 'entidad', 'boton', 'unidad_placa', 'unidad_descripcion', 'cboConductores', 'sistema_electrico', 'sistema_mecanico', 'accesorios', 'documentos', 'listar'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $existe = Libreria::verificarExistencia($id, 'Checklistvehicular');
+        if ($existe !== true) {
+            return $existe;
+        }
+        // $reglas = array(
+        //     'unidad_id' => 'required',
+        //     'codigo' => ['required', 'digits:7',Rule::unique('repuesto')->ignore($id)],
+        //     'descripcion' => ['required','max:100',Rule::unique('repuesto')->ignore($id)],
+        // );
+        // $mensajes = array(
+        //     'codigo.required' => 'Debe ingresar un código',
+        //     'codigo.digits' => 'El código debe tener 7 cifras',
+        //     'codigo.unique' => 'El código ya existe',
+        //     'descripcion.required' => 'Debe ingresar una descripcion',
+        //     'descripcion.max' => 'La descripcion debe tener max. 100 caracteres',
+        //     'descripcion.unique' => 'La descripción ya existe',
+        //     'unidad_id.required' => 'Debe seleccionar una unidad'
+        // );
+        // $validacion = Validator::make($request->all(), $reglas, $mensajes);
+        // if ($validacion->fails()) {
+        //     return $validacion->messages()->toJson();
+        // }
+        $error = DB::transaction(function() use($request, $id){
+            $checklistvehicular = Checklistvehicular::find($id);
+            $checklistvehicular->fecha_registro= $request->input('fecha_registro');
+
+            $placa = $request->input('unidad_placa');
+            $equipo = Equipo::where('placa', $placa)->first();
+            if($equipo != null) {
+                $checklistvehicular->equipo_id= $equipo->id;
+            }else {
+                $vehiculo = Vehiculo::where('placa', $placa)->first();
+                $checklistvehicular->vehiculo_id= $vehiculo->id;
+            }
+
+            $checklistvehicular->k_inicial = $request->input('k_inicial');
+            $checklistvehicular->k_final = $request->input('k_final');
+            $checklistvehicular->lider_area = mb_strtoupper($request->input('lider_area'), 'utf-8');
+            $checklistvehicular->conductor_id= $request->input('conductor_id');
+            $checklistvehicular->observaciones = $request->input('observaciones');
+
+            if($request->input('sistema_electrico') != null) $checklistvehicular->sistema_electrico = json_decode($request->input('sistema_electrico'));
+            if($request->input('sistema_mecanico') != null) $checklistvehicular->sistema_mecanico = json_decode($request->input('sistema_mecanico'));
+            if($request->input('accesorios') != null) $checklistvehicular->accesorios = json_decode($request->input('accesorios'));
+            if($request->input('documentos') != null) $checklistvehicular->documentos = json_decode($request->input('documentos'));
+            
+            $checklistvehicular->save();
         });
         return is_null($error) ? "OK" : $error;
     }
