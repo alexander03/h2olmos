@@ -13,6 +13,7 @@ use App\Librerias\Libreria;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 use App\Concesionaria;
+use App\DescripcionRegRepVeh;
 
 class RegRepVehController extends Controller
 {
@@ -112,6 +113,7 @@ class RegRepVehController extends Controller
         ->join('users','users.id','=','userconcesionaria.user_id')
         ->where('userconcesionaria.estado','=',true)->where('userconcesionaria.user_id','=',auth()->user()->id)
        	->select('concesionaria.id','concesionaria.razonsocial')->get();
+        $oObservaciones=array(new DescripcionRegRepVeh());
 
         foreach($arrConcesionarias as $k=>$v){
             $oConcesionarias = array($v->id=>$v->razonsocial);
@@ -122,7 +124,7 @@ class RegRepVehController extends Controller
         $formData = array('regrepveh.createregrepveh');
         $formData = array('route' => $formData, 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
         $boton    = 'Registrar'; 
-        return view($this->folderview.'.mant2')->with(compact('regrepveh', 'oTipos','formData', 'entidad','oConcesionarias', 'boton', 'listar'));
+        return view($this->folderview.'.mant2')->with(compact('regrepveh', 'oTipos','formData', 'entidad','oConcesionarias','oObservaciones', 'boton', 'listar'));
     }
 
     public function buscarporua(Request $request){
@@ -235,11 +237,12 @@ class RegRepVehController extends Controller
 
         $listar   = Libreria::getParam($request->input('listar'), 'NO');
         $regrepveh = RegRepVeh::find($id);
+        $oObservaciones=DescripcionRegRepVeh::where('regrepveh_id','=',$id)->get();
         $entidad  = 'RegRepVeh';
         $formData = array('regrepveh.update', $id);
         $formData = array('route' => $formData, 'method' => 'PUT', 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
         $boton    = 'Modificar';
-        return view($this->folderview.'.mant2')->with(compact('regrepveh','oConcesionarias', 'formData', 'entidad', 'boton', 'listar'));
+        return view($this->folderview.'.mant2')->with(compact('regrepveh','oConcesionarias','oObservaciones', 'formData', 'entidad', 'boton', 'listar'));
     }
 
     public function update(Request $request, $id)
