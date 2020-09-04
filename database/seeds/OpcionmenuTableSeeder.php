@@ -16,21 +16,21 @@ class OpcionmenuTableSeeder extends Seeder
             [
             'descripcion' => 'Ua',
             'link' => 'ua',
-            'icono' => 'myicon',
+            'icono' => 'api',
             'orden' => 1,
             'grupomenu_id' => 1
             ],
             [
             'descripcion' => 'Propietarios',
             'link' => 'propietario',
-            'icono' => 'myicon',
+            'icono' => 'accessibility',
             'orden' => 1,
             'grupomenu_id' => 1
             ],
             [
             'descripcion' => 'Unidades',
             'link' => 'unidad',
-            'icono' => 'myicon',
+            'icono' => 'ac_unit',
             'orden' => 1,
             'grupomenu_id' => 1
             ]
@@ -38,45 +38,45 @@ class OpcionmenuTableSeeder extends Seeder
         DB::table('opcionmenu')->insert([
             'descripcion' => 'Tipo de users',
             'link' => 'tipouser',
-            'icono' => 'controldiario',
+            'icono' => 'contacts',
             'orden' => 4,
             'grupomenu_id' => 2
         ]);
         DB::table('opcionmenu')->insert([
             'descripcion' => 'Marcas',
             'link' => 'marcas',
-            'icono' => 'myicon',
+            'icono' => 'model_training',
             'orden' => 1,
             'grupomenu_id' => 1
         ]);
         DB::table('opcionmenu')->insert([
             'descripcion' => 'Repuestos',
             'link' => 'repuestos',
-            'icono' => 'myicon',
+            'icono' => 'settings',
             'orden' => 2,
             'grupomenu_id' => 1
         ]);
         DB::table('opcionmenu')->insert([
             'descripcion' => 'Conductores',
             'link' => 'conductores',
-            'icono' => 'myicon',
+            'icono' => 'face',
             'orden' => 3,
             'grupomenu_id' => 1
         ]);
         DB::table('opcionmenu')->insert([
             ['descripcion' => 'Areas',
             'link' => 'areas',
-            'icono' => 'myicon',
+            'icono' => 'info',
             'orden' => 4,
             'grupomenu_id' => 1],
             ['descripcion' => 'Contratistas',
             'link' => 'contratistas',
-            'icono' => 'myicon',
+            'icono' => 'perm_identity',
             'orden' => 5,
             'grupomenu_id' => 1],
             ['descripcion' => 'Trabajos',
             'link' => 'trabajos',
-            'icono' => 'myicon',
+            'icono' => 'play_for_work',
             'orden' => 6,
             'grupomenu_id' => 1],
             ['descripcion' => 'Concesionarias',
@@ -86,16 +86,30 @@ class OpcionmenuTableSeeder extends Seeder
             'grupomenu_id' => 1],
         ]);
         DB::table('opcionmenu')->insert([
+            'descripcion' => 'Grupo Menu',
+            'link' => 'grupomenu',
+            'icono' => 'vertical_split',
+            'orden' => 3,
+            'grupomenu_id' => 2
+        ]);
+        DB::table('opcionmenu')->insert([
+            'descripcion' => 'Opcion Menu',
+            'link' => 'opcionmenu',
+            'icono' => 'language',
+            'orden' => 4,
+            'grupomenu_id' => 2
+        ]);
+        DB::table('opcionmenu')->insert([
             'descripcion' => 'Tipo de horas',
             'link' => 'tipohora',
-            'icono' => 'myicon',
+            'icono' => 'hourglass_empty',
             'orden' => 4,
             'grupomenu_id' => 1
         ]);
         DB::table('opcionmenu')->insert([
             'descripcion' => 'Vehículos',
             'link' => 'vehiculo',
-            'icono' => 'vehiculo',
+            'icono' => 'directions_car',
             'orden' => 4,
             'grupomenu_id' => 1
         ]);
@@ -109,14 +123,14 @@ class OpcionmenuTableSeeder extends Seeder
         DB::table('opcionmenu')->insert([
             'descripcion' => 'Grifos',
             'link' => 'grifo',
-            'icono' => 'myicon',
+            'icono' => 'toc',
             'orden' => 5,
             'grupomenu_id' => 1
         ]);
         DB::table('opcionmenu')->insert([
             'descripcion' => 'Equipos',
             'link' => 'equipo',
-            'icono' => 'myicon',
+            'icono' => 'directions_car',
             'orden' => 6,
             'grupomenu_id' => 1
         ]);
@@ -141,7 +155,7 @@ class OpcionmenuTableSeeder extends Seeder
         DB::table('opcionmenu')->insert([
             'descripcion' => 'Usuario',
             'link' => 'user',
-            'icono' => 'myicon',
+            'icono' => 'person',
             'orden' => 1,
             'grupomenu_id' => 2
         ]);

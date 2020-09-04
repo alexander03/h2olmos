@@ -4,8 +4,8 @@
         &copy;
         <script>
             document.write(new Date().getFullYear())
-        </script>, made with <i class="material-icons">favorite</i> by
-        <a href="http://garzasoft.com">Garzasoft</a>
+        </script>, made with <i class="material-icons">favorite</i> <!--by-->
+        <a href="">&nbsp;</a>
         </div>
     </div>
 </footer>

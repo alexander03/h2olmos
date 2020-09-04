@@ -5,7 +5,7 @@
       <script>
         document.write(new Date().getFullYear())
       </script>
-      <a href="http://garzasoft.com">Garzasoft</a>
+      <a href="http:">&nbsp;</a>
     </div>
   </div>
 </footer>

@@ -13,17 +13,17 @@ class GrupomenuTableSeeder extends Seeder
     {
         DB::table('grupomenu')->insert([
             'descripcion' => 'MANTENIMIENTO',
-            'icono' => 'myicon',
+            'icono' => 'content_paste',
             'orden' => 1
         ]);
         DB::table('grupomenu')->insert([
             'descripcion' => 'SISTEMA',
-            'icono' => 'myicon',
+            'icono' => 'settings_power',
             'orden' => 2
         ]);
         DB::table('grupomenu')->insert([
             'descripcion' => 'PROCESOS',
-            'icono' => 'myicon',
+            'icono' => 'dashboard',
             'orden' => 3
         ]);
     }
