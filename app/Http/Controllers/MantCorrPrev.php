@@ -112,24 +112,34 @@ class MantCorrPrev extends Controller
     public function store(Request $request) {
         
         $listar     = Libreria::getParam($request->input('listar'), 'NO');
-        // $reglas     = array(
-            //     'codigo' => 'required|digits:7|unique:repuesto,codigo',
-            //     'descripcion' => 'required|max:100|unique:repuesto,descripcion',
-            //     'unidad_id' => 'required'
-            // );
-            // $mensajes = array(
-                //     'codigo.required' => 'Debe ingresar un código',
-                //     'codigo.unique' => 'Este código ya existe',
-                //     'codigo.digits' => 'El código debe tener 7 cifras',
-                //     'descripcion.required' => 'Debe ingresar una descripcion',
-                //     'descripcion.unique' => 'Esta descripción ya existe',
-                //     'descripcion.max' => 'La descripcion debe tener max. 100 caracteres',
-                //     'unidad_id.required' => 'Debe seleccionar una unidad'
-                // );
-                // $validacion = Validator::make($request->all(), $reglas, $mensajes);
-                // if ($validacion->fails()) {
-                    //     return $validacion->messages()->toJson();
-                    // }
+
+        $today = \Carbon\Carbon::now('America/Lima')->toDateString();
+        $min = $request->all()['k_inicial'];
+
+        $reglas     = array(
+            'fecha_registro' => 'required|date|after_or_equal:' . $today,
+            'unidad_placa' => 'required|regex:@^([\d\w]+)(-\1)?$@i',
+            'k_inicial' => 'required|integer|min:0',
+            'k_final' => 'required|integer|min:' . $min,
+            'lider_area' => 'required|max:300',
+            'conductor_id' => 'required|integer'
+        );
+
+        $mensajes = array(
+            'fecha_registro.required' => 'Debe seleccionar una fecha',
+            'fecha_registro.date' => 'La fecha tiene formato incorrecto',
+            'fecha_registro.after_or_equal' => 'La fecha ingresada es incorrecta',
+            'unidad_placa.required' => 'Debe ingresar una unidad placa',
+            'unidad_placa.regex' => 'La unidad placa ingresada es incorrecta',
+            'k_inicial.required' => 'Debe ingresar un kilometraje inicial',
+            'k_inicial.min' => 'El kilometraje inicial ingresado es incorrecto',
+            'k_final.required' => 'Debe ingresar un kilometraje final',
+            'k_final.min' => 'El kilometraje final ingresado es incorrecto',
+            'lider_area.required' => 'Debe ingresar un lider de area',
+            'lider_area.max' => 'El nombre del lider de area debe tener max. 300 caracteres',
+            'conductor_id.required' => 'Debe seleccionar una conductor'
+        );
+        
         $error = DB::transaction(function() use($request){
             
             $checklistvehicular = new Checklistvehicular();

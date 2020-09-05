@@ -64,7 +64,7 @@
 	<div class="form-group col-4">
 		{!! Form::label('fecha_registro', 'F. Registro:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
 		<div class="col-lg-12 col-md-12 col-sm-12">
-			{!! Form::date('fecha_registro', null, array('class' => 'form-control input-xs solo-lectura', 'id' => 'fecha_registro', 'min' => date('Y-m-d'), 'readonly' => !$modalNuevo )) !!}
+			{!! Form::date('fecha_registro', null, array('class' => 'form-control input-xs solo-lectura', 'id' => 'fecha_registro_modal', 'readonly' => !$modalNuevo )) !!}
 		</div>
 	</div>
 	<div class="form-group col-2">
@@ -138,7 +138,7 @@
 								</td>
 							</tr>
 						@endforeach
-						<input name="sistema_electrico" id="sistema_electrico" type="text" class="hidden" value="">
+						<input name="sistema_electrico" id="sistema_electrico" type="text" class="hidden" value="{{ json_encode($sistema_electrico) }}">
 					</tbody>
 				</table>
 			</div>
@@ -183,7 +183,7 @@
 								</td>
 							</tr>
 						@endfor
-						<input name="sistema_mecanico" id="sistema_mecanico" type="text" class="hidden" value="">
+						<input name="sistema_mecanico" id="sistema_mecanico" type="text" class="hidden" value="{{ json_encode($sistema_mecanico) }}">
 					</tbody>
 				</table>
 			</div>
@@ -206,7 +206,7 @@
 								</td>
 							</tr>
 						@endforeach
-						<input name="accesorios" id="accesorios" type="text" class="hidden" value="">
+						<input name="accesorios" id="accesorios" type="text" class="hidden" value="{{ json_encode($accesorios) }}">
 					</tbody>
 				</table>
 			</div>
@@ -229,7 +229,7 @@
 								</td>
 							</tr>
 						@endforeach
-						<input name="documentos" id="documentos" type="text" class="hidden" value="">
+						<input name="documentos" id="documentos" type="text" class="hidden" value="{{ json_encode($documentos) }}">
 					</tbody>
 				</table>
 			</div>
@@ -279,10 +279,12 @@
 			if(dia<10) dia = '0' + dia;
 			if(mes<10) mes = '0' + mes;
 
-			const inputFechaRegistro = document.getElementById('fecha_registro');
+			const inputFechaRegistro = document.getElementById('fecha_registro_modal');
 			// console.log('antes: ', inputFechaRegistro.value);
 			inputFechaRegistro.value = ano+"-"+mes+"-"+dia;
+			inputFechaRegistro.setAttribute('min', ano+"-"+mes+"-"+dia);
 			// console.log('despues: ', inputFechaRegistro.value);
+			// console.log(ano+"-"+mes+"-"+dia);
 		}
 		getDateCurrent();
 
