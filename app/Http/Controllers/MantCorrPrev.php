@@ -140,6 +140,12 @@ class MantCorrPrev extends Controller
             'conductor_id.required' => 'Debe seleccionar una conductor'
         );
         
+        $validacion = Validator::make($request->all(), $reglas, $mensajes);
+
+        if ( $validacion->fails() ) {
+            return $validacion->messages()->toJson();
+        }
+        
         $error = DB::transaction(function() use($request){
             
             $checklistvehicular = new Checklistvehicular();
