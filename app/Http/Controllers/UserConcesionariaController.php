@@ -48,7 +48,7 @@ class UserConcesionariaController extends Controller
                 ->where('user_id', auth()->user()->id)
                 ->where('concesionaria_id', $id)
                 ->update(['estado' => true]);
-        return view('dashboard');
+        //return redirect()->route('home');
     }
 
 

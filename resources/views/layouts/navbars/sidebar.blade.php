@@ -15,7 +15,6 @@ use App\Http\Controllers\UserConcesionariaController;
         <?php
         $a= new UserConcesionariaController();
         echo $a->actual();
-        //{{ __('H2OLMOS') }}
         ?>
         
       </a>
@@ -24,15 +23,7 @@ use App\Http\Controllers\UserConcesionariaController;
         $a= new UserConcesionariaController();
       $data = $a->devolverConce(auth()->user()->id)->get();
       foreach ($data as $key => $val) {
-        echo '<a class="dropdown-item" onclick="location.reload()" href="http://localhost:8000/userconcesionaria/concesionaria/'.$val->id.'">'.$val->razonsocial.'</a>';
-        /*echo '<a class="dropdown-item" onclick="$.ajax({
-                type: `GET`,
-                url: `http://localhost:8000/userconcesionaria/cambiara/'.$val->id.'`,
-                data: param = ``,
-                contentType: `application/json; charset=utf-8`,
-                dataType: `json`,
-                success: location.reload()
-            }); " >'.$val->razonsocial.'</a>';*/
+        echo '<a class="dropdown-item" onclick="cambiar('.$val->id.')" >'.$val->razonsocial.'</a>';
       }
         ?>
       </div>
@@ -170,3 +161,25 @@ use App\Http\Controllers\UserConcesionariaController;
     </ul>
   </div>
 </div>
+<script type="text/javascript">
+  function cambiar($id){
+    var serviceURL = "http://localhost:8000/userconcesionaria/concesionaria/"+$id;
+    $.ajax({
+        type: "GET",
+        url: serviceURL,
+        data: param = "",
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: successFunc,
+        error: errorFunc
+    });
+    
+    function successFunc(data, status) {
+    location.reload();
+    }
+    function errorFunc(data, status) {
+     location.reload();
+    }
+  }
+
+</script>

@@ -83,13 +83,13 @@
 		<table id="example1" class="table table-bordered table-striped table-condensed table-hover">
 			<thead>
 				<tr>
-					<th colspan="1"  class="text-center">#</th>
-					<th colspan="1"  class="text-center">Cantidad</th>
-					<th colspan="1"  class="text-center">Unidad</th>
-					<th colspan="1"  class="text-center">Código</th>
-					<th colspan="1"  class="text-center">Monto</th>
+					<th colspan="1"  class="text-center" style="width:40px;">#</th>
+					<th colspan="1"  class="text-center" style="width:80px;">Cantidad</th>
+					<th colspan="1"  class="text-center" style="width:100px;">Unidad</th>
+					<th colspan="1"  class="text-center" style="width:100px;">Código</th>
+					<th colspan="1"  class="text-center" style="width:80px;">Monto</th>
 					<th colspan="1"  class="text-center">Descripción</th>
-					<th colspan="2"  class="text-center">Opciones</th>
+					<th colspan="1"  class="text-center" style="width:100px;">Opciones</th>
 				</tr>
 			</thead>
 			<tbody id="tbody">
@@ -97,15 +97,25 @@
 				$contador = 1;
 				?>
 				@foreach ($oObservaciones as $key => $value)
+				<!--tr>
+					<p><input type="hidden" name="id{{ $contador }}" value="{{ $value->id }}"></p>
+					<td style="text-align:center;">{{ $contador }}</td>
+					<td><input name="cantidad{{ $contador }}" class='form-control' type="number" value="{{ $value->cantidad }}" style="text-align:right;width:100px;"></td>
+					<td><input name="unidad{{ $contador }}" class="form-control" type="text" value="{{ $value->unidad }}" style="width:100px;"></td>
+					<td ><input name="codigo{{ $contador }}" class="form-control" type="text" value="{{ $value->codigo }}" style="width:100px;"></td>
+					<td contenteditable="true"><input  name="monto{{ $contador }}"class='form-control' type="number" value="{{ $value->monto }}" style="text-align:right;width:100px;"></td>
+					<td contenteditable="true"><input name="descripcion{{ $contador }}" class="form-control" type="text" value="{{ $value->descripcion }}"></td>
+					<td onclick="alert('gg nomaddddds');" style="color:#ff0000;text-align:center;width:50px;"><i class="material-icons text-center">close</i></td>
+				</tr-->
 				<tr>
-					<td contenteditable="true">{{ $contador }}</td>
-					<td contenteditable="true">{{ $value->cantidad }}</td>
-					<td contenteditable="true">{{ $value->unidad }}</td>
-					<td contenteditable="true">{{ $value->codigo }}</td>
-					<td contenteditable="true">{{ $value->monto }}</td>
-					<td contenteditable="true">{{ $value->descripcion }}</td>
-					<td onclick="evaluarcantidad();" style="color:#11cc11"><i class="material-icons text-center">edit</i></td>
-					<td onclick="alert('gg nomaddddds');" style="color:#ff0000"><i class="material-icons text-center">close</i></td>
+					<p><input type="hidden" name="idid[]" value="{{ $value->id }}"></p>
+					<td style="text-align:center;">{{ $contador }}</td>
+					<td><input name="cantidad[]" class='form-control' type="number" value="{{ $value->cantidad }}" style="text-align:right;width:100px;"></td>
+					<td><input name="unidad[]" class="form-control" type="text" value="{{ $value->unidad }}" style="width:100px;"></td>
+					<td ><input name="codigo[]" class="form-control" type="text" value="{{ $value->codigo }}" style="width:100px;"></td>
+					<td contenteditable="true"><input  name="monto[]"class='form-control' type="number" value="{{ $value->monto }}" style="text-align:right;width:100px;"></td>
+					<td contenteditable="true"><input name="descripcion[]" class="form-control" type="text" value="{{ $value->descripcion }}"></td>
+					<td onclick="deleteRow(this);" style="color:#ff0000;text-align:center;width:50px;"><i class="material-icons text-center">close</i></td>
 				</tr>
 				<?php
 				$contador = $contador + 1;
@@ -132,13 +142,14 @@
 
 	
 
+	/*data class desc($hijo,$padre)
 	var ListaHijos = [];
-	var.push(new DescripcionRegRepVeh())
+	var.push(new DescripcionRegRepVeh('dasd','sfdsdf'));*/
 
 
 
 
-	var a = 1;
+	var a = <?php echo $contador?> -1;
 	$(document).ready(function() {
 		configurarAnchoModal('900');
 		init(IDFORMMANTENIMIENTO+'{!! $entidad !!}', 'M', '{!! $entidad !!}');
@@ -207,19 +218,57 @@
 
 	function agregarfila(){
 		a++;
+		var f = "fff";
+		/*
 		document.getElementById('tbody').innerHTML+=`
+			<tr>
+				<input type="hidden" name="id{{ $contador }}" value="-1">
+				<td style="text-align:center;">${a}</td>
+				<td><input name="cantidad{{ $contador }}" class='form-control' type="number" value="" style="text-align:right;width:100px;"></td>
+				<td><input name="unidad{{ $contador }}" class="form-control" type="text" value="" style="width:100px;"></td>
+				<td ><input name="codigo{{ $contador }}" class="form-control" type="text" value="" style="width:100px;"></td>
+				<td contenteditable="true"><input  name="monto{{ $contador }}"class='form-control' type="number" value="" style="text-align:right;width:100px;"></td>
+				<td contenteditable="true"><input name="descripcion{{ $contador }}" class="form-control" type="text" value=""></td>
+				<td onclick="alert();" style="color:#ff0000;text-align:center;width:50px;"><i class="material-icons text-center">close</i></td>
+			</tr>`;*/
+		/*document.getElementById('tbody').innerHTML+=`
 		<tr>
-			<td contenteditable="true"></td>
-			<td contenteditable="true"></td>
-			<td contenteditable="true"></td>
-			<td contenteditable="true"></td>
-			<td contenteditable="true"></td>
-			<td contenteditable="true"></td>
-			<td onclick="alert('gg nomaddddds');" style="color:#11cc11"><i class="material-icons text-center">edit</i></td>
-			<td onclick="alert('gg nomaddddds');" style="color:#ff0000"><i class="material-icons text-center">close</i></td>
-		</tr>`;
+			<input type="hidden" name="idid[]" value="-1">
+			<td style="text-align:center;">${a}</td>
+			<td><input name="cantidad[]" class='form-control' type="number" value="" style="text-align:right;width:100px;"></td>
+			<td><input name="unidad[]" class="form-control" type="text" value="" style="width:100px;"></td>
+			<td ><input name="codigo[]" class="form-control" type="text" value="" style="width:100px;"></td>
+			<td contenteditable="true"><input  name="monto[]"class='form-control' type="number" value="" style="text-align:right;width:100px;"></td>
+			<td contenteditable="true"><input name="descripcion[]" class="form-control" type="text" value=""></td>
+			<td onclick="alert();" style="color:#ff0000;text-align:center;width:50px;"><i class="material-icons text-center">close</i></td>
+		</tr>`;*/
 
- 
+
+			var tr = document.createElement("tr");
+			tr.innerHTML = `
+		<tr>
+			<input type="hidden" name="idid[]" value="-1">
+			<td style="text-align:center;">${a}</td>
+			<td><input name="cantidad[]" class='form-control' type="number" value="" style="text-align:right;width:100px;"></td>
+			<td><input name="unidad[]" class="form-control" type="text" value="" style="width:100px;"></td>
+			<td ><input name="codigo[]" class="form-control" type="text" value="" style="width:100px;"></td>
+			<td contenteditable="true"><input  name="monto[]"class='form-control' type="number" value="" style="text-align:right;width:100px;"></td>
+			<td contenteditable="true"><input name="descripcion[]" class="form-control" type="text" value=""></td>
+			<td onclick="deleteRow(this);" style="color:#ff0000;text-align:center;width:50px;"><i class="material-icons text-center">close</i></td>
+		</tr>`;
+			document.getElementById("tbody").appendChild(tr);
+
+
+
+   }
+
+	   function deleteRow(btn) {
+		  var row = btn.parentNode;
+		  row.parentNode.removeChild(row);
+	}
+
+   function borrarfila(){
+
    }
 
 	

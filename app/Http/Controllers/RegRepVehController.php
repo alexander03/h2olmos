@@ -114,6 +114,7 @@ class RegRepVehController extends Controller
         ->where('userconcesionaria.estado','=',true)->where('userconcesionaria.user_id','=',auth()->user()->id)
        	->select('concesionaria.id','concesionaria.razonsocial')->get();
         $oObservaciones=array(new DescripcionRegRepVeh());
+        $oObservaciones[0]->id=-1 ; 
 
         foreach($arrConcesionarias as $k=>$v){
             $oConcesionarias = array($v->id=>$v->razonsocial);
@@ -167,9 +168,14 @@ class RegRepVehController extends Controller
 		];
 
         $listar     = Libreria::getParam($request->input('listar'), 'NO');
+
+        $idn=DB::select("SHOW TABLE STATUS LIKE 'regrepveh'");
+        $next_id=$idn[0]->Auto_increment;
+
         
-        $error = DB::transaction(function() use($request){
+        $error = DB::transaction(function() use($request,$next_id){
             $regrepv = new RegRepVeh();
+            $regrepv -> id =$next_id;
             $regrepv -> cliente  = $request -> input('cliente');
             $regrepv -> concesionaria_id  = $request -> input('concesionaria_id');
             $regrepv -> ua_id = $request -> input('ua_id');
@@ -182,6 +188,29 @@ class RegRepVehController extends Controller
             $regrepv -> telefono = $request -> input('telefono');
             $regrepv -> save();
         });
+
+
+        $cantidades=$request->cantidad;
+        $unidades=$request->unidad;
+        $codigos=$request->codigo;
+        $montos=$request->monto;
+        $descripciones=$request->descripcion;
+        for ($i = 0; $i < count($cantidades); $i++) {
+           $error = DB::transaction(function() use($i,$request,$next_id,$cantidades,$unidades,$codigos,$montos,$descripciones){
+            $descripcionregrepv = new DescripcionRegRepVeh();
+            $descripcionregrepv -> regrepveh_id =$next_id;
+            $descripcionregrepv -> cantidad  = $cantidades[$i];
+            $descripcionregrepv -> unidad  = $unidades[$i];;
+            $descripcionregrepv -> codigo = $codigos[$i];;
+            $descripcionregrepv -> monto = $montos[$i];;
+            $descripcionregrepv -> descripcion = $descripciones[$i];;
+            $descripcionregrepv -> save();
+        }); 
+        }
+
+        
+
+
         return is_null($error) ? "OK" : $error;
     }
 
@@ -234,10 +263,14 @@ class RegRepVehController extends Controller
         foreach($arrConcesionarias as $k=>$v){
             $oConcesionarias = array($v->id=>$v->razonsocial);
         }
+        
 
         $listar   = Libreria::getParam($request->input('listar'), 'NO');
         $regrepveh = RegRepVeh::find($id);
         $oObservaciones=DescripcionRegRepVeh::where('regrepveh_id','=',$id)->get();
+
+
+        
         $entidad  = 'RegRepVeh';
         $formData = array('regrepveh.update', $id);
         $formData = array('route' => $formData, 'method' => 'PUT', 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
@@ -261,6 +294,12 @@ class RegRepVehController extends Controller
         if ($validacion->fails()) {
             return $validacion->messages()->toJson();
         } 
+
+
+
+
+
+
         $error = DB::transaction(function() use($request, $id){
             $regrepv = RegRepVeh::find($id);
             $regrepv -> cliente  = $request -> input('cliente');
@@ -276,6 +315,29 @@ class RegRepVehController extends Controller
             $regrepv -> save();
 
         });
+        $ids=$request->idid;
+        $cantidades=$request->cantidad;
+        $unidades=$request->unidad;
+        $codigos=$request->codigo;
+        $montos=$request->monto;
+        $descripciones=$request->descripcion;
+        for ($i = 0; $i < count($cantidades); $i++) {
+           $error = DB::transaction(function() use($id,$i,$ids,$request,$cantidades,$unidades,$codigos,$montos,$descripciones){
+            $descripcionregrepv = new DescripcionRegRepVeh();
+            if($ids[$i]>=0){$descripcionregrepv = DescripcionRegRepVeh::find($ids[$i]);}
+            $descripcionregrepv -> regrepveh_id =$id;
+            $descripcionregrepv -> cantidad  = $cantidades[$i];
+            $descripcionregrepv -> unidad  = $unidades[$i];;
+            $descripcionregrepv -> codigo = $codigos[$i];;
+            $descripcionregrepv -> monto = $montos[$i];;
+            $descripcionregrepv -> descripcion = $descripciones[$i];;
+            $descripcionregrepv -> save();
+        }); 
+        }
+
+
+
+
         return is_null($error) ? "OK" : $error;
     }
 
