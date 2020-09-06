@@ -25,6 +25,8 @@ class CreateChecklistvehicularTable extends Migration
             $table->string('lider_area');
             $table->unsignedBigInteger('conductor_id');
             $table->foreign('conductor_id')->references('id')->on('conductor');
+            $table->unsignedBigInteger('concesionaria_id');
+            $table->foreign('concesionaria_id')->references('id')->on('concesionaria');
             
             $table->longText('sistema_electrico')->nullable();
             $table->longText('sistema_mecanico')->nullable();

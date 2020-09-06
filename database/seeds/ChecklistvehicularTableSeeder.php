@@ -20,6 +20,7 @@ class ChecklistvehicularTableSeeder extends Seeder
             'k_final' => 80.00,
             'lider_area' => 'OSCAR MARIANO DEL PORTAL',
             'conductor_id' => 1,
+            'concesionaria_id' => 1,
             'sistema_electrico' => [
                 ['orden' => 1,'id' => 'freno_emergencia', 'titulo' => 'Freno de emergencia', 'estado' => true],
                 ['orden' => 2,'id' => 'funcionamiento_tablero', 'titulo' => 'Funcionamiento de tablero','estado' => false],
@@ -82,6 +83,7 @@ class ChecklistvehicularTableSeeder extends Seeder
             'k_final' => 220.00,
             'lider_area' => 'JOSE ESTEFAN HURTADO MONTERO',
             'conductor_id' => 2,
+            'concesionaria_id' => 2,
             'sistema_electrico' => [
                 ['orden' => 1,'id' => 'freno_emergencia', 'titulo' => 'Freno de emergencia', 'estado' => true],
                 ['orden' => 2,'id' => 'funcionamiento_tablero', 'titulo' => 'Funcionamiento de tablero','estado' => false],

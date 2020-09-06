@@ -13,6 +13,12 @@ class Conductor extends Model
     protected $fillable = ['nombres', 'apellidos', 'dni', 'categoria', 'licencia', 'fechavencimiento', 'contratista_id'];
 
     public function scopegetFilter($query, $estado, $filter, $categoria, $contratista_id) {
+        $concesionariaAct = Concesionaria::join('userconcesionaria','userconcesionaria.concesionaria_id','=','concesionaria.id')
+                                ->join('users','users.id','=','userconcesionaria.user_id')
+                                ->where('userconcesionaria.estado','=',true)->where('userconcesionaria.user_id','=',auth()->user()->id)
+                                ->select('concesionaria.id','concesionaria.razonsocial')->first();
+        $idConcAct = $concesionariaAct->id;
+        
         return $query->join('contratista', 'conductor.contratista_id', '=', 'contratista.id')
             ->where(function($subquery) use ($estado) {
                 if($estado === 'activos') $subquery->whereNull('conductor.deleted_at');
@@ -21,8 +27,6 @@ class Conductor extends Model
             ->where(function($subquery) use ($filter) {
                 $subquery->where('conductor.dni', strtoupper($filter))
                     ->orWhere('conductor.licencia', strtoupper($filter))
-                    // ->orWhere('conductor.apellidos', 'LIKE', strtoupper($filter).'%')
-                    // ->orWhere('conductor.nombres', 'LIKE', strtoupper($filter).'%')
                     ->orWhere(DB::raw("concat(conductor.apellidos , ' ', conductor.nombres)"), 'LIKE', strtoupper($filter).'%')
                     ->orWhere(DB::raw("concat(conductor.nombres , ' ', conductor.apellidos)"), 'LIKE', strtoupper($filter).'%');
             })
@@ -31,6 +35,9 @@ class Conductor extends Model
             })
             ->where(function($subquery) use ($contratista_id) {
                 if($contratista_id !== 'all') $subquery->where('conductor.contratista_id', $contratista_id);
+            })
+            ->where(function($subquery) use ($idConcAct) {
+                $subquery->where('concesionaria_id', $idConcAct);
             })
             ->orderBy('conductor.apellidos', 'ASC')
             ->select('conductor.id','conductor.nombres', 'conductor.apellidos', 'conductor.dni', 'conductor.categoria', 'conductor.licencia', 'conductor.fechavencimiento', 'conductor.deleted_at', 'contratista.razonsocial as contratista_razonsocial')->withTrashed();
