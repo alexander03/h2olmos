@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Conductor;
 use App\Contratista;
 use App\Concesionaria;
+use App\Conductorconcesionaria;
 use App\Librerias\Libreria;
 use Illuminate\Support\Facades\DB;
 
@@ -151,16 +152,31 @@ class ConductorController extends Controller
                                 ->select('concesionaria.id','concesionaria.razonsocial')->first();
             $idConcAct = $concesionariaAct->id;
 
-            $conductor = new Conductor();
-            $conductor->dni= $request->input('dni');
-            $conductor->apellidos= mb_strtoupper($request->input('apellidos'), 'utf-8');
-            $conductor->nombres= mb_strtoupper($request->input('nombres'), 'utf-8');
-            $conductor->licencia= mb_strtoupper($request->input('licencia_letra'), 'utf-8') . '-' . $request->input('dni') ;
-            $conductor->categoria= $request->input('categoria');
-            $conductor->fechavencimiento= mb_strtoupper($request->input('fechavencimiento'), 'utf-8');
-            $conductor->contratista_id= mb_strtoupper($request->input('contratista_id'), 'utf-8');
-            $conductor->concesionaria_id = $idConcAct;
-            $conductor->save();
+            //Busco al conductor
+            $conductorBuscado = Conductor::where('dni', $request->input('dni'))->first();
+            if($conductorBuscado == null) {
+                $conductor = new Conductor();
+                $conductor->dni= $request->input('dni');
+                $conductor->apellidos= mb_strtoupper($request->input('apellidos'), 'utf-8');
+                $conductor->nombres= mb_strtoupper($request->input('nombres'), 'utf-8');
+                $conductor->licencia= mb_strtoupper($request->input('licencia_letra'), 'utf-8') . '-' . $request->input('dni') ;
+                $conductor->categoria= $request->input('categoria');
+                $conductor->fechavencimiento= mb_strtoupper($request->input('fechavencimiento'), 'utf-8');
+                $conductor->contratista_id= mb_strtoupper($request->input('contratista_id'), 'utf-8');
+                $conductor->save();
+    
+                $conductorconcesionaria = new Conductorconcesionaria();
+                $conductorconcesionaria->conductor_id = $conductor->id;
+                $conductorconcesionaria->concesionaria_id = $idConcAct;
+                $conductorconcesionaria->save();
+            } else {
+                $conductorconcesionaria = new Conductorconcesionaria();
+                $conductorconcesionaria->conductor_id = $conductorBuscado->id;
+                $conductorconcesionaria->concesionaria_id = $idConcAct;
+                $conductorconcesionaria->save();
+            }
+
+
         });
         return is_null($error) ? "OK" : $error;
     }
