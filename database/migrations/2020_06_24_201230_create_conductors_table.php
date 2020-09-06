@@ -22,7 +22,9 @@ class CreateConductorsTable extends Migration
             $table->string('licencia', 10)->unique();
             $table->date('fechavencimiento');
             $table->unsignedBigInteger('contratista_id');
+            $table->unsignedBigInteger('concesionaria_id');
             $table->foreign('contratista_id')->references('id')->on('contratista');
+            $table->foreign('concesionaria_id')->references('id')->on('concesionaria');
             $table->timestamps();
             $table->softDeletes();
         });

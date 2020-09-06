@@ -19,10 +19,11 @@ class ConductorTableSeeder extends Seeder
             'licencia' => 'D-17811439',
             'fechavencimiento' => '2021-02-15',
             'contratista_id' => 1,
+            'concesionaria_id' => 1,
             'created_at' => now(),
             'updated_at' => now()
-        ]);
-        DB::table('conductor')->insert([
+            ]);
+            DB::table('conductor')->insert([
             'nombres' => 'EDMUNDO',
             'apellidos' => 'VILLENA FIESTAS',
             'dni' => '17974640',
@@ -30,6 +31,7 @@ class ConductorTableSeeder extends Seeder
             'licencia' => 'D-17974640',
             'fechavencimiento' => '2021-10-09',
             'contratista_id' => 1,
+            'concesionaria_id' => 1,
             'created_at' => now(),
             'updated_at' => now()
         ]);
@@ -41,6 +43,7 @@ class ConductorTableSeeder extends Seeder
             'licencia' => 'C-16691239',
             'fechavencimiento' => '2021-08-09',
             'contratista_id' => 2,
+            'concesionaria_id' => 2,
             'created_at' => now(),
             'updated_at' => now()
         ]);
@@ -52,6 +55,7 @@ class ConductorTableSeeder extends Seeder
             'licencia' => 'B-16732333',
             'fechavencimiento' => '2025-01-24',
             'contratista_id' => 3,
+            'concesionaria_id' => 2,
             'created_at' => now(),
             'updated_at' => now()
         ]);
