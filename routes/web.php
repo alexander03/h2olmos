@@ -179,7 +179,7 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::post('mantcorrprev/buscar', 'MantCorrPrev@buscar')->name('mantcorrprev.buscar');
 	Route::get('mantcorrprev/createrepuesto', 'MantCorrPrev@createrepuesto')->name('mantcorrprev.createrepuesto');
 	Route::get('mantcorrprev/buscarporua', 'MantCorrPrev@buscarporua')->name('mantcorrprev.buscarporua');
-	Route::get('existeunidad', 'MantCorrPrev@existeUnidad')->name('conductores.existeconductor');
+	Route::get('existeunidad', 'MantCorrPrev@existeUnidad')->name('mantcorrprev.existeunidad');
 	// Route::get('mantcorrprev/createchecklistvehicular', 'MantCorrPrev@createchecklistvehicular')->name('mantcorrprev.createchecklistvehicular');
 
 //Rutas para Registro Repuesto Vehicular

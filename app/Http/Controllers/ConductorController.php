@@ -144,6 +144,12 @@ class ConductorController extends Controller
             return $validacion->messages()->toJson();
         }
         $error = DB::transaction(function() use($request){
+            $concesionariaAct = Concesionaria::join('userconcesionaria','userconcesionaria.concesionaria_id','=','concesionaria.id')
+                                ->join('users','users.id','=','userconcesionaria.user_id')
+                                ->where('userconcesionaria.estado','=',true)->where('userconcesionaria.user_id','=',auth()->user()->id)
+                                ->select('concesionaria.id','concesionaria.razonsocial')->first();
+            $idConcAct = $concesionariaAct->id;
+
             $conductor = new Conductor();
             $conductor->dni= $request->input('dni');
             $conductor->apellidos= mb_strtoupper($request->input('apellidos'), 'utf-8');
@@ -152,6 +158,7 @@ class ConductorController extends Controller
             $conductor->categoria= $request->input('categoria');
             $conductor->fechavencimiento= mb_strtoupper($request->input('fechavencimiento'), 'utf-8');
             $conductor->contratista_id= mb_strtoupper($request->input('contratista_id'), 'utf-8');
+            $conductor->concesionaria_id = $idConcAct;
             $conductor->save();
         });
         return is_null($error) ? "OK" : $error;
