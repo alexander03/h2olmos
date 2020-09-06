@@ -20,6 +20,7 @@ class Conductor extends Model
         $idConcAct = $concesionariaAct->id;
         
         return $query->join('contratista', 'conductor.contratista_id', '=', 'contratista.id')
+            ->join('conductorconcesionaria', 'conductorconcesionaria.conductor_id', '=', 'conductor.id')
             ->where(function($subquery) use ($estado) {
                 if($estado === 'activos') $subquery->whereNull('conductor.deleted_at');
                 elseif($estado === 'desactivados') $subquery->whereNotNull('conductor.deleted_at');
@@ -37,7 +38,7 @@ class Conductor extends Model
                 if($contratista_id !== 'all') $subquery->where('conductor.contratista_id', $contratista_id);
             })
             ->where(function($subquery) use ($idConcAct) {
-                $subquery->where('concesionaria_id', $idConcAct);
+                $subquery->where('conductorconcesionaria.concesionaria_id', $idConcAct);
             })
             ->orderBy('conductor.apellidos', 'ASC')
             ->select('conductor.id','conductor.nombres', 'conductor.apellidos', 'conductor.dni', 'conductor.categoria', 'conductor.licencia', 'conductor.fechavencimiento', 'conductor.deleted_at', 'contratista.razonsocial as contratista_razonsocial')->withTrashed();

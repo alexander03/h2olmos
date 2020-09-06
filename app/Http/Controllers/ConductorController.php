@@ -6,6 +6,7 @@ use Validator;
 use Illuminate\Http\Request;
 use App\Conductor;
 use App\Contratista;
+use App\Concesionaria;
 use App\Librerias\Libreria;
 use Illuminate\Support\Facades\DB;
 
@@ -285,6 +286,17 @@ class ConductorController extends Controller
     }
 
     public function existeConductor(Request $request) {
-        return $res = Conductor::withTrashed()->where('dni', $request->dni)->get();
+        $concesionariaAct = Concesionaria::join('userconcesionaria','userconcesionaria.concesionaria_id','=','concesionaria.id')
+                                ->join('users','users.id','=','userconcesionaria.user_id')
+                                ->where('userconcesionaria.estado','=',true)->where('userconcesionaria.user_id','=',auth()->user()->id)
+                                ->select('concesionaria.id','concesionaria.razonsocial')->first();
+        $idConcAct = $concesionariaAct->id;
+
+        return $res = Conductor::withTrashed()
+                ->join('conductorconcesionaria', 'conductorconcesionaria.conductor_id', '=', 'conductor.id')
+                ->where(function($subquery) use ($idConcAct) {
+                    $subquery->where('conductorconcesionaria.concesionaria_id', $idConcAct);
+                })
+                ->where('dni', $request->dni)->get();
     }
 }
