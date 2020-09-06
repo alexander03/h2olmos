@@ -19,6 +19,8 @@ class CreateConductorconcesionariaTable extends Migration
             $table->unsignedBigInteger('concesionaria_id');
             $table->foreign('conductor_id')->references('id')->on('conductor');
             $table->foreign('concesionaria_id')->references('id')->on('concesionaria');
+
+            $table->unique(['conductor_id', 'concesionaria_id']);
             $table->timestamps();
         });
     }
