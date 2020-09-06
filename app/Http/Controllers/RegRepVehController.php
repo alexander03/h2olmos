@@ -120,6 +120,7 @@ class RegRepVehController extends Controller
             $oConcesionarias = array($v->id=>$v->razonsocial);
         }
         //$oTipos=array('' => 'Seleccione Tipo');
+        $oTipos=array('' => 'Seleccione Tipo');
         $oTipos=array('1' => 'Preventivo');
         $oTipos+=array('2' => 'Correctivo');
         $formData = array('regrepveh.createregrepveh');
@@ -160,12 +161,34 @@ class RegRepVehController extends Controller
 
     public function store(Request $request){
 
-        $reglas     = [
-            
+        $reglas = [
+            'concesionaria_id' => 'required',
+            'cliente' => 'required',
+            'ua_id' => 'required',
+            'fechaentrada' => 'required',
+            'fechasalida' => 'required',
+            'kmman' => 'required',
+            'kminicial' => 'required',
+            'kmfinal' => 'required',
+            'tipomantenimiento' => 'required',
+            'telefono' => 'required'
         ];
+
         $mensajes = [
-            
-		];
+            'cliente.required' => 'Cliente Campo Vacío',
+            'ua_id.required' => 'UA Campo Vacío',
+            'fechaentrada.required' => 'Fecha Entrada Campo Vacío',
+            'fechasalida.required' => 'Fecha Salida Campo Vacío',
+            'kmman.required' => 'Km de Mantenimiento Campo Vacío',
+            'kminicial.required' => 'Km Inicial Campo Vacío',
+            'kmfinal.required' => 'Km Final Campo Vacío',
+            'tipomantenimiento.required' => 'Tipo de Mantenimiento No Seleccionado',
+            'telefono.required' => 'Campo Vacío'
+        ];
+        $validacion = Validator::make($request->all(), $reglas, $mensajes);
+        if ($validacion->fails()) {
+            return $validacion->messages()->toJson();
+        }
 
         $listar     = Libreria::getParam($request->input('listar'), 'NO');
 
@@ -334,6 +357,20 @@ class RegRepVehController extends Controller
             $descripcionregrepv -> save();
         }); 
         }
+
+        $idseliminados=$request->idseliminados;
+
+        if($idseliminados!=null){
+            foreach($idseliminados as $k=>$idd){
+                $error = DB::transaction(function() use($idd){
+                    if($idd>0){
+                $regrepveh = DescripcionRegRepVeh::find($idd);
+                $regrepveh->delete();}
+                }); 
+            }
+        }   
+
+
 
 
 

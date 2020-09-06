@@ -66,7 +66,7 @@
 	<div class="form-group col-lg-4 col-md-4 col-sm-4">
 		{!! Form::label('tipo', 'Tipo de Mantenimiento:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
 		<div class="col-lg-12 col-md-12 col-sm-12">
-			{!! Form::select('tipomantenimiento',array('1'=>'Preventivo','2'=>'Correctivo'), null, array('class' => 'form-control input-xs', 'id' => 'tipomantenimiento', 'maxlength' => '100')) !!}
+			{!! Form::select('tipomantenimiento',array(''=>'Seleccione Tipo','1'=>'Preventivo','2'=>'Correctivo'), null, array('class' => 'form-control input-xs', 'id' => 'tipomantenimiento', 'maxlength' => '100')) !!}
 		</div>
 	</div>
 	<div class="form-group col-lg-4 col-md-4 col-sm-4">
@@ -97,25 +97,15 @@
 				$contador = 1;
 				?>
 				@foreach ($oObservaciones as $key => $value)
-				<!--tr>
-					<p><input type="hidden" name="id{{ $contador }}" value="{{ $value->id }}"></p>
-					<td style="text-align:center;">{{ $contador }}</td>
-					<td><input name="cantidad{{ $contador }}" class='form-control' type="number" value="{{ $value->cantidad }}" style="text-align:right;width:100px;"></td>
-					<td><input name="unidad{{ $contador }}" class="form-control" type="text" value="{{ $value->unidad }}" style="width:100px;"></td>
-					<td ><input name="codigo{{ $contador }}" class="form-control" type="text" value="{{ $value->codigo }}" style="width:100px;"></td>
-					<td contenteditable="true"><input  name="monto{{ $contador }}"class='form-control' type="number" value="{{ $value->monto }}" style="text-align:right;width:100px;"></td>
-					<td contenteditable="true"><input name="descripcion{{ $contador }}" class="form-control" type="text" value="{{ $value->descripcion }}"></td>
-					<td onclick="alert('gg nomaddddds');" style="color:#ff0000;text-align:center;width:50px;"><i class="material-icons text-center">close</i></td>
-				</tr-->
 				<tr>
-					<p><input type="hidden" name="idid[]" value="{{ $value->id }}"></p>
-					<td style="text-align:center;">{{ $contador }}</td>
+					<p><input type="hidden" name="idid[]" id="ididid" value="{{ $value->id }}"></p>
+					<td name="nnn" style="text-align:center;">{{ $contador }}</td>
 					<td><input name="cantidad[]" class='form-control' type="number" value="{{ $value->cantidad }}" style="text-align:right;width:100px;"></td>
 					<td><input name="unidad[]" class="form-control" type="text" value="{{ $value->unidad }}" style="width:100px;"></td>
 					<td ><input name="codigo[]" class="form-control" type="text" value="{{ $value->codigo }}" style="width:100px;"></td>
-					<td contenteditable="true"><input  name="monto[]"class='form-control' type="number" value="{{ $value->monto }}" style="text-align:right;width:100px;"></td>
-					<td contenteditable="true"><input name="descripcion[]" class="form-control" type="text" value="{{ $value->descripcion }}"></td>
-					<td onclick="deleteRow(this);" style="color:#ff0000;text-align:center;width:50px;"><i class="material-icons text-center">close</i></td>
+					<td><input  name="monto[]"class='form-control' type="number" value="{{ $value->monto }}" style="text-align:right;width:100px;"></td>
+					<td><input name="descripcion[]" class="form-control" type="text" value="{{ $value->descripcion }}"></td>
+					<td onclick="if(confirm('¿Desea Eliminar la Observación?')){borrarfila({{ $value->id }});deleteRow(this);}" style="color:#ff0000;text-align:center;width:50px;"><i class="material-icons text-center">close</i></td>
 				</tr>
 				<?php
 				$contador = $contador + 1;
@@ -142,12 +132,6 @@
 
 	
 
-	/*data class desc($hijo,$padre)
-	var ListaHijos = [];
-	var.push(new DescripcionRegRepVeh('dasd','sfdsdf'));*/
-
-
-
 
 	var a = <?php echo $contador?> -1;
 	$(document).ready(function() {
@@ -167,21 +151,6 @@
 	}); 	
 
 	function buscarporUA(){
-		
-
-// 		//alert("gg nomas");
-// 		var uanumero= document.getElementById('uabuscar').value;
-// 		var informe = "dd";
-// 		$.ajax("mantcorrprev/buscarporua?ua="+uanumero, function(data) {
-			
-// 			informe+=data.value;
-// 			/*if (data!=null) {
-// 				alert(data);
-// 			}else{
-// 				alert("No existe Unidad con UA"+uanumero);
-//        		}*/
-// });
-// 		alert(informe);
 
 		var uanumero= document.getElementById('ua_id').value;
 
@@ -208,9 +177,11 @@
 	}
 
 	function evaluarcantidad(){
-		var rr =document.getElementById('tbody');
-		var trs=rr.getElementsByTagName('tr').length;
-		alert(trs);
+		var fff=document.getElementsByName('nnn');
+		for (var i = 0; i < fff.length; i++) {
+
+			fff[i].innerHTML=(1+i);
+		}
 
 	}
 
@@ -218,58 +189,67 @@
 
 	function agregarfila(){
 		a++;
-		var f = "fff";
-		/*
-		document.getElementById('tbody').innerHTML+=`
-			<tr>
-				<input type="hidden" name="id{{ $contador }}" value="-1">
-				<td style="text-align:center;">${a}</td>
-				<td><input name="cantidad{{ $contador }}" class='form-control' type="number" value="" style="text-align:right;width:100px;"></td>
-				<td><input name="unidad{{ $contador }}" class="form-control" type="text" value="" style="width:100px;"></td>
-				<td ><input name="codigo{{ $contador }}" class="form-control" type="text" value="" style="width:100px;"></td>
-				<td contenteditable="true"><input  name="monto{{ $contador }}"class='form-control' type="number" value="" style="text-align:right;width:100px;"></td>
-				<td contenteditable="true"><input name="descripcion{{ $contador }}" class="form-control" type="text" value=""></td>
-				<td onclick="alert();" style="color:#ff0000;text-align:center;width:50px;"><i class="material-icons text-center">close</i></td>
-			</tr>`;*/
-		/*document.getElementById('tbody').innerHTML+=`
+		var tr = document.createElement("tr");
+		tr.innerHTML = `
 		<tr>
 			<input type="hidden" name="idid[]" value="-1">
-			<td style="text-align:center;">${a}</td>
+			<td name="nnn" style="text-align:center;">${a}</td>
 			<td><input name="cantidad[]" class='form-control' type="number" value="" style="text-align:right;width:100px;"></td>
 			<td><input name="unidad[]" class="form-control" type="text" value="" style="width:100px;"></td>
 			<td ><input name="codigo[]" class="form-control" type="text" value="" style="width:100px;"></td>
-			<td contenteditable="true"><input  name="monto[]"class='form-control' type="number" value="" style="text-align:right;width:100px;"></td>
-			<td contenteditable="true"><input name="descripcion[]" class="form-control" type="text" value=""></td>
-			<td onclick="alert();" style="color:#ff0000;text-align:center;width:50px;"><i class="material-icons text-center">close</i></td>
-		</tr>`;*/
-
-
-			var tr = document.createElement("tr");
-			tr.innerHTML = `
-		<tr>
-			<input type="hidden" name="idid[]" value="-1">
-			<td style="text-align:center;">${a}</td>
-			<td><input name="cantidad[]" class='form-control' type="number" value="" style="text-align:right;width:100px;"></td>
-			<td><input name="unidad[]" class="form-control" type="text" value="" style="width:100px;"></td>
-			<td ><input name="codigo[]" class="form-control" type="text" value="" style="width:100px;"></td>
-			<td contenteditable="true"><input  name="monto[]"class='form-control' type="number" value="" style="text-align:right;width:100px;"></td>
-			<td contenteditable="true"><input name="descripcion[]" class="form-control" type="text" value=""></td>
+			<td><input  name="monto[]"class='form-control' type="number" value="" style="text-align:right;width:100px;"></td>
+			<td><input name="descripcion[]" class="form-control" type="text" value=""></td>
 			<td onclick="deleteRow(this);" style="color:#ff0000;text-align:center;width:50px;"><i class="material-icons text-center">close</i></td>
 		</tr>`;
 			document.getElementById("tbody").appendChild(tr);
 
-
-
    }
 
 	   function deleteRow(btn) {
-		  var row = btn.parentNode;
-		  row.parentNode.removeChild(row);
+
+	   	//if(confirm('¿Desea Eliminar la Observación?')){
+	   		a--;
+			var row = btn.parentNode;
+		  	row.parentNode.removeChild(row);
+		  	evaluarcantidad();
+	   //	}
+	   	
+
+	   /*	bootbox.dialog({
+		message : '¿Eliminar Observación?',
+		buttons: {
+			'cancel': {
+				label: 'Cancelar',
+				className: 'btn btn-default btn-sm'
+			},
+			'confirm':{
+				label: 'Eliminar',
+				className: 'btn btn-danger btn-sm'
+			}
+		}, 
+		callback: function(result) {
+	   	if(result){
+				var row = btn.parentNode;
+		  		row.parentNode.removeChild(row);
+	   		}
+
+		}
+		
+	});*/
+		  
 	}
 
-   function borrarfila(){
+function borrarfila(iddd){
+	   		var input = document.createElement("input");
 
-   }
+			input.setAttribute("type", "hidden");
 
+			input.setAttribute("name", "idseliminados[]");
+
+			input.setAttribute("value", iddd);
+
+			document.getElementById("tbody").appendChild(input);
+
+	   	}
 	
 </script>
