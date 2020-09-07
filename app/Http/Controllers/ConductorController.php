@@ -253,13 +253,32 @@ class ConductorController extends Controller
 
     public function destroy($id)
     {
-        $existe = Libreria::verificarExistencia($id, 'conductor');
-        if ($existe !== true) {
-            return $existe;
+        $concesionariaAct = Concesionaria::join('userconcesionaria','userconcesionaria.concesionaria_id','=','concesionaria.id')
+                                ->join('users','users.id','=','userconcesionaria.user_id')
+                                ->where('userconcesionaria.estado','=',true)->where('userconcesionaria.user_id','=',auth()->user()->id)
+                                ->select('concesionaria.id','concesionaria.razonsocial')->first();
+        $idConcAct = $concesionariaAct->id;
+
+        $conductorBuscado = Conductor::where('conductor.id', $id)
+                        ->join('conductorconcesionaria', 'conductorconcesionaria.conductor_id', '=', 'conductor.id')
+                        ->where('conductorconcesionaria.concesionaria_id', $idConcAct)->first();
+
+        if ($conductorBuscado == null) {
+            $cadena = '<blockquote><p class="text-danger">Registro no existe en la base de datos. No manipular ID</p></blockquote>';
+			$cadena .= '<button class="btn btn-warning btn-sm" id="btnCerrarexiste"><i class="fa fa-times fa-lg"></i> Cerrar</button>';
+			$cadena .= "<script type=\"text/javascript\">
+							$(document).ready(function() {
+								$('#btnCerrarexiste').attr('onclick','cerrarModal(' + (contadorModal - 1) + ');').unbind('click');
+							}); 
+						</script>";
+			return $cadena;
         }
-        $error = DB::transaction(function() use($id){
-            $brand = Conductor::find($id);
-            $brand->delete();
+        $error = DB::transaction(function() use($id, $idConcAct){
+            // $brand = Conductor::find($id);
+            // $brand->delete();
+            $conductorconcesionaria = Conductorconcesionaria::where('conductor_id', $id)->where('concesionaria_id', $idConcAct)->first();
+            $conductorconcesionaria->estado = false;
+            $conductorconcesionaria->save();
         });
         return is_null($error) ? "OK" : $error;
     }
