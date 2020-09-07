@@ -21,11 +21,16 @@ class UserConcesionariaController extends Controller
 
     public function actual() {
 
-        return UserConcesionaria::join('users', 'userconcesionaria.user_id', '=', 'users.id')
+        $razonsocial= UserConcesionaria::join('users', 'userconcesionaria.user_id', '=', 'users.id')
             ->join('concesionaria', 'userconcesionaria.concesionaria_id', '=', 'concesionaria.id')
             ->where('users.id','=',auth()->user()->id)
             ->where('userconcesionaria.estado','=',true)
-            ->select('concesionaria.abreviatura as razonsocial')->get()[0]->razonsocial;
+            ->select('concesionaria.abreviatura as razonsocial')->get();
+            if(count($razonsocial)>0){
+                return $razonsocial[0]->razonsocial;
+            }else{
+                return "Sin Concesionaria";
+            }
     }
 
 

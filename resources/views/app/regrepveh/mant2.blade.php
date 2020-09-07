@@ -27,24 +27,12 @@
 	<div class="form-group col-4 col-md-4 p-3 u-search-ua">
 		<label for="ua" class="pl-3">Código Ua</label>
 		<div class="u-ua-style js-ua-desc">
-			<!--?php if($regrepveh) if(isset($regrepveh -> ua_id)) echo $regrepveh -> ua_id; else echo 'Sin ua';?-->
 		</div>
 		{!! Form::text('ua_id', null, array('class' => 'form-control input-xs js-ua-id', 'id' => 'ua_id', 'maxlength' => '15')) !!}
-		<!--input type="text" 
-			name="ua_id" 
-			id="ua_id" 
-			class="form-control input-xs js-ua-id" -->
+		
 		<small id="autoComplete_list1" class="text-danger"></small>
 	</div>
-	<!--div class="form-group col-lg-4 col-md-4 col-sm-4">
-		<div class="container">
-			<div for="ua" class="col-lg-12 col-md-12 col-sm-12 control-label">UA:
-				<label id="buscarporUA" style="color:black" onclick="buscarporUA()" onmouseout="this.style.color='black'" onmouseover="this.style.color='orange';">Comprobar
-				</label>
-			</div>
-			{!! Form::number('ua_id', null, array('class' => 'form-control input-xs', 'id' => 'ua_id', 'maxlength' => '12')) !!}
-		</div>
-	</div-->
+	
 	<div class="form-group col-lg-4 col-md-4 col-sm-4">
 		{!! Form::label('fin', 'Fecha Entrada:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
 		<div class="col-lg-12 col-md-12 col-sm-12">

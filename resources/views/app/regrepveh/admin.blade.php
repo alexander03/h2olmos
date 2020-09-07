@@ -18,7 +18,7 @@
 				{!! Form::label('filas', 'Filas')!!}
 				{!! Form::selectRange('filas', 1, 30, 20, array('class' => 'form-control input-xs', 'onchange' => 'buscar(\''.$entidad.'\')')) !!}
 			</div>
-			<div class="col-12 col-sm-4 col-md-2 col-lg-8 d-flex justify-content-around align-items-center">
+			<div class="form-group">
 				{!! Form::button('<i class="material-icons">search</i>Buscar', array('class' => 'btn btn-success p-2 pl-1 pr-1', 'id' => 'btnBuscar', 'onclick' => 'buscar(\''.$entidad.'\')')) !!}
 				{!! Form::button('<i class="material-icons">add</i>Registrar Repuestos', array('class' => 'btn btn-info p-2 pl-1 pr-1', 'id' => 'btnNuevo', 'onclick' => 'modal (\''.URL::route($ruta["createrepuesto"], array('listar'=>'SI')).'\', \''.$tituloRegistrar.'\', this);')) !!}
 

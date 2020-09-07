@@ -9,6 +9,7 @@ use App\Unidad;
 use App\Equipo;
 use App\RegRepVeh;
 use App\Ua;
+use App\Rules\SearchUaPadre;
 use App\Librerias\Libreria;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
@@ -19,10 +20,9 @@ class RegRepVehController extends Controller
 {
     protected $folderview      = 'app.regrepveh';
     protected $tituloAdmin     = 'Registro de Repuesto Vehicular';
-    protected $tituloCheckListVehicular = 'Nuevo Check List Vehicular';
     protected $tituloRegistrar = 'Registro de Repuesto Vehicular';
-    protected $tituloModificar = 'Modificar repuesto';
-    protected $tituloEliminar  = 'Eliminar repuesto';
+    protected $tituloModificar = 'Modificar Repuesto Vehicular';
+    protected $tituloEliminar  = 'Eliminar Repuesto Vehicular';
     protected $tituloActivar  = 'Activar repuesto';
     protected $rutas           = array(
        // 'create' => 'regrepveh.createregrepveh',
@@ -47,16 +47,19 @@ class RegRepVehController extends Controller
         $filas            = $request->input('filas');
         $entidad          = 'RegRepVeh';
         $filter           = Libreria::getParam($request->input('filter'));
-		$idConcesionariaActual = Concesionaria::join('userconcesionaria','userconcesionaria.concesionaria_id','=','concesionaria.id')
+		$ConcesionariaActual = Concesionaria::join('userconcesionaria','userconcesionaria.concesionaria_id','=','concesionaria.id')
         ->join('users','users.id','=','userconcesionaria.user_id')
         ->where('userconcesionaria.estado','=',true)->where('userconcesionaria.user_id','=',auth()->user()->id)
        	->select('concesionaria.id','concesionaria.razonsocial')->get();
-       	$idConcAct=$idConcesionariaActual[0]->id;
+       	$idConcAct=$ConcesionariaActual[0]->id;
 
         $resultado= RegRepVeh::where('regrepveh.concesionaria_id',$idConcAct)
         ->where(function($q) use ($filter){
         $q->where('regrepveh.cliente', 'like', '%'.$filter.'%')
-          ->orWhere('regrepveh.ua_id', 'like', '%'.$filter.'%');
+          ->orWhere('regrepveh.ua_id', 'like', '%'.$filter.'%')
+          ->orWhere('regrepveh.telefono', 'like', '%'.$filter.'%')
+          ->orWhere('regrepveh.fechaentrada', 'like', '%'.$filter.'%')
+          ->orWhere('regrepveh.fechasalida', 'like', '%'.$filter.'%');
      	});
 
 
@@ -96,11 +99,10 @@ class RegRepVehController extends Controller
     {
         $entidad          = 'RegRepVeh';
         $title            = $this->tituloAdmin;
-        $tituloCheckListVehicular = $this->tituloCheckListVehicular;
         $tituloRegistrar = $this->tituloRegistrar;
         $ruta             = $this->rutas;
         
-        return view($this->folderview.'.admin')->with(compact('entidad', 'title', 'tituloCheckListVehicular','tituloRegistrar', 'ruta'));
+        return view($this->folderview.'.admin')->with(compact('entidad', 'title','tituloRegistrar', 'ruta'));
     }
 
 
@@ -163,8 +165,8 @@ class RegRepVehController extends Controller
 
         $reglas = [
             'concesionaria_id' => 'required',
-            'cliente' => 'required',
-            'ua_id' => 'required',
+            'cliente' => 'required|max:10',
+            'ua_id' => ['required', new SearchUaPadre()],
             'fechaentrada' => 'required',
             'fechasalida' => 'required',
             'kmman' => 'required',
@@ -176,6 +178,7 @@ class RegRepVehController extends Controller
 
         $mensajes = [
             'cliente.required' => 'Cliente Campo Vacío',
+            'cliente.max' => 'Nombre de Cliente muy largo, máximo 250 caracteres',
             'ua_id.required' => 'UA Campo Vacío',
             'fechaentrada.required' => 'Fecha Entrada Campo Vacío',
             'fechasalida.required' => 'Fecha Salida Campo Vacío',
@@ -303,6 +306,40 @@ class RegRepVehController extends Controller
 
     public function update(Request $request, $id)
     {
+
+        $reglas = [
+            'concesionaria_id' => 'required',
+            'cliente' => 'required|max:10',
+            'ua_id' => ['required', new SearchUaPadre()],
+            'fechaentrada' => 'required',
+            'fechasalida' => 'required',
+            'kmman' => 'required',
+            'kminicial' => 'required',
+            'kmfinal' => 'required',
+            'tipomantenimiento' => 'required',
+            'telefono' => 'required'
+        ];
+
+        $mensajes = [
+            'cliente.required' => 'Cliente Campo Vacío',
+            'cliente.max' => 'Nombre de Cliente muy largo, máximo 250 caracteres',
+            'ua_id.required' => 'UA Campo Vacío',
+            'fechaentrada.required' => 'Fecha Entrada Campo Vacío',
+            'fechasalida.required' => 'Fecha Salida Campo Vacío',
+            'kmman.required' => 'Km de Mantenimiento Campo Vacío',
+            'kminicial.required' => 'Km Inicial Campo Vacío',
+            'kmfinal.required' => 'Km Final Campo Vacío',
+            'tipomantenimiento.required' => 'Tipo de Mantenimiento No Seleccionado',
+            'telefono.required' => 'Campo Vacío'
+        ];
+        $validacion = Validator::make($request->all(), $reglas, $mensajes);
+        if ($validacion->fails()) {
+            return $validacion->messages()->toJson();
+        }
+
+
+
+
         $existe = Libreria::verificarExistencia($id, 'regrepveh');
         if ($existe !== true) {
             return $existe;
@@ -317,9 +354,6 @@ class RegRepVehController extends Controller
         if ($validacion->fails()) {
             return $validacion->messages()->toJson();
         } 
-
-
-
 
 
 
