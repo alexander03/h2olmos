@@ -41,7 +41,7 @@ class Conductor extends Model
                 $subquery->where('conductorconcesionaria.concesionaria_id', $idConcAct);
             })
             ->orderBy('conductor.apellidos', 'ASC')
-            ->select('conductor.id','conductor.nombres', 'conductor.apellidos', 'conductor.dni', 'conductor.categoria', 'conductor.licencia', 'conductor.fechavencimiento', 'conductor.deleted_at', 'contratista.razonsocial as contratista_razonsocial')->withTrashed();
+            ->select('conductor.id','conductor.nombres', 'conductor.apellidos', 'conductor.dni', 'conductor.categoria', 'conductor.licencia', 'conductor.fechavencimiento', 'conductor.deleted_at', 'contratista.razonsocial as contratista_razonsocial', 'conductorconcesionaria.estado as conductor_estado');
     }
 
     public function scopegetAll($query) {

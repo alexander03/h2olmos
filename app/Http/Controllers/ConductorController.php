@@ -251,6 +251,24 @@ class ConductorController extends Controller
         return is_null($error) ? "OK" : $error;
     }
 
+    public function eliminar($id, $listarLuego)
+    {
+        $existe = Libreria::verificarExistencia($id, 'conductor');
+        if ($existe !== true) {
+            return $existe;
+        }
+        $listar = "NO";
+        if (!is_null(Libreria::obtenerParametro($listarLuego))) {
+            $listar = $listarLuego;
+        }
+        $mensaje=true;
+        $modelo   = Conductor::find($id);
+        $entidad  = 'Conductor';
+        $formData = array('route' => array('conductores.destroy', $id), 'method' => 'DELETE', 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
+        $boton    = 'Eliminar';
+        return view('app.confirmarEliminar')->with(compact('modelo', 'formData', 'entidad', 'boton', 'listar','mensaje'));
+    }
+
     public function destroy($id)
     {
         $concesionariaAct = Concesionaria::join('userconcesionaria','userconcesionaria.concesionaria_id','=','concesionaria.id')
@@ -281,24 +299,6 @@ class ConductorController extends Controller
         return is_null($error) ? "OK" : $error;
     }
 
-    public function eliminar($id, $listarLuego)
-    {
-        $existe = Libreria::verificarExistencia($id, 'conductor');
-        if ($existe !== true) {
-            return $existe;
-        }
-        $listar = "NO";
-        if (!is_null(Libreria::obtenerParametro($listarLuego))) {
-            $listar = $listarLuego;
-        }
-        $mensaje=true;
-        $modelo   = Conductor::find($id);
-        $entidad  = 'Conductor';
-        $formData = array('route' => array('conductores.destroy', $id), 'method' => 'DELETE', 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
-        $boton    = 'Eliminar';
-        return view('app.confirmarEliminar')->with(compact('modelo', 'formData', 'entidad', 'boton', 'listar','mensaje'));
-    }
-
     public function activar($id, $listarLuego){
         $listar = "NO";
         if (!is_null(Libreria::obtenerParametro($listarLuego))) {
@@ -312,8 +312,31 @@ class ConductorController extends Controller
     }
 
     public function reactivar($id){
-        $error = DB::transaction(function() use($id){
-            Conductor::onlyTrashed()->where('id', $id)->restore();
+
+        $concesionariaAct = Concesionaria::join('userconcesionaria','userconcesionaria.concesionaria_id','=','concesionaria.id')
+                                ->join('users','users.id','=','userconcesionaria.user_id')
+                                ->where('userconcesionaria.estado','=',true)->where('userconcesionaria.user_id','=',auth()->user()->id)
+                                ->select('concesionaria.id','concesionaria.razonsocial')->first();
+        $idConcAct = $concesionariaAct->id;
+
+        $conductorBuscado = Conductor::where('conductor.id', $id)
+                        ->join('conductorconcesionaria', 'conductorconcesionaria.conductor_id', '=', 'conductor.id')
+                        ->where('conductorconcesionaria.concesionaria_id', $idConcAct)->first();
+
+        if ($conductorBuscado == null) {
+            $cadena = '<blockquote><p class="text-danger">Registro no existe en la base de datos. No manipular ID</p></blockquote>';
+			$cadena .= '<button class="btn btn-warning btn-sm" id="btnCerrarexiste"><i class="fa fa-times fa-lg"></i> Cerrar</button>';
+			$cadena .= "<script type=\"text/javascript\">
+							$(document).ready(function() {
+								$('#btnCerrarexiste').attr('onclick','cerrarModal(' + (contadorModal - 1) + ');').unbind('click');
+							}); 
+						</script>";
+			return $cadena;
+        }
+        $error = DB::transaction(function() use($id, $idConcAct){
+            $conductorconcesionaria = Conductorconcesionaria::where('conductor_id', $id)->where('concesionaria_id', $idConcAct)->first();
+            $conductorconcesionaria->estado = true;
+            $conductorconcesionaria->save();
         });
         return is_null($error) ? "OK" : $error;
     }
