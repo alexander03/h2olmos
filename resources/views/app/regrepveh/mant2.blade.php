@@ -24,7 +24,19 @@
 	<div class="mt-8 mb-4 ml-6  col-lg-12 col-md-12 col-sm-12">
 		<p class="text-warning"  style="margin-bottom: 0;">Datos Generales</p> 
 	</div>
-	<div class="form-group col-lg-4 col-md-4 col-sm-4">
+	<div class="form-group col-4 col-md-4 p-3 u-search-ua">
+		<label for="ua" class="pl-3">Código Ua</label>
+		<div class="u-ua-style js-ua-desc">
+			<!--?php if($regrepveh) if(isset($regrepveh -> ua_id)) echo $regrepveh -> ua_id; else echo 'Sin ua';?-->
+		</div>
+		{!! Form::text('ua_id', null, array('class' => 'form-control input-xs js-ua-id', 'id' => 'ua_id', 'maxlength' => '15')) !!}
+		<!--input type="text" 
+			name="ua_id" 
+			id="ua_id" 
+			class="form-control input-xs js-ua-id" -->
+		<small id="autoComplete_list1" class="text-danger"></small>
+	</div>
+	<!--div class="form-group col-lg-4 col-md-4 col-sm-4">
 		<div class="container">
 			<div for="ua" class="col-lg-12 col-md-12 col-sm-12 control-label">UA:
 				<label id="buscarporUA" style="color:black" onclick="buscarporUA()" onmouseout="this.style.color='black'" onmouseover="this.style.color='orange';">Comprobar
@@ -32,7 +44,7 @@
 			</div>
 			{!! Form::number('ua_id', null, array('class' => 'form-control input-xs', 'id' => 'ua_id', 'maxlength' => '12')) !!}
 		</div>
-	</div>
+	</div-->
 	<div class="form-group col-lg-4 col-md-4 col-sm-4">
 		{!! Form::label('fin', 'Fecha Entrada:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
 		<div class="col-lg-12 col-md-12 col-sm-12">
@@ -89,7 +101,7 @@
 					<th colspan="1"  class="text-center" style="width:100px;">Código</th>
 					<th colspan="1"  class="text-center" style="width:80px;">Monto</th>
 					<th colspan="1"  class="text-center">Descripción</th>
-					<th colspan="1"  class="text-center" style="width:100px;">Opciones</th>
+					<th colspan="1"  class="text-center" style="width:100px;">Eliminar</th>
 				</tr>
 			</thead>
 			<tbody id="tbody">
@@ -137,7 +149,7 @@
 	$(document).ready(function() {
 		configurarAnchoModal('900');
 		init(IDFORMMANTENIMIENTO+'{!! $entidad !!}', 'M', '{!! $entidad !!}');
-
+		doSearchUA();
 		const inputCode = document.getElementById('codigo');
 		inputCode.addEventListener('change', e => {
 			if(isNaN(e.target.value)) e.target.value = '';
@@ -196,23 +208,20 @@
 			<td name="nnn" style="text-align:center;">${a}</td>
 			<td><input name="cantidad[]" class='form-control' type="number" value="" style="text-align:right;width:100px;"></td>
 			<td><input name="unidad[]" class="form-control" type="text" value="" style="width:100px;"></td>
-			<td ><input name="codigo[]" class="form-control" type="text" value="" style="width:100px;"></td>
+			<td><input name="codigo[]" class="form-control" type="text" value="" style="width:100px;"></td>
 			<td><input  name="monto[]"class='form-control' type="number" value="" style="text-align:right;width:100px;"></td>
 			<td><input name="descripcion[]" class="form-control" type="text" value=""></td>
-			<td onclick="deleteRow(this);" style="color:#ff0000;text-align:center;width:50px;"><i class="material-icons text-center">close</i></td>
+			<td onclick="if(confirm('¿Desea Eliminar la Observación?')){deleteRow(this);}" style="color:#ff0000;text-align:center;width:50px;"><i class="material-icons text-center">close</i></td>
 		</tr>`;
 			document.getElementById("tbody").appendChild(tr);
 
    }
 
 	   function deleteRow(btn) {
-
-	   	//if(confirm('¿Desea Eliminar la Observación?')){
 	   		a--;
 			var row = btn.parentNode;
 		  	row.parentNode.removeChild(row);
 		  	evaluarcantidad();
-	   //	}
 	   	
 
 	   /*	bootbox.dialog({
@@ -239,7 +248,7 @@
 		  
 	}
 
-function borrarfila(iddd){
+		function borrarfila(iddd){
 	   		var input = document.createElement("input");
 
 			input.setAttribute("type", "hidden");
