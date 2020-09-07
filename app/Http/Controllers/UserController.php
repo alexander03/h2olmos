@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\User;
 use App\Tipouser;
 use App\Concesionaria;
+use App\UserConcesionaria;
 use Validator;
 use App\Http\Requests\UserRequest;
 use Illuminate\Support\Facades\Hash;
@@ -136,6 +137,20 @@ class UserController extends Controller
             $user->username= $request->input('username');
             $user->password= Hash::make($request->input('password'));
             $user->save();
+
+            if($request->input('H2OLMOS') != null) {
+                $userconcesionaria = new UserConcesionaria();
+                $userconcesionaria->user_id = $user->id;
+                $userconcesionaria->concesionaria_id = $request->input('H2OLMOS');
+                $userconcesionaria->save();
+            }
+            if($request->input('C.T.O.') != null) {
+                $userconcesionaria = new UserConcesionaria();
+                $userconcesionaria->user_id = $user->id;
+                $userconcesionaria->concesionaria_id = $request->input('C.T.O.');
+                $userconcesionaria->save();
+            }
+
         });
         return is_null($error) ? "OK" : $error;
 
