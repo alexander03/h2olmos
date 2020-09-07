@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\User;
 use App\Tipouser;
+use App\Concesionaria;
 use Validator;
 use App\Http\Requests\UserRequest;
 use Illuminate\Support\Facades\Hash;
@@ -82,6 +83,7 @@ class UserController extends Controller
         foreach($arrTipousers as $k=>$v){
             $cboTipousers += array($v->id=>$v->descripcion);
         }
+        
         return view($this->folderview.'.admin')->with(compact('entidad', 'title', 'titulo_registrar', 'cboTipousers', 'ruta'));
 
     }
@@ -99,7 +101,13 @@ class UserController extends Controller
         foreach($arrTipousers as $k=>$v){
             $cboTipousers += array($v->id=>$v->descripcion);
         }
-        return view($this->folderview.'.mant')->with(compact('user', 'formData', 'entidad', 'cboTipousers', 'boton', 'listar'));
+
+        $arrConcesionarias      = Concesionaria::getAll();
+        $cboConcesionaria = [];
+        foreach($arrConcesionarias as $k=>$v){
+            $cboConcesionaria[] = array('id' => $v->id, 'abreviatura' => $v->abreviatura, 'estado' => false);
+        }
+        return view($this->folderview.'.mant')->with(compact('user', 'formData', 'entidad', 'cboTipousers','cboConcesionaria' ,'boton', 'listar'));
     }
 
     public function store(Request $request) {

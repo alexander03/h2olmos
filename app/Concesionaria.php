@@ -22,4 +22,5 @@ class Concesionaria extends Model
                             ->select('concesionaria.id','concesionaria.razonsocial')->first();
         return $concesionariaAct;
     }
+
 }
