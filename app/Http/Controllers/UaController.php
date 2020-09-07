@@ -254,8 +254,9 @@ class UaController extends Controller{
 
     //PETICION GET QUE DEVUELVE TODOS LOS DATOS
     public function searchAutocomplete($query){
-
-        $consulta = "select id, codigo, descripcion from ua where
+        // 
+        $consulta = "SELECT id, codigo, descripcion, CONCAT(codigo, ' - ', descripcion) AS 'search'  
+            FROM ua WHERE
             deleted_at IS NULL AND
             codigo LIKE '%".$query."%' OR descripcion LIKE '%".$query."%'";
         $res = DB::select($consulta);

@@ -328,7 +328,8 @@ class AbastecimientoCombustibleController extends Controller{
     //PETICION GET QUE DEVUELVE TODOS LOS DATOS CONDUCTOR
     public function searchAutocompleteConductor($query){
 
-        $consulta = "select id, nombres, apellidos, dni from conductor where
+        $consulta = "select id, nombres, apellidos, dni, CONCAT(nombres, ' ', apellidos, ' - ', dni) as 'search' 
+            from conductor where
             deleted_at IS NULL AND
             apellidos LIKE UPPER('%".$query."%') OR dni LIKE '%".$query."%'";
         $res = DB::select($consulta);
@@ -339,7 +340,8 @@ class AbastecimientoCombustibleController extends Controller{
     //PETICION GET QUE DEVUELVE TODOS LOS DATOS EQUIPO
     public function searchAutocompleteEquipo($query){
 
-        $consulta = "select id, codigo, descripcion from equipo where
+        $consulta = "select id, codigo, descripcion, CONCAT(codigo, ' - ', descripcion) as 'search'
+            from equipo where
             deleted_at IS NULL AND
             codigo LIKE '%".$query."%' OR descripcion LIKE '%".$query."%'";
         $res = DB::select($consulta);
