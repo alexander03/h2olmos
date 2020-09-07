@@ -274,8 +274,6 @@ class ConductorController extends Controller
 			return $cadena;
         }
         $error = DB::transaction(function() use($id, $idConcAct){
-            // $brand = Conductor::find($id);
-            // $brand->delete();
             $conductorconcesionaria = Conductorconcesionaria::where('conductor_id', $id)->where('concesionaria_id', $idConcAct)->first();
             $conductorconcesionaria->estado = false;
             $conductorconcesionaria->save();

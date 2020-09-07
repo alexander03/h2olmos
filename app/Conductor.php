@@ -22,8 +22,8 @@ class Conductor extends Model
         return $query->join('contratista', 'conductor.contratista_id', '=', 'contratista.id')
             ->join('conductorconcesionaria', 'conductorconcesionaria.conductor_id', '=', 'conductor.id')
             ->where(function($subquery) use ($estado) {
-                if($estado === 'activos') $subquery->whereNull('conductor.deleted_at');
-                elseif($estado === 'desactivados') $subquery->whereNotNull('conductor.deleted_at');
+                if($estado === 'activos') $subquery->where('conductorconcesionaria.estado', true);
+                elseif($estado === 'desactivados') $subquery->where('conductorconcesionaria.estado', false);
             })
             ->where(function($subquery) use ($filter) {
                 $subquery->where('conductor.dni', strtoupper($filter))
