@@ -146,11 +146,7 @@ class ConductorController extends Controller
             return $validacion->messages()->toJson();
         }
         $error = DB::transaction(function() use($request){
-            $concesionariaAct = Concesionaria::join('userconcesionaria','userconcesionaria.concesionaria_id','=','concesionaria.id')
-                                ->join('users','users.id','=','userconcesionaria.user_id')
-                                ->where('userconcesionaria.estado','=',true)->where('userconcesionaria.user_id','=',auth()->user()->id)
-                                ->select('concesionaria.id','concesionaria.razonsocial')->first();
-            $idConcAct = $concesionariaAct->id;
+            $concesionariaActual = Concesionaria::getConcesionariaActual();
 
             //Busco al conductor
             $conductorBuscado = Conductor::where('dni', $request->input('dni'))->first();
@@ -167,12 +163,12 @@ class ConductorController extends Controller
     
                 $conductorconcesionaria = new Conductorconcesionaria();
                 $conductorconcesionaria->conductor_id = $conductor->id;
-                $conductorconcesionaria->concesionaria_id = $idConcAct;
+                $conductorconcesionaria->concesionaria_id = $concesionariaActual->id;
                 $conductorconcesionaria->save();
             } else {
                 $conductorconcesionaria = new Conductorconcesionaria();
                 $conductorconcesionaria->conductor_id = $conductorBuscado->id;
-                $conductorconcesionaria->concesionaria_id = $idConcAct;
+                $conductorconcesionaria->concesionaria_id = $concesionariaActual->id;
                 $conductorconcesionaria->save();
             }
 
@@ -271,15 +267,11 @@ class ConductorController extends Controller
 
     public function destroy($id)
     {
-        $concesionariaAct = Concesionaria::join('userconcesionaria','userconcesionaria.concesionaria_id','=','concesionaria.id')
-                                ->join('users','users.id','=','userconcesionaria.user_id')
-                                ->where('userconcesionaria.estado','=',true)->where('userconcesionaria.user_id','=',auth()->user()->id)
-                                ->select('concesionaria.id','concesionaria.razonsocial')->first();
-        $idConcAct = $concesionariaAct->id;
+        $concesionariaActual = Concesionaria::getConcesionariaActual();
 
         $conductorBuscado = Conductor::where('conductor.id', $id)
                         ->join('conductorconcesionaria', 'conductorconcesionaria.conductor_id', '=', 'conductor.id')
-                        ->where('conductorconcesionaria.concesionaria_id', $idConcAct)->first();
+                        ->where('conductorconcesionaria.concesionaria_id', $concesionariaActual->id)->first();
 
         if ($conductorBuscado == null) {
             $cadena = '<blockquote><p class="text-danger">Registro no existe en la base de datos. No manipular ID</p></blockquote>';
@@ -291,8 +283,8 @@ class ConductorController extends Controller
 						</script>";
 			return $cadena;
         }
-        $error = DB::transaction(function() use($id, $idConcAct){
-            $conductorconcesionaria = Conductorconcesionaria::where('conductor_id', $id)->where('concesionaria_id', $idConcAct)->first();
+        $error = DB::transaction(function() use($id, $concesionariaActual){
+            $conductorconcesionaria = Conductorconcesionaria::where('conductor_id', $id)->where('concesionaria_id', $concesionariaActual->id)->first();
             $conductorconcesionaria->estado = false;
             $conductorconcesionaria->save();
         });
@@ -313,15 +305,11 @@ class ConductorController extends Controller
 
     public function reactivar($id){
 
-        $concesionariaAct = Concesionaria::join('userconcesionaria','userconcesionaria.concesionaria_id','=','concesionaria.id')
-                                ->join('users','users.id','=','userconcesionaria.user_id')
-                                ->where('userconcesionaria.estado','=',true)->where('userconcesionaria.user_id','=',auth()->user()->id)
-                                ->select('concesionaria.id','concesionaria.razonsocial')->first();
-        $idConcAct = $concesionariaAct->id;
+        $concesionariaActual = Concesionaria::getConcesionariaActual();
 
         $conductorBuscado = Conductor::where('conductor.id', $id)
                         ->join('conductorconcesionaria', 'conductorconcesionaria.conductor_id', '=', 'conductor.id')
-                        ->where('conductorconcesionaria.concesionaria_id', $idConcAct)->first();
+                        ->where('conductorconcesionaria.concesionaria_id', $concesionariaActual->id)->first();
 
         if ($conductorBuscado == null) {
             $cadena = '<blockquote><p class="text-danger">Registro no existe en la base de datos. No manipular ID</p></blockquote>';
@@ -333,8 +321,8 @@ class ConductorController extends Controller
 						</script>";
 			return $cadena;
         }
-        $error = DB::transaction(function() use($id, $idConcAct){
-            $conductorconcesionaria = Conductorconcesionaria::where('conductor_id', $id)->where('concesionaria_id', $idConcAct)->first();
+        $error = DB::transaction(function() use($id, $concesionariaActual){
+            $conductorconcesionaria = Conductorconcesionaria::where('conductor_id', $id)->where('concesionaria_id', $concesionariaActual->id)->first();
             $conductorconcesionaria->estado = true;
             $conductorconcesionaria->save();
         });
@@ -342,16 +330,12 @@ class ConductorController extends Controller
     }
 
     public function existeConductor(Request $request) {
-        $concesionariaAct = Concesionaria::join('userconcesionaria','userconcesionaria.concesionaria_id','=','concesionaria.id')
-                                ->join('users','users.id','=','userconcesionaria.user_id')
-                                ->where('userconcesionaria.estado','=',true)->where('userconcesionaria.user_id','=',auth()->user()->id)
-                                ->select('concesionaria.id','concesionaria.razonsocial')->first();
-        $idConcAct = $concesionariaAct->id;
+        $concesionariaActual = Concesionaria::getConcesionariaActual();
 
         return $res = Conductor::withTrashed()
                 ->join('conductorconcesionaria', 'conductorconcesionaria.conductor_id', '=', 'conductor.id')
-                ->where(function($subquery) use ($idConcAct) {
-                    $subquery->where('conductorconcesionaria.concesionaria_id', $idConcAct);
+                ->where(function($subquery) use ($concesionariaActual) {
+                    $subquery->where('conductorconcesionaria.concesionaria_id', $concesionariaActual->id);
                 })
                 ->where('dni', $request->dni)->get();
     }
