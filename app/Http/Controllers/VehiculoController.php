@@ -6,6 +6,7 @@ use App\Vehiculo;
 use App\Area;
 use App\Brand;
 use App\Contratista;
+use App\Concesionaria;
 use Illuminate\Http\Request;
 use App\Librerias\Libreria;
 use App\Http\Controllers\Controller;
@@ -49,6 +50,7 @@ class VehiculoController extends Controller
         $filtro           = array();
         $filtro[]         = ['ua', 'LIKE', '%'.strtoupper($ua).'%'];
         $filtro[]         = ['placa', 'LIKE', '%'.strtoupper($placa).'%'];
+        $filtro[]         = ['concesionaria_id', $this->consecionariaActual()];
 /*
         if($ua_id != 0 ){
 			$filtro[]         = ['ua_id', '=', $ua_id];        	
@@ -234,7 +236,7 @@ class VehiculoController extends Controller
             $vehiculo->fechavencimientosoat = $request->input('fechavencimientosoat');
             $vehiculo->fechavencimientogps  = $request->input('fechavencimientogps');
             $vehiculo->fechavencimientortv  = $request->input('fechavencimientortv');
-*/            
+*/          $vehiculo->consecionaria_id       =  consecionariaActual(); 
             $vehiculo->area_id 				  = $request->input('area_id');
             $vehiculo->placa 				  = $request->input('placa');
             $vehiculo->motor 				  = $request->input('motor');
@@ -441,5 +443,15 @@ class VehiculoController extends Controller
         $uas = Ua::select('codigo','descripcion')->get();
 
         return response() -> json($uas);
+    }
+
+    private function consecionariaActual(){
+        $ConcesionariaActual = Concesionaria::join('userconcesionaria','userconcesionaria.concesionaria_id','=','concesionaria.id')
+        ->join('users','users.id','=','userconcesionaria.user_id')
+        ->where('userconcesionaria.estado','=',true)->where('userconcesionaria.user_id','=',auth()->user()->id)
+        ->select('concesionaria.id','concesionaria.razonsocial')->get();
+        $idConcAct=$ConcesionariaActual[0]->id;
+
+        return $idConcAct;
     }
 }
