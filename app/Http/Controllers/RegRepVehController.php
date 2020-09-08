@@ -9,19 +9,20 @@ use App\Unidad;
 use App\Equipo;
 use App\RegRepVeh;
 use App\Ua;
+use App\Rules\SearchUaPadre;
 use App\Librerias\Libreria;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 use App\Concesionaria;
+use App\DescripcionRegRepVeh;
 
 class RegRepVehController extends Controller
 {
     protected $folderview      = 'app.regrepveh';
     protected $tituloAdmin     = 'Registro de Repuesto Vehicular';
-    protected $tituloCheckListVehicular = 'Nuevo Check List Vehicular';
     protected $tituloRegistrar = 'Registro de Repuesto Vehicular';
-    protected $tituloModificar = 'Modificar repuesto';
-    protected $tituloEliminar  = 'Eliminar repuesto';
+    protected $tituloModificar = 'Modificar Repuesto Vehicular';
+    protected $tituloEliminar  = 'Eliminar Repuesto Vehicular';
     protected $tituloActivar  = 'Activar repuesto';
     protected $rutas           = array(
        // 'create' => 'regrepveh.createregrepveh',
@@ -46,16 +47,19 @@ class RegRepVehController extends Controller
         $filas            = $request->input('filas');
         $entidad          = 'RegRepVeh';
         $filter           = Libreria::getParam($request->input('filter'));
-		$idConcesionariaActual = Concesionaria::join('userconcesionaria','userconcesionaria.concesionaria_id','=','concesionaria.id')
+		$ConcesionariaActual = Concesionaria::join('userconcesionaria','userconcesionaria.concesionaria_id','=','concesionaria.id')
         ->join('users','users.id','=','userconcesionaria.user_id')
         ->where('userconcesionaria.estado','=',true)->where('userconcesionaria.user_id','=',auth()->user()->id)
        	->select('concesionaria.id','concesionaria.razonsocial')->get();
-       	$idConcAct=$idConcesionariaActual[0]->id;
+       	$idConcAct=$ConcesionariaActual[0]->id;
 
         $resultado= RegRepVeh::where('regrepveh.concesionaria_id',$idConcAct)
         ->where(function($q) use ($filter){
         $q->where('regrepveh.cliente', 'like', '%'.$filter.'%')
-          ->orWhere('regrepveh.ua_id', 'like', '%'.$filter.'%');
+          ->orWhere('regrepveh.ua_id', 'like', '%'.$filter.'%')
+          ->orWhere('regrepveh.telefono', 'like', '%'.$filter.'%')
+          ->orWhere('regrepveh.fechaentrada', 'like', '%'.$filter.'%')
+          ->orWhere('regrepveh.fechasalida', 'like', '%'.$filter.'%');
      	});
 
 
@@ -95,11 +99,10 @@ class RegRepVehController extends Controller
     {
         $entidad          = 'RegRepVeh';
         $title            = $this->tituloAdmin;
-        $tituloCheckListVehicular = $this->tituloCheckListVehicular;
         $tituloRegistrar = $this->tituloRegistrar;
         $ruta             = $this->rutas;
         
-        return view($this->folderview.'.admin')->with(compact('entidad', 'title', 'tituloCheckListVehicular','tituloRegistrar', 'ruta'));
+        return view($this->folderview.'.admin')->with(compact('entidad', 'title','tituloRegistrar', 'ruta'));
     }
 
 
@@ -112,17 +115,20 @@ class RegRepVehController extends Controller
         ->join('users','users.id','=','userconcesionaria.user_id')
         ->where('userconcesionaria.estado','=',true)->where('userconcesionaria.user_id','=',auth()->user()->id)
        	->select('concesionaria.id','concesionaria.razonsocial')->get();
+        $oObservaciones=array(new DescripcionRegRepVeh());
+        $oObservaciones[0]->id=-1 ; 
 
         foreach($arrConcesionarias as $k=>$v){
             $oConcesionarias = array($v->id=>$v->razonsocial);
         }
         //$oTipos=array('' => 'Seleccione Tipo');
+        $oTipos=array('' => 'Seleccione Tipo');
         $oTipos=array('1' => 'Preventivo');
         $oTipos+=array('2' => 'Correctivo');
         $formData = array('regrepveh.createregrepveh');
         $formData = array('route' => $formData, 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
         $boton    = 'Registrar'; 
-        return view($this->folderview.'.mant2')->with(compact('regrepveh', 'oTipos','formData', 'entidad','oConcesionarias', 'boton', 'listar'));
+        return view($this->folderview.'.mant2')->with(compact('regrepveh', 'oTipos','formData', 'entidad','oConcesionarias','oObservaciones', 'boton', 'listar'));
     }
 
     public function buscarporua(Request $request){
@@ -157,17 +163,45 @@ class RegRepVehController extends Controller
 
     public function store(Request $request){
 
-        $reglas     = [
-            
+        $reglas = [
+            'concesionaria_id' => 'required',
+            'cliente' => 'required|max:10',
+            'ua_id' => ['required', new SearchUaPadre()],
+            'fechaentrada' => 'required',
+            'fechasalida' => 'required',
+            'kmman' => 'required',
+            'kminicial' => 'required',
+            'kmfinal' => 'required',
+            'tipomantenimiento' => 'required',
+            'telefono' => 'required'
         ];
+
         $mensajes = [
-            
-		];
+            'cliente.required' => 'Cliente Campo Vacío',
+            'cliente.max' => 'Nombre de Cliente muy largo, máximo 250 caracteres',
+            'ua_id.required' => 'UA Campo Vacío',
+            'fechaentrada.required' => 'Fecha Entrada Campo Vacío',
+            'fechasalida.required' => 'Fecha Salida Campo Vacío',
+            'kmman.required' => 'Km de Mantenimiento Campo Vacío',
+            'kminicial.required' => 'Km Inicial Campo Vacío',
+            'kmfinal.required' => 'Km Final Campo Vacío',
+            'tipomantenimiento.required' => 'Tipo de Mantenimiento No Seleccionado',
+            'telefono.required' => 'Campo Vacío'
+        ];
+        $validacion = Validator::make($request->all(), $reglas, $mensajes);
+        if ($validacion->fails()) {
+            return $validacion->messages()->toJson();
+        }
 
         $listar     = Libreria::getParam($request->input('listar'), 'NO');
+
+        $idn=DB::select("SHOW TABLE STATUS LIKE 'regrepveh'");
+        $next_id=$idn[0]->Auto_increment;
+
         
-        $error = DB::transaction(function() use($request){
+        $error = DB::transaction(function() use($request,$next_id){
             $regrepv = new RegRepVeh();
+            $regrepv -> id =$next_id;
             $regrepv -> cliente  = $request -> input('cliente');
             $regrepv -> concesionaria_id  = $request -> input('concesionaria_id');
             $regrepv -> ua_id = $request -> input('ua_id');
@@ -180,6 +214,29 @@ class RegRepVehController extends Controller
             $regrepv -> telefono = $request -> input('telefono');
             $regrepv -> save();
         });
+
+
+        $cantidades=$request->cantidad;
+        $unidades=$request->unidad;
+        $codigos=$request->codigo;
+        $montos=$request->monto;
+        $descripciones=$request->descripcion;
+        for ($i = 0; $i < count($cantidades); $i++) {
+           $error = DB::transaction(function() use($i,$request,$next_id,$cantidades,$unidades,$codigos,$montos,$descripciones){
+            $descripcionregrepv = new DescripcionRegRepVeh();
+            $descripcionregrepv -> regrepveh_id =$next_id;
+            $descripcionregrepv -> cantidad  = $cantidades[$i];
+            $descripcionregrepv -> unidad  = $unidades[$i];;
+            $descripcionregrepv -> codigo = $codigos[$i];;
+            $descripcionregrepv -> monto = $montos[$i];;
+            $descripcionregrepv -> descripcion = $descripciones[$i];;
+            $descripcionregrepv -> save();
+        }); 
+        }
+
+        
+
+
         return is_null($error) ? "OK" : $error;
     }
 
@@ -232,18 +289,57 @@ class RegRepVehController extends Controller
         foreach($arrConcesionarias as $k=>$v){
             $oConcesionarias = array($v->id=>$v->razonsocial);
         }
+        
 
         $listar   = Libreria::getParam($request->input('listar'), 'NO');
         $regrepveh = RegRepVeh::find($id);
+        $oObservaciones=DescripcionRegRepVeh::where('regrepveh_id','=',$id)->get();
+
+
+        
         $entidad  = 'RegRepVeh';
         $formData = array('regrepveh.update', $id);
         $formData = array('route' => $formData, 'method' => 'PUT', 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
         $boton    = 'Modificar';
-        return view($this->folderview.'.mant2')->with(compact('regrepveh','oConcesionarias', 'formData', 'entidad', 'boton', 'listar'));
+        return view($this->folderview.'.mant2')->with(compact('regrepveh','oConcesionarias','oObservaciones', 'formData', 'entidad', 'boton', 'listar'));
     }
 
     public function update(Request $request, $id)
     {
+
+        $reglas = [
+            'concesionaria_id' => 'required',
+            'cliente' => 'required|max:10',
+            'ua_id' => ['required', new SearchUaPadre()],
+            'fechaentrada' => 'required',
+            'fechasalida' => 'required',
+            'kmman' => 'required',
+            'kminicial' => 'required',
+            'kmfinal' => 'required',
+            'tipomantenimiento' => 'required',
+            'telefono' => 'required'
+        ];
+
+        $mensajes = [
+            'cliente.required' => 'Cliente Campo Vacío',
+            'cliente.max' => 'Nombre de Cliente muy largo, máximo 250 caracteres',
+            'ua_id.required' => 'UA Campo Vacío',
+            'fechaentrada.required' => 'Fecha Entrada Campo Vacío',
+            'fechasalida.required' => 'Fecha Salida Campo Vacío',
+            'kmman.required' => 'Km de Mantenimiento Campo Vacío',
+            'kminicial.required' => 'Km Inicial Campo Vacío',
+            'kmfinal.required' => 'Km Final Campo Vacío',
+            'tipomantenimiento.required' => 'Tipo de Mantenimiento No Seleccionado',
+            'telefono.required' => 'Campo Vacío'
+        ];
+        $validacion = Validator::make($request->all(), $reglas, $mensajes);
+        if ($validacion->fails()) {
+            return $validacion->messages()->toJson();
+        }
+
+
+
+
         $existe = Libreria::verificarExistencia($id, 'regrepveh');
         if ($existe !== true) {
             return $existe;
@@ -258,6 +354,9 @@ class RegRepVehController extends Controller
         if ($validacion->fails()) {
             return $validacion->messages()->toJson();
         } 
+
+
+
         $error = DB::transaction(function() use($request, $id){
             $regrepv = RegRepVeh::find($id);
             $regrepv -> cliente  = $request -> input('cliente');
@@ -273,6 +372,43 @@ class RegRepVehController extends Controller
             $regrepv -> save();
 
         });
+        $ids=$request->idid;
+        $cantidades=$request->cantidad;
+        $unidades=$request->unidad;
+        $codigos=$request->codigo;
+        $montos=$request->monto;
+        $descripciones=$request->descripcion;
+        for ($i = 0; $i < count($cantidades); $i++) {
+           $error = DB::transaction(function() use($id,$i,$ids,$request,$cantidades,$unidades,$codigos,$montos,$descripciones){
+            $descripcionregrepv = new DescripcionRegRepVeh();
+            if($ids[$i]>=0){$descripcionregrepv = DescripcionRegRepVeh::find($ids[$i]);}
+            $descripcionregrepv -> regrepveh_id =$id;
+            $descripcionregrepv -> cantidad  = $cantidades[$i];
+            $descripcionregrepv -> unidad  = $unidades[$i];;
+            $descripcionregrepv -> codigo = $codigos[$i];;
+            $descripcionregrepv -> monto = $montos[$i];;
+            $descripcionregrepv -> descripcion = $descripciones[$i];;
+            $descripcionregrepv -> save();
+        }); 
+        }
+
+        $idseliminados=$request->idseliminados;
+
+        if($idseliminados!=null){
+            foreach($idseliminados as $k=>$idd){
+                $error = DB::transaction(function() use($idd){
+                    if($idd>0){
+                $regrepveh = DescripcionRegRepVeh::find($idd);
+                $regrepveh->delete();}
+                }); 
+            }
+        }   
+
+
+
+
+
+
         return is_null($error) ? "OK" : $error;
     }
 
