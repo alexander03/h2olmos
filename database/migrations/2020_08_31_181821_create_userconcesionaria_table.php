@@ -14,6 +14,7 @@ class CreateUserconcesionariaTable extends Migration
     public function up()
     {
         Schema::create('userconcesionaria', function (Blueprint $table) {
+            $table->bigIncrements('id');
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('concesionaria_id');
             $table->boolean('estado')->default(true);
