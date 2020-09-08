@@ -22,6 +22,7 @@ class DatabaseSeeder extends Seeder
             RepuestoTableSeeder::class,
             ContratistaTableSeeder::class,
             ConductorTableSeeder::class,
+            ConductorConcesionariaSeeder::class,
             AreaTableSeeder::class,
             TrabajoTableSeeder::class,
             TipohoraTableSeeder::class,
