@@ -8,6 +8,7 @@ class UserConcesionaria extends Model
 {
 protected $table = 'userconcesionaria';
     //use SoftDeletes;
+    
     protected $fillable = ['concesionaria_id', 'user_id','estado'];
 
     

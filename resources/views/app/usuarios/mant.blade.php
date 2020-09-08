@@ -31,8 +31,8 @@
 	<div class="col-sm-12 d-flex justify-content-around">
 		@foreach ($cboConcesionaria as $item)
 			<div>
-				{!! Form::label($item['id'], $item['abreviatura'], []) !!}
-				{!! Form::checkbox($item['abreviatura'], $item['id'], $item['estado'], ['id' => $item['id']]) !!}
+				{!! Form::label($item['ruc'], $item['abreviatura'], []) !!}
+				{!! Form::checkbox($item['ruc'], $item['id'], $item['estado'], ['id' => $item['ruc']]) !!}
 			</div>
 		@endforeach
 	</div>

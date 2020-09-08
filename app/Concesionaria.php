@@ -12,7 +12,7 @@ class Concesionaria extends Model
     protected $fillable = ['ruc', 'razonsocial', 'abreviatura'];
 
     public function scopegetAll($query) {
-        return $query->select('id', 'razonsocial', 'abreviatura')->orderBy('razonsocial', 'ASC')->get();
+        return $query->select('id', 'ruc', 'razonsocial', 'abreviatura')->orderBy('razonsocial', 'ASC')->get();
     }
 
     public function scopegetConcesionariaActual($query) {

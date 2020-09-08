@@ -106,7 +106,7 @@ class UserController extends Controller
         $arrConcesionarias      = Concesionaria::getAll();
         $cboConcesionaria = [];
         foreach($arrConcesionarias as $k=>$v){
-            $cboConcesionaria[] = array('id' => $v->id, 'abreviatura' => $v->abreviatura, 'estado' => false);
+            $cboConcesionaria[] = array('ruc'=> $v->ruc ,'id' => $v->id, 'abreviatura' => $v->abreviatura, 'estado' => false);
         }
         return view($this->folderview.'.mant')->with(compact('user', 'formData', 'entidad', 'cboTipousers','cboConcesionaria' ,'boton', 'listar'));
     }
@@ -138,17 +138,17 @@ class UserController extends Controller
             $user->password= Hash::make($request->input('password'));
             $user->save();
 
-            if($request->input('H2OLMOS') != null) {
+            if($request->input('20523611250') != null) {
                 $userconcesionaria = new UserConcesionaria();
                 $userconcesionaria->user_id = $user->id;
-                $userconcesionaria->concesionaria_id = $request->input('H2OLMOS');
+                $userconcesionaria->concesionaria_id = $request->input('20523611250');
                 $userconcesionaria->save();
             }
-            if($request->input('C.T.O.') != null) {
-                $userconcesionaria = new UserConcesionaria();
-                $userconcesionaria->user_id = $user->id;
-                $userconcesionaria->concesionaria_id = $request->input('C.T.O.');
-                $userconcesionaria->save();
+            if($request->input('20509093521') != null) {
+                $userconcesionaria2 = new UserConcesionaria();
+                $userconcesionaria2->user_id = $user->id;
+                $userconcesionaria2->concesionaria_id = $request->input('20509093521');
+                $userconcesionaria2->save();
             }
 
         });

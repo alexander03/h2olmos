@@ -14,9 +14,13 @@ class CreateUserconcesionariaTable extends Migration
     public function up()
     {
         Schema::create('userconcesionaria', function (Blueprint $table) {
-            $table->integer('user_id');//->onDelete('restrict')->onUpdate('restrict');
-            $table->integer('concesionaria_id');//->onDelete('restrict')->onUpdate('restrict');
-            $table->boolean('estado');
+            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('concesionaria_id');
+            $table->boolean('estado')->default(true);
+
+            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('concesionaria_id')->references('id')->on('concesionaria');
+            $table->timestamps();
         });
     }
 
