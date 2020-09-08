@@ -20,7 +20,8 @@ class CreateAbastecimientoCombustiblesTable extends Migration
             $table -> string('tipo_combustible');
             $table -> unsignedBigInteger('conductor_id');
             $table -> unsignedBigInteger('ua_id');
-            $table -> unsignedBigInteger('equipo_id');
+            $table -> unsignedBigInteger('equipo_id') -> nullable();
+            $table -> unsignedBigInteger('vehiculo_id') -> nullable();
             $table -> float('qtdgl');
             $table -> float('qtdl');
             $table -> float('km');

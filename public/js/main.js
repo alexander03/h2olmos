@@ -22,17 +22,11 @@ const doSearchUA = (input = '.js-ua-id', descr = '.js-ua-desc', resultNull = '#a
                     `ua/search/${query}` , config
                 );
                 let data = await source.json();
-                data = data.map( (elm) => {
-                    let { codigo, ...arr } = elm;
-                    codigo = codigo.toString();
-    
-                    return { codigo, ...arr };
-                });
                 // Post loading placeholder text
                 // Returns Fetched data
                 return data;
             },
-            key: [ "codigo", "descripcion"],
+            key: [ "search" ],
             cache: false
         },
         sort: (a, b) => {
@@ -205,7 +199,7 @@ const doSearchConductor = () => {
                 // Returns Fetched data
                 return data;
             },
-            key: ["apellidos", "dni"],
+            key: [ 'search' ],
             cache: false
         },
         sort: (a, b) => {
@@ -292,7 +286,7 @@ const doSearchEquipo = () => {
                 // Returns Fetched data
                 return data;
             },
-            key: ["codigo", "descripcion"],
+            key: [ 'search' ],
             cache: false
         },
         sort: (a, b) => {
@@ -329,6 +323,7 @@ const doSearchEquipo = () => {
             document.querySelector("#autoComplete_list4").innerText = '';
             const selection = feedback.selection.value;
             document.querySelector(".js-equipo-id").value = selection.codigo;
+            document.querySelector(".js-equipo-hidden").value = selection.tipo;
             document.querySelector(".js-equipo-desc").innerText = selection.descripcion;
             // console.log(feedback);
         }

@@ -21,6 +21,7 @@ use App\Imports\UaImport;
 use App\Rules\SearchConductorRule;
 use App\Rules\SearchEquipo;
 use App\Rules\SearchGrifoRule;
+use App\Vehiculo;
 use Exception;
 
 use function PHPSTORM_META\map;
@@ -48,28 +49,57 @@ class AbastecimientoCombustibleController extends Controller{
         $grifoQuery       = Libreria::getParam($request->input('grifo'));
         $placaQuery       = Libreria::getParam($request->input('placa'));
         //Buscar ua 
-        if( isset($codigoUaQuery) )
+        $uaException = false;
+        if( isset($codigoUaQuery) ){
             $uaDB = Ua::select('id') -> where('codigo', 'LIKE', "%{$codigoUaQuery}%") -> first();   
+            //*Excepcion si no encuentra registro
+            ( isset( $uaDB ) ) ? $uaException = false : $uaException = true;
+        }
         $uaId = (isset( $uaDB )) ? $uaDB -> id : null;
         //Buscar grifo
-        if( isset($grifoQuery) )
+        $grifoException = false;
+        if( isset($grifoQuery) ){
             $grifoDB = Grifo::select('id') -> where('descripcion', 'LIKE', "%{$grifoQuery}%") -> first();
+            //*Excepcion si no encuentra registro
+            ( isset( $grifoDB ) ) ? $grifoException = false: $grifoException = true;
+        }
         $grifoId = (isset( $grifoDB )) ? $grifoDB -> id : null;
         //Buscar equipo
-        if( isset($placaQuery) )
+        $equipVehiException = false;
+        if( isset($placaQuery) ){
             $equipoDB = Equipo::select('id') -> where('placa', 'LIKE', "%{$placaQuery}%") -> first();
+            $vehiculoDB = Vehiculo::select('id') -> where('placa', 'LIKE', "%{$placaQuery}%") -> first();
+            if( isset($equipoDB) ){
+                $vehiculoDB = new Vehiculo();
+                $vehiculoDB -> id = -1;
+            }else if( isset($vehiculoDB) ){
+                $equipoDB = new Equipo();
+                $equipoDB -> id = -1;
+            }
+            //*Excepcion si no encuentra registro
+            ( isset($equipoDB) || isset($vehiculoDB) ) ? $equipVehiException = false : $equipVehiException = true;
+        }
         $equipoId = (isset( $equipoDB )) ? $equipoDB -> id : null;
+        $vehiculoId = (isset( $vehiculoDB )) ? $vehiculoDB -> id : null;
         //Resultado
-        $resultado        = AbastecimientoCombustible::
+        $resultado = AbastecimientoCombustible::
             where([
                 ['fecha_abastecimiento', 'LIKE', '%'.$fechaQuery.'%'],
                 ['ua_id', 'LIKE', "%{$uaId}%"],
-                ['grifo_id', 'LIKE', "%{$grifoId}%"],
-                ['equipo_id', 'LIKE', "%{$equipoId}%"]   
-            ]) 
-            -> orderBy('fecha_abastecimiento', 'ASC');
-    
-        $lista            = $resultado->get();
+                ['grifo_id', 'LIKE', "%{$grifoId}%"]
+            ])-> orderBy('fecha_abastecimiento', 'ASC'); 
+        //Query compleja 
+        if( isset($equipoId) || isset($vehiculoId) ){
+            $resultado = AbastecimientoCombustible::
+                where([
+                    ['fecha_abastecimiento', 'LIKE', '%'.$fechaQuery.'%'],
+                    ['ua_id', 'LIKE', "%{$uaId}%"],
+                    ['grifo_id', 'LIKE', "%{$grifoId}%"],
+                    ['equipo_id', 'LIKE', "%{$equipoId}%"]
+                ])->orWhere('vehiculo_id', 'LIKE', "%{$vehiculoId}%")
+                -> orderBy('fecha_abastecimiento', 'ASC'); 
+        }
+        ( $uaException || $grifoException || $equipVehiException ) ? $lista = [] : $lista = $resultado->get();  
         $cabecera         = array();
         $cabecera[]       = array('valor' => '#', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Fecha de abastecimiento', 'numero' => '1');
@@ -149,7 +179,7 @@ class AbastecimientoCombustibleController extends Controller{
             'tipo_combustible.required' => 'El tipo de combustible es requerido',
             'conductor_id.required' => 'El conductor es requerido',
             'ua_id.required' => 'Su ua es requerida',
-            'equipo_id.required' => 'El equipo es requerido',
+            'equipo_id.required' => 'El equipo o vehículo es requerido',
             'qtdgl.required' => 'Su QTD(GL) es requerido',
             'qtdl.required' => 'Su QTD(L) es requerido',
             'km.required' => 'Su km es requerido',
@@ -183,8 +213,14 @@ class AbastecimientoCombustibleController extends Controller{
             }
             //BUSCAR EQUIPO
             if($request -> input('equipo_id')){
-                $equipoDB =  Equipo::where('codigo', $request -> input('equipo_id')) -> get();
-                $abastecimiento -> equipo_id = (!($equipoDB -> isEmpty())) ? $equipoDB[0] -> id : null;
+                if($request -> input('equipo_tipo') === 'e'){
+                    $equipoDB =  Equipo::where('codigo', $request -> input('equipo_id')) -> get();
+                    $abastecimiento -> equipo_id = (!($equipoDB -> isEmpty())) ? $equipoDB[0] -> id : null;
+                }
+                if($request -> input('equipo_tipo') === 'v'){
+                    $vehiculoDB =  Vehiculo::where('placa', $request -> input('equipo_id')) -> get();
+                    $abastecimiento -> vehiculo_id = (!($vehiculoDB -> isEmpty())) ? $vehiculoDB[0] -> id : null;
+                }   
             }
             $abastecimiento -> qtdgl = $request -> input('qtdgl');
             $abastecimiento -> qtdl = $request -> input('qtdl');
@@ -234,7 +270,7 @@ class AbastecimientoCombustibleController extends Controller{
             'tipo_combustible.required' => 'El tipo de combustible es requerido',
             'conductor_id.required' => 'El conductor es requerido',
             'ua_id.required' => 'Su ua es requerida',
-            'equipo_id.required' => 'El equipo es requerido',
+            'equipo_id.required' => 'El equipo o vehículo es requerido',
             'qtdgl.required' => 'Su QTD(GL) es requerido',
             'qtdl.required' => 'Su QTD(L) es requerido',
             'km.required' => 'Su km es requerido',
@@ -271,8 +307,16 @@ class AbastecimientoCombustibleController extends Controller{
             }
             //BUSCAR EQUIPO
             if($request -> input('equipo_id')){
-                $equipoDB =  Equipo::where('codigo', $request -> input('equipo_id')) -> get();
-                $abastecimiento -> equipo_id = (!($equipoDB -> isEmpty())) ? $equipoDB[0] -> id : null;
+                if($request -> input('equipo_tipo') === 'e'){
+                    $abastecimiento -> vehiculo_id = null;
+                    $equipoDB =  Equipo::where('codigo', $request -> input('equipo_id')) -> get();
+                    $abastecimiento -> equipo_id = (!($equipoDB -> isEmpty())) ? $equipoDB[0] -> id : null;
+                }
+                if($request -> input('equipo_tipo') === 'v'){
+                    $abastecimiento -> equipo_id = null;
+                    $vehiculoDB =  Vehiculo::where('placa', $request -> input('equipo_id')) -> get();
+                    $abastecimiento -> vehiculo_id = (!($vehiculoDB -> isEmpty())) ? $vehiculoDB[0] -> id : null;
+                }   
             }
             $abastecimiento -> qtdgl = $request -> input('qtdgl');
             $abastecimiento -> qtdl = $request -> input('qtdl');
@@ -328,7 +372,8 @@ class AbastecimientoCombustibleController extends Controller{
     //PETICION GET QUE DEVUELVE TODOS LOS DATOS CONDUCTOR
     public function searchAutocompleteConductor($query){
 
-        $consulta = "select id, nombres, apellidos, dni from conductor where
+        $consulta = "select id, nombres, apellidos, dni, CONCAT(nombres, ' ', apellidos, ' - ', dni) as 'search' 
+            from conductor where
             deleted_at IS NULL AND
             apellidos LIKE UPPER('%".$query."%') OR dni LIKE '%".$query."%'";
         $res = DB::select($consulta);
@@ -336,12 +381,18 @@ class AbastecimientoCombustibleController extends Controller{
         return response() -> json($res);
     }
 
-    //PETICION GET QUE DEVUELVE TODOS LOS DATOS EQUIPO
+    //PETICION GET QUE DEVUELVE TODOS LOS DATOS EQUIPO O VEHICULO
     public function searchAutocompleteEquipo($query){
 
-        $consulta = "select id, codigo, descripcion from equipo where
-            deleted_at IS NULL AND
-            codigo LIKE '%".$query."%' OR descripcion LIKE '%".$query."%'";
+        // $consulta = "select id, codigo, descripcion, CONCAT(codigo, ' - ', descripcion) as 'search'
+        //     from equipo where
+        //     deleted_at IS NULL AND
+        //     codigo LIKE '%".$query."%' OR descripcion LIKE '%".$query."%'";
+
+        $consulta = "select tipo, `placa-codigo` as 'codigo', descripcion, CONCAT(`placa-codigo`, ' - ', descripcion) as 'search'
+            from view_equipo_vehiculo
+            where deleted_at IS NULL AND 
+            `placa-codigo` LIKE '%".$query."%' OR descripcion LIKE '%".$query."%'";
         $res = DB::select($consulta);
         
         return response() -> json($res);

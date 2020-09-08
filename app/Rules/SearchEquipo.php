@@ -3,6 +3,7 @@
 namespace App\Rules;
 
 use App\Equipo;
+use App\Vehiculo;
 use Exception;
 use Illuminate\Contracts\Validation\Rule;
 
@@ -32,7 +33,11 @@ class SearchEquipo implements Rule
                 $equipoDB =  Equipo::where('codigo', $value) -> get();
                 if( !$equipoDB -> isEmpty() ) 
                     return true;
-                else return false; 
+                $vehiculoDB = Vehiculo::where('placa', $value) -> get();
+                if( !$vehiculoDB -> isEmpty() ) 
+                    return true;
+                
+                return false; 
             }catch(Exception $error){
                 return false; 
             }
@@ -47,6 +52,6 @@ class SearchEquipo implements Rule
      */
     public function message()
     {
-        return 'No se encontró un equipo con ese código';
+        return 'No se encontró un equipo o vehículo con ese código';
     }
 }
