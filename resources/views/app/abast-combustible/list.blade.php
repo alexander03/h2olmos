@@ -25,11 +25,11 @@
             <td class="text-nowrap">{{ $value -> conductor -> dni }}</td>
             <td class="text-nowrap">{{ $value -> ua -> codigo }}</td>
             <td class="text-nowrap">{{ $value -> ua -> descripcion }}</td>
-			<td class="text-nowrap">{{ $value -> equipo -> descripcion }}</td>
-			<td class="text-nowrap">{{ $value -> equipo -> marca -> descripcion }}</td>
-			<td class="text-nowrap">{{ isset($value -> equipo -> modelo) ? $value -> equipo -> modelo : 'No Asignado'  }}</td>
-			<td class="text-nowrap">{{ isset($value -> equipo -> placa) ? $value -> equipo -> placa : 'No Asignado'}}</td>
-			<td class="text-nowrap">{{ $value -> equipo -> contratista -> razonsocial }}</td>
+			<td class="text-nowrap">{{ isset($value -> equipo) ? $value -> equipo -> descripcion : 'Vehículo' }}</td>
+			<td class="text-nowrap">{{ isset($value -> equipo) ? $value -> equipo -> marca -> descripcion : $value -> vehiculo -> marca -> descripcion }}</td>
+			<td class="text-nowrap">{{ isset($value -> equipo) ? ( isset($value -> equipo -> modelo) ? $value -> equipo -> modelo : 'No Asignado' ) : ( isset($value -> vehiculo -> modelo) ? $value -> vehiculo -> modelo : 'No Asignado' ) }}</td>
+			<td class="text-nowrap">{{ isset($value -> equipo) ? ( isset($value -> equipo -> placa) ? $value -> equipo -> placa : 'No Asignado' ) : ( isset($value -> vehiculo -> placa) ? $value -> vehiculo -> placa : 'No Asignado' ) }}</td>
+			<td class="text-nowrap">{{ isset($value -> equipo) ? $value -> equipo -> contratista -> razonsocial : $value -> vehiculo -> contratista -> razonsocial }}</td>
 			<td class="text-nowrap">{{ $value -> qtdgl }}</td>
 			<td class="text-nowrap">{{ $value -> qtdl }}</td>
 			<td class="text-nowrap">{{ $value -> km }}</td>

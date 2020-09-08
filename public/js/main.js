@@ -323,6 +323,7 @@ const doSearchEquipo = () => {
             document.querySelector("#autoComplete_list4").innerText = '';
             const selection = feedback.selection.value;
             document.querySelector(".js-equipo-id").value = selection.codigo;
+            document.querySelector(".js-equipo-hidden").value = selection.tipo;
             document.querySelector(".js-equipo-desc").innerText = selection.descripcion;
             // console.log(feedback);
         }
