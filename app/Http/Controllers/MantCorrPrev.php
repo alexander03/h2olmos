@@ -10,10 +10,11 @@ use App\Equipo;
 use App\Vehiculo;
 use App\Conductor;
 use App\Ua;
+use App\Concesionaria;
 use App\Librerias\Libreria;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
-use App\Concesionaria;
+use Mpdf\Mpdf;
 
 class MantCorrPrev extends Controller
 {
@@ -270,5 +271,112 @@ class MantCorrPrev extends Controller
         $res = Equipo::withTrashed()->where('placa', $request->placa)->first();
         if($res != null) return ['unidad' => $res];
         return [ 'unidad' => Vehiculo::withTrashed()->where('placa', $request->placa)->first()];
+    }
+
+    public function generatePDF(Request $request) {
+        if ( $request->checklistvehicular_id == null || !is_numeric($request->checklistvehicular_id) ) return;
+
+        $namefile = 'Check List Vehicular - '.time().'.pdf';  
+        
+        $checklistvehicular = Checklistvehicular::leftJoin('equipo', 'equipo.id', '=', 'checklistvehicular.equipo_id')
+                                                ->leftJoin('vehiculo', 'vehiculo.id', 'checklistvehicular.vehiculo_id')
+                                                ->join('conductor', 'conductor.id', 'checklistvehicular.conductor_id')
+                                                ->leftJoin('marca AS marca_equipo', 'marca_equipo.id', 'equipo.marca_id')
+                                                ->leftJoin('marca AS marca_vehiculo', 'marca_vehiculo.id', 'vehiculo.marca_id')
+                                                ->leftJoin('contratista AS contratista_vehiculo', 'contratista_vehiculo.id', 'vehiculo.contratista_id')
+                                                ->leftJoin('contratista AS contratista_equipo', 'contratista_equipo.id', 'equipo.contratista_id')
+                                                ->select('checklistvehicular.fecha_registro', 'checklistvehicular.k_inicial', 'checklistvehicular.k_final', 'checklistvehicular.lider_area', 'checklistvehicular.observaciones', 
+                                                        'checklistvehicular.sistema_electrico', 'checklistvehicular.sistema_mecanico', 'checklistvehicular.accesorios', 'checklistvehicular.documentos',
+                                                        'equipo.placa as equipo_placa', 'marca_equipo.descripcion AS equipo_marca', 'equipo.modelo AS equipo_modelo', 'contratista_equipo.razonsocial AS equipo_contratista', 'equipo.descripcion as equipo_descripcion',
+                                                        'vehiculo.placa AS vehiculo_placa', 'marca_vehiculo.descripcion AS vehiculo_marca', 'vehiculo.modelo AS vehiculo_modelo', 'contratista_vehiculo.razonsocial AS vehiculo_contratista', 'vehiculo.color AS vehiculo_color',
+                                                        'conductor.nombres as conductor_nombres', 'conductor.apellidos as conductor_apellidos', 'conductor.licencia')
+                                                // ->select('checklistvehicular.fecha_registro')
+                                                ->where('checklistvehicular.id', '=', $request->checklistvehicular_id)->withTrashed()->first();
+
+        if ( $checklistvehicular == NULL ) return redirect('/home');
+
+        $data = [];
+
+        $is_v = $checklistvehicular->vehiculo_placa != NULL ? true : false;
+
+        $data['placa'] = $is_v ? $checklistvehicular->vehiculo_placa : $checklistvehicular->equipo_placa;
+        $data['marca'] = $is_v ? $checklistvehicular->vehiculo_marca : $checklistvehicular->equipo_marca;
+        $data['modelo'] = $is_v ? $checklistvehicular->vehiculo_modelo : $checklistvehicular->equipo_modelo;
+        $data['contratista'] = $is_v ? $checklistvehicular->vehiculo_contratista : $checklistvehicular->equipo_contratista;
+        
+        
+        $data['ua'] = $checklistvehicular->vehiculo_ua;
+
+        $data['equipo_descripcion'] = $checklistvehicular->equipo_descripcion;
+        $data['color'] = $checklistvehicular->vehiculo_color;
+
+        $data['fecha_registro'] = $checklistvehicular->fecha_registro;
+        $data['k_inicial'] = $checklistvehicular->k_inicial;
+        $data['k_final'] = $checklistvehicular->k_final;
+        $data['lider_area'] = $checklistvehicular->lider_area;
+        $data['observaciones'] = strtoupper($checklistvehicular->observaciones);
+
+        $data['conductor'] = $checklistvehicular->conductor_nombres . ' ' . $checklistvehicular->conductor_apellidos;
+        $data['licencia'] = $checklistvehicular->licencia;
+        
+        $limite = intval((count($checklistvehicular->sistema_electrico) + count($checklistvehicular->sistema_mecanico) + count($checklistvehicular->accesorios) + count($checklistvehicular->documentos) + 4)/2);
+        
+        $steps = [ 
+            [
+                'title' => 'SISTEMA ELECTRICO',
+                'values' => $checklistvehicular->sistema_electrico
+            ], [
+                'title' => 'SISTEMA MECANICO',
+                'values' => $checklistvehicular->sistema_mecanico
+            ], [
+                'title' => 'ACCESORIOS',
+                'values' => $checklistvehicular->accesorios
+            ], [
+                'title' => 'DOCUMENTOS',
+                'values' => $checklistvehicular->documentos
+            ]
+        ];
+
+        $lista = [];
+        $row = -1;  // para saber en que fila esta
+        foreach ($steps as $step) { // para controlar la etapa en la que se encuentra
+            $row++; //aumento de uno en uno
+            $lista[] = [
+                'title' => true,
+                'caption' => $step['title'],
+                'value_yes' => 'SI',
+                'value_not' => 'NO'
+            ];
+            foreach ($step['values'] as $param) {
+                $row++;
+                if ( $row == $limite ) {
+                    $lista[] = [
+                        'title' => true,
+                        'caption' => $step['title'],
+                        'value_yes' => 'SI',
+                        'value_not' => 'NO'
+                    ];
+                }
+                $lista[] = [
+                    'title' => false,
+                    'caption' => mb_strtoupper($param['titulo'], 'UTF-8'),
+                    'value_yes' => ( !is_null($param['estado']) && $param['estado'] )? 'X': '',
+                    'value_not' => ( !is_null($param['estado']) && !$param['estado'] )? 'X': ''
+                ];
+                
+            }
+        }
+        
+        $data['lista'] = $lista;
+        $data['limite'] = $limite;
+        $data['namefile'] = $namefile;
+        // dd($data);
+        $html = view('app.mantcorrprev.pdf.template_individual', $data)->render();
+
+        $mpdf = new Mpdf();
+        $mpdf->SetDisplayMode('fullpage');
+        $mpdf->WriteHTML($html);
+
+        $mpdf->Output($namefile, "I");
     }
 }
