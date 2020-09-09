@@ -83,7 +83,7 @@
         {{-- AUTOCOMPLETE --}}
         <script src="{{ asset('/js/auto-complete.js') }}"></script>
         <script src="{{ asset('/js/main.js') }}"></script>
-        
+        <script src="{{ asset('/js/equipo-autocomplete.js') }}"></script>
 
         @stack('js')
     </body>

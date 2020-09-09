@@ -209,7 +209,7 @@ class EquipoController extends Controller
             $equipo->marca_id 			  = $request->input('marca_id');
             $equipo->anio 				  = $request->input('anio');
             $equipo->contratista_id 	  = $request->input('contratista_id');
-            $equipo->consecionaria_id     =  consecionariaActual();
+            $equipo->concesionaria_id     =  $this->consecionariaActual();
             
             if($request->input('area_id') != 0){
             	$equipo->area_id 				  = $request->input('area_id');
@@ -387,7 +387,12 @@ class EquipoController extends Controller
 
     public function searchAutocomplete($query){
 
-        $res = Equipo::select('id','codigo','descripcion')->where('codigo','LIKE', '%' .$query .'%')->get();
+        $consulta = "select codigo , descripcion, CONCAT(codigo, ' - ', descripcion) as 'search'
+            from equipo
+            where deleted_at IS NULL AND 
+            concesionaria_id = {$this -> consecionariaActual()} AND
+            (codigo LIKE '%".$query."%' OR descripcion LIKE '%".$query."%')";
+        $res = DB::select($consulta);
         
         return response() -> json($res);
     }

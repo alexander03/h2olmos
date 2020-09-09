@@ -236,7 +236,7 @@ class VehiculoController extends Controller
             $vehiculo->fechavencimientosoat = $request->input('fechavencimientosoat');
             $vehiculo->fechavencimientogps  = $request->input('fechavencimientogps');
             $vehiculo->fechavencimientortv  = $request->input('fechavencimientortv');
-*/          $vehiculo->consecionaria_id       =  consecionariaActual(); 
+*/          $vehiculo->concesionaria_id       =  $this->consecionariaActual(); 
             $vehiculo->area_id 				  = $request->input('area_id');
             $vehiculo->placa 				  = $request->input('placa');
             $vehiculo->motor 				  = $request->input('motor');

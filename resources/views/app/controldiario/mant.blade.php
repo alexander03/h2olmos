@@ -148,8 +148,7 @@ if ($controldiario !== NULL) {
 		configurarAnchoModal('450');
 		init(IDFORMMANTENIMIENTO+'{!! $entidad !!}', 'M', '{!! $entidad !!}');
 		doSearchUA();
-		doSearchUA();
-		doSearchEquipo();
+		doSearchEquipoPrim();
 
 		nuevaFila = (boton) =>{
 			let Num = Number(boton.getAttribute('data-filas'));
