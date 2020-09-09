@@ -44,7 +44,7 @@ class TipohoraController extends Controller
     {
         $pagina           = $request->input('page');
         $filas            = $request->input('filas');
-        $entidad          = 'Opcionmenu';
+        $entidad          = 'Tipohora';
         $codigo           = Libreria::getParam($request->input('codigo'));
         $descripcion      = Libreria::getParam($request->input('descripcion'));
         
