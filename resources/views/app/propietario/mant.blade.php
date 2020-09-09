@@ -24,6 +24,7 @@ if ($propietario !== NULL) {
 			id="id-ua"
 			class="form-control js-ua-id" 
 			value="<?php if($propietario) if($propietario -> ua -> id) echo $propietario -> ua -> codigo;?>">
+		<small id="autoComplete_list1" class="text-danger"></small>
 	</div>
 	<div class="form-group col-md-6 p-3">
 	  <label for="id-date-begin" class="pl-3">Fecha de llegada</label>
