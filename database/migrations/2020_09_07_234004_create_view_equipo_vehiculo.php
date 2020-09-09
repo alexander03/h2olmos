@@ -16,10 +16,10 @@ class CreateViewEquipoVehiculo extends Migration
 
         $query = "CREATE VIEW view_equipo_vehiculo AS
             SELECT id, descripcion, modelo, codigo as 'placa-codigo', placa, marca_id, area_id, 
-                contratista_id, anio, 'e' as 'tipo', deleted_at FROM equipo 
+                contratista_id, anio, 'e' as 'tipo', concesionaria_id, deleted_at FROM equipo 
             UNION ALL 
             SELECT id, modelo as 'descripcion', modelo, placa as 'placa-codigo', placa, marca_id, area_id, 
-                contratista_id, anio, 'v' as 'tipo', deleted_at FROM vehiculo;";
+                contratista_id, anio, 'v' as 'tipo', concesionaria_id, deleted_at FROM vehiculo;";
 
         DB::statement($query);
     }

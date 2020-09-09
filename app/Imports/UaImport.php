@@ -2,6 +2,7 @@
 
 namespace App\Imports;
 
+use App\Concesionaria;
 use App\Ua;
 use App\Unidad;
 use Exception;
@@ -43,7 +44,19 @@ class UaImport implements ToModel
             'fondos' => $row[4],
             'responsable' => $row[5],
             'tipo_costo' => $row[6],
-            'ua_padre_id' => $row[7]
+            'ua_padre_id' => $row[7],
+            'concesionaria_id' => $this -> getConsecionariaActual()
         ]);
+    }
+
+    private function getConsecionariaActual(){
+
+        $ConcesionariaActual = Concesionaria::join('userconcesionaria','userconcesionaria.concesionaria_id','=','concesionaria.id')
+            ->join('users','users.id','=','userconcesionaria.user_id')
+            ->where('userconcesionaria.estado','=',true)->where('userconcesionaria.user_id','=',auth()->user()->id)
+            ->select('concesionaria.id','concesionaria.razonsocial')->get();
+        $idConcAct=$ConcesionariaActual[0]->id;
+
+        return $idConcAct;
     }
 }

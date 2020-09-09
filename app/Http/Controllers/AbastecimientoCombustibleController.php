@@ -388,7 +388,8 @@ class AbastecimientoCombustibleController extends Controller{
         $consulta = "select tipo, `placa-codigo` as 'codigo', descripcion, CONCAT(`placa-codigo`, ' - ', descripcion) as 'search'
             from view_equipo_vehiculo
             where deleted_at IS NULL AND 
-            `placa-codigo` LIKE '%".$query."%' OR descripcion LIKE '%".$query."%'";
+            concesionaria_id = {$this -> getConsecionariaActual()} AND
+            (`placa-codigo` LIKE '%".$query."%' OR descripcion LIKE '%".$query."%')";
         $res = DB::select($consulta);
         
         return response() -> json($res);

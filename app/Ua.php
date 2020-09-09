@@ -11,7 +11,7 @@ class Ua extends Model{
     protected $table = 'ua';
     protected $dates = ['deleted_at'];
     protected $fillable = ['codigo', 'descripcion', 'tipo', 
-                            'fondos', 'responsable', 'tipo_costo', 'unidad_id', 'ua_padre_id'];
+                            'fondos', 'responsable', 'tipo_costo', 'unidad_id', 'ua_padre_id', 'concesionaria_id'];
 
     public function unidad(){
 
