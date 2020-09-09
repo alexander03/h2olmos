@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Concesionaria;
 use App\Librerias\Libreria;
 use App\Rules\SearchUaPadre;
 use App\Rules\SelectDifZero;
@@ -35,8 +36,14 @@ class UaController extends Controller{
         $entidad          = 'Ua';
         $nombre           = Libreria::getParam($request->input('descripcion'));
         $codigo           = Libreria::getParam($request -> input('codigo'));
-        $resultado        = Ua::where('descripcion', 'LIKE', '%'.strtoupper($nombre).'%')->orderBy('descripcion', 'ASC');
-        $resultado2       = Ua::where('codigo', 'LIKE', '%'.$codigo.'%')->orderBy('codigo', 'ASC');
+        $resultado        = Ua::where([
+                [ 'descripcion', 'LIKE', '%'.strtoupper($nombre).'%' ],
+                [ 'concesionaria_id', $this -> getConsecionariaActual() ] 
+                ])->orderBy('descripcion', 'ASC');
+        $resultado2       = Ua::where([
+                [ 'codigo', 'LIKE', '%'.$codigo.'%' ],
+                [ 'concesionaria_id', $this -> getConsecionariaActual() ]
+                ])->orderBy('codigo', 'ASC');
         ($codigo) ? $lista = $resultado2 -> get() : $lista = $resultado -> get();
         $cabecera         = array();
         $cabecera[]       = array('valor' => '#', 'numero' => '1');
@@ -129,6 +136,7 @@ class UaController extends Controller{
             $ua -> responsable = $request -> input('responsable');
             $ua -> tipo_costo = $request -> input('tipo_costo');
             $ua -> unidad_id = $request -> input('unidad_id');
+            $ua -> concesionaria_id = $this -> getConsecionariaActual();
             //BUSCAR
             if($request -> input('ua_padre_id')){
                 $uaDB =  Ua::where('codigo', $request -> input('ua_padre_id')) -> get();
@@ -258,7 +266,8 @@ class UaController extends Controller{
         $consulta = "SELECT id, codigo, descripcion, CONCAT(codigo, ' - ', descripcion) AS 'search'  
             FROM ua WHERE
             deleted_at IS NULL AND
-            codigo LIKE '%".$query."%' OR descripcion LIKE '%".$query."%'";
+            concesionaria_id = {$this -> getConsecionariaActual()} AND
+            (codigo LIKE '%".$query."%' OR descripcion LIKE '%".$query."%')";
         $res = DB::select($consulta);
         
         return response() -> json($res);
@@ -284,6 +293,17 @@ class UaController extends Controller{
     public function exportExcel(){
 
         return Excel::download(new UaExport, 'ua-list.xlsx');
+    }
+
+    private function getConsecionariaActual(){
+
+        $ConcesionariaActual = Concesionaria::join('userconcesionaria','userconcesionaria.concesionaria_id','=','concesionaria.id')
+            ->join('users','users.id','=','userconcesionaria.user_id')
+            ->where('userconcesionaria.estado','=',true)->where('userconcesionaria.user_id','=',auth()->user()->id)
+            ->select('concesionaria.id','concesionaria.razonsocial')->get();
+        $idConcAct=$ConcesionariaActual[0]->id;
+
+        return $idConcAct;
     }
 }
 

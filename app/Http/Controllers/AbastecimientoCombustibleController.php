@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\AbastecimientoCombustible;
+use App\Concesionaria;
 use App\Conductor;
 use App\Equipo;
 use App\Exports\AbastecimientoCombustibleExport;
@@ -384,11 +385,6 @@ class AbastecimientoCombustibleController extends Controller{
     //PETICION GET QUE DEVUELVE TODOS LOS DATOS EQUIPO O VEHICULO
     public function searchAutocompleteEquipo($query){
 
-        // $consulta = "select id, codigo, descripcion, CONCAT(codigo, ' - ', descripcion) as 'search'
-        //     from equipo where
-        //     deleted_at IS NULL AND
-        //     codigo LIKE '%".$query."%' OR descripcion LIKE '%".$query."%'";
-
         $consulta = "select tipo, `placa-codigo` as 'codigo', descripcion, CONCAT(`placa-codigo`, ' - ', descripcion) as 'search'
             from view_equipo_vehiculo
             where deleted_at IS NULL AND 
@@ -402,6 +398,17 @@ class AbastecimientoCombustibleController extends Controller{
     public function exportExcel(){
 
         return Excel::download(new AbastecimientoCombustibleExport, 'abast-combustible-list.xlsx');
+    }
+
+    private function getConsecionariaActual(){
+
+        $ConcesionariaActual = Concesionaria::join('userconcesionaria','userconcesionaria.concesionaria_id','=','concesionaria.id')
+            ->join('users','users.id','=','userconcesionaria.user_id')
+            ->where('userconcesionaria.estado','=',true)->where('userconcesionaria.user_id','=',auth()->user()->id)
+            ->select('concesionaria.id','concesionaria.razonsocial')->get();
+        $idConcAct=$ConcesionariaActual[0]->id;
+
+        return $idConcAct;
     }
 }
 

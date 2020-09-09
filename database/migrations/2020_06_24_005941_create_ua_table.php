@@ -25,6 +25,7 @@ class CreateUaTable extends Migration
             $table -> string('tipo_costo');
             $table -> unsignedBigInteger('ua_padre_id') -> nullable();
             $table -> unsignedBigInteger('unidad_id');
+            $table -> unsignedBigInteger('concesionaria_id');
             $table -> timestamps();
             $table -> softDeletes();
         });
