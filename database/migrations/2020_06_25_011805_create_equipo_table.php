@@ -29,6 +29,7 @@ class CreateEquipoTable extends Migration
             $table->unsignedBigInteger('contratista_id');
             $table->year('anio')->nullable();
             $table->unsignedBigInteger('area_id');
+            $table->unsignedBigInteger('concesionaria_id');
             /*
             $table->unsignedBigInteger('ua_id')->nullable();
             

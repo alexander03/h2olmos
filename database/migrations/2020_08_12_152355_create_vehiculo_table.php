@@ -32,6 +32,7 @@ class CreateVehiculoTable extends Migration
 //            $table->string('carroceria',10);
             $table->boolean('carroceria');
             $table->string('color',20);
+            $table->unsignedBigInteger('concesionaria_id');
 /*
             $table->date('fechavencimientosoat')->nullable();
             $table->date('fechavencimientogps')->nullable();

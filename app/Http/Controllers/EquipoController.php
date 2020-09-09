@@ -7,6 +7,7 @@ use App\Equipo;
 use App\Area;
 use App\Brand;
 use App\Ua;
+use App\Concesionaria;
 use App\Contratista;
 use Illuminate\Http\Request;
 use App\Librerias\Libreria;
@@ -50,6 +51,7 @@ class EquipoController extends Controller
         $filtro           = array();
         $filtro[]         = ['codigo', 'LIKE', '%'.strtoupper($codigo).'%'];
         $filtro[]         = ['descripcion', 'LIKE', '%'.strtoupper($descripcion).'%'];
+        $filtro[]         = ['concesionaria_id', $this->consecionariaActual()];
 /*
         if($ua_id != 0 ){
 			$filtro[]         = ['ua_id', '=', $ua_id];        	
@@ -207,7 +209,7 @@ class EquipoController extends Controller
             $equipo->marca_id 			  = $request->input('marca_id');
             $equipo->anio 				  = $request->input('anio');
             $equipo->contratista_id 	  = $request->input('contratista_id');
-
+            $equipo->consecionaria_id     =  consecionariaActual();
             
             if($request->input('area_id') != 0){
             	$equipo->area_id 				  = $request->input('area_id');
@@ -388,5 +390,15 @@ class EquipoController extends Controller
         $res = Equipo::select('id','codigo','descripcion')->where('codigo','LIKE', '%' .$query .'%')->get();
         
         return response() -> json($res);
+    }
+
+    private function consecionariaActual(){
+        $ConcesionariaActual = Concesionaria::join('userconcesionaria','userconcesionaria.concesionaria_id','=','concesionaria.id')
+        ->join('users','users.id','=','userconcesionaria.user_id')
+        ->where('userconcesionaria.estado','=',true)->where('userconcesionaria.user_id','=',auth()->user()->id)
+        ->select('concesionaria.id','concesionaria.razonsocial')->get();
+        $idConcAct=$ConcesionariaActual[0]->id;
+
+        return $idConcAct;
     }
 }

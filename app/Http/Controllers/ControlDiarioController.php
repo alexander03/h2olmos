@@ -7,6 +7,7 @@ use App\Equipo;
 use App\Area;
 use App\Tipohora;
 use App\Ua;
+use App\Concesionaria;
 use App\Controldiario;
 use App\Contratista;
 use Illuminate\Http\Request;
@@ -55,17 +56,21 @@ class ControlDiarioController extends Controller
         $filtro[]         = ['codigo', 'LIKE', '%'.strtoupper($ua).'%'];
         $filtro[]         = ['codigo', 'LIKE', '%'.strtoupper($equipo_ua).'%'];
         $filtro[]         = ['descripcion', 'LIKE', '%'.strtoupper($descripcion).'%'];
+        $filtro[]         = ['concesionaria_id','=',$this->consecionariaActual()];
 /*
         if($ua_id != 0 ){
 			$filtro[]         = ['ua_id', '=', $ua_id];        	
         }
 */
         $resultado        = Controldiario::whereHas('ua', function($query) use($filtro){
-        									$query->where($filtro[0][0],$filtro[0][1],$filtro[0][2]);
+        									$query->where($filtro[0][0],$filtro[0][1],$filtro[0][2])->where($filtro[3][0],$filtro[3][1],$filtro[3][2]);
         								})->orWhereHas('equipo', function($query) use($filtro){
         									$query->where($filtro[1][0],$filtro[1][1],$filtro[1][2])
         									->orWhere($filtro[2][0],$filtro[2][1],$filtro[2][2]);
-        								})->orderBy('fecha', 'desc');
+        								})
+                                        ->WhereHas('equipo', function($query) use($filtro){
+                                            $query->where($filtro[3][0],$filtro[3][1],$filtro[3][2]);
+                                        })->orderBy('fecha', 'desc');
 
         $lista            = $resultado->get();
         $cabecera         = array();
@@ -410,5 +415,14 @@ class ControlDiarioController extends Controller
         $uas = Ua::select('codigo','descripcion')->get();
 
         return response() -> json($uas);
+    }
+    private function consecionariaActual(){
+        $ConcesionariaActual = Concesionaria::join('userconcesionaria','userconcesionaria.concesionaria_id','=','concesionaria.id')
+        ->join('users','users.id','=','userconcesionaria.user_id')
+        ->where('userconcesionaria.estado','=',true)->where('userconcesionaria.user_id','=',auth()->user()->id)
+        ->select('concesionaria.id','concesionaria.razonsocial')->get();
+        $idConcAct=$ConcesionariaActual[0]->id;
+
+        return $idConcAct;
     }
 }

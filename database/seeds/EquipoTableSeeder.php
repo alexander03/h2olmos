@@ -20,6 +20,7 @@ class EquipoTableSeeder extends Seeder
             'contratista_id' => 1,
             'anio' => '2010',
             'area_id' => 1,
+            'concesionaria_id' => 1,
             'created_at' => now(),
             'updated_at' => now()
         ]);
@@ -33,6 +34,7 @@ class EquipoTableSeeder extends Seeder
             'contratista_id' => 2,
             'anio' => '2015',
             'area_id' => 1,
+            'concesionaria_id' => 1,
             'created_at' => now(),
             'updated_at' => now()
         ]);        
