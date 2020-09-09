@@ -21,8 +21,8 @@ class ConductorTableSeeder extends Seeder
             'contratista_id' => 1,
             'created_at' => now(),
             'updated_at' => now()
-        ]);
-        DB::table('conductor')->insert([
+            ]);
+            DB::table('conductor')->insert([
             'nombres' => 'EDMUNDO',
             'apellidos' => 'VILLENA FIESTAS',
             'dni' => '17974640',

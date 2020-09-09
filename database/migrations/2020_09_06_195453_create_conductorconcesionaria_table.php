@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateUserconcesionariaTable extends Migration
+class CreateConductorconcesionariaTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,15 @@ class CreateUserconcesionariaTable extends Migration
      */
     public function up()
     {
-        Schema::create('userconcesionaria', function (Blueprint $table) {
+        Schema::create('conductorconcesionaria', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('conductor_id');
             $table->unsignedBigInteger('concesionaria_id');
-            $table->boolean('estado')->default(true);
-
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('conductor_id')->references('id')->on('conductor');
             $table->foreign('concesionaria_id')->references('id')->on('concesionaria');
+            $table->boolean('estado', true)->default(true);
+
+            $table->unique(['conductor_id', 'concesionaria_id']);
             $table->timestamps();
         });
     }
@@ -32,6 +33,6 @@ class CreateUserconcesionariaTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('userconcesionaria');
+        Schema::dropIfExists('conductorconcesionaria');
     }
 }

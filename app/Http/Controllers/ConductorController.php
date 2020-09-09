@@ -6,6 +6,8 @@ use Validator;
 use Illuminate\Http\Request;
 use App\Conductor;
 use App\Contratista;
+use App\Concesionaria;
+use App\Conductorconcesionaria;
 use App\Librerias\Libreria;
 use Illuminate\Support\Facades\DB;
 
@@ -144,15 +146,33 @@ class ConductorController extends Controller
             return $validacion->messages()->toJson();
         }
         $error = DB::transaction(function() use($request){
-            $conductor = new Conductor();
-            $conductor->dni= $request->input('dni');
-            $conductor->apellidos= mb_strtoupper($request->input('apellidos'), 'utf-8');
-            $conductor->nombres= mb_strtoupper($request->input('nombres'), 'utf-8');
-            $conductor->licencia= mb_strtoupper($request->input('licencia_letra'), 'utf-8') . '-' . $request->input('dni') ;
-            $conductor->categoria= $request->input('categoria');
-            $conductor->fechavencimiento= mb_strtoupper($request->input('fechavencimiento'), 'utf-8');
-            $conductor->contratista_id= mb_strtoupper($request->input('contratista_id'), 'utf-8');
-            $conductor->save();
+            $concesionariaActual = Concesionaria::getConcesionariaActual();
+
+            //Busco al conductor
+            $conductorBuscado = Conductor::where('dni', $request->input('dni'))->first();
+            if($conductorBuscado == null) {
+                $conductor = new Conductor();
+                $conductor->dni= $request->input('dni');
+                $conductor->apellidos= mb_strtoupper($request->input('apellidos'), 'utf-8');
+                $conductor->nombres= mb_strtoupper($request->input('nombres'), 'utf-8');
+                $conductor->licencia= mb_strtoupper($request->input('licencia_letra'), 'utf-8') . '-' . $request->input('dni') ;
+                $conductor->categoria= $request->input('categoria');
+                $conductor->fechavencimiento= mb_strtoupper($request->input('fechavencimiento'), 'utf-8');
+                $conductor->contratista_id= mb_strtoupper($request->input('contratista_id'), 'utf-8');
+                $conductor->save();
+    
+                $conductorconcesionaria = new Conductorconcesionaria();
+                $conductorconcesionaria->conductor_id = $conductor->id;
+                $conductorconcesionaria->concesionaria_id = $concesionariaActual->id;
+                $conductorconcesionaria->save();
+            } else {
+                $conductorconcesionaria = new Conductorconcesionaria();
+                $conductorconcesionaria->conductor_id = $conductorBuscado->id;
+                $conductorconcesionaria->concesionaria_id = $concesionariaActual->id;
+                $conductorconcesionaria->save();
+            }
+
+
         });
         return is_null($error) ? "OK" : $error;
     }
@@ -227,19 +247,6 @@ class ConductorController extends Controller
         return is_null($error) ? "OK" : $error;
     }
 
-    public function destroy($id)
-    {
-        $existe = Libreria::verificarExistencia($id, 'conductor');
-        if ($existe !== true) {
-            return $existe;
-        }
-        $error = DB::transaction(function() use($id){
-            $brand = Conductor::find($id);
-            $brand->delete();
-        });
-        return is_null($error) ? "OK" : $error;
-    }
-
     public function eliminar($id, $listarLuego)
     {
         $existe = Libreria::verificarExistencia($id, 'conductor');
@@ -258,6 +265,32 @@ class ConductorController extends Controller
         return view('app.confirmarEliminar')->with(compact('modelo', 'formData', 'entidad', 'boton', 'listar','mensaje'));
     }
 
+    public function destroy($id)
+    {
+        $concesionariaActual = Concesionaria::getConcesionariaActual();
+
+        $conductorBuscado = Conductor::where('conductor.id', $id)
+                        ->join('conductorconcesionaria', 'conductorconcesionaria.conductor_id', '=', 'conductor.id')
+                        ->where('conductorconcesionaria.concesionaria_id', $concesionariaActual->id)->first();
+
+        if ($conductorBuscado == null) {
+            $cadena = '<blockquote><p class="text-danger">Registro no existe en la base de datos. No manipular ID</p></blockquote>';
+			$cadena .= '<button class="btn btn-warning btn-sm" id="btnCerrarexiste"><i class="fa fa-times fa-lg"></i> Cerrar</button>';
+			$cadena .= "<script type=\"text/javascript\">
+							$(document).ready(function() {
+								$('#btnCerrarexiste').attr('onclick','cerrarModal(' + (contadorModal - 1) + ');').unbind('click');
+							}); 
+						</script>";
+			return $cadena;
+        }
+        $error = DB::transaction(function() use($id, $concesionariaActual){
+            $conductorconcesionaria = Conductorconcesionaria::where('conductor_id', $id)->where('concesionaria_id', $concesionariaActual->id)->first();
+            $conductorconcesionaria->estado = false;
+            $conductorconcesionaria->save();
+        });
+        return is_null($error) ? "OK" : $error;
+    }
+
     public function activar($id, $listarLuego){
         $listar = "NO";
         if (!is_null(Libreria::obtenerParametro($listarLuego))) {
@@ -271,13 +304,39 @@ class ConductorController extends Controller
     }
 
     public function reactivar($id){
-        $error = DB::transaction(function() use($id){
-            Conductor::onlyTrashed()->where('id', $id)->restore();
+
+        $concesionariaActual = Concesionaria::getConcesionariaActual();
+
+        $conductorBuscado = Conductor::where('conductor.id', $id)
+                        ->join('conductorconcesionaria', 'conductorconcesionaria.conductor_id', '=', 'conductor.id')
+                        ->where('conductorconcesionaria.concesionaria_id', $concesionariaActual->id)->first();
+
+        if ($conductorBuscado == null) {
+            $cadena = '<blockquote><p class="text-danger">Registro no existe en la base de datos. No manipular ID</p></blockquote>';
+			$cadena .= '<button class="btn btn-warning btn-sm" id="btnCerrarexiste"><i class="fa fa-times fa-lg"></i> Cerrar</button>';
+			$cadena .= "<script type=\"text/javascript\">
+							$(document).ready(function() {
+								$('#btnCerrarexiste').attr('onclick','cerrarModal(' + (contadorModal - 1) + ');').unbind('click');
+							}); 
+						</script>";
+			return $cadena;
+        }
+        $error = DB::transaction(function() use($id, $concesionariaActual){
+            $conductorconcesionaria = Conductorconcesionaria::where('conductor_id', $id)->where('concesionaria_id', $concesionariaActual->id)->first();
+            $conductorconcesionaria->estado = true;
+            $conductorconcesionaria->save();
         });
         return is_null($error) ? "OK" : $error;
     }
 
     public function existeConductor(Request $request) {
-        return $res = Conductor::withTrashed()->where('dni', $request->dni)->get();
+        $concesionariaActual = Concesionaria::getConcesionariaActual();
+
+        return $res = Conductor::withTrashed()
+                ->join('conductorconcesionaria', 'conductorconcesionaria.conductor_id', '=', 'conductor.id')
+                ->where(function($subquery) use ($concesionariaActual) {
+                    $subquery->where('conductorconcesionaria.concesionaria_id', $concesionariaActual->id);
+                })
+                ->where('dni', $request->dni)->get();
     }
 }

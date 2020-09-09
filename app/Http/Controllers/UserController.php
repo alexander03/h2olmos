@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\User;
 use App\Tipouser;
+use App\Concesionaria;
+use App\UserConcesionaria;
 use Validator;
 use App\Http\Requests\UserRequest;
 use Illuminate\Support\Facades\Hash;
@@ -82,6 +84,7 @@ class UserController extends Controller
         foreach($arrTipousers as $k=>$v){
             $cboTipousers += array($v->id=>$v->descripcion);
         }
+        
         return view($this->folderview.'.admin')->with(compact('entidad', 'title', 'titulo_registrar', 'cboTipousers', 'ruta'));
 
     }
@@ -99,7 +102,13 @@ class UserController extends Controller
         foreach($arrTipousers as $k=>$v){
             $cboTipousers += array($v->id=>$v->descripcion);
         }
-        return view($this->folderview.'.mant')->with(compact('user', 'formData', 'entidad', 'cboTipousers', 'boton', 'listar'));
+
+        $arrConcesionarias      = Concesionaria::getAll();
+        $cboConcesionaria = [];
+        foreach($arrConcesionarias as $k=>$v){
+            $cboConcesionaria[] = array('ruc'=> $v->ruc ,'id' => $v->id, 'abreviatura' => $v->abreviatura, 'estado' => false);
+        }
+        return view($this->folderview.'.mant')->with(compact('user', 'formData', 'entidad', 'cboTipousers','cboConcesionaria' ,'boton', 'listar'));
     }
 
     public function store(Request $request) {
@@ -128,6 +137,21 @@ class UserController extends Controller
             $user->username= $request->input('username');
             $user->password= Hash::make($request->input('password'));
             $user->save();
+
+            if($request->input('20523611250') != null) {
+                $userconcesionaria = new UserConcesionaria();
+                $userconcesionaria->user_id = $user->id;
+                $userconcesionaria->concesionaria_id = $request->input('20523611250');
+                $userconcesionaria->save();
+            }
+            
+            if($request->input('20509093521') != null) {
+                $userconcesionaria2 = new UserConcesionaria();
+                $userconcesionaria2->user_id = $user->id;
+                $userconcesionaria2->concesionaria_id = $request->input('20509093521');
+                $userconcesionaria2->save();
+            }
+
         });
         return is_null($error) ? "OK" : $error;
 
@@ -150,7 +174,14 @@ class UserController extends Controller
         foreach($arrTipousers as $k=>$v){
             $cboTipousers += array($v->id=>$v->descripcion);
         }
-        return view($this->folderview.'.mant')->with(compact('user', 'formData', 'entidad', 'boton', 'cboTipousers', 'listar'));
+
+        $arrConcesionarias      = $user->getConcesionarias;
+        $cboConcesionaria = [];
+        foreach($arrConcesionarias as $k=>$v){
+            $cboConcesionaria[] = array('ruc'=> $v->ruc ,'id' => $v->id, 'abreviatura' => $v->abreviatura, 'estado' => $v->pivot->estado);
+        }
+
+        return view($this->folderview.'.mant')->with(compact('user', 'formData', 'entidad', 'boton', 'cboTipousers', 'cboConcesionaria', 'listar'));
     }
 
     public function update(Request $request, $id)
@@ -163,13 +194,13 @@ class UserController extends Controller
             'tipouser_id' => 'required',
             'name' => 'required',
             'username' => 'required',
-            'password' => 'required'
+            // 'password' => 'required'
         );
         $mensajes = array(
             'tipouser_id.required' => 'Debe seleccionar un tipo de usuario',
             'name.required' => 'Debe ingresar el nombre de la persona',
             'username.required' => 'Debe ingresar el usuario',
-            'password.required' => 'Debe ingresar la contraseña',
+            // 'password.required' => 'Debe ingresar la contraseña',
         );
 
         $validacion = Validator::make($request->all(), $reglas, $mensajes);
@@ -179,11 +210,51 @@ class UserController extends Controller
 
         $error = DB::transaction(function() use($request, $id){
             $user = User::find($id);
+            // return $userconcesionariaH2O = $user->getConcesionarias->where('ruc', '20523611250')->first();
             $user->tipouser_id= $request->input('tipouser_id');
             $user->name= mb_strtoupper($request->input('name'), 'utf-8');
             $user->username= $request->input('username');
-            $user->password= Hash::make($request->input('password'));
+            if($request->input('password')) $user->password = Hash::make($request->input('password'));
             $user->save();
+
+            $concesionariaH2O = $user->getConcesionarias->where('ruc', '20523611250')->first();
+            if($concesionariaH2O != null) {
+                if($request->input('20523611250') != null) {
+                    $userconcesionaria = UserConcesionaria::where('user_id', $user->id)->where('concesionaria_id', $concesionariaH2O->id)->first();
+                    $userconcesionaria->estado = true;
+                    $userconcesionaria->save();
+                } else {
+                    $userconcesionaria = UserConcesionaria::where('user_id', $user->id)->where('concesionaria_id', $concesionariaH2O->id)->first();
+                    $userconcesionaria->estado = false;
+                    $userconcesionaria->save();
+                }
+            } else {
+                if($request->input('20523611250') != null) {
+                    $userconcesionaria = new UserConcesionaria();
+                    $userconcesionaria->user_id = $user->id;
+                    $userconcesionaria->concesionaria_id = $request->input('20523611250');
+                    $userconcesionaria->save();
+                }
+            }
+            $concesionariaCTO = $user->getConcesionarias->where('ruc', '20509093521')->first();
+            if($concesionariaCTO != null) {
+                if($request->input('20509093521') != null) {
+                    $userconcesionaria = UserConcesionaria::where('user_id', $user->id)->where('concesionaria_id', $concesionariaCTO->id)->first();
+                    $userconcesionaria->estado = true;
+                    $userconcesionaria->save();
+                }else {
+                    $userconcesionaria = UserConcesionaria::where('user_id', $user->id)->where('concesionaria_id', $concesionariaCTO->id)->first();
+                    $userconcesionaria->estado = false;
+                    $userconcesionaria->save();
+                }
+            } else {
+                if($request->input('20509093521') != null) {
+                    $userconcesionaria = new UserConcesionaria();
+                    $userconcesionaria->user_id = $user->id;
+                    $userconcesionaria->concesionaria_id = $request->input('20509093521');
+                    $userconcesionaria->save();
+                }
+            }
         });
         return is_null($error) ? "OK" : $error;
     }

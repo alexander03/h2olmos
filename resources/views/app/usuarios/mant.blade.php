@@ -27,6 +27,17 @@
 	</div>
 </div>
 <div class="form-group">
+	{!! Form::label('concesionaria_id', 'Concesionaria:', array('class' => 'col-sm-12 control-label')) !!}
+	<div class="col-sm-12 d-flex justify-content-around">
+		@foreach ($cboConcesionaria as $item)
+			<div>
+				{!! Form::label($item['ruc'], $item['abreviatura'], []) !!}
+				{!! Form::checkbox($item['ruc'], $item['id'], $item['estado'], ['id' => $item['ruc']]) !!}
+			</div>
+		@endforeach
+	</div>
+</div>
+<div class="form-group">
 	<div class="col-sm-12 text-right">
 		{!! Form::button('<i class="fa fa-check fa-lg"></i> '.$boton, array('class' => 'btn btn-success btn-sm', 'id' => 'btnGuardar', 'onclick' => 'guardar(\''.$entidad.'\', this)')) !!}
 		{!! Form::button('<i class="fa fa-exclamation fa-lg"></i> Cancelar', array('class' => 'btn btn-warning btn-sm', 'id' => 'btnCancelar'.$entidad, 'onclick' => 'cerrarModal();')) !!}

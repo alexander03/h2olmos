@@ -58,4 +58,8 @@ class User extends Authenticatable
     public function tipouser(){
         return $this->belongsTo('App\Tipouser');
     }
+
+    public function getConcesionarias() {
+        return $this->belongsToMany('App\Concesionaria', 'userconcesionaria')->withPivot('estado');
+    }
 }
