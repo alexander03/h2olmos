@@ -16,7 +16,7 @@ class Tipouser extends Model
     }
 
     public function opcionesmenu(){
-    	return $this->belongsToMany('App\Opcionmenu','acceso');
+    	return $this->belongsToMany('App\Opcionmenu','acceso')->where('acceso.deleted_at',null);
     }
 
     public function scopegetAll($query) {

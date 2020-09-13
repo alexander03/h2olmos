@@ -33,7 +33,8 @@
 				@endif
 			</td>
 			<td>
-				{{round((strtotime($value->hora_fin) - strtotime($value->hora_inicio))/3600,2)}}
+		{{--	{{round((strtotime($value->hora_fin) - strtotime($value->hora_inicio))/3600,2)}} --}}	
+				{{ $value->hora_total }}
 			</td>
 			<td>
 				@if($value->ua)

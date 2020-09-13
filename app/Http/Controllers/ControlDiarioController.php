@@ -184,18 +184,22 @@ class ControlDiarioController extends Controller
         $listar     = Libreria::getParam($request->input('listar'), 'NO');
         $reglas     = array('equipo_id' 			=> [new SearchEquipo()],
     						'tipohora_id.*' 			=> 'numeric',
+                            'ua_id.*'               =>  [ 'required', new SearchUaPadre() ],
                             'turno'                 => 'boolean',
                             'horometro_inicial'     => 'required|numeric',
                             'horometro_final'       => 'required|numeric|gt:horometro_inicial',
     						'hora_inicio.*'			=> 'required',
+                            'hora_total.*'          => 'required|numeric',
     						'hora_fin.*'		    => 'required', //|after:hora_inicio
     						'fecha'  				=> 'date'
                         );
         $mensajes = array(
             'tipohora_id.*.numeric'  	  		  => 'Tipo de hora inválido',
             'turno.boolean'                       => 'Ingrese un turno válido',
-            'hora_inicio.*.required'			  => 'Debe una hora de inicio válida',
-            'hora_fin.*.required'    			  => 'Debe una hora de finalzación válida',
+            'hora_inicio.*.required'			  => 'Debe ingresar una hora de inicio válida',
+            'hora_total.*.required'               => 'Debe ingresar la hora total',
+            'hora_total.*.numeric'               => 'Debe ingresar la hora total valida',
+            'hora_fin.*.required'    			  => 'Debe ingresar una hora de finalzación válida',
             'horometro_inicial.required'          => 'Ingrese el horómetro inicial',
             'horometro_final.required'            => 'Ingrese el horómetro final',
             'horometro_inicial.numeric'             => 'Ingrese el horómetro inicial',
@@ -207,11 +211,11 @@ class ControlDiarioController extends Controller
 
 
         $validacion = Validator::make($request->all(), $reglas, $mensajes);
-
+/*
         $validacion->sometimes('ua_id.*',[ 'required', new SearchUaPadre() ], function($input){
         	return $input->tipohora_id == 0 ;
         });
-
+*/
         if ($validacion->fails()) {
             return $validacion->messages()->toJson();
         }
@@ -223,15 +227,16 @@ class ControlDiarioController extends Controller
                 $controldiario = new Controldiario();  
                 $controldiario->equipo_id             = $equipoDB[0]->id;
                 
-                if($request -> input('tipohora_id.'.$key) == 0){
-                    $uaDB =  Ua::where('codigo', $request -> input('ua_id.'.$key)) -> get();
-                    $controldiario->ua_id                 = $uaDB[0]->id;
-                }else{
-                    $tipohoraDB = Tipohora::where('codigo',$request -> input('tipohora_id.'.$key)) ->get();
+                if($request -> input('tipohora_id.'.$key) != 0){
+                    $tipohoraDB = Tipohora::where('id',$request -> input('tipohora_id.'.$key)) ->get();
                     $controldiario->tipohora_id           = $tipohoraDB[0]->id;
+                    
                 }
+                $uaDB =  Ua::where('codigo', $request -> input('ua_id.'.$key)) -> get();
+                $controldiario->ua_id                 = $uaDB[0]->id;
 
                 $controldiario->hora_inicio = $request -> input('hora_inicio.'. $key);
+                $controldiario->hora_total  = $request -> input('hora_total.'. $key);
                 $controldiario->hora_fin    = $request -> input('hora_fin.'. $key);
                 $controldiario->fecha       = $request -> input('fecha');
                 $controldiario->horometro_inicial       = $request -> input('horometro_inicial');
@@ -315,17 +320,21 @@ class ControlDiarioController extends Controller
          $listar     = Libreria::getParam($request->input('listar'), 'NO');
         $reglas     = array('equipo_id'             => [new SearchEquipo()],
                             'tipohora_id.0'             => 'numeric',
+                            'ua_id.0'               =>  [ 'required', new SearchUaPadre() ],
                             'turno'                 => 'boolean',
                             'horometro_inicial'     => 'required|numeric',
                             'horometro_final'       => 'required|numeric|gt:horometro_inicial',
                             'hora_inicio.0'         => 'required',
-                            'hora_fin.0'                => 'required', //|after:hora_inicio
+                            'hora_total.0'          => 'required',
+                            'hora_fin.0'            => 'required', //|after:hora_inicio
                             'fecha'                 => 'date'
                         );
         $mensajes = array(
             'tipohora_id.0.numeric'               => 'Tipo de hora inválido',
             'turno.boolean'                   => 'Ingrese un turno válido',
             'hora_inicio.0.required'              => 'Debe una hora de inicio válida',
+            'hora_total.0.numeric'               => 'Debe ingresar la hora total valida',
+            'hora_total.0.required'              => 'Debe ingresar la hora total',
             'hora_fin.*.required'                 => 'Debe una hora de finalzación válida',
             'horometro_inicial.required'          => 'Ingrese el horómetro inicial',
             'horometro_final.required'            => 'Ingrese el horómetro final',
@@ -351,18 +360,17 @@ class ControlDiarioController extends Controller
             $equipoDB = Equipo::where('codigo',$request->input('equipo_id')) -> get();
             $controldiario->equipo_id 	 		  = $equipoDB[0]->id;
             
-            if($request -> input('tipohora_id.0') == 0){
-	            $uaDB =  Ua::where('codigo', $request -> input('ua_id.0')) -> get();
-	            $controldiario->ua_id 	 			  = $uaDB[0]->id;
-	            $controldiario->tipohora_id = null;
-	        }else{
-	            $tipohoraDB = Tipohora::where('codigo',$request -> input('tipohora_id.0')) ->get();
-	            $controldiario->tipohora_id 	 	  = $tipohoraDB[0]->id;
-	            $controldiario->ua_id = 0;
-	        }
+             if($request -> input('tipohora_id.'.$key) != 0){
+                    $tipohoraDB = Tipohora::where('id',$request -> input('tipohora_id.'.$key)) ->get();
+                    $controldiario->tipohora_id           = $tipohoraDB[0]->id;
+                    
+                }
+            $uaDB =  Ua::where('codigo', $request -> input('ua_id.'.$key)) -> get();
+            $controldiario->ua_id                 = $uaDB[0]->id;
 
 	        $controldiario->hora_inicio = $request -> input('hora_inicio.0');
-	        $controldiario->hora_fin 	= $request -> input('hora_fin.0');
+	        $controldiario->hora_total  = $request -> input('hora_total.0');
+            $controldiario->hora_fin 	= $request -> input('hora_fin.0');
             $controldiario->horometro_inicial       = $request -> input('horometro_inicial');
             $controldiario->horometro_final       = $request -> input('horometro_final');
 	        $controldiario->fecha 		= $request ->input('fecha');

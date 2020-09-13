@@ -16,7 +16,7 @@ class CreateEquipoTable extends Migration
         Schema::create('equipo', function (Blueprint $table) {
         //    $table->engine = 'InnoDB';
             $table->bigIncrements('id');
-            $table->string('codigo',10);
+            $table->string('codigo',10)->nullable();
             $table->string('descripcion',22);
             $table->string('modelo',20);
 
@@ -30,9 +30,9 @@ class CreateEquipoTable extends Migration
             $table->year('anio')->nullable();
             $table->unsignedBigInteger('area_id');
             $table->unsignedBigInteger('concesionaria_id');
-            /*
-            $table->unsignedBigInteger('ua_id')->nullable();
             
+            $table->unsignedBigInteger('ua_id')->nullable();
+            /*
             $table->string('chasis',20)->nullable();
             $table->string('carroceria',10)->nullable();
             $table->string('color',20)->nullable();

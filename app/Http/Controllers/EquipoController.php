@@ -45,11 +45,11 @@ class EquipoController extends Controller
         $filas            = $request->input('filas');
         $entidad          = 'Equipo';
 
-        $codigo     	  = Libreria::getParam($request->input('codigo'));
+        $ua     	  = Libreria::getParam($request->input('codigo'));
         $descripcion      = Libreria::getParam($request->input('descripcion'));
 
         $filtro           = array();
-        $filtro[]         = ['codigo', 'LIKE', '%'.strtoupper($codigo).'%'];
+//        $filtro[]         = ['codigo', 'LIKE', '%'.strtoupper($codigo).'%'];
         $filtro[]         = ['descripcion', 'LIKE', '%'.strtoupper($descripcion).'%'];
         $filtro[]         = ['concesionaria_id', $this->consecionariaActual()];
 /*
@@ -57,7 +57,9 @@ class EquipoController extends Controller
 			$filtro[]         = ['ua_id', '=', $ua_id];        	
         }
 */
-        $resultado        = Equipo::where($filtro)->orderBy('descripcion', 'ASC');
+        $resultado        = Equipo::where($filtro)->whereHas('ua', function($query) use($ua){
+                                $query->where('codigo', 'LIKE', '%'.strtoupper($ua).'%');
+                            })->orderBy('descripcion', 'ASC');
 
         $lista            = $resultado->get();
         $cabecera         = array();
@@ -169,14 +171,15 @@ class EquipoController extends Controller
     public function store(Request $request)
     {
         $listar     = Libreria::getParam($request->input('listar'), 'NO');
-        $reglas     = array('codigo' 				=> 'required|max:10',
+        $reglas     = array(
+//                            'codigo' 				=> 'required|max:10',
     						'descripcion' 			=> 'required|max:22',
     						'modelo' 				=> 'required|max:20',
     						'marca_id' 				=> 'numeric|min:1',
                             'placa'                 => 'max:15',
     						'anio' 					=> 'required',
     						'contratista_id'  		=> 'numeric|min:1',
-//    						'ua_id' 				=> ['required', new SearchUaPadre() ]
+    						'ua_id' 				=> ['required', new SearchUaPadre() ]
 //    						'fechavencimientosoat'  => 'required',
 //    						'fechavencimientogps'   => 'required',
 //    						'fechavencimientortv'   => 'required'
@@ -203,7 +206,8 @@ class EquipoController extends Controller
         }
         $error = DB::transaction(function() use($request){
             $equipo = new Equipo();
-            $equipo->codigo 	 		  = strtoupper($request->input('codigo'));
+//            $equipo->codigo 	 		  = strtoupper($request->input('codigo'));
+            $equipo->ua_id                = Ua::where('codigo',$request->input('ua_id'))->get()[0]->id;
             $equipo->descripcion 		  = strtoupper($request->input('descripcion'));
             $equipo->modelo 			  = strtoupper($request->input('modelo'));
             $equipo->marca_id 			  = $request->input('marca_id');
@@ -300,14 +304,15 @@ class EquipoController extends Controller
         if ($existe !== true) {
             return $existe;
         }
-        $reglas     = array('codigo'                => 'required|max:10',
+        $reglas     = array(
+                        //    'codigo'                => 'required|max:10',
                             'descripcion'           => 'required|max:22',
                             'modelo'                => 'required|max:20',
                             'marca_id'              => 'numeric|min:1',
                             'placa'                 => 'max:15',
                             'anio'                  => 'required',
                             'contratista_id'        => 'numeric|min:1',
-//                            'ua_id'                 => ['required', new SearchUaPadre() ]
+                            'ua_id'                 => ['required', new SearchUaPadre() ]
 //                            'fechavencimientosoat'  => 'required',
 //                            'fechavencimientogps'   => 'required',
 //                            'fechavencimientortv'   => 'required'
@@ -334,7 +339,8 @@ class EquipoController extends Controller
         } 
         $error = DB::transaction(function() use($request, $id){
             $equipo = Equipo::find($id);
-            $equipo->codigo 	 		  = strtoupper($request->input('codigo'));
+//            $equipo->codigo 	 		  = strtoupper($request->input('codigo'));
+            $equipo->ua_id                = Ua::where('codigo',$request->input('ua_id'))->get()[0]->id;
             $equipo->descripcion 		  = strtoupper($request->input('descripcion'));
             $equipo->modelo 			  = strtoupper($request->input('modelo'));
             $equipo->marca_id 			  = $request->input('marca_id');
