@@ -29,7 +29,6 @@ class DatabaseSeeder extends Seeder
             GrifoTableSeeder::class,
             UaTableSeeder::class,
             EquipoTableSeeder::class,
-            PropietariosTableSeeder::class,
             VehiculoTableSeeder::class,
             ControlDiarioTableSeeder::class,
             AccesoTableSeeder::class,

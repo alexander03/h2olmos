@@ -20,6 +20,9 @@ class UaTableSeeder extends Seeder
             'responsable' => 'Gultron Gulp',
             'tipo_costo' => 'flete anual',
             'concesionaria_id' => 1,
+            'situacion' => true,
+            'fecha_inicio' => now(),
+            'fecha_fin' => '2021-09-12',
             'unidad_id'=> 1,
             'created_at' => now(),
             'updated_at' => now()
@@ -32,6 +35,9 @@ class UaTableSeeder extends Seeder
             'responsable' => 'Juanito Alachofa',
             'tipo_costo' => 'flete anual',
             'concesionaria_id' => 1,
+            'situacion' => true,
+            'fecha_inicio' => now(),
+            'fecha_fin' => '2021-09-12',
             'unidad_id'=> 1,
             'created_at' => now(),
             'updated_at' => now()
@@ -44,6 +50,9 @@ class UaTableSeeder extends Seeder
             'responsable' => 'Jhon Doe',
             'tipo_costo' => 'flete anual',
             'concesionaria_id' => 1,
+            'situacion' => true,
+            'fecha_inicio' => now(),
+            'fecha_fin' => '2021-09-12',
             'unidad_id'=> 2,
             'created_at' => now(),
             'updated_at' => now()
@@ -56,6 +65,9 @@ class UaTableSeeder extends Seeder
             'responsable' => 'Pluck Asegura',
             'tipo_costo' => 'flete anual',
             'concesionaria_id' => 2,
+            'situacion' => true,
+            'fecha_inicio' => now(),
+            'fecha_fin' => '2021-09-12',
             'unidad_id'=> 3,
             'created_at' => now(),
             'updated_at' => now()

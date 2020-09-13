@@ -166,7 +166,7 @@ class AbastecimientoCombustibleController extends Controller{
             'fecha_abastecimiento' => 'required',
             'grifo_id' => ['required', new SearchGrifoRule()],
             'tipo_combustible' => 'required',
-            'conductor_id' => ['required', new SearchConductorRule()],
+            'conductor_id' => ['required'],
             'ua_id' => ['required', new SearchUaPadre()],
             'equipo_id' => ['required', new SearchEquipo()],
             'qtdgl' => 'required',
@@ -206,6 +206,7 @@ class AbastecimientoCombustibleController extends Controller{
             if($request -> input('conductor_id')){
                 $conductorDB =  Conductor::where('dni', $request -> input('conductor_id')) -> get();
                 $abastecimiento -> conductor_id = (!($conductorDB -> isEmpty())) ? $conductorDB[0] -> id : null;
+                if($abastecimiento -> conductor_id === null) $abastecimiento -> conductor_fake = strtoupper($request -> input('conductor_id'));
             }
             //BUSCAR UA
             if($request -> input('ua_id')){
@@ -256,7 +257,7 @@ class AbastecimientoCombustibleController extends Controller{
             'fecha_abastecimiento' => 'required',
             'grifo_id' => ['required', new SearchGrifoRule()],
             'tipo_combustible' => 'required',
-            'conductor_id' => ['required', new SearchConductorRule()],
+            'conductor_id' => ['required'],
             'ua_id' => ['required', new SearchUaPadre()],
             'equipo_id' => ['required', new SearchEquipo()],
             'qtdgl' => 'required',
@@ -298,8 +299,10 @@ class AbastecimientoCombustibleController extends Controller{
             $abastecimiento -> tipo_combustible = $request -> input('tipo_combustible');
             //BUSCAR CONDUCTOR
             if($request -> input('conductor_id')){
+                $abastecimiento -> conductor_fake = null;
                 $conductorDB =  Conductor::where('dni', $request -> input('conductor_id')) -> get();
                 $abastecimiento -> conductor_id = (!($conductorDB -> isEmpty())) ? $conductorDB[0] -> id : null;
+                if($abastecimiento -> conductor_id === null) $abastecimiento -> conductor_fake = strtoupper($request -> input('conductor_id'));
             }
             //BUSCAR UA
             if($request -> input('ua_id')){

@@ -11,7 +11,8 @@ class Ua extends Model{
     protected $table = 'ua';
     protected $dates = ['deleted_at'];
     protected $fillable = ['codigo', 'descripcion', 'tipo', 
-                            'fondos', 'responsable', 'tipo_costo', 'unidad_id', 'ua_padre_id', 'concesionaria_id'];
+                            'fondos', 'responsable', 'tipo_costo', 'unidad_id', 'ua_padre_id', 'concesionaria_id',
+                            'situacion', 'fecha_inicio', 'fecha_fin'];
 
     public function unidad(){
 
@@ -22,16 +23,5 @@ class Ua extends Model{
 
         return DB::select('select codigo, descripcion from ua where id = ?', [ $id ]);
     }
-    // public function propietarios(){
 
-    //     return $this->hasMany(Propietario::class, 'unidad_id'); 				 		
-    // }
-
-    // public static function boot() {
-    //     parent::boot();
-
-    //     static::deleting(function($ua) {
-    //          $ua->propietarios()->delete();
-    //     });
-    // }
 }
