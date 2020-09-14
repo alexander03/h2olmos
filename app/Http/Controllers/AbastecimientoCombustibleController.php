@@ -216,7 +216,8 @@ class AbastecimientoCombustibleController extends Controller{
             //BUSCAR EQUIPO
             if($request -> input('equipo_id')){
                 if($request -> input('equipo_tipo') === 'e'){
-                    $equipoDB =  Equipo::where('codigo', $request -> input('equipo_id')) -> get();
+                    $idEquipo = explode('--', $request -> input('equipo_id'));
+                    $equipoDB =  Equipo::where('id', $idEquipo[1]) -> get();
                     $abastecimiento -> equipo_id = (!($equipoDB -> isEmpty())) ? $equipoDB[0] -> id : null;
                 }
                 if($request -> input('equipo_tipo') === 'v'){
@@ -313,7 +314,8 @@ class AbastecimientoCombustibleController extends Controller{
             if($request -> input('equipo_id')){
                 if($request -> input('equipo_tipo') === 'e'){
                     $abastecimiento -> vehiculo_id = null;
-                    $equipoDB =  Equipo::where('codigo', $request -> input('equipo_id')) -> get();
+                    $idEquipo = explode('--', $request -> input('equipo_id'));
+                    $equipoDB =  Equipo::where('id', $idEquipo[1]) -> get();
                     $abastecimiento -> equipo_id = (!($equipoDB -> isEmpty())) ? $equipoDB[0] -> id : null;
                 }
                 if($request -> input('equipo_tipo') === 'v'){
