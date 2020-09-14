@@ -45,7 +45,10 @@ class UaImport implements ToModel
             'responsable' => $row[5],
             'tipo_costo' => $row[6],
             'ua_padre_id' => $row[7],
-            'concesionaria_id' => $this -> getConsecionariaActual()
+            'concesionaria_id' => $this -> getConsecionariaActual(),
+            'situacion' => true,
+            'fecha_inicio' => $row[8],
+            'fecha_fin' => $row[9]
         ]);
     }
 

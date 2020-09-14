@@ -21,13 +21,6 @@ class OpcionmenuTableSeeder extends Seeder
             'grupomenu_id' => 1
             ],
             [
-            'descripcion' => 'Propietarios',
-            'link' => 'propietario',
-            'icono' => 'accessibility',
-            'orden' => 1,
-            'grupomenu_id' => 1
-            ],
-            [
             'descripcion' => 'Unidades',
             'link' => 'unidad',
             'icono' => 'ac_unit',
@@ -63,6 +56,15 @@ class OpcionmenuTableSeeder extends Seeder
             'orden' => 3,
             'grupomenu_id' => 1
         ]);
+
+        DB::table('opcionmenu')->insert([
+            'descripcion' => 'Carrocerías',
+            'link' => 'carroceria',
+            'icono' => 'face',
+            'orden' => 3,
+            'grupomenu_id' => 1
+        ]);
+
         DB::table('opcionmenu')->insert([
             ['descripcion' => 'Areas',
             'link' => 'areas',

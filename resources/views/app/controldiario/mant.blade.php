@@ -67,6 +67,12 @@ if ($controldiario !== NULL) {
 					{!! Form::time('hora_fin[]', null, array('class' => 'form-control input-xs', 'id' => 'hora_fin')) !!}
 				</div>
 			</div>
+			<div class="form-group col-md-3 mt-4">
+				{!! Form::label('hora_total', 'horas totales:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
+				<div class="col-lg-12 col-md-12 col-sm-12 mt-2">
+					{!! Form::number('hora_total[]', null, array('class' => 'form-control input-xs', 'id' => 'hora_total')) !!}
+				</div>
+			</div>
 			<div class="form-group col-md-6">
 				{!! Form::label('tipohora_id', 'Tipo de hora:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
 				<div class="col-lg-12 col-md-12 col-sm-12">
@@ -178,6 +184,12 @@ if ($controldiario !== NULL) {
 							<label For="hora_fin_${Num}" class="col-lg-12 col-md-12 col-sm-12 control-label">Hora fin : </label>
 							<div class="col-lg-12 col-md-12 col-sm-12 mt-2">
 								<input type="time" class="form-control input-xs" name="hora_fin[]" id='hora_fin_${Num}'>
+							</div>
+						</div>
+						<div class="form-group col-md-3 mt-4">
+							<label For="hora_total_${Num}" class="col-lg-12 col-md-12 col-sm-12 control-label">Horas totales : </label>
+							<div class="col-lg-12 col-md-12 col-sm-12 mt-2">
+								<input type="number" class="form-control input-xs" name="hora_total[]" id='hora_total_${Num}'>
 							</div>
 						</div>
 						<div class="form-group col-md-6">

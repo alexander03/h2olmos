@@ -62,6 +62,14 @@ if ($ua !== NULL) {
 			@endforeach
 		</select>
 	</div>
+	<div class="form-group col-md-6 p-3">
+		<label for="id-f-init" class="pl-3">Fecha de inicio</label>
+		<input type="date" name="fecha_inicio" id="id-f-init" class="form-control" value="<?php if($ua) echo $ua->fecha_inicio; else echo date('yy-m-d'); ?>">
+	</div>
+	<div class="form-group col-md-6 p-3">
+		<label for="id-f-fin" class="pl-3">Fecha de fin</label>
+		<input type="date" name="fecha_fin" id="id-f-fin" class="form-control" value="<?php if($ua) echo $ua->fecha_fin; ?>">
+	</div>
 	<div class="form-group w-100">
 		<div class="col-lg-12 col-md-12 col-sm-12 text-right">
 			{!! Form::button('<i class="fa fa-check fa-lg"></i> '.$boton, array('class' => 'btn btn-success btn-sm', 'id' => 'btnGuardar', 'onclick' => 'guardar(\''.$entidad.'\', this)')) !!}

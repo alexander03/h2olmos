@@ -12,6 +12,7 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         $this->call([
+            CarroceriaTableSeeder::class,
             ConcesionariaTableSeeder::class,
             TipouserTableSeeder::class,
             UsersTableSeeder::class,
@@ -29,7 +30,6 @@ class DatabaseSeeder extends Seeder
             GrifoTableSeeder::class,
             UaTableSeeder::class,
             EquipoTableSeeder::class,
-            PropietariosTableSeeder::class,
             VehiculoTableSeeder::class,
             ControlDiarioTableSeeder::class,
             AccesoTableSeeder::class,

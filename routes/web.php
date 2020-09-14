@@ -78,10 +78,6 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::resource('opcionmenu', 'OpcionmenuController', array('except' => array('show')));
 
 	//Rutas propietario - ua - unidad
-	Route::post('propietario/buscar', 'PropietarioController@buscar')->name('propietario.buscar');
-	Route::get('propietario/eliminar/{id}/{listarluego}', 'PropietarioController@eliminar')->name('propietario.eliminar');
-	Route::resource('propietario', 'PropietarioController');
-
 	Route::post('ua/buscar', 'UaController@buscar')->name('ua.buscar');
 	Route::get('ua/eliminar/{id}/{listarluego}', 'UaController@eliminar')->name('ua.eliminar');
 	Route::get('ua/search/{query}', 'UaController@searchAutocomplete')->name('ua.search');
@@ -117,6 +113,11 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('grifo/eliminar/{id}/{listarluego}', 'GrifoController@eliminar')->name('grifo.eliminar');
 	Route::resource('grifo', 'GrifoController', array('except' => array('show')));
 
+	//Rutas Carroceria
+	Route::post('carroceria/buscar', 'CarroceriaController@buscar')->name('carroceria.buscar');
+	Route::get('carroceria/eliminar/{id}/{listarluego}', 'CarroceriaController@eliminar')->name('carroceria.eliminar');
+	Route::resource('carroceria', 'CarroceriaController', array('except' => array('show')));
+
 	//Rutas Equipo
 	Route::post('equipo/buscar', 'EquipoController@buscar')->name('equipo.buscar');
 	Route::get('equipo/eliminar/{id}/{listarluego}', 'EquipoController@eliminar')->name('equipo.eliminar');
@@ -131,6 +132,7 @@ Route::group(['middleware' => 'auth'], function () {
 	//Rutas VehiculoDocument
 	Route::post('vehiculodocument/buscar', 'VehiculoDocumentController@buscar')->name('vehiculodocument.buscar');
 	Route::get('vehiculodocument/eliminar/{id}/{listarluego}', 'VehiculoDocumentController@eliminar')->name('vehiculodocument.eliminar');
+	Route::post('vehiculodocument/{id}', 'VehiculoDocumentController@update')->name('vehiculodocument.update');
 	Route::resource('vehiculodocument', 'VehiculoDocumentController', array('except' => array('show')));
 
 	//tipo user

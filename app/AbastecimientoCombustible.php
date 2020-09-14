@@ -12,7 +12,7 @@ class AbastecimientoCombustible extends Model{
     protected $dates = [ 'deleted_at' ];
   
     protected $fillable = [ 'fecha_abastecimiento', 'grifo_id', 'tipo_combustible', 
-                            'conductor_id', 'ua_id', 'equipo_id', 'qtdgl', 'qtdl',
+                            'conductor_id', 'conductor_fake', 'ua_id', 'equipo_id', 'qtdgl', 'qtdl',
                             'km', 'abastecimiento_dia' ];
     
     public function grifo(){

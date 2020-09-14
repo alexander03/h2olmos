@@ -26,6 +26,9 @@ class CreateUaTable extends Migration
             $table -> unsignedBigInteger('ua_padre_id') -> nullable();
             $table -> unsignedBigInteger('unidad_id');
             $table -> unsignedBigInteger('concesionaria_id');
+            $table -> boolean('situacion') -> default(true);
+            $table -> date('fecha_inicio');
+            $table -> date('fecha_fin');
             $table -> timestamps();
             $table -> softDeletes();
         });

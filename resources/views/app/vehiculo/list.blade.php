@@ -18,7 +18,8 @@
 		@foreach ($lista as $key => $value)
 		<tr>
 			<td>{{ $contador }}</td>
-			<td>{{ $value->ua }}</td>
+			<td>{{ $value->ua->codigo }}</td>
+
 			<td>{{ $value->modelo }}</td>
 			<td>
 				@if($value->marca)

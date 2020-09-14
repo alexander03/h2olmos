@@ -25,4 +25,8 @@ class Vehiculo extends Model
     {
         return $this->belongsTo('App\Area');
     }
+    public function ua()
+    {
+        return $this->belongsTo('App\Ua');
+    }
 }
