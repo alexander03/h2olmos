@@ -41,7 +41,7 @@
 					{{ $value->ua->descripcion }}
 				@else
 					{{ $value->tipohora->descripcion }}
-				@endif --}}
+				@endif  --}}
 				{{ $value->ua->descripcion }}
 			</td>
 			<td>

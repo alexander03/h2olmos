@@ -12,7 +12,14 @@ if ($controldiario !== NULL) {
 <div class="form-group">
 	{!! Form::label('fecha', 'Fecha :', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
 	<div class="col-lg-12 col-md-12 col-sm-12">
-		{!! Form::date('fecha', null, array('class' => 'form-control input-xs', 'id' => 'fecha')) !!}
+		
+		<input type="date" name="fecha" id='fecha' class="form-control input-xs" 
+		@if($controldiario)
+			value="{{$controldiario->fecha}}"
+		@else
+			value="{{ date('Y-m-d')}}"
+		@endif
+		>
 	</div>
 </div>
 <div class="form-group">
