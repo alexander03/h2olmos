@@ -372,8 +372,8 @@ const doImportExcel = () => {
                         method:'POST',
                         body: formData
                     };
-                        
-                    const res = await fetch('/ua/importar', config);
+                   
+                    const res = await fetch('ua/importar', config);
                     const { ok } = await res.json();
                     
                     //Carga tabla
@@ -384,3 +384,13 @@ const doImportExcel = () => {
         }
     );
 };
+
+//Conversión de galones a litros
+const convertGLtoL = () => {
+
+    const refGL = document.querySelector('.js-qtd-gl');
+    refGL.addEventListener('keyup', ({ target: { value } }) => {
+        
+        document.querySelector('.js-qtd-l').value = value * 3.7854;
+    });
+}

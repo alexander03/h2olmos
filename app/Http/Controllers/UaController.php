@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Validator;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\UaExport;
 use App\Imports\UaImport;
+use DateTime;
 use Exception;
 
 class UaController extends Controller{
@@ -55,11 +56,27 @@ class UaController extends Controller{
         $cabecera[]       = array('valor' => 'Tipo de costo', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Ua Padre', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Unidad', 'numero' => '1');
+        $cabecera[]       = array('valor' => 'Situación', 'numero' => '1');
+        $cabecera[]       = array('valor' => 'Fecha de inicio', 'numero' => '1');
+        $cabecera[]       = array('valor' => 'Fecha de fin', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Operaciones', 'numero' => '2');
         
         $titulo_modificar = $this->tituloModificar;
         $titulo_eliminar  = $this->tituloEliminar;
         $ruta             = $this->rutas;
+
+        $uaLst =  Ua::all();
+        foreach($uaLst as $uaDB){
+            $hoy = new DateTime(date("Y-m-d")); 
+            $fechaFin = new DateTime($uaDB -> fecha_fin);
+            if($hoy > $fechaFin){          
+               $uaNew = new Ua();
+               $uaNew = $uaDB;
+               $uaNew -> situacion = false;
+               $uaNew -> save();
+           }
+        }
+
         if (count($lista) > 0) {
             $clsLibreria     = new Libreria();
             $paramPaginacion = $clsLibreria->generarPaginacion($lista, $pagina, $filas, $entidad);
@@ -109,6 +126,8 @@ class UaController extends Controller{
             'tipo_costo' => 'required',
             'ua_padre_id' => [ new SearchUaPadre() ],
             'unidad_id' => ['required', new SelectDifZero()],
+            'fecha_inicio' => 'required',
+            'fecha_fin' => 'required|after_or_equal:fecha_inicio',
         ];
         $mensajes = [
             'codigo.required' => 'Su código es requerido',
@@ -118,7 +137,10 @@ class UaController extends Controller{
             'fondos.required' => 'Sus fondos son requeridos',
             'responsable.required' => 'Su responsable es requerido',
             'tipo_costo.required' => 'Su tipo de costo es requerido',
-            'unidad_id.required' => 'Su unidad es requerida'
+            'unidad_id.required' => 'Su unidad es requerida',
+            'fecha_inicio.required' => 'Su fecha de inicio es requerida',
+            'fecha_fin.required' => 'Su fecha de fin es requerida',
+            'fecha_fin.after_or_equal' => 'Su fecha de fin no puede ser menor que la de inicio',
 		];
         $validacion = Validator::make($request->all(), $reglas, $mensajes);
         if ($validacion->fails()) {
@@ -137,6 +159,8 @@ class UaController extends Controller{
             $ua -> tipo_costo = $request -> input('tipo_costo');
             $ua -> unidad_id = $request -> input('unidad_id');
             $ua -> concesionaria_id = $this -> getConsecionariaActual();
+            $ua -> fecha_inicio = $request -> input('fecha_inicio');
+            $ua -> fecha_fin = $request -> input('fecha_fin');
             //BUSCAR
             if($request -> input('ua_padre_id')){
                 $uaDB =  Ua::where('codigo', $request -> input('ua_padre_id')) -> get();
@@ -177,6 +201,8 @@ class UaController extends Controller{
             'tipo_costo' => 'required',
             'ua_padre_id' => [ new SearchUaPadre() ],
             'unidad_id' => ['required', new SelectDifZero()],
+            'fecha_inicio' => 'required',
+            'fecha_fin' => 'required|after_or_equal:fecha_inicio',
         ];
         $mensajes = [
             'codigo.required' => 'Su código es requerido',
@@ -186,7 +212,10 @@ class UaController extends Controller{
             'fondos.required' => 'Sus fondos son requeridos',
             'responsable.required' => 'Su responsable es requerido',
             'tipo_costo.required' => 'Su tipo de costo es requerido',
-            'unidad_id.required' => 'Su unidad es requerida'
+            'unidad_id.required' => 'Su unidad es requerida',
+            'fecha_inicio.required' => 'Su fecha de inicio es requerida',
+            'fecha_fin.required' => 'Su fecha de fin es requerida',
+            'fecha_fin.after_or_equal' => 'Su fecha de fin no puede ser menor que la de inicio',
 		];
         $validacion = Validator::make($request->all(), $reglas, $mensajes);
         if ($validacion->fails()) {
@@ -207,6 +236,8 @@ class UaController extends Controller{
             $ua -> responsable = $request -> input('responsable');
             $ua -> tipo_costo = $request -> input('tipo_costo');
             $ua -> unidad_id = $request -> input('unidad_id');
+            $ua -> fecha_inicio = $request -> input('fecha_inicio');
+            $ua -> fecha_fin = $request -> input('fecha_fin');
             //BUSCAR
             if($request -> input('ua_padre_id')){
                 $uaDB =  Ua::where('codigo', $request -> input('ua_padre_id')) -> get();

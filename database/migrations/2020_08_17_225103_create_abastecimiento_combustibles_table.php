@@ -18,7 +18,8 @@ class CreateAbastecimientoCombustiblesTable extends Migration
             $table -> date('fecha_abastecimiento');
             $table -> unsignedBigInteger('grifo_id');
             $table -> string('tipo_combustible');
-            $table -> unsignedBigInteger('conductor_id');
+            $table -> unsignedBigInteger('conductor_id') -> nullable();
+            $table -> string('conductor_fake') -> nullable();
             $table -> unsignedBigInteger('ua_id');
             $table -> unsignedBigInteger('equipo_id') -> nullable();
             $table -> unsignedBigInteger('vehiculo_id') -> nullable();

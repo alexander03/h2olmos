@@ -40,14 +40,14 @@ if ($abastecimiento !== NULL) {
 			<?php if($abastecimiento) 
 				if(isset($abastecimiento -> conductor)) 
 				echo $abastecimiento -> conductor -> nombres.' '.$abastecimiento -> conductor -> apellidos; 
-				else echo 'Sin dni';
+				else echo 'Conductor no registrado';
 			?>
 		</div>
 		<input type="text" 
 			name="conductor_id" 
 			id="id-conductor" 
 			class="form-control js-conductor-id" 
-			value="<?php if($abastecimiento) echo $abastecimiento -> conductor -> dni?>">
+			value="<?php if($abastecimiento) echo ( isset($abastecimiento -> conductor) ) ? $abastecimiento -> conductor -> dni : $abastecimiento -> conductor_fake;?>">
 		<small id="autoComplete_list3" class="text-danger"></small>
 	</div>
 	<div class="form-group col-12 col-md-6 p-3 u-search-ua">
@@ -75,7 +75,7 @@ if ($abastecimiento !== NULL) {
 			name="equipo_id" 
 			id="id-equipo" 
 			class="form-control js-equipo-id" 
-			value="<?php if($abastecimiento) if(isset($abastecimiento -> equipo)) echo $abastecimiento -> equipo -> codigo; else if(isset($abastecimiento -> vehiculo)) echo $abastecimiento -> vehiculo -> placa;?>">
+			value="<?php if($abastecimiento) if(isset($abastecimiento -> equipo)) echo $abastecimiento -> equipo -> ua -> codigo . '--' . $abastecimiento -> equipo -> id; else if(isset($abastecimiento -> vehiculo)) echo $abastecimiento -> vehiculo -> placa;?>">
 		<input type="hidden" 
 			name="equipo_tipo" 
 			class="js-equipo-hidden"
@@ -87,15 +87,16 @@ if ($abastecimiento !== NULL) {
 		<input type="number" 
 			name="qtdgl" 
 			id="id-qtdgl" 
-			class="form-control" 
+			class="form-control js-qtd-gl" 
 			value="<?php if($abastecimiento) echo $abastecimiento -> qtdgl?>">
 	</div>
 	<div class="form-group col-12 col-md-6 p-3">
 		<label for="id-qtdl" class="pl-3">QTD(L)</label>
-		<input type="number" 
+		<input type="text" 
 			name="qtdl" 
 			id="id-qtdl" 
-			class="form-control" 
+			class="form-control js-qtd-l"
+			readonly="readonly" 
 			value="<?php if($abastecimiento) echo $abastecimiento -> qtdl?>">
 	</div>
 	<div class="form-group col-12 col-md-6 p-3">
@@ -131,5 +132,6 @@ if ($abastecimiento !== NULL) {
 		doSearchGrifo();
 		doSearchConductor();
 		doSearchEquipo();
+		convertGLtoL();
 	}); 
 </script>

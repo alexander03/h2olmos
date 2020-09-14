@@ -78,10 +78,6 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::resource('opcionmenu', 'OpcionmenuController', array('except' => array('show')));
 
 	//Rutas propietario - ua - unidad
-	Route::post('propietario/buscar', 'PropietarioController@buscar')->name('propietario.buscar');
-	Route::get('propietario/eliminar/{id}/{listarluego}', 'PropietarioController@eliminar')->name('propietario.eliminar');
-	Route::resource('propietario', 'PropietarioController');
-
 	Route::post('ua/buscar', 'UaController@buscar')->name('ua.buscar');
 	Route::get('ua/eliminar/{id}/{listarluego}', 'UaController@eliminar')->name('ua.eliminar');
 	Route::get('ua/search/{query}', 'UaController@searchAutocomplete')->name('ua.search');
@@ -186,6 +182,7 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('mantcorrprev/createrepuesto', 'MantCorrPrev@createrepuesto')->name('mantcorrprev.createrepuesto');
 	Route::get('mantcorrprev/buscarporua', 'MantCorrPrev@buscarporua')->name('mantcorrprev.buscarporua');
 	Route::get('existeunidad', 'MantCorrPrev@existeUnidad')->name('mantcorrprev.existeunidad');
+	Route::get('mantcorrprev/pdf/generar','MantCorrPrev@generatePDF')->name('mantcorrprev.pdf.export');
 	// Route::get('mantcorrprev/createchecklistvehicular', 'MantCorrPrev@createchecklistvehicular')->name('mantcorrprev.createchecklistvehicular');
 
 //Rutas para Registro Repuesto Vehicular

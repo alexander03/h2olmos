@@ -16,7 +16,7 @@ class CreateEquipoTable extends Migration
         Schema::create('equipo', function (Blueprint $table) {
         //    $table->engine = 'InnoDB';
             $table->bigIncrements('id');
-            $table->string('codigo',10)->nullable();
+            // $table->string('codigo',10)->nullable();
             $table->string('descripcion',22);
             $table->string('modelo',20);
 

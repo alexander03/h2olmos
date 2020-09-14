@@ -21,13 +21,6 @@ class OpcionmenuTableSeeder extends Seeder
             'grupomenu_id' => 1
             ],
             [
-            'descripcion' => 'Propietarios',
-            'link' => 'propietario',
-            'icono' => 'accessibility',
-            'orden' => 1,
-            'grupomenu_id' => 1
-            ],
-            [
             'descripcion' => 'Unidades',
             'link' => 'unidad',
             'icono' => 'ac_unit',
