@@ -19,7 +19,7 @@
 		<tr>
 			<td>{{ $contador }}</td>
 			<td>{{ $value->fecha }}</td>
-			<td>{{ $value->equipo->codigo }}</td>
+			<td>{{ $value->equipo->ua->codigo }}</td>
 			<td>{{ $value->equipo->descripcion }}</td>
 			<td>{{ $value->equipo->contratista->razonsocial }}</td>
 			<td>
@@ -37,11 +37,12 @@
 				{{ $value->hora_total }}
 			</td>
 			<td>
-				@if($value->ua)
+		{{--		@if($value->ua)
 					{{ $value->ua->descripcion }}
 				@else
 					{{ $value->tipohora->descripcion }}
-				@endif
+				@endif  --}}
+				{{ $value->ua->descripcion }}
 			</td>
 			<td>
 				@if($value->tipohora_id )

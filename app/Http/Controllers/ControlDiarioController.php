@@ -65,8 +65,9 @@ class ControlDiarioController extends Controller
         $resultado        = Controldiario::whereHas('ua', function($query) use($filtro){
         									$query->where($filtro[0][0],$filtro[0][1],$filtro[0][2])->where($filtro[3][0],$filtro[3][1],$filtro[3][2]);
         								})->orWhereHas('equipo', function($query) use($filtro){
-        									$query->where($filtro[1][0],$filtro[1][1],$filtro[1][2])
-        									->orWhere($filtro[2][0],$filtro[2][1],$filtro[2][2]);
+        									$query->whereHas('ua', function($query) use($filtro){
+                                                $query->where($filtro[1][0],$filtro[1][1],$filtro[1][2]);
+                                            })->orWhere($filtro[2][0],$filtro[2][1],$filtro[2][2]);
         								})
                                         ->WhereHas('equipo', function($query) use($filtro){
                                             $query->where($filtro[3][0],$filtro[3][1],$filtro[3][2]);
@@ -221,11 +222,13 @@ class ControlDiarioController extends Controller
         }
         $error = DB::transaction(function() use($request){
             
-            $equipoDB = Equipo::where('codigo',$request->input('equipo_id')) -> get();
-
+            $idEquipo = explode('--',$request->input('equipo_id'))[1];
+           
+//            $equipoDB = Equipo::where('codigo',$request->input('equipo_id')) -> get();
+         
             foreach ($request -> input('hora_inicio') as $key => $value) {
                 $controldiario = new Controldiario();  
-                $controldiario->equipo_id             = $equipoDB[0]->id;
+                $controldiario->equipo_id             = intval($idEquipo);
                 
                 if($request -> input('tipohora_id.'.$key) != 0){
                     $tipohoraDB = Tipohora::where('id',$request -> input('tipohora_id.'.$key)) ->get();
@@ -357,8 +360,9 @@ class ControlDiarioController extends Controller
         $error = DB::transaction(function() use($request, $id){
 
             $controldiario =  Controldiario::find($id);
-            $equipoDB = Equipo::where('codigo',$request->input('equipo_id')) -> get();
-            $controldiario->equipo_id 	 		  = $equipoDB[0]->id;
+//            $equipoDB = Equipo::where('codigo',$request->input('equipo_id')) -> get();
+            $idEquipo = explode('--',$request->input('equipo_id'))[1];
+            $controldiario->equipo_id 	 		  = intval($idEquipo);
             
              if($request -> input('tipohora_id.'.$key) != 0){
                     $tipohoraDB = Tipohora::where('id',$request -> input('tipohora_id.'.$key)) ->get();

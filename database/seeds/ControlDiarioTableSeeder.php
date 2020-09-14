@@ -29,6 +29,7 @@ class ControlDiarioTableSeeder extends Seeder
             'turno' => 1,
             'horometro_inicial' => 4583.52,
             'horometro_final'  => 4602.12,
+            'ua_id' => 4,
             'tipohora_id' => 2,
             'fecha' => '2020-8-20',
             'hora_inicio' => '15:00',
