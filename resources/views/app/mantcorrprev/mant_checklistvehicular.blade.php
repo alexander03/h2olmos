@@ -67,22 +67,44 @@
 			{!! Form::date('fecha_registro', null, array('class' => 'form-control input-xs solo-lectura', 'id' => 'fecha_registro_modal', 'readonly' => !$modalNuevo )) !!}
 		</div>
 	</div>
-	<div class="form-group col-2">
-		{!! Form::label('unidad_placa', 'Unidad placa:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
-		<div class="col-lg-12 col-md-12 col-sm-12">
-			{!! Form::text('unidad_placa', $unidad_placa, array('class' => 'form-control input-xs solo-lectura', 'id' => 'unidad_placa', 'readonly' => !$modalNuevo)) !!}
+
+
+	{{-- INICIO DE MODIFICACION --}}
+	<div class="col-8 p-0 m-0">
+		<div class="col-12 p-0 m-0 input-group">
+			<div class="form-group col-3">
+				{!! Form::label('unidad_placa', 'Unidad placa:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
+				<div class="col-lg-12 col-md-12 col-sm-12">
+					{!! Form::text('unidad_placa', $unidad_placa, array('class' => 'form-control input-xs solo-lectura', 'id' => 'unidad_placa', 'readonly' => !$modalNuevo)) !!}
+				</div>
+			</div>
+			<div class="form-group col-7">
+				{!! Form::label('unidad_descripcion', 'Unidad descripción:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
+				<div class="col-lg-12 col-md-12 col-sm-12">
+					{!! Form::text('unidad_descripcion', $unidad_descripcion, array('class' => 'form-control input-xs solo-lectura', 'id' => 'unidad_descripcion', 'readonly' => true)) !!}
+					{{-- <input name="unidad_id" id="unidad_id" type="text" class="hidden" value=""> --}}
+				</div>
+			</div>
+			<div class="form-group col-2">
+				<i id="unidad_loading" class="fa fa-spinner fa-lg fa-spin text-info" aria-hidden="true" hidden></i>
+			</div>
+		</div>
+		<div id="unidad_data_table" class="data-table">
+			<table class="table table-bordered table-sm table-condensed">
+				<thead class="dt-row-bordered">
+					<tr>
+						<th class="table-primary font-weight-bold pt-0 pb-0">PLACA</th>
+						<th class="table-primary font-weight-bold pt-0 pb-0">DESCRIPCION</th>
+					</tr>
+				</thead>
+				<tbody id="unidad_data_table_rows">
+				</tbody>
+			</table>
 		</div>
 	</div>
-	<div class="form-group col-1">
-		<i id="loader-unidad" class="fa fa-spinner fa-lg text-info" aria-hidden="true" hidden></i>
-	</div>
-	<div class="form-group col-5">
-		{!! Form::label('unidad_descripcion', 'Unidad descripción:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
-		<div class="col-lg-12 col-md-12 col-sm-12">
-			{!! Form::text('unidad_descripcion', $unidad_descripcion, array('class' => 'form-control input-xs solo-lectura', 'id' => 'unidad_descripcion', 'readonly' => true)) !!}
-			{{-- <input name="unidad_id" id="unidad_id" type="text" class="hidden" value=""> --}}
-		</div>
-	</div>
+	{{-- FIN DE MODIFICACION --}}
+
+	
 </div>
 <div class="form-row">
 	<div class="form-group col-3">
@@ -105,13 +127,31 @@
 	</div>
 </div>
 <div class="form-row">
-	<div class="form-group col-6">
+	<div class="form-group col-8">
 		{!! Form::label('conductor_id', 'Conductor:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
-		<div class="col-lg-12 col-md-12 col-sm-12">
-			{!! Form::select('conductor_id', $cboConductores, null, array('class' => 'form-control input-xs', 'id' => 'conductor_id', 'disabled' => !$modalNuevo)) !!}
+		<div class="col-12 input-group p-0 m-0">
+			<div class="col-lg-4 col-md-4 col-sm-4">
+				{!! Form::hidden('conductor_id', $conductor['id'], array('id' => 'conductor_id')) !!}
+				{!! Form::text('conductor_dni', $conductor['dni'], array('class' => 'form-control input-xs', 'id' => 'conductor_dni', 'disabled' => !$modalNuevo)) !!}
+			</div>
+			<div class="col-lg-8 col-md-8 col-sm-8">
+				{!! Form::text('conductor_nombres', $conductor['nombres'], array('class' => 'form-control input-xs solo-lectura', 'id' => 'conductor_nombres', 'readonly' => true)) !!}
+			</div>
+		</div>
+		<div id="conductor_data_table" class="data-table">
+			<table class="table table-condensed table-bordered">
+				<thead class="dt-row-bordered">
+					<tr>
+						<th class="table-primary font-weight-bold pt-0 pb-0">DNI</th>
+						<th class="table-primary font-weight-bold pt-0 pb-0">NOMBRE COMPLETO</th>
+					</tr>
+				</thead>
+				<tbody id="conductor_data_table_rows">
+				</tbody>
+			</table>
 		</div>
 	</div>
-	<div class="col-6 d-flex align-items-center justify-content-end">
+	<div class="col-4 d-flex align-items-center justify-content-end">
 		{!! Form::button('<i class="material-icons">edit</i> Editar', array('class' => 'btn btn-warning btn-sm mr-5', 'id' => 'btn-editar', 'hidden' => $modalNuevo)) !!}
 	</div>
 </div>
@@ -258,15 +298,29 @@
 		display: none;
 	}
 	
-
+	.dt-row-bordered-selectable{
+		border: 2px solid blueviolet !important;
+		cursor: pointer;
+	}
+	.dt-row-bordered{
+		border: 2px solid blueviolet !important;
+	}
+	.showTable{
+		display: block !important;
+	}
+	.data-table{
+		float: left;
+		position: absolute;
+		display: none;
+		z-index: 1000;
+	}
 </style>
 <script type="text/javascript">
 	$(document).ready(function() {
 		configurarAnchoModal('900');
 		init(IDFORMMANTENIMIENTO+'{!! $entidad !!}', 'M', '{!! $entidad !!}');
 
-		const inputUnidadPlaca = document.getElementById('unidad_placa');
-		const inputUnidadDescripcion = document.getElementById('unidad_descripcion');
+		
 
 		const btnEditar = document.getElementById('btn-editar');
 
@@ -288,39 +342,176 @@
 		}
 		getDateCurrent();
 
-		inputUnidadPlaca.addEventListener('keyup', async (e) => {
-			const placa = e.target.value;
-			inputUnidadDescripcion.placeholder = 'Buscando...';
-			inputUnidadDescripcion.value = '';
-			const loaderUnidad = document.getElementById('loader-unidad');
-			if(placa.length > 0){
-				loaderUnidad.removeAttribute('hidden');
-			} else {
-				loaderUnidad.setAttribute('hidden', true);
-				inputUnidadDescripcion.placeholder = '';
+
+		// TABLA SELECCIONADORA DE CONDUCTORES
+		let listaConductores = [];
+		const conductorId = document.getElementById('conductor_id');
+		const conductorDNI = document.getElementById('conductor_dni');
+		const conductorNombres = document.getElementById('conductor_nombres');
+		const conductorDataTable = document.getElementById('conductor_data_table');
+		const conductorDataTableRows = document.getElementById('conductor_data_table_rows');
+
+		const searchConductor = async (filter = '') => {
+			listaConductores = await querySearchConductor(filter);
+
+			if ( listaConductores.length == 0 ) {
+				updateConductor(conductorDNI.value);
+				conductorDataTable.classList.remove('showTable');
+				return;
+			}
+			if ( listaConductores.length == 1 && updateConductor(conductorDNI.value) ) {
+				conductorDataTable.classList.remove('showTable');
+				return;
+			};
+			
+			conductorDataTableRows.innerHTML = '';
+			listaConductores.forEach(conductor => {
+				conductorDataTableRows.innerHTML += `
+					<tr name="conductor_row" data-conductor_dni="${conductor.dni}" class="dt-row-bordered-selectable table-hover">
+						<td class="table-secondary pt-0 pb-0">${conductor.dni}</td>
+						<td class="table-secondary pt-0 pb-0">${conductor.nombres}</td>
+					</tr>
+				`;
+			});
+
+			const conductor_rows = Array.from(document.getElementsByName('conductor_row'));
+			conductor_rows.forEach(row => {
+				row.addEventListener('click', e => {
+					const trow = e.srcElement.parentElement;
+					const dni = trow.dataset.conductor_dni;
+					selectConductor(dni);
+				});
+			});
+			
+			conductorDataTable.classList.add('showTable');
+			updateConductor(conductorDNI.value);
+		}
+		const querySearchConductor = async (filter) => {
+			if ( !filter.length ) return [];
+
+			return list = fetch(`/mantcorrprev/searchConductor?filter=${filter}`)
+			.then(response => response.status === 200 ? response.json() : console.log('Error on searchConductor method'))
+			.then(response => response.list)
+			.catch(error => console.log(`Error on searchConductor method: ${error}`));
+		}
+		const selectConductor = (dni) => {
+			conductorDataTable.classList.remove('showTable');
+			updateConductor(dni);	
+		}
+		const updateConductor = (dni) => {
+			let found = false;
+			for (let i = 0; i < listaConductores.length; i++) {
+				if ( listaConductores[i].dni == dni ) {
+					conductorId.value = listaConductores[i].id;
+					conductorDNI.value = listaConductores[i].dni;
+					conductorNombres.value = listaConductores[i].nombres;
+					found = true; break;
+				}
+			}
+			if ( !found ) {
+				conductorId.value = null;
+				conductorNombres.value = '';
 			}
 
-			if(placa.length >=6) {
-				const unidad = await consultarUnidad(placa);
-				if(unidad != null) {
-					if(unidad.modelo) inputUnidadDescripcion.value = unidad.modelo;
-					if(unidad.descripcion) inputUnidadDescripcion.value = unidad.descripcion;
+			return found;
+		}
+		conductorDNI.addEventListener('keyup', async (e) => {
+			const filter = e.target.value;
+			
+			if ( filter.length > 0 ) {
+				searchConductor(filter);
+			} else {
+				updateConductor(conductorDNI.value);
+				conductorDataTable.classList.remove('showTable');
+			}
+		});
 
-					loaderUnidad.setAttribute('hidden', true);
-				} else {
-					inputUnidadDescripcion.placeholder = 'Buscando...';
+
+		// TABLA SELECCIONADORA DE UNIDADES
+		let listaUnidades = [];
+		const unidadPlaca = document.getElementById('unidad_placa');
+		const unidadDescripcion = document.getElementById('unidad_descripcion');
+		const unidadLoading = document.getElementById('unidad_loading');
+		const unidadDataTable = document.getElementById('unidad_data_table');
+		const unidadDataTableRows = document.getElementById('unidad_data_table_rows');
+
+		const searchUnidad = async (filter = '') => {
+			listaUnidades = await querySearchUnidad(filter);
+			console.log(listaUnidades);
+			if ( listaUnidades.length == 0 ) {
+				updateUnidad(unidadPlaca.value);
+				unidadDataTable.classList.remove('showTable'); 
+				unidadLoading.setAttribute('hidden', true); return;
+			}
+			if ( listaUnidades.length == 1 && updateUnidad(unidadPlaca.value) ) {
+				unidadDataTable.classList.remove('showTable');
+				unidadLoading.setAttribute('hidden', true); return;
+			}
+
+			unidadDataTableRows.innerHTML = '';
+			listaUnidades.forEach(unidad => {
+				unidadDataTableRows.innerHTML += `
+					<tr name="unidad_row" data-unidad_placa="${unidad.placa}" class="dt-row-bordered-selectable table-hover">
+						<td class="table-secondary pt-0 pb-0">${unidad.placa}</td>
+						<td class="table-secondary pt-0 pb-0">${unidad.descripcion}</td>
+					</tr>
+				`;
+			});
+
+			unidad_rows = Array.from(document.getElementsByName('unidad_row'));
+			unidad_rows.forEach(unidad => {
+				unidad.addEventListener('click', e => {
+					let trow = e.srcElement.parentElement;
+					let placa = trow.dataset.unidad_placa;
+					selectUnidad(placa);
+				});
+			});
+
+			unidadDataTable.classList.add('showTable');
+			unidadLoading.setAttribute('hidden', true);
+			updateUnidad(unidadPlaca.value);
+		}
+		const querySearchUnidad = async (filter) => {
+			if ( !filter.length ) return [];
+
+			return fetch(`/mantcorrprev/searchUnidad?filter=${filter}`)
+			.then(response => response.status === 200 ? response.json() : console.error(`Error on query into querySearchUnidad method: ${response.status}`))
+			.then(response => response.equipos.concat(response.vehiculos))
+			.catch(error => console.error('Error in querySearchUnidad method'));
+		}
+		const selectUnidad = (placa) => {
+			unidadDataTable.classList.remove('showTable');
+			updateUnidad(placa);
+		}
+		const updateUnidad = (placa) => {
+			let found = false;
+
+			for (let i = 0; i < listaUnidades.length; i++) {
+				if ( listaUnidades[i].placa == placa ) {
+					unidadPlaca.value = listaUnidades[i].placa;
+					unidadDescripcion.value = listaUnidades[i].descripcion;
+					found = true; return;
 				}
 			}
 
-		});
-
-		const consultarUnidad = async (placa = '') => {
-			const uri = `./existeunidad?placa=${placa}`;
-			return fetch(uri)
-			.then(res => res.status === 200 ? res.json() : console.error(`Error al cosultar Conductor en la db: ${res.status}`))
-			.then(res => res.unidad)
-			.catch(err => console.log(`Error en consultarUnidad(): ${err}`))
+			if ( !found ) {
+				unidadDescripcion.value = '';
+			}
+			
+			return found;
 		}
+		unidadPlaca.addEventListener('keyup', async (e) => {
+			const filter = e.target.value;
+			
+			if ( filter.length > 0 ){
+				unidadLoading.removeAttribute('hidden');
+				searchUnidad(filter);
+			} else {
+				unidadLoading.setAttribute('hidden', true);
+				updateUnidad(unidadPlaca.value);
+				unidadDataTable.classList.remove('showTable');
+			}
+		});
 
 		//SISTEMA ELECTRICO
 		$("input[data-type='sistema_electrico']").change(function(){

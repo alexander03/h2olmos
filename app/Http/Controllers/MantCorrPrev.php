@@ -16,6 +16,12 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 use Mpdf\Mpdf;
 
+
+// INICIO DE MODIFICACION
+use App\Rules\RulePlacaExist;
+// FIN DE MODIFICACION
+
+
 class MantCorrPrev extends Controller
 {
     protected $folderview      = 'app.mantcorrprev';
@@ -102,16 +108,20 @@ class MantCorrPrev extends Controller
         $formData = array('mantcorrprev.store');
         $formData = array('route' => $formData, 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
         $boton    = 'Registrar';
-        $arrConductores = Conductor::getAll();
-        $cboConductores = array('' => 'Seleccione');
-        foreach($arrConductores as $k=>$v){
-            $cboConductores += array($v->id => $v->nombres . $v->apellidos);
-        }
-        return view($this->folderview.'.mant_checklistvehicular')->with(compact('checklistvehicular', 'formData', 'entidad', 'unidad_placa', 'unidad_descripcion', 'cboConductores', 'boton', 'listar'));
+        $conductor = [
+            'id' => null,
+            'dni' => '',
+            'nombres' => ''
+        ];
+        // $arrConductores = Conductor::getAll();
+        // $cboConductores = array('' => 'Seleccione');
+        // foreach($arrConductores as $k=>$v){
+        //     $cboConductores += array($v->id => $v->nombres . $v->apellidos);
+        // }
+        return view($this->folderview.'.mant_checklistvehicular')->with(compact('checklistvehicular', 'formData', 'entidad', 'unidad_placa', 'unidad_descripcion', 'conductor', 'boton', 'listar'));
     }
 
     public function store(Request $request) {
-        
         $listar     = Libreria::getParam($request->input('listar'), 'NO');
 
         $today = \Carbon\Carbon::now('America/Lima')->toDateString();
@@ -119,11 +129,11 @@ class MantCorrPrev extends Controller
 
         $reglas     = array(
             'fecha_registro' => 'required|date|after_or_equal:' . $today,
-            'unidad_placa' => 'required|regex:@^([\d\w]+)(-\1)?$@i',
-            'k_inicial' => 'required|integer|min:0',
-            'k_final' => 'required|integer|min:' . $min,
+            'unidad_placa' => (new RulePlacaExist()),
+            'k_inicial' => 'required|numeric|min:0',
+            'k_final' => 'required|numeric|min:' . $min,
             'lider_area' => 'required|max:300',
-            'conductor_id' => 'required|integer'
+            'conductor_id' => 'exists:App\Conductor,id'
         );
 
         $mensajes = array(
@@ -138,7 +148,7 @@ class MantCorrPrev extends Controller
             'k_final.min' => 'El kilometraje final ingresado es incorrecto',
             'lider_area.required' => 'Debe ingresar un lider de area',
             'lider_area.max' => 'El nombre del lider de area debe tener max. 300 caracteres',
-            'conductor_id.required' => 'Debe seleccionar una conductor'
+            'conductor_id.exists' => 'Debe ingresar un conductor'
         );
         
         $validacion = Validator::make($request->all(), $reglas, $mensajes);
@@ -170,6 +180,7 @@ class MantCorrPrev extends Controller
             $checklistvehicular->sistema_mecanico = json_decode($request->input('sistema_mecanico'));
             $checklistvehicular->accesorios = json_decode($request->input('accesorios'));
             $checklistvehicular->documentos = json_decode($request->input('documentos'));
+            $checklistvehicular->concesionaria_id = Concesionaria::getConcesionariaActual()->id;
             
             $checklistvehicular->save();
 
@@ -193,25 +204,27 @@ class MantCorrPrev extends Controller
         } else {
             $vehiculo = Vehiculo::find($checklistvehicular->vehiculo_id);
             $unidad_placa = $vehiculo->placa;
-            $unidad_descripcion = $vehiculo->descripcion;
+            $unidad_descripcion = $vehiculo->modelo;
         }
 
         $entidad  = 'Checklistvehicular';
         $formData = array('mantcorrprev.update', $id);
         $formData = array('route' => $formData, 'method' => 'PUT', 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
         $boton    = 'Modificar';
-        $arrConductores      = Conductor::getAll();
-        $cboConductores = array('' => 'Seleccione');
-        foreach($arrConductores as $k=>$v){
-            $cboConductores += array($v->id => $v->nombres . $v->apellidos);
-        }
+        $conductor = Conductor::select('id', 'dni', DB::raw("CONCAT(nombres, ' ', apellidos) AS nombres"))->where('id', '=', $checklistvehicular->conductor_id)->first();
+        // $arrConductores      = Conductor::getAll();
+        // $cboConductores = array('' => 'Seleccione');
+        // foreach($arrConductores as $k=>$v){
+        //     $cboConductores += array($v->id => $v->nombres . $v->apellidos);
+        // }
 
         $sistema_electrico = $checklistvehicular->sistema_electrico;
         $sistema_mecanico = $checklistvehicular->sistema_mecanico;
         $accesorios = $checklistvehicular->accesorios;
         $documentos = $checklistvehicular->documentos;
 
-        return view($this->folderview.'.mant_checklistvehicular')->with(compact('checklistvehicular', 'formData', 'entidad', 'boton', 'unidad_placa', 'unidad_descripcion', 'cboConductores', 'sistema_electrico', 'sistema_mecanico', 'accesorios', 'documentos', 'listar'));
+        return view($this->folderview.'.mant_checklistvehicular')
+            ->with(compact('checklistvehicular', 'formData', 'entidad', 'boton', 'unidad_placa', 'unidad_descripcion', 'conductor', 'sistema_electrico', 'sistema_mecanico', 'accesorios', 'documentos', 'listar'));
     }
 
     public function update(Request $request, $id)
@@ -220,36 +233,51 @@ class MantCorrPrev extends Controller
         if ($existe !== true) {
             return $existe;
         }
-        // $reglas = array(
-        //     'unidad_id' => 'required',
-        //     'codigo' => ['required', 'digits:7',Rule::unique('repuesto')->ignore($id)],
-        //     'descripcion' => ['required','max:100',Rule::unique('repuesto')->ignore($id)],
-        // );
-        // $mensajes = array(
-        //     'codigo.required' => 'Debe ingresar un código',
-        //     'codigo.digits' => 'El código debe tener 7 cifras',
-        //     'codigo.unique' => 'El código ya existe',
-        //     'descripcion.required' => 'Debe ingresar una descripcion',
-        //     'descripcion.max' => 'La descripcion debe tener max. 100 caracteres',
-        //     'descripcion.unique' => 'La descripción ya existe',
-        //     'unidad_id.required' => 'Debe seleccionar una unidad'
-        // );
-        // $validacion = Validator::make($request->all(), $reglas, $mensajes);
-        // if ($validacion->fails()) {
-        //     return $validacion->messages()->toJson();
-        // }
+        
+        $today = \Carbon\Carbon::now('America/Lima')->toDateString();
+        $min = $request->all()['k_inicial'];
+
+        $reglas     = array(
+            'fecha_registro' => 'required|date|after_or_equal:' . $today,
+            'unidad_placa' => (new RulePlacaExist()),
+            'k_inicial' => 'required|numeric|min:0',
+            'k_final' => 'required|numeric|min:' . $min,
+            'lider_area' => 'required|max:300',
+            'conductor_id' => 'exists:App\Conductor,id'
+        );
+
+        $mensajes = array(
+            'fecha_registro.required' => 'Debe seleccionar una fecha',
+            'fecha_registro.date' => 'La fecha tiene formato incorrecto',
+            'fecha_registro.after_or_equal' => 'La fecha ingresada es incorrecta',
+            'unidad_placa.required' => 'Debe ingresar una unidad placa',
+            'unidad_placa.regex' => 'La unidad placa ingresada es incorrecta',
+            'k_inicial.required' => 'Debe ingresar un kilometraje inicial',
+            'k_inicial.min' => 'El kilometraje inicial ingresado es incorrecto',
+            'k_final.required' => 'Debe ingresar un kilometraje final',
+            'k_final.min' => 'El kilometraje final ingresado es incorrecto',
+            'lider_area.required' => 'Debe ingresar un lider de area',
+            'lider_area.max' => 'El nombre del lider de area debe tener max. 300 caracteres',
+            'conductor_id.exists' => 'Debe ingresar un conductor'
+        );
+        
+        $validacion = Validator::make($request->all(), $reglas, $mensajes);
+
+        if ( $validacion->fails() ) {
+            return $validacion->messages()->toJson();
+        }
+        
         $error = DB::transaction(function() use($request, $id){
             $checklistvehicular = Checklistvehicular::find($id);
             $checklistvehicular->fecha_registro= $request->input('fecha_registro');
 
             $placa = $request->input('unidad_placa');
+
             $equipo = Equipo::where('placa', $placa)->first();
-            if($equipo != null) {
-                $checklistvehicular->equipo_id= $equipo->id;
-            }else {
-                $vehiculo = Vehiculo::where('placa', $placa)->first();
-                $checklistvehicular->vehiculo_id= $vehiculo->id;
-            }
+            $checklistvehicular->equipo_id = $equipo!=null ? $equipo->id : null;
+
+            $vehiculo = Vehiculo::where('placa', $placa)->first();
+            $checklistvehicular->vehiculo_id = $vehiculo!=null ? $vehiculo->id : null;
 
             $checklistvehicular->k_inicial = $request->input('k_inicial');
             $checklistvehicular->k_final = $request->input('k_final');
@@ -267,10 +295,28 @@ class MantCorrPrev extends Controller
         return is_null($error) ? "OK" : $error;
     }
 
-    public function existeUnidad(Request $request) {
-        $res = Equipo::withTrashed()->where('placa', $request->placa)->first();
-        if($res != null) return ['unidad' => $res];
-        return [ 'unidad' => Vehiculo::withTrashed()->where('placa', $request->placa)->first()];
+    public function searchUnidad(Request $request) {
+        $filter = $request->filter;
+        $concesionaria_id = Concesionaria::getConcesionariaActual()->id;
+
+        $equipos = Equipo::select('placa', 'descripcion')
+                        ->where('concesionaria_id', '=', $concesionaria_id)
+                        ->where(function ($query) use ($filter) {
+                            $query->where('placa', 'like', '%'.$filter.'%')
+                                ->orWhere('descripcion', 'like', '%'.$filter.'%');
+                        })->withTrashed()->get();
+
+        $vehiculos = Vehiculo::select('placa', 'modelo AS descripcion')
+                            ->where('concesionaria_id', '=', $concesionaria_id)
+                            ->where(function ($query) use ($filter) {
+                                $query->where('placa', 'like', '%'.$filter.'%')
+                                    ->orWhere('modelo', 'like', '%'.$filter.'%');
+                            })->withTrashed()->get();
+        
+        return [
+            'equipos' => $equipos,
+            'vehiculos' => $vehiculos
+        ];
     }
 
     public function generatePDF(Request $request) {
@@ -379,4 +425,27 @@ class MantCorrPrev extends Controller
 
         $mpdf->Output($namefile, "I");
     }
+
+
+    // INICIO DE MODIFICACION
+    public function searchConductor(Request $request){
+        $filter = $request->filter;
+        $concesionaria_id = Concesionaria::getConcesionariaActual()->id;
+
+        $list = Conductor::rightJoin('conductorconcesionaria AS cc', 'cc.conductor_id', '=', 'conductor.id')
+                        ->select('conductor.id', 'dni', DB::raw("CONCAT(nombres, ' ', apellidos) AS nombres"))
+                        ->where(function ($subquery) use ($filter) {
+                            $subquery->where('dni', 'like', '%'.$filter.'%')
+                                    ->orWhere(DB::raw("CONCAT(nombres, ' ', apellidos)"), 'like', '%'.$filter.'%');
+                        })
+                        ->where('cc.concesionaria_id', '=', $concesionaria_id)
+                        ->orderBy('dni', 'desc')->get();
+
+        return [
+            'list' => $list
+        ];
+    }
+    // FIN DE MODIFICACION
+
+
 }
