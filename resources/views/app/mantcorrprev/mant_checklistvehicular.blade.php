@@ -389,7 +389,7 @@
 		const querySearchConductor = async (filter) => {
 			if ( !filter.length ) return [];
 
-			return list = fetch(`/mantcorrprev/searchConductor?filter=${filter}`)
+			return list = fetch(`./mantcorrprev/searchConductor?filter=${filter}`)
 			.then(response => response.status === 200 ? response.json() : console.log('Error on searchConductor method'))
 			.then(response => response.list)
 			.catch(error => console.log(`Error on searchConductor method: ${error}`));
@@ -474,7 +474,7 @@
 		const querySearchUnidad = async (filter) => {
 			if ( !filter.length ) return [];
 
-			return fetch(`/mantcorrprev/searchUnidad?filter=${filter}`)
+			return fetch(`./mantcorrprev/searchUnidad?filter=${filter}`)
 			.then(response => response.status === 200 ? response.json() : console.error(`Error on query into querySearchUnidad method: ${response.status}`))
 			.then(response => response.equipos.concat(response.vehiculos))
 			.catch(error => console.error('Error in querySearchUnidad method'));
