@@ -65,7 +65,6 @@ class UaController extends Controller{
         $titulo_eliminar  = $this->tituloEliminar;
         $ruta             = $this->rutas;
 
-        //TODO: VERIFICAR UA FECHAS PARA DESHABILITAR
         $uaLst =  Ua::all();
         foreach($uaLst as $uaDB){
             $hoy = new DateTime(date("Y-m-d")); 
