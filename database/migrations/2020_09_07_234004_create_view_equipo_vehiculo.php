@@ -16,7 +16,7 @@ class CreateViewEquipoVehiculo extends Migration
 
         $query = "CREATE VIEW view_equipo_vehiculo AS
             SELECT eq.id, eq.descripcion, modelo, concat(ua.codigo, '--', eq.id) as 'placa-codigo', placa, marca_id, area_id, 
-                contratista_id, anio, 'e' as 'tipo', eq.concesionaria_id, eq.deleted_at FROM equipo as 'eq'
+                contratista_id, anio, 'e' as 'tipo', eq.concesionaria_id, eq.deleted_at FROM equipo as eq
             INNER JOIN ua ON ua.id = eq.ua_id
             UNION ALL 
             SELECT id, modelo as 'descripcion', modelo, placa as 'placa-codigo', placa, marca_id, area_id, 
