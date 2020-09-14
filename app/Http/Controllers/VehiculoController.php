@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 use Validator;
 use App\Vehiculo;
+use App\Ua;
+use App\Rules\SearchUaPadre;
 use App\Area;
 use App\Brand;
+use App\carroceria;
 use App\Contratista;
 use App\Concesionaria;
 use Illuminate\Http\Request;
@@ -48,7 +51,7 @@ class VehiculoController extends Controller
   
 
         $filtro           = array();
-        $filtro[]         = ['ua', 'LIKE', '%'.strtoupper($ua).'%'];
+//        $filtro[]         = ['ua', 'LIKE', '%'.strtoupper($ua).'%'];
         $filtro[]         = ['placa', 'LIKE', '%'.strtoupper($placa).'%'];
         $filtro[]         = ['concesionaria_id', $this->consecionariaActual()];
 /*
@@ -56,7 +59,9 @@ class VehiculoController extends Controller
 			$filtro[]         = ['ua_id', '=', $ua_id];        	
         }
 */
-        $resultado        = Vehiculo::where($filtro)->orderBy('ua', 'ASC');
+        $resultado        = Vehiculo::where($filtro)->whereHas('ua', function($query) use($ua){
+                                $query->where('codigo', 'LIKE', '%'.strtoupper($ua).'%');
+                            })->orderBy('modelo', 'ASC');
 
         $lista            = $resultado->get();
         $cabecera         = array();
@@ -145,6 +150,12 @@ class VehiculoController extends Controller
             $cboArea += array($v->id=>$v->descripcion);
         }
 
+        $carrocerias = Carroceria::orderBy('descripcion','asc')->get();
+        $cboCarroceria = array();
+        foreach($carrocerias as $k=>$v){
+            $cboCarroceria += array($v->id=>$v->descripcion);
+        }
+
 
         $contratistas = Contratista::orderBy('razonsocial','asc')->get();
         $cboContratista = array();
@@ -166,7 +177,7 @@ class VehiculoController extends Controller
         $formData = array('vehiculo.store');
         $formData = array('route' => $formData, 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
         $boton    = 'Registrar'; 
-        return view($this->folderview.'.mant')->with(compact('vehiculo', 'formData', 'entidad', 'boton', 'listar', 'cboMarca', 'cboArea', 'cboContratista'));
+        return view($this->folderview.'.mant')->with(compact('vehiculo', 'formData', 'entidad', 'boton', 'listar', 'cboMarca', 'cboArea', 'cboContratista', 'cboCarroceria'));
     }
 
     /**
@@ -178,7 +189,8 @@ class VehiculoController extends Controller
     public function store(Request $request)
     {
         $listar     = Libreria::getParam($request->input('listar'), 'NO');
-        $reglas     = array('ua' 				=> 'required|max:10',
+        $reglas     = array(
+//                            'ua' 				=> 'required|max:10',
     						'modelo' 				=> 'required|max:20',
     						'marca_id' 				=> 'numeric|min:1',
                             'placa'                 => 'max:15',
@@ -189,7 +201,8 @@ class VehiculoController extends Controller
     						'color' 				=> 'required|max:20',
 //                            'unidad'                => 'required|max:25',
     						'chasis' 				=> 'required|max:20',
-/*
+                            'ua_id'                 => ['required', new SearchUaPadre() ]
+/*                          
     						'fechavencimientosoat'  => 'required',
     						'fechavencimientogps'   => 'required',
     						'fechavencimientortv'   => 'required'
@@ -226,7 +239,8 @@ class VehiculoController extends Controller
         }
         $error = DB::transaction(function() use($request){
             $vehiculo = new Vehiculo();
-            $vehiculo->ua 	 		  = strtoupper($request->input('ua'));
+//            $vehiculo->ua 	 		  = strtoupper($request->input('ua'));
+            $vehiculo->ua_id             =  Ua::where('codigo',$request->input('ua_id'))->get()[0]->id;
             $vehiculo->modelo 			  = strtoupper($request->input('modelo'));
             $vehiculo->marca_id 			  = $request->input('marca_id');
             $vehiculo->anio 				  = $request->input('anio');
@@ -242,7 +256,7 @@ class VehiculoController extends Controller
             $vehiculo->motor 				  = $request->input('motor');
             $vehiculo->asientos 				  = $request->input('asientos');
             $vehiculo->chasis 				  = $request->input('chasis');
-            $vehiculo->carroceria 				  = $request->input('carroceria');
+            $vehiculo->carroceria_id 				  = $request->input('carroceria_id');
             $vehiculo->color 				  = $request->input('color');
             
 
@@ -285,7 +299,7 @@ class VehiculoController extends Controller
             $cboMarca += array($v->id=>$v->descripcion);
         }
 
-        $areas = Area::orderBy('descripcion','asc')->get();
+        $carrocerias = Area::orderBy('descripcion','asc')->get();
         $cboArea = array();
         $cboArea += array('0' => 'Selecione área');
 //        $cboArea += array('1' => 'wea');
@@ -293,6 +307,11 @@ class VehiculoController extends Controller
             $cboArea += array($v->id=>$v->descripcion);
         }
 
+        $carrocerias = Carroceria::orderBy('descripcion','asc')->get();
+        $cboCarroceria = array();
+        foreach($carrocerias as $k=>$v){
+            $cboCarroceria += array($v->id=>$v->descripcion);
+        }
 
         $contratistas = Contratista::orderBy('razonsocial','asc')->get();
         $cboContratista = array();
@@ -314,7 +333,7 @@ class VehiculoController extends Controller
         $formData = array('vehiculo.update', $id);
         $formData = array('route' => $formData, 'method' => 'PUT', 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
         $boton    = 'Modificar';
-        return view($this->folderview.'.mant')->with(compact('vehiculo', 'formData', 'entidad', 'boton', 'listar', 'cboMarca', 'cboArea' ,'cboContratista'));
+        return view($this->folderview.'.mant')->with(compact('vehiculo', 'formData', 'entidad', 'boton', 'listar', 'cboMarca', 'cboArea' ,'cboContratista', 'cboCarroceria'));
     }
 
     /**
@@ -330,7 +349,8 @@ class VehiculoController extends Controller
         if ($existe !== true) {
             return $existe;
         }
-        $reglas     = array('ua' 					=> 'required|max:10',
+        $reglas     = array(
+//                            'ua' 					=> 'required|max:10',
     						'modelo' 				=> 'required|max:20',
     						'marca_id' 				=> 'numeric|min:1',
                             'placa'                 => 'max:15',
@@ -340,6 +360,7 @@ class VehiculoController extends Controller
     						'area_id' 				=> 'numeric|min:1',
     						'color'					=> 'required|max:20',
     						'chasis' 				=> 'required|max:20',
+                            'ua_id'                 => ['required', new SearchUaPadre() ]
 //                            'unidad'                => 'required|max:25',
 /*
     						'fechavencimientosoat'  => 'required',
@@ -348,7 +369,7 @@ class VehiculoController extends Controller
 */
                         );
         $mensajes = array(
-        	'ua.required'         		  => 'Debe ingresar un código de ua',
+//        	'ua.required'         		  => 'Debe ingresar un código de ua',
             'codigo.max'                      => 'El código de ua sobrepasa los 10 carácteres',
             'modelo.required'         		  => 'Debe ingresar el modelo',
             'modelo.max'                      => 'El modelo sobrepasa los 20 carácteres',
@@ -378,7 +399,8 @@ class VehiculoController extends Controller
         } 
         $error = DB::transaction(function() use($request, $id){
             $vehiculo =  Vehiculo::find($id);
-            $vehiculo->ua 	 		  = strtoupper($request->input('ua'));
+//            $vehiculo->ua 	 		  = strtoupper($request->input('ua'));
+            $vehiculo->ua_id             =  Ua::where('codigo',$request->input('ua_id'))->get()[0]->id;
             $vehiculo->modelo 			  = strtoupper($request->input('modelo'));
             $vehiculo->marca_id 			  = $request->input('marca_id');
             $vehiculo->anio 				  = $request->input('anio');
@@ -393,7 +415,7 @@ class VehiculoController extends Controller
             $vehiculo->motor 				  = $request->input('motor');
             $vehiculo->asientos 				  = $request->input('asientos');
             $vehiculo->chasis 				  = $request->input('chasis');
-            $vehiculo->carroceria 				  = $request->input('carroceria');
+            $vehiculo->carroceria_id 				  = $request->input('carroceria_id');
             $vehiculo->color 				  = $request->input('color');
             
 

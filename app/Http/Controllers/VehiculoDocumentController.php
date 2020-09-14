@@ -54,6 +54,7 @@ class VehiculoDocumentController extends Controller
         $cabecera[]       = array('valor' => '#', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Fecha de V', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Tipo', 'numero' => '1');
+        $cabecera[]       = array('valor' => 'Archivo', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Operaciones', 'numero' => '2');
         
         $titulo_modificar = $this->tituloModificar;
@@ -105,6 +106,13 @@ class VehiculoDocumentController extends Controller
 
      		$vehiculodocument->fecha =  $request->input('fecha');
      		$vehiculodocument->tipo =  $request->input('tipo');
+
+            $archivo  = $request->file('archivo');
+            $fileName =   date("Y_m_d") . '_'. $archivo->getClientOriginalName();
+            $vehiculodocument->archivo =  $fileName;
+            $archivo->move(public_path('files/documento_vehiculo/'), $fileName);       
+            
+
      		$vehiculodocument->vehiculo_id = $request->input('vehiculo_id');
 
             $vehiculodocument->save();
@@ -136,7 +144,15 @@ class VehiculoDocumentController extends Controller
      		$vehiculodocument->fecha =  $request->input('fecha');
      		$vehiculodocument->tipo =  $request->input('tipo');
      		$vehiculodocument->vehiculo_id = $request->input('vehiculo_id');
-
+            
+            
+            if($request->file('archivo')){
+                $archivo  = $request->file('archivo');
+                $fileName =  date("Y_m_d") . '_'.  $archivo->getClientOriginalName();
+                $vehiculodocument->archivo =   $fileName;
+                $archivo->move(public_path('files/documento_vehiculo/'), $fileName);       
+            }
+            
             $vehiculodocument->save();
         });
         return is_null($error) ? "OK" : $error;

@@ -10,9 +10,15 @@ if ($equipo !== NULL) {
 {!! Form::hidden('listar', $listar, array('id' => 'listar')) !!}
 
 <div class="form-group">
-	{!! Form::label('codigo', 'Codigo:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
+
+	{!! Form::label('ua_id', 'Ua :', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
 	<div class="col-lg-12 col-md-12 col-sm-12">
-		{!! Form::text('codigo', null, array('class' => 'form-control input-xs', 'id' => 'codigo')) !!}
+		<div class="u-ua-style js-ua-desc">
+			<?php if($equipo && $equipo->ua_id) echo $equipo ->ua->descripcion; ?>
+		</div>
+		<input type="text" name="ua_id" id="ua_id" class="form-control js-ua-id input-xs" 
+		value="@if($equipo && $equipo->ua_id ){{$equipo->ua->codigo}}@endif">
+		<small id="autoComplete_list1" class="text-danger"></small>
 	</div>
 </div>
 <div class="form-group">
@@ -69,6 +75,6 @@ if ($equipo !== NULL) {
 	$(document).ready(function() {
 		configurarAnchoModal('350');
 		init(IDFORMMANTENIMIENTO+'{!! $entidad !!}', 'M', '{!! $entidad !!}');
-		
+		doSearchUA();
 	}); 
 </script>

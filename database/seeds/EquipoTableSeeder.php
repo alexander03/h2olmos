@@ -12,7 +12,8 @@ class EquipoTableSeeder extends Seeder
     public function run()
     {
         DB::table('equipo')->insert([
-            'codigo' => '1234567FD',
+//            'codigo' => '1234567FD',
+            'ua_id' => 1,
             'descripcion' => 'GRUPO GENERADOR',
             'modelo' => 'P33-1',
             'placa' => '172084TB',
@@ -26,7 +27,8 @@ class EquipoTableSeeder extends Seeder
         ]);
 
         DB::table('equipo')->insert([
-            'codigo' => '452SE1FG',
+//            'codigo' => '452SE1FG',
+            'ua_id' => 4,
             'descripcion' => 'CAMIONETA',
             'modelo' => 'L200',
             'placa' => '456123FD',
@@ -34,7 +36,7 @@ class EquipoTableSeeder extends Seeder
             'contratista_id' => 2,
             'anio' => '2015',
             'area_id' => 1,
-            'concesionaria_id' => 1,
+            'concesionaria_id' => 2,
             'created_at' => now(),
             'updated_at' => now()
         ]);        

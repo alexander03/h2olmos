@@ -10,9 +10,15 @@ if ($vehiculo !== NULL) {
 {!! Form::hidden('listar', $listar, array('id' => 'listar')) !!}
 <div class='form-row'>
 	<div class="form-group col-md-6 mt-4">
-		{!! Form::label('ua', 'Ua:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
+
+		{!! Form::label('ua_id', 'Ua :', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
 		<div class="col-lg-12 col-md-12 col-sm-12">
-			{!! Form::text('ua', null, array('class' => 'form-control input-xs', 'id' => 'ua')) !!}
+			<div class="u-ua-style js-ua-desc">
+				<?php if($vehiculo && $vehiculo->ua_id) echo $vehiculo ->ua->descripcion; ?>
+			</div>
+			<input type="text" name="ua_id" id="ua_id" class="form-control js-ua-id input-xs" 
+			value="@if($vehiculo && $vehiculo->ua_id ){{$vehiculo->ua->codigo}}@endif">
+			<small id="autoComplete_list1" class="text-danger"></small>
 		</div>
 	</div>
 	<div class="form-group col-md-6 mt-4">
@@ -76,9 +82,9 @@ if ($vehiculo !== NULL) {
 		</div>
 	</div>
 	<div class="form-group col-md-6 ">
-		{!! Form::label('carroceria', 'Carrocería:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
+		{!! Form::label('carroceria_id', 'Carrocería:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
 		<div class="col-lg-12 col-md-12 col-sm-12">
-			{!! Form::select('carroceria',['0'=>'PICK UP', '1' => 'SUV'] ,null, array('class' => 'form-control input-xs', 'id' => 'carroceria')) !!}
+			{!! Form::select('carroceria_id', $cboCarroceria ,null, array('class' => 'form-control input-xs', 'id' => 'carroceria_id')) !!}
 		</div>
 	</div>
 </div>
@@ -91,5 +97,6 @@ if ($vehiculo !== NULL) {
 	$(document).ready(function() {
 		configurarAnchoModal('500');
 		init(IDFORMMANTENIMIENTO+'{!! $entidad !!}', 'M', '{!! $entidad !!}');
+		doSearchUA();
 	}); 
 </script>

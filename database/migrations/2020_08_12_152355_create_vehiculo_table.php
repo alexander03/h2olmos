@@ -15,7 +15,7 @@ class CreateVehiculoTable extends Migration
     {
         Schema::create('vehiculo', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('ua',10);
+//            $table->string('ua',10);
             $table->string('placa',15);
 //            $table->string('unidad',25);
             $table->string('motor',20);
@@ -24,13 +24,15 @@ class CreateVehiculoTable extends Migration
             $table->year('anio');
             $table->unsignedBigInteger('marca_id');
             $table->foreign('marca_id')->references('id')->on('marca');
+            $table->unsignedBigInteger('ua_id');
+            $table->foreign('ua_id')->references('id')->on('ua');
             $table->unsignedBigInteger('area_id');
             $table->foreign('area_id')->references('id')->on('area');
             $table->unsignedBigInteger('contratista_id');
             $table->foreign('contratista_id')->references('id')->on('contratista');
             $table->string('chasis',20);
-//            $table->string('carroceria',10);
-            $table->boolean('carroceria');
+            $table->unsignedBigInteger('carroceria_id');
+//            $table->boolean('carroceria');
             $table->string('color',20);
             $table->unsignedBigInteger('concesionaria_id');
 /*
