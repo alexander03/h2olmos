@@ -14,6 +14,24 @@
 	</div>
 </div>
 <div class="form-group">
+	{!! Form::label('propietario', 'Propietario:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
+	<div class="col-lg-12 col-md-12 col-sm-12">
+		{!! Form::text('propietario', null, array('class' => 'form-control input-xs', 'id' => 'propietario', 'maxlength' => '11')) !!}
+	</div>
+</div>
+<div class="form-group">
+	{!! Form::label('email', 'E-Mail:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
+	<div class="col-lg-12 col-md-12 col-sm-12">
+		{!! Form::text('email', null, array('class' => 'form-control input-xs', 'id' => 'email', 'maxlength' => '11')) !!}
+	</div>
+</div>
+<div class="form-group">
+	{!! Form::label('telefono', 'Teléfono:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
+	<div class="col-lg-12 col-md-12 col-sm-12">
+		{!! Form::text('telefono', null, array('class' => 'form-control input-xs', 'id' => 'telefono', 'maxlength' => '11')) !!}
+	</div>
+</div>
+<div class="form-group">
 	<div class="col-lg-12 col-md-12 col-sm-12 text-right">
 		{!! Form::button('<i class="fa fa-check fa-lg"></i> '.$boton, array('class' => 'btn btn-success btn-sm', 'id' => 'btnGuardar', 'onclick' => 'guardar(\''.$entidad.'\', this)')) !!}
 		{!! Form::button('<i class="fa fa-exclamation fa-lg"></i> Cancelar', array('class' => 'btn btn-warning btn-sm', 'id' => 'btnCancelar'.$entidad, 'onclick' => 'cerrarModal();')) !!}

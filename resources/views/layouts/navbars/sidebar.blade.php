@@ -163,7 +163,7 @@ use App\Http\Controllers\UserConcesionariaController;
 </div>
 <script type="text/javascript">
   function cambiar($id){
-    var serviceURL = "http://localhost:8000/userconcesionaria/concesionaria/"+$id;
+    var serviceURL = "/userconcesionaria/concesionaria/"+$id;
     $.ajax({
         type: "GET",
         url: serviceURL,

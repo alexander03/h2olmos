@@ -17,6 +17,9 @@ class CreateContratistasTable extends Migration
             $table->bigIncrements('id');
             $table->string('ruc', 11)->unique();
             $table->string('razonsocial');
+            $table->string('propietario');
+            $table->string('email');
+            $table->string('telefono');
             $table->timestamps();
             $table->softDeletes();
         });

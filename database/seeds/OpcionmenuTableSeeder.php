@@ -83,7 +83,7 @@ class OpcionmenuTableSeeder extends Seeder
             'grupomenu_id' => 1],
             ['descripcion' => 'Concesionarias',
             'link' => 'concesionarias',
-            'icono' => 'myicon',
+            'icono' => 'api',
             'orden' => 7,
             'grupomenu_id' => 1],
         ]);
@@ -166,7 +166,14 @@ class OpcionmenuTableSeeder extends Seeder
         DB::table('opcionmenu')->insert([
             'descripcion' => 'Reg.Rep.Vehicular',
             'link' => 'regrepveh',
-            'icono' => 'myicon',
+            'icono' => 'api',
+            'orden' => 1,
+            'grupomenu_id' => 3
+        ]);
+        DB::table('opcionmenu')->insert([
+            'descripcion' => 'Reg.Man.Vehicular',
+            'link' => 'regmanveh',
+            'icono' => 'api',
             'orden' => 1,
             'grupomenu_id' => 3
         ]);

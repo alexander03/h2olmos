@@ -1,6 +1,6 @@
 
 <div id="divMensajeError{!! $entidad !!}"></div>
-{!! Form::model($regrepveh, $formData) !!}	
+{!! Form::model($regmanveh, $formData) !!}	
 {!! Form::hidden('listar', $listar, array('id' => 'listar')) !!}
 <section class="form-row">
 	<div class="form-group col-lg-12 col-md-12 col-sm-12">
@@ -79,33 +79,28 @@
 		<p class="text-warning ">Observaciones </p>
 	</div>
 	<div class="form-group col-12 col-md-6 p-3">
-		<label for="id-repuesto" class="pl-3">Repuesto</label>
+		<label for="id-trabajo" class="pl-3">Trabajo</label>
 		<input type="hidden" 
-			name="repuesto_hiddenid" 
-			id="hiddenid-repuesto" 
-			class="form-control js-repuesto-hiddenid" 
-			value="">
-			<input type="hidden" 
-			name="repuesto_hiddenunidad" 
-			id="hiddenunidad-repuesto" 
-			class="form-control js-repuesto-unidad" 
+			name="trabajo_hiddenid" 
+			id="hiddenid-trabajo" 
+			class="form-control js-trabajo-hiddenid" 
 			value="">
 			<input type="hidden" 
 			name="hiddendescripcion" 
-			id="hiddendescripcion-repuesto" 
-			class="form-control js-repuesto-hiddendescripcion" 
+			id="hiddendescripcion-trabajo" 
+			class="form-control js-trabajo-hiddendescripcion" 
 			value="">
-		<div class="u-ua-style js-repuesto-desc">
+		<div class="u-ua-style js-trabajo-desc">
 			<!--?php if($abastecimiento) 
-				if(isset($abastecimiento -> repuesto)) 
-				echo $abastecimiento -> repuesto -> nombres.' '.$abastecimiento -> repuesto -> apellidos; 
+				if(isset($abastecimiento -> trabajo)) 
+				echo $abastecimiento -> trabajo -> nombres.' '.$abastecimiento -> trabajo -> apellidos; 
 				else echo 'Conductor no registrado';
 			?-->
 		</div>
 		<input type="text" 
-			name="repuesto_id" 
-			id="id-repuesto" 
-			class="form-control js-repuesto-id" 
+			name="trabajo_id" 
+			id="id-trabajo" 
+			class="form-control js-trabajo-id" 
 			value="">
 		<small id="autoComplete_list3" class="text-danger"></small>
 	</div>{!! Form::button('<i class="fa fa-plus fa-lg table-add"></i>', array('class' => 'btn btn-success btn-sm', 'id' => 'btnAgregar', 'onclick' => 'agregarfila();')) !!}
@@ -115,8 +110,6 @@
 				<tr>
 					<th colspan="1"  class="text-center" style="width:40px;">#</th>
 					<th colspan="1"  class="text-center" style="width:80px;">Cantidad</th>
-					<th colspan="1"  class="text-center" style="width:100px;">Unidad</th>
-					<th colspan="1"  class="text-center" style="width:100px;">Código</th>
 					<th colspan="1"  class="text-center" style="width:80px;">Monto</th>
 					<th colspan="1"  class="text-center">Descripción</th>
 					<th colspan="1"  class="text-center" style="width:100px;">Eliminar</th>
@@ -130,12 +123,9 @@
 				@if($value->id>=0)
 				<tr>
 					<p><input type="hidden" name="idobservacion[]" id="ididid" value="{{ $value->id }}"></p>
-					<p><input type="hidden" name="repuestoid[]" id="rep" value="{{ $value->repuesto_id }}"></p>
-					<p><input type="hidden" name="unidad[]" id="uni" value="{{ $value->unidad }}"></p>
+					<p><input type="hidden" name="trabajoid[]" id="rep" value="{{ $value->trabajo_id }}"></p>
 					<td name="nnn" style="text-align:center;">{{ $contador }}</td>
 					<td><input name="cantidad[]" class='form-control' type="number" value="{{ $value->cantidad }}" style="text-align:right;width:100px;"></td>
-					<td><input disabled name="unidad[]" class="form-control" type="text" value="{{ $value->unidad }}" style="width:100px;"></td>
-					<td ><input disabled name="codigo[]" class="form-control" type="text" value="{{ $value->codigo }}" style="width:100px;"></td>
 					<td><input  name="monto[]"class='form-control' type="number" value="{{ $value->monto }}" style="text-align:right;width:100px;"></td>
 					<td><input disabled name="descripcion[]" class="form-control" type="text" value="{{ $value->descripcion }}"></td>
 					<td onclick="if(confirm('¿Desea Eliminar la Observación?')){borrarfila({{ $value->id }});deleteRow(this);}" style="color:#ff0000;text-align:center;width:50px;"><i class="material-icons text-center">close</i></td>
@@ -172,7 +162,8 @@
 		configurarAnchoModal('900');
 		init(IDFORMMANTENIMIENTO+'{!! $entidad !!}', 'M', '{!! $entidad !!}');
 		doSearchUA();
-		doSearchRepuesto();
+		//doSearchConductor();
+		doSearchTrabajo();
 		const inputCode = document.getElementById('codigo');
 		inputCode.addEventListener('change', e => {
 			if(isNaN(e.target.value)) e.target.value = '';
@@ -224,23 +215,18 @@
 
 	function agregarfila(){
 		a++;
-		var idrepuesto=document.getElementById("hiddenid-repuesto").value;
-		var unidad=document.getElementById("hiddenunidad-repuesto").value;
-		var codigo=document.getElementById("id-repuesto").value;
-		var descripcion=document.getElementById("hiddendescripcion-repuesto").value;
+		var idtrabajo=document.getElementById("hiddenid-trabajo").value;
+		var descripcion=document.getElementById("hiddendescripcion-trabajo").value;
 		var tr = document.createElement("tr");
 		tr.innerHTML = `
 			<tr>
 				<td name="nnn" style="text-align:center;">${a}</td>
 				<td><input name="cantidad[]" class='form-control' type="number" value="" style="text-align:right;width:100px;"></td>
-				<td><input disabled name="unidad[]" class="form-control" type="text" value="${unidad}" style="width:100px;"></td>
-				<td ><input disabled name="codigo[]" class="form-control" type="text" value="${codigo}" style="width:100px;"></td>
 				<td><input  name="monto[]"class='form-control' type="number" value="" style="text-align:right;width:100px;"></td>
 				<td><input disabled name="descripcion[]" class="form-control" type="text" value="${descripcion}"></td>
 				<td onclick="if(confirm('¿Desea Eliminar la Observación?')){deleteRow(this);}" style="color:#ff0000;text-align:center;width:50px;"><i class="material-icons text-center">close</i></td>
 				<p><input type="hidden" name="idobservacion[]" id="ididid" value="-1"></p>
-				<p><input type="hidden" name="repuestoid[]" id="rep" value="${idrepuesto}"></p>
-				<p><input type="hidden" name="unidad[]" id="uni" value="${unidad}"></p>
+				<p><input type="hidden" name="trabajoid[]" id="rep" value="${idtrabajo}"></p>
 			</tr>`;
 		document.getElementById("tbody").appendChild(tr);
 
