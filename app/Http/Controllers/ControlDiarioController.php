@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use Validator;
 use App\Equipo;
 use App\Area;
@@ -52,6 +53,9 @@ class ControlDiarioController extends Controller
         $equipo_ua      = Libreria::getParam($request->input('equipo_ua'));
   		$descripcion = Libreria::getParam($request->input('descripcion'));
 
+        $anio = Libreria::getParam($request->input('anio'));
+        $mes = Libreria::getParam($request->input('mes'));
+        $dia =  Libreria::getParam($request->input('dia'));
         $filtro           = array();
         $filtro[]         = ['codigo', 'LIKE', '%'.strtoupper($ua).'%'];
         $filtro[]         = ['codigo', 'LIKE', '%'.strtoupper($equipo_ua).'%'];
@@ -61,7 +65,7 @@ class ControlDiarioController extends Controller
         if($ua_id != 0 ){
 			$filtro[]         = ['ua_id', '=', $ua_id];        	
         }
-*/
+*/       
         $resultado        = Controldiario::whereHas('ua', function($query) use($filtro){
         									$query->where($filtro[0][0],$filtro[0][1],$filtro[0][2])->where($filtro[3][0],$filtro[3][1],$filtro[3][2]);
         								})->orWhereHas('equipo', function($query) use($filtro){
@@ -72,7 +76,17 @@ class ControlDiarioController extends Controller
                                         ->WhereHas('equipo', function($query) use($filtro){
                                             $query->where($filtro[3][0],$filtro[3][1],$filtro[3][2]);
                                         })->orderBy('fecha', 'desc');
-
+/*
+        if($anio){
+            $resultado->whereYear('fecha','=',$anio);
+        }
+        if($mes){
+            $resultado->whereYear('fecha','=',$mes);   
+        }
+        if($dia){
+            $resultado->whereYear('fecha','=',$dia);   
+        }
+*/
         $lista            = $resultado->get();
         $cabecera         = array();
         $cabecera[]       = array('valor' => '#', 'numero' => '1');
@@ -338,7 +352,7 @@ class ControlDiarioController extends Controller
             'hora_inicio.0.required'              => 'Debe una hora de inicio válida',
             'hora_total.0.numeric'               => 'Debe ingresar la hora total valida',
             'hora_total.0.required'              => 'Debe ingresar la hora total',
-            'hora_fin.*.required'                 => 'Debe una hora de finalzación válida',
+            'hora_fin.0.required'                 => 'Debe una hora de finalzación válida',
             'horometro_inicial.required'          => 'Ingrese el horómetro inicial',
             'horometro_final.required'            => 'Ingrese el horómetro final',
             'horometro_inicial.numeric'           => 'Ingrese el horómetro inicial',
@@ -364,12 +378,12 @@ class ControlDiarioController extends Controller
             $idEquipo = explode('--',$request->input('equipo_id'))[1];
             $controldiario->equipo_id 	 		  = intval($idEquipo);
             
-             if($request -> input('tipohora_id.'.$key) != 0){
+             if($request -> input('tipohora_id.0') != 0){
                     $tipohoraDB = Tipohora::where('id',$request -> input('tipohora_id.'.$key)) ->get();
                     $controldiario->tipohora_id           = $tipohoraDB[0]->id;
                     
                 }
-            $uaDB =  Ua::where('codigo', $request -> input('ua_id.'.$key)) -> get();
+            $uaDB =  Ua::where('codigo', $request -> input('ua_id.0')) -> get();
             $controldiario->ua_id                 = $uaDB[0]->id;
 
 	        $controldiario->hora_inicio = $request -> input('hora_inicio.0');

@@ -393,7 +393,7 @@ class EquipoController extends Controller
 
     public function searchAutocomplete($query){
 
-        $consulta = "select   eq.descripcion as 'descripcion', CONCAT(ua.codigo, ' - ', eq.descripcion) as 'search' , concat(ua.codigo, '--', eq.id) as 'codigo'
+        $consulta = "select   eq.descripcion as 'descripcion', CONCAT(ua.codigo, ' -- ', eq.descripcion) as 'search' , concat(ua.codigo, '--', eq.id) as 'codigo'
             from equipo eq
             join ua on(ua.id = eq.ua_id)
             where eq.deleted_at IS NULL AND 

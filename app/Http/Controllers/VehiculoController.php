@@ -299,7 +299,7 @@ class VehiculoController extends Controller
             $cboMarca += array($v->id=>$v->descripcion);
         }
 
-        $carrocerias = Area::orderBy('descripcion','asc')->get();
+        $areas = Area::orderBy('descripcion','asc')->get();
         $cboArea = array();
         $cboArea += array('0' => 'Selecione área');
 //        $cboArea += array('1' => 'wea');
