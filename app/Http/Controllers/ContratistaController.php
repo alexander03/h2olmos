@@ -45,6 +45,9 @@ class ContratistaController extends Controller
         $cabecera[]       = array('valor' => '#', 'numero' => '1');
         $cabecera[]       = array('valor' => 'RUC', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Razon Social', 'numero' => '1');
+        $cabecera[]       = array('valor' => 'Propietario', 'numero' => '1');
+        $cabecera[]       = array('valor' => 'e-mail', 'numero' => '1');
+        $cabecera[]       = array('valor' => 'Teléfono', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Operaciones', 'numero' => '2');
         
         $titulo_modificar = $this->tituloModificar;
@@ -103,6 +106,9 @@ class ContratistaController extends Controller
             $contratista = new Contratista();
             $contratista->razonsocial= strtoupper($request->input('razonsocial'));
             $contratista->ruc= strtoupper($request->input('ruc'));
+            $contratista->propietario= strtoupper($request->input('propietario'));
+            $contratista->email= strtoupper($request->input('email'));
+            $contratista->telefono= strtoupper($request->input('telefono'));
             $contratista->save();
         });
         return is_null($error) ? "OK" : $error;
@@ -142,6 +148,9 @@ class ContratistaController extends Controller
             $contratista = Contratista::find($id);
             $contratista->razonsocial= strtoupper($request->input('razonsocial'));
             $contratista->ruc= strtoupper($request->input('ruc'));
+            $contratista->propietario= strtoupper($request->input('propietario'));
+            $contratista->email= strtoupper($request->input('email'));
+            $contratista->telefono= strtoupper($request->input('telefono'));
             $contratista->save();
         });
         return is_null($error) ? "OK" : $error;

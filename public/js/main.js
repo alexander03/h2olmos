@@ -394,3 +394,181 @@ const convertGLtoL = () => {
         document.querySelector('.js-qtd-l').value = value * 3.7854;
     });
 }
+
+
+const doSearchRepuesto = () => {
+
+    var autoCompletejsRepuesto = new autoComplete({
+        data: {
+            src: async () => {
+                // Loading placeholder text
+                document
+                    .querySelector(".js-repuesto-id")
+                    .setAttribute("placeholder", "Loading...");
+       
+                // Fetch External Data Source
+                const headers = new Headers();
+                headers.append('X-CSRF-TOKEN', document.querySelector('meta[name="csrf-token"]').content);
+                const config = {
+                    headers,
+                    method:'GET'
+                };
+                  //Query
+                const query = document.querySelector('.js-repuesto-id').value;
+                const source = await fetch(
+                    `regrepveh/search/repuesto/${query}` , config
+                );
+                let data = await source.json();
+                // Post loading placeholder text
+                // Returns Fetched data
+                return data;
+            },
+            key: [ 'search' ],
+            cache: false
+        },
+        sort: (a, b) => {
+            if (a.match < b.match) return -1;
+            if (a.match > b.match) return 1;
+            return 0;
+        },
+        selector: ".js-repuesto-id",
+        threshold: 1,
+        debounce: 0,
+        searchEngine: "strict",
+        highlight: true,
+        maxResults: 5,
+        resultsList: {
+            render: true,
+            container: source => {
+                source.setAttribute("id", "autoComplete_list");
+                source.setAttribute("class", "u-search-ua__result");
+            },
+            destination: document.querySelector(".js-repuesto-id"),
+            position: "afterend",
+            element: "ul"
+        },
+        resultItem: {
+            content: (data, source) => {
+                source.innerHTML = data.match;
+            },
+            element: "li"
+        },
+        noResults: () => {
+            document.querySelector("#autoComplete_list3").innerText = 'Sin resultados';
+        },
+        onSelection: feedback => { //VA NUESTRA LOGICA
+            document.querySelector("#autoComplete_list3").innerText = '';
+            const selection = feedback.selection.value;
+            document.querySelector(".js-repuesto-id").value = selection.codigo;
+            document.querySelector(".js-repuesto-desc").innerText = selection.descripcion;
+            document.querySelector(".js-repuesto-unidad").value = selection.unidad;
+            document.querySelector(".js-repuesto-hiddenid").value = selection.id;
+            document.querySelector(".js-repuesto-hiddendescripcion").value = selection.descripcion;
+            // console.log(feedback);
+        }
+    });
+    
+    // Toggle event for search input
+    // showing & hidding results list onfocus / blur
+    ["focus", "blur"].forEach(function(eventType) {
+      const resultsList = document.querySelector("#autoComplete_list4");
+    
+      document.querySelector(".js-repuesto-id").addEventListener(eventType, function() {
+        // Hide results list & show other elemennts
+        if (eventType === "blur") {
+          resultsList.style.display = "none";
+        } else if (eventType === "focus") {
+          // Show results list & hide other elemennts
+          resultsList.style.display = "block";
+        }
+      });
+    });
+};
+const doSearchTrabajo = () => {
+
+    var autoCompletejsTrabajo = new autoComplete({
+        data: {
+            src: async () => {
+                // Loading placeholder text
+                document
+                    .querySelector(".js-trabajo-id")
+                    .setAttribute("placeholder", "Loading...");
+       
+                // Fetch External Data Source
+                const headers = new Headers();
+                headers.append('X-CSRF-TOKEN', document.querySelector('meta[name="csrf-token"]').content);
+                const config = {
+                    headers,
+                    method:'GET'
+                };
+                  //Query
+                const query = document.querySelector('.js-trabajo-id').value;
+                const source = await fetch(
+                    `regmanveh/search/trabajo/${query}` , config
+                );
+                let data = await source.json();
+                // Post loading placeholder text
+                // Returns Fetched data
+                return data;
+            },
+            key: [ 'search' ],
+            cache: false
+        },
+        sort: (a, b) => {
+            if (a.match < b.match) return -1;
+            if (a.match > b.match) return 1;
+            return 0;
+        },
+        selector: ".js-trabajo-id",
+        threshold: 1,
+        debounce: 0,
+        searchEngine: "strict",
+        highlight: true,
+        maxResults: 5,
+        resultsList: {
+            render: true,
+            container: source => {
+                source.setAttribute("id", "autoComplete_list");
+                source.setAttribute("class", "u-search-ua__result");
+            },
+            destination: document.querySelector(".js-trabajo-id"),
+            position: "afterend",
+            element: "ul"
+        },
+        resultItem: {
+            content: (data, source) => {
+                source.innerHTML = data.match;
+            },
+            element: "li"
+        },
+        noResults: () => {
+            document.querySelector("#autoComplete_list3").innerText = 'Sin resultados';
+        },
+        onSelection: feedback => { //VA NUESTRA LOGICA
+            document.querySelector("#autoComplete_list3").innerText = '';
+            const selection = feedback.selection.value;
+            
+            document.querySelector(".js-trabajo-id").value = selection.descripcion;
+            document.querySelector(".js-trabajo-desc").innerText = selection.descripcion;
+            document.querySelector(".js-trabajo-hiddenid").value = selection.id;
+            document.querySelector(".js-trabajo-hiddendescripcion").value = selection.descripcion;
+            // console.log(feedback);
+        }
+    });
+    
+    // Toggle event for search input
+    // showing & hidding results list onfocus / blur
+    ["focus", "blur"].forEach(function(eventType) {
+      const resultsList = document.querySelector("#autoComplete_list4");
+    
+      document.querySelector(".js-trabajo-id").addEventListener(eventType, function() {
+        // Hide results list & show other elemennts
+        if (eventType === "blur") {
+          resultsList.style.display = "none";
+        } else if (eventType === "focus") {
+          // Show results list & hide other elemennts
+          resultsList.style.display = "block";
+        }
+      });
+    });
+};

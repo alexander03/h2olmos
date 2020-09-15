@@ -195,6 +195,20 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('regrepveh/buscarporua', 'RegRepVehController@buscarporua')->name('regrepveh.buscarporua');
 	Route::post('regrepveh/store', 'RegRepVehController@store')->name('regrepveh.createregrepveh');
 	Route::get('userconcesionaria/concesionaria/{id}', 'UserConcesionariaController@concesionaria')->name('userconcesionaria.concesionaria');
+	Route::get('regrepveh/search/repuesto/{query}', 'RegRepVehController@searchAutocompleteRepuesto')->name('regrepveh.search.repuesto');
+	Route::resource('regrepveh', 'RegRepVehController');
+
+//Rutas para Registro Trabajo Vehicular
+	Route::resource('regmanveh', 'RegManVehController', array('except' => array('show')));
+	Route::post('regmanveh/buscar', 'RegManVehController@buscar')->name('regmanveh.buscar');
+	Route::get('regmanveh/eliminar/{id}/{listarluego}', 'RegManVehController@eliminar')->name('regmanveh.eliminar');
+	Route::get('regmanveh/createtrabajo', 'RegManVehController@createtrabajo')->name('regmanveh.createtrabajo');
+	Route::get('regmanveh/buscarporua', 'RegManVehController@buscarporua')->name('regmanveh.buscarporua');
+	Route::post('regmanveh/store', 'RegManVehController@store')->name('regmanveh.createregmanveh');
+	Route::get('userconcesionaria/concesionaria/{id}', 'UserConcesionariaController@concesionaria')->name('userconcesionaria.concesionaria');
+	Route::get('regmanveh/search/trabajo/{query}', 'RegManVehController@searchAutocompleteTrabajo')->name('regmanveh.search.trabajo');
+	Route::resource('regmanveh', 'RegManVehController');
+
 
 	Route::post('grupomenu/buscar', 'GrupomenuController@buscar')->name('grupomenu.buscar');
     Route::get('grupomenu/eliminar/{id}/{listarluego}', 'GrupomenuController@eliminar')->name('grupomenu.eliminar');

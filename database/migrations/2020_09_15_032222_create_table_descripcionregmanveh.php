@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class  CreateTableDescripcionRegRepVeh extends Migration
+class CreateTableDescripcionregmanveh extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,14 @@ class  CreateTableDescripcionRegRepVeh extends Migration
      */
     public function up()
     {
-        Schema::create('descripcionregrepveh', function (Blueprint $table) {
+        Schema::create('descripcionregmanveh', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('regrepveh_id');
+            $table->unsignedBigInteger('regmanveh_id');
             $table->string('cantidad');
-            $table->unsignedBigInteger('repuesto_id');
+            $table->unsignedBigInteger('trabajo_id');
             $table->integer('monto');
-            $table->foreign('repuesto_id')->references('id')->on('repuesto');
-            $table->foreign('regrepveh_id')->references('id')->on('regrepveh');
+            $table->foreign('trabajo_id')->references('id')->on('trabajo');
+            $table->foreign('regmanveh_id')->references('id')->on('regmanveh');
             $table->timestamps();
             $table->softDeletes();
         });
@@ -33,6 +33,6 @@ class  CreateTableDescripcionRegRepVeh extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('descripcionregrepveh');
+        Schema::dropIfExists('descripcionregmanveh');
     }
 }

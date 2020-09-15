@@ -4,36 +4,36 @@ namespace App\Http\Controllers;
 
 use Validator;
 use Illuminate\Http\Request;
-use App\Repuesto;
+use App\Trabajo;
 use App\Unidad;
 use App\Equipo;
-use App\RegRepVeh;
+use App\RegManVeh;
 use App\Ua;
 use App\Rules\SearchUaPadre;
 use App\Librerias\Libreria;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 use App\Concesionaria;
-use App\DescripcionRegRepVeh;
+use App\DescripcionRegManVeh;
 
-class RegRepVehController extends Controller
+class RegManVehController extends Controller
 {
-    protected $folderview      = 'app.regrepveh';
-    protected $tituloAdmin     = 'Registro de Repuesto Vehicular';
-    protected $tituloRegistrar = 'Registro de Repuesto Vehicular';
-    protected $tituloModificar = 'Modificar Repuesto Vehicular';
-    protected $tituloEliminar  = 'Eliminar Repuesto Vehicular';
-    protected $tituloActivar  = 'Activar repuesto';
+    protected $folderview      = 'app.regmanveh';
+    protected $tituloAdmin     = 'Registro de Mantenimiento Vehicular';
+    protected $tituloRegistrar = 'Registro de Mantenimiento Vehicular';
+    protected $tituloModificar = 'Modificar Mantenimiento Vehicular';
+    protected $tituloEliminar  = 'Eliminar Mantenimiento Vehicular';
+    protected $tituloActivar  = 'Activar mantenimiento';
     protected $rutas           = array(
-       // 'create' => 'regrepveh.createregrepveh',
-        'createrepuesto' => 'regrepveh.createrepuesto',
-        'buscarporua' => 'regrepveh.buscarporua',
-        'edit'   => 'regrepveh.edit', 
-        'delete' => 'regrepveh.eliminar',
-        'activar' => 'regrepveh.activar',
-        'search' => 'regrepveh.buscar',
-        'store' => 'regrepveh.store',
-        'index'  => 'regrepveh.index',
+       // 'create' => 'regmanveh.createregmanveh',
+        'createtrabajo' => 'regmanveh.createtrabajo',
+        'buscarporua' => 'regmanveh.buscarporua',
+        'edit'   => 'regmanveh.edit', 
+        'delete' => 'regmanveh.eliminar',
+        'activar' => 'regmanveh.activar',
+        'search' => 'regmanveh.buscar',
+        'store' => 'regmanveh.store',
+        'index'  => 'regmanveh.index',
     );
 
     public function __construct()
@@ -45,7 +45,7 @@ class RegRepVehController extends Controller
     {
         $pagina           = $request->input('page');
         $filas            = $request->input('filas');
-        $entidad          = 'RegRepVeh';
+        $entidad          = 'RegManVeh';
         $filter           = Libreria::getParam($request->input('filter'));
 		$ConcesionariaActual = Concesionaria::join('userconcesionaria','userconcesionaria.concesionaria_id','=','concesionaria.id')
         ->join('users','users.id','=','userconcesionaria.user_id')
@@ -53,13 +53,13 @@ class RegRepVehController extends Controller
        	->select('concesionaria.id','concesionaria.razonsocial')->get();
        	$idConcAct=$ConcesionariaActual[0]->id;
 
-        $resultado= RegRepVeh::where('regrepveh.concesionaria_id',$idConcAct)
+        $resultado= RegManVeh::where('regmanveh.concesionaria_id',$idConcAct)
         ->where(function($q) use ($filter){
-        $q->where('regrepveh.cliente', 'like', '%'.$filter.'%')
-          ->orWhere('regrepveh.ua_id', 'like', '%'.$filter.'%')
-          ->orWhere('regrepveh.telefono', 'like', '%'.$filter.'%')
-          ->orWhere('regrepveh.fechaentrada', 'like', '%'.$filter.'%')
-          ->orWhere('regrepveh.fechasalida', 'like', '%'.$filter.'%');
+        $q->where('regmanveh.cliente', 'like', '%'.$filter.'%')
+          ->orWhere('regmanveh.ua_id', 'like', '%'.$filter.'%')
+          ->orWhere('regmanveh.telefono', 'like', '%'.$filter.'%')
+          ->orWhere('regmanveh.fechaentrada', 'like', '%'.$filter.'%')
+          ->orWhere('regmanveh.fechasalida', 'like', '%'.$filter.'%');
      	});
 
 
@@ -97,7 +97,7 @@ class RegRepVehController extends Controller
 
     public function index()
     {
-        $entidad          = 'RegRepVeh';
+        $entidad          = 'RegManVeh';
         $title            = $this->tituloAdmin;
         $tituloRegistrar = $this->tituloRegistrar;
         $ruta             = $this->rutas;
@@ -106,16 +106,16 @@ class RegRepVehController extends Controller
     }
 
 
-    public function createrepuesto(Request $request)
+    public function createtrabajo(Request $request)
     {
         $listar   = Libreria::getParam($request->input('listar'), 'NO');
-        $entidad  = 'RegRepVeh';
-        $regrepveh = null;
+        $entidad  = 'RegManVeh';
+        $regmanveh = null;
         $arrConcesionarias = Concesionaria::join('userconcesionaria','userconcesionaria.concesionaria_id','=','concesionaria.id')
         ->join('users','users.id','=','userconcesionaria.user_id')
         ->where('userconcesionaria.estado','=',true)->where('userconcesionaria.user_id','=',auth()->user()->id)
        	->select('concesionaria.id','concesionaria.razonsocial')->get();
-        $oObservaciones=array(new DescripcionRegRepVeh());
+        $oObservaciones=array(new DescripcionRegManVeh());
         $oObservaciones[0]->id=-1 ; 
 
         foreach($arrConcesionarias as $k=>$v){
@@ -125,10 +125,10 @@ class RegRepVehController extends Controller
         $oTipos=array('' => 'Seleccione Tipo');
         $oTipos=array('1' => 'Preventivo');
         $oTipos+=array('2' => 'Correctivo');
-        $formData = array('regrepveh.createregrepveh');
+        $formData = array('regmanveh.createregmanveh');
         $formData = array('route' => $formData, 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
         $boton    = 'Registrar'; 
-        return view($this->folderview.'.mant2')->with(compact('regrepveh', 'oTipos','formData', 'entidad','oConcesionarias','oObservaciones', 'boton', 'listar'));
+        return view($this->folderview.'.mant2')->with(compact('regmanveh', 'oTipos','formData', 'entidad','oConcesionarias','oObservaciones', 'boton', 'listar'));
     }
 
     public function buscarporua(Request $request){
@@ -148,9 +148,9 @@ class RegRepVehController extends Controller
     public function createchecklistvehicular(Request $request)
     {
         $listar   = Libreria::getParam($request->input('listar'), 'NO');
-        $entidad  = 'RegRepVeh';
-        $repuesto = null;
-        $formData = array('repuestos.store');
+        $entidad  = 'RegManVeh';
+        $mantenimiento = null;
+        $formData = array('mantenimientos.store');
         $formData = array('route' => $formData, 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
         $boton    = 'Registrar';
         $arrUnidades = Unidad::getAll();
@@ -158,7 +158,7 @@ class RegRepVehController extends Controller
         foreach($arrUnidades as $k=>$v){
             $cboUnidades += array($v->id=>$v->descripcion);
         }
-        return view($this->folderview.'.mant_checklistvehicular')->with(compact('repuesto', 'formData', 'entidad', 'boton', 'cboUnidades', 'listar'));
+        return view($this->folderview.'.mant_checklistvehicular')->with(compact('mantenimiento', 'formData', 'entidad', 'boton', 'cboUnidades', 'listar'));
     }
 
     public function store(Request $request){
@@ -195,38 +195,38 @@ class RegRepVehController extends Controller
 
         $listar     = Libreria::getParam($request->input('listar'), 'NO');
 
-        $idn=DB::select("SHOW TABLE STATUS LIKE 'regrepveh'");
+        $idn=DB::select("SHOW TABLE STATUS LIKE 'regmanveh'");
         $next_id=$idn[0]->Auto_increment;
 
         
         $error = DB::transaction(function() use($request,$next_id){
-            $regrepv = new RegRepVeh();
-            $regrepv -> id =$next_id;
-            $regrepv -> cliente  = $request -> input('cliente');
-            $regrepv -> concesionaria_id  = $request -> input('concesionaria_id');
-            $regrepv -> ua_id = $request -> input('ua_id');
-            $regrepv -> kminicial = $request -> input('kminicial');
-            $regrepv -> kmman = $request -> input('kmman');
-            $regrepv -> kmfinal = $request -> input('kmfinal');
-            $regrepv -> fechaentrada = $request -> input('fechaentrada');
-            $regrepv -> fechasalida = $request -> input('fechasalida');
-            $regrepv -> tipomantenimiento = $request -> input('tipomantenimiento');
-            $regrepv -> telefono = $request -> input('telefono');
-            $regrepv -> save();
+            $regmanv = new RegManVeh();
+            $regmanv -> id =$next_id;
+            $regmanv -> cliente  = $request -> input('cliente');
+            $regmanv -> concesionaria_id  = $request -> input('concesionaria_id');
+            $regmanv -> ua_id = $request -> input('ua_id');
+            $regmanv -> kminicial = $request -> input('kminicial');
+            $regmanv -> kmman = $request -> input('kmman');
+            $regmanv -> kmfinal = $request -> input('kmfinal');
+            $regmanv -> fechaentrada = $request -> input('fechaentrada');
+            $regmanv -> fechasalida = $request -> input('fechasalida');
+            $regmanv -> tipomantenimiento = $request -> input('tipomantenimiento');
+            $regmanv -> telefono = $request -> input('telefono');
+            $regmanv -> save();
         });
 
 
         $cantidades=$request->cantidad;
-        $repuestosid=$request->repuestoid;
+        $mantenimientosid=$request->trabajoid;
         $montos=$request->monto;
         for ($i = 0; $i < count($cantidades); $i++) {
-           $error = DB::transaction(function() use($i,$request,$next_id,$cantidades,$repuestosid,$montos){
-            $descripcionregrepv = new DescripcionRegRepVeh();
-            $descripcionregrepv -> regrepveh_id =$next_id;
-            $descripcionregrepv -> cantidad  = $cantidades[$i];
-            $descripcionregrepv -> repuesto_id  = intval($repuestosid[$i]);
-            $descripcionregrepv -> monto = $montos[$i];;
-            $descripcionregrepv -> save();
+           $error = DB::transaction(function() use($i,$request,$next_id,$cantidades,$mantenimientosid,$montos){
+            $descripcionregmanv = new DescripcionRegManVeh();
+            $descripcionregmanv -> regmanveh_id =$next_id;
+            $descripcionregmanv -> cantidad  = $cantidades[$i];
+            $descripcionregmanv -> trabajo_id  = intval($mantenimientosid[$i]);
+            $descripcionregmanv -> monto = $montos[$i];;
+            $descripcionregmanv -> save();
         }); 
         }
 
@@ -239,7 +239,7 @@ class RegRepVehController extends Controller
 
     public function eliminar($id, $listarLuego)
     {
-        $existe = Libreria::verificarExistencia($id, 'regrepveh');
+        $existe = Libreria::verificarExistencia($id, 'regmanveh');
         if ($existe !== true) {
             return $existe;
         }
@@ -248,22 +248,22 @@ class RegRepVehController extends Controller
             $listar = $listarLuego;
         }
         $mensaje = true;
-        $modelo   = RegRepVeh::find($id);
-        $entidad  = 'RegRepVeh';
-        $formData = array('route' => array('regrepveh.destroy', $id), 'method' => 'DELETE', 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
+        $modelo   = RegManVeh::find($id);
+        $entidad  = 'RegManVeh';
+        $formData = array('route' => array('regmanveh.destroy', $id), 'method' => 'DELETE', 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
         $boton    = 'Eliminar';
         return view('app.confirmarEliminar')->with(compact('modelo', 'formData', 'entidad', 'boton', 'listar','mensaje'));
     }
 
     public function destroy($id)
     {
-        $existe = Libreria::verificarExistencia($id, 'regrepveh');
+        $existe = Libreria::verificarExistencia($id, 'regmanveh');
         if ($existe !== true) {
             return $existe;
         }
         $error = DB::transaction(function() use($id){
-            $regrepveh = RegRepVeh::find($id);
-            $regrepveh->delete();
+            $regmanveh = RegManVeh::find($id);
+            $regmanveh->delete();
         });
         return is_null($error) ? "OK" : $error;
     }
@@ -272,7 +272,7 @@ class RegRepVehController extends Controller
 
     public function edit($id, Request $request)
     {
-        $existe = Libreria::verificarExistencia($id, 'regrepveh');
+        $existe = Libreria::verificarExistencia($id, 'regmanveh');
         if ($existe !== true) {
             return $existe;
         }
@@ -288,21 +288,19 @@ class RegRepVehController extends Controller
         
 
         $listar   = Libreria::getParam($request->input('listar'), 'NO');
-        $regrepveh = RegRepVeh::find($id);
-        $oObservaciones=DescripcionRegRepVeh::where('regrepveh_id','=',$id)
-            ->join('repuesto', 'descripcionregrepveh.repuesto_id', '=', 'repuesto.id')
-            ->join('unidad', 'repuesto.unidad_id', '=', 'unidad.id')
-            ->select('descripcionregrepveh.id as id','descripcionregrepveh.monto as monto','descripcionregrepveh.cantidad as cantidad','repuesto.codigo as codigo','repuesto.id as repuesto_id','repuesto.descripcion as descripcion','unidad.descripcion as unidad')
-        ->get();
+        $regmanveh = RegManVeh::find($id);
+        $oObservaciones=DescripcionRegManVeh::where('regmanveh_id','=',$id)
+            ->join('trabajo', 'descripcionregmanveh.trabajo_id', '=', 'trabajo.id')
+            ->select('descripcionregmanveh.id as id','descripcionregmanveh.monto as monto','descripcionregmanveh.cantidad as cantidad','trabajo.id as trabajo_id','trabajo.descripcion as descripcion')->get();
 
 
 
         
-        $entidad  = 'RegRepVeh';
-        $formData = array('regrepveh.update', $id);
+        $entidad  = 'RegManVeh';
+        $formData = array('regmanveh.update', $id);
         $formData = array('route' => $formData, 'method' => 'PUT', 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
         $boton    = 'Modificar';
-        return view($this->folderview.'.mant2')->with(compact('regrepveh','oConcesionarias','oObservaciones', 'formData', 'entidad', 'boton', 'listar'));
+        return view($this->folderview.'.mant2')->with(compact('regmanveh','oConcesionarias','oObservaciones', 'formData', 'entidad', 'boton', 'listar'));
     }
 
     public function update(Request $request, $id)
@@ -341,7 +339,7 @@ class RegRepVehController extends Controller
 
 
 
-        $existe = Libreria::verificarExistencia($id, 'regrepveh');
+        $existe = Libreria::verificarExistencia($id, 'regmanveh');
         if ($existe !== true) {
             return $existe;
         }
@@ -359,48 +357,44 @@ class RegRepVehController extends Controller
 
 
         $error = DB::transaction(function() use($request, $id){
-            $regrepv = RegRepVeh::find($id);
-            $regrepv -> cliente  = $request -> input('cliente');
-            $regrepv -> concesionaria_id  = $request -> input('concesionaria_id');
-            $regrepv -> ua_id = $request -> input('ua_id');
-            $regrepv -> kmman = $request -> input('kmman');
-            $regrepv -> kminicial = $request -> input('kminicial');
-            $regrepv -> kmfinal = $request -> input('kmfinal');
-            $regrepv -> fechaentrada = $request -> input('fechaentrada');
-            $regrepv -> fechasalida = $request -> input('fechasalida');
-            $regrepv -> tipomantenimiento = $request -> input('tipomantenimiento');
-            $regrepv -> telefono = $request -> input('telefono');
-            $regrepv -> save();
+            $regmanv = RegManVeh::find($id);
+            $regmanv -> cliente  = $request -> input('cliente');
+            $regmanv -> concesionaria_id  = $request -> input('concesionaria_id');
+            $regmanv -> ua_id = $request -> input('ua_id');
+            $regmanv -> kmman = $request -> input('kmman');
+            $regmanv -> kminicial = $request -> input('kminicial');
+            $regmanv -> kmfinal = $request -> input('kmfinal');
+            $regmanv -> fechaentrada = $request -> input('fechaentrada');
+            $regmanv -> fechasalida = $request -> input('fechasalida');
+            $regmanv -> tipomantenimiento = $request -> input('tipomantenimiento');
+            $regmanv -> telefono = $request -> input('telefono');
+            $regmanv -> save();
 
         });
         $ids=$request->idobservacion;
-        $codigos=$request->codigo;
         $montos=$request->monto;
         $cantidades=$request->cantidad;
-        $repuestosid=$request->repuestoid;
+        $mantenimientosid=$request->trabajoid;
         for ($i = 0; $i < count($cantidades); $i++) {
-           $error = DB::transaction(function() use($id,$i,$ids,$request,$cantidades,$repuestosid,$montos){
-            $descripcionregrepv = new DescripcionRegRepVeh();
-            if($ids[$i]>=0){$descripcionregrepv = DescripcionRegRepVeh::find($ids[$i]);}
-            $descripcionregrepv -> regrepveh_id =$id;
-            $descripcionregrepv -> cantidad  = $cantidades[$i];
-            $descripcionregrepv -> repuesto_id  = $repuestosid[$i];
-            $descripcionregrepv -> monto = $montos[$i];;
-            $descripcionregrepv -> save();
+           $error = DB::transaction(function() use($id,$i,$ids,$request,$cantidades,$mantenimientosid,$montos){
+            $descripcionregmanv = new DescripcionRegManVeh();
+            if($ids[$i]>=0){$descripcionregmanv = DescripcionRegManVeh::find($ids[$i]);}
+            $descripcionregmanv -> regmanveh_id =$id;
+            $descripcionregmanv -> cantidad  = $cantidades[$i];
+            $descripcionregmanv -> trabajo_id  = $mantenimientosid[$i];
+            $descripcionregmanv -> monto = $montos[$i];;
+            $descripcionregmanv -> save();
         }); 
         }
 
         $idseliminados=$request->idseliminados;
 
-        /*echo "<script>console.log('Debug idseliminados: " . print_r($idseliminados) . "' );</script>";
-        echo "<script>console.log('Debug repuestosid: " . print_r($repuestosid) . "' );</script>";
-        echo "<script>console.log('Debug idobservacion: " . print_r($ids) . "' );</script>";*/
         if($idseliminados!=null){
             foreach($idseliminados as $k=>$idd){
                 $error = DB::transaction(function() use($idd){
                     if($idd>0){
-                $regrepveh = DescripcionRegRepVeh::find($idd);
-                $regrepveh->delete();}
+                $regmanveh = DescripcionRegManVeh::find($idd);
+                $regmanveh->delete();}
                 }); 
             }
         }   
@@ -414,12 +408,12 @@ class RegRepVehController extends Controller
     }
 
 
-public function searchAutocompleteRepuesto($query){
+public function searchAutocompleteTrabajo($query){
 
-        $consulta = "select repuesto.id as id,repuesto.codigo as codigo, repuesto.descripcion as descripcion, CONCAT(`codigo`, ' - ', repuesto.descripcion) as 'search', unidad.descripcion as unidad
-            from repuesto inner join unidad on repuesto.unidad_id = unidad.id
-            where repuesto.deleted_at IS NULL AND
-            (`codigo` LIKE '%".$query."%' OR repuesto.descripcion LIKE '%".$query."%')";
+        $consulta = "select  id, descripcion, descripcion as 'search'
+            from trabajo 
+            where trabajo.deleted_at IS NULL AND
+            (descripcion LIKE '%".$query."%')";
         $res = DB::select($consulta);
         
         return response() -> json($res);
