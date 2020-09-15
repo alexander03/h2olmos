@@ -39,7 +39,7 @@ if ($controldiario !== NULL) {
 	<div class="col-lg-12 col-md-12 col-sm-12">
 		<div class="u-ua-style js-equipo-desc"></div>
 		<input type="text" name="equipo_id" id="equipo_id" class="form-control js-equipo-id input-xs" 
-		value="@if($controldiario){{$controldiario->equipo->codigo}}@endif">
+		value="@if($controldiario){{$controldiario->equipo->ua->codigo . '--' . $controldiario->equipo->id}}@endif">
 		<small id="autoComplete_list4" class="text-danger"></small>
 	</div>
 </div>
@@ -65,13 +65,13 @@ if ($controldiario !== NULL) {
 			<div class="form-group col-md-3 mt-4">
 				{!! Form::label('hora_inicio', 'hora inicio:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
 				<div class="col-lg-12 col-md-12 col-sm-12 mt-2">
-					{!! Form::time('hora_inicio[]', null, array('class' => 'form-control input-xs', 'id' => 'hora_inicio')) !!}
+					<input type="time" class="form-control input-xs" value="@if($controldiario){{substr($controldiario->hora_inicio,0,5)}}@endif" name="hora_fin[]" id='hora_fin'>
 				</div>
 			</div>
 			<div class="form-group col-md-3 mt-4">
 				{!! Form::label('hora_fin', 'hora Fin:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
 				<div class="col-lg-12 col-md-12 col-sm-12 mt-2">
-					{!! Form::time('hora_fin[]', null, array('class' => 'form-control input-xs', 'id' => 'hora_fin')) !!}
+					<input type="time" class="form-control input-xs" value="@if($controldiario){{substr($controldiario->hora_fin,0,5)}}@endif" name="hora_fin[]" id='hora_fin'>
 				</div>
 			</div>
 			<div class="form-group col-md-3 mt-4">
