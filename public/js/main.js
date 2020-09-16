@@ -470,7 +470,7 @@ const doSearchRepuesto = () => {
     
     // Toggle event for search input
     // showing & hidding results list onfocus / blur
-    ["focus", "blur"].forEach(function(eventType) {
+    /*["focus", "blur"].forEach(function(eventType) {
       const resultsList = document.querySelector("#autoComplete_list4");
     
       document.querySelector(".js-repuesto-id").addEventListener(eventType, function() {
@@ -482,7 +482,7 @@ const doSearchRepuesto = () => {
           resultsList.style.display = "block";
         }
       });
-    });
+    });*/
 };
 const doSearchTrabajo = () => {
 
@@ -558,7 +558,7 @@ const doSearchTrabajo = () => {
     
     // Toggle event for search input
     // showing & hidding results list onfocus / blur
-    ["focus", "blur"].forEach(function(eventType) {
+    /*["focus", "blur"].forEach(function(eventType) {
       const resultsList = document.querySelector("#autoComplete_list4");
     
       document.querySelector(".js-trabajo-id").addEventListener(eventType, function() {
@@ -570,5 +570,5 @@ const doSearchTrabajo = () => {
           resultsList.style.display = "block";
         }
       });
-    });
+    });*/
 };

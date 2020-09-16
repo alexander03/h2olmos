@@ -122,13 +122,14 @@
 				@foreach ($oObservaciones as $key => $value)
 				@if($value->id>=0)
 				<tr>
-					<p><input type="hidden" name="idobservacion[]" id="ididid" value="{{ $value->id }}"></p>
-					<p><input type="hidden" name="trabajoid[]" id="rep" value="{{ $value->trabajo_id }}"></p>
+					
 					<td name="nnn" style="text-align:center;">{{ $contador }}</td>
 					<td><input name="cantidad[]" class='form-control' type="number" value="{{ $value->cantidad }}" style="text-align:right;width:100px;"></td>
 					<td><input  name="monto[]"class='form-control' type="number" value="{{ $value->monto }}" style="text-align:right;width:100px;"></td>
 					<td><input disabled name="descripcion[]" class="form-control" type="text" value="{{ $value->descripcion }}"></td>
 					<td onclick="if(confirm('¿Desea Eliminar la Observación?')){borrarfila({{ $value->id }});deleteRow(this);}" style="color:#ff0000;text-align:center;width:50px;"><i class="material-icons text-center">close</i></td>
+					<p name="datos{{$value->id}}"><input type="hidden" name="idobservacion[]" id="ididid" value="{{ $value->id }}">
+					<input type="hidden" name="trabajoid[]" id="rep" value="{{ $value->trabajo_id }}"></p>
 				</tr>
 				<?php
 				$contador = $contador + 1;
@@ -274,6 +275,11 @@
 
 			document.getElementById("tbody").appendChild(input);
 
+			var fff=document.getElementsByName('datos'+iddd);
+			for (var i = 0; i < fff.length; i++) {
+
+				fff[i].innerHTML='';
+			}
 	   	}
 	
 </script>
