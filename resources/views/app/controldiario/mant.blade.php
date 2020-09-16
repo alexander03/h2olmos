@@ -65,7 +65,7 @@ if ($controldiario !== NULL) {
 			<div class="form-group col-md-3 mt-4">
 				{!! Form::label('hora_inicio', 'hora inicio:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
 				<div class="col-lg-12 col-md-12 col-sm-12 mt-2">
-					<input type="time" class="form-control input-xs" value="@if($controldiario){{substr($controldiario->hora_inicio,0,5)}}@endif" name="hora_fin[]" id='hora_fin'>
+					<input type="time" class="form-control input-xs" value="@if($controldiario){{substr($controldiario->hora_inicio,0,5)}}@endif" name="hora_inicio[]" id='hora_inicio'>
 				</div>
 			</div>
 			<div class="form-group col-md-3 mt-4">
