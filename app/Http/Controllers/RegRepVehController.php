@@ -374,7 +374,6 @@ class RegRepVehController extends Controller
 
         });
         $ids=$request->idobservacion;
-        $codigos=$request->codigo;
         $montos=$request->monto;
         $cantidades=$request->cantidad;
         $repuestosid=$request->repuestoid;
@@ -392,10 +391,11 @@ class RegRepVehController extends Controller
 
         $idseliminados=$request->idseliminados;
 
-        /*echo "<script>console.log('Debug idseliminados: " . print_r($idseliminados) . "' );</script>";
+       /* echo "<script>console.log('Debug idobservacion: " . print_r($ids) . "' );</script>";
+         echo "<script>console.log('Debug idobservacion: " . print_r($montos) . "' );</script>";
         echo "<script>console.log('Debug repuestosid: " . print_r($repuestosid) . "' );</script>";
-        echo "<script>console.log('Debug idobservacion: " . print_r($ids) . "' );</script>";*/
-        if($idseliminados!=null){
+        echo "<script>console.log('Debug idseliminados: " . print_r($idseliminados) . "' );</script>";
+        */if($idseliminados!=null){
             foreach($idseliminados as $k=>$idd){
                 $error = DB::transaction(function() use($idd){
                     if($idd>0){
