@@ -18,7 +18,7 @@
 		@foreach ($lista as $key => $value)
 		<tr>
 			<td>{{ $contador }}</td>
-			<td>{{ $value->fecha_registro }}</td>
+			<td>{{ date('d/m/Y', strtotime($value->fecha_registro)) }}</td>
 			<td>{{ $value->equipo_descripcion }}</td>
 			<td>{{ $value->k_inicial }}</td>
 			<td>{{ $value->k_final }}</td>

@@ -57,8 +57,9 @@ class MantCorrPrev extends Controller
         // $filter           = Libreria::getParam($request->input('filter'));
         // $estado           = $request->input('estado');
         // $unidad           = $request->input('unidad');
-        $fecha_registro   = $request->input('fecha_registro');
-        $resultado        = Checklistvehicular::getFilter($fecha_registro);
+        $fecha_registro_inicial = $request->input('fecha_registro_inicial');
+        $fecha_registro_final   = $request->input('fecha_registro_final');
+        $resultado        = Checklistvehicular::getFilter($fecha_registro_inicial, $fecha_registro_final);
         $lista            = $resultado->get();
         $cabecera         = array();
         $cabecera[]       = array('valor' => '#', 'numero' => '1');

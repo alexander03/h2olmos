@@ -22,7 +22,7 @@ class Checklistvehicular extends Model
         'documentos' => 'array',
     ];
 
-    public function scopegetFilter($query, $fecha_registro) {
+    public function scopegetFilter($query, $fecha_registro_inicial, $fecha_registro_final) {
 
         $concesionariaAct = Concesionaria::join('userconcesionaria','userconcesionaria.concesionaria_id','=','concesionaria.id')
                                 ->join('users','users.id','=','userconcesionaria.user_id')
@@ -33,8 +33,9 @@ class Checklistvehicular extends Model
         return $query->leftjoin('equipo', 'equipo.id', '=', 'checklistvehicular.equipo_id')
             ->leftjoin('vehiculo', 'vehiculo.id', 'checklistvehicular.vehiculo_id')
             ->join('conductor', 'conductor.id', 'checklistvehicular.conductor_id')
-            ->where(function($subquery) use ($fecha_registro) {
-                if($fecha_registro !== null) $subquery->where('checklistvehicular.fecha_registro', $fecha_registro);
+            ->where(function($subquery) use ($fecha_registro_inicial, $fecha_registro_final) {
+                if ( $fecha_registro_inicial !== null ) $subquery->where('checklistvehicular.fecha_registro', '>=', $fecha_registro_inicial);
+                if ( $fecha_registro_final !== null ) $subquery->where('checklistvehicular.fecha_registro', '<=', $fecha_registro_final);
             })
             ->where(function($subquery) use ($idConcAct) {
                 $subquery->where('checklistvehicular.concesionaria_id', $idConcAct);
