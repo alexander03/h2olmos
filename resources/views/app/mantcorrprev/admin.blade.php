@@ -16,11 +16,21 @@
 								{!! Form::label(null, 'Buscar por rango de Fecha de Registro inicial y final') !!}
 								<div class="col-6 p-0 input-group">
 									{!! Form::label('fecha_registro_inicial', 'Inicio', array('class' => 'col-3 p-0 mt-2')) !!}
-									{!! Form::date('fecha_registro_inicial', '', array('class' => 'col-8 form-control input-xs', 'id' => 'fecha_registro_inicial')) !!}
+									{!! Form::date('fecha_registro_inicial', '', array('class' => 'col-7 text-right form-control input-xs', 'id' => 'fecha_registro_inicial')) !!}
+									<div class="col-1 p-0">
+										<button class="btn btn-warning p-1" id="btn_remove_fecha_registro_inicial">
+											<span class="material-icons outlined">close</span>
+										</button>
+									</div>
 								</div>
 								<div class="col-6 p-0 input-group">
 									{!! Form::label('fecha_registro_final', 'Final', array('class' => 'col-3 p-0 mt-2')) !!}
-									{!! Form::date('fecha_registro_final', '', array('class' => 'col-8 form-control input-xs', 'id' => 'fecha_registro_final')) !!}
+									{!! Form::date('fecha_registro_final', '', array('class' => 'col-7 text-right form-control input-xs', 'id' => 'fecha_registro_final')) !!}
+									<div class="col-1 p-0">
+										<button class="btn btn-warning p-1" id="btn_remove_fecha_registro_final">
+											<span class="material-icons">close</span>
+										</button>
+									</div>
 								</div>
 							</div>
 							<div class="col-2">
@@ -51,5 +61,15 @@
 				buscar('{{ $entidad }}');
 			}
 		});
+
+		document.getElementById('btn_remove_fecha_registro_inicial').addEventListener('click', e => {
+			const fecha_registro_inicial = document.getElementById('fecha_registro_inicial');
+			fecha_registro_inicial.value = '';
+		});
+		document.getElementById('btn_remove_fecha_registro_final').addEventListener('click', e => {
+			const fecha_registro_final = document.getElementById('fecha_registro_final');
+			fecha_registro_final.value = '';
+		});
+
 	});
 </script>

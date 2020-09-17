@@ -81,7 +81,7 @@
 			<div class="form-group col-7">
 				{!! Form::label('unidad_descripcion', 'Unidad descripción:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
 				<div class="col-lg-12 col-md-12 col-sm-12">
-					{!! Form::text('unidad_descripcion', $unidad_descripcion, array('class' => 'form-control input-xs solo-lectura', 'id' => 'unidad_descripcion', 'readonly' => true)) !!}
+					{!! Form::text('unidad_descripcion', $unidad_descripcion, array('class' => 'form-control input-xs', 'id' => 'unidad_descripcion', 'disabled' => true)) !!}
 					{{-- <input name="unidad_id" id="unidad_id" type="text" class="hidden" value=""> --}}
 				</div>
 			</div>
@@ -132,10 +132,10 @@
 		<div class="col-12 input-group p-0 m-0">
 			<div class="col-lg-4 col-md-4 col-sm-4">
 				{!! Form::hidden('conductor_id', $conductor['id'], array('id' => 'conductor_id')) !!}
-				{!! Form::text('conductor_dni', $conductor['dni'], array('class' => 'form-control input-xs', 'id' => 'conductor_dni', 'disabled' => !$modalNuevo)) !!}
+				{!! Form::text('conductor_dni', $conductor['dni'], array('class' => 'form-control input-xs solo-lectura', 'id' => 'conductor_dni', 'readonly' => !$modalNuevo)) !!}
 			</div>
 			<div class="col-lg-8 col-md-8 col-sm-8">
-				{!! Form::text('conductor_nombres', $conductor['nombres'], array('class' => 'form-control input-xs solo-lectura', 'id' => 'conductor_nombres', 'readonly' => true)) !!}
+				{!! Form::text('conductor_nombres', $conductor['nombres'], array('class' => 'form-control input-xs solo-lectura', 'id' => 'conductor_nombres', 'disabled' => true)) !!}
 			</div>
 		</div>
 		<div id="conductor_data_table" class="data-table">
@@ -697,18 +697,20 @@
 			document.getElementById('documentos').value = JSON.stringify(arrObjects);
 		});
 
-		btnEditar.addEventListener('click', () => {
+		btnEditar.addEventListener('click', (e) => {
 			const inputsReadonly = document.querySelectorAll("[readonly]");
 			Array.from(inputsReadonly).map(el => {
 				el.removeAttribute('readonly');
 			});
-			const inputsDisabled = document.querySelectorAll("[disabled]");
-			Array.from(inputsDisabled).map(el => {
-				el.removeAttribute('disabled');
-			});
+			// const inputsDisabled = document.querySelectorAll("[disabled]");
+			// Array.from(inputsDisabled).map(el => {
+			// 	el.removeAttribute('disabled');
+			// });
 
 			const btnGuardar = document.getElementById('btnGuardar');
 			btnGuardar.removeAttribute('hidden');
+
+			e.srcElement.setAttribute('hidden', true);
 		});
 	});
 
