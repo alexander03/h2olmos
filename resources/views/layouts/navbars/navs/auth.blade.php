@@ -24,7 +24,7 @@
         <li class="nav-item">
           <a class="nav-link" href="{{ route('profile.edit') }}">
             <i class="material-icons">person_pin</i>
-            <label>Administrador</label>
+            <label>{{ Auth::user()->name }}</label>
           </a>
         </li>
         <!--li class="nav-item dropdown">
@@ -51,9 +51,9 @@
             </p>
           </a>
           <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownProfile">
-            <a class="dropdown-item" href="{{ route('profile.edit') }}">{{ __('Profile') }}</a>
+            <a class="dropdown-item" href="{{ route('profile.edit') }}">Perfil</a>
             <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();document.getElementById('logout-form').submit();">{{ __('Log out') }}</a>
+            <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();document.getElementById('logout-form').submit();">Cerrar sesión</a>
           </div>
         </li>
       </ul>
