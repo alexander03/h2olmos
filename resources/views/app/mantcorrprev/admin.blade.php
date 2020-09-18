@@ -11,21 +11,21 @@
 						{!! Form::hidden('page', 1, array('id' => 'page')) !!}
 						{!! Form::hidden('accion', 'listar', array('id' => 'accion')) !!}
 
-						<div class="col-8 p-0 m-0 form-group input-group">
-							<div class="col-10 p-0 input-group">
-								{!! Form::label(null, 'Buscar por rango de Fecha de Registro inicial y final') !!}
-								<div class="col-6 p-0 input-group">
+						<div class="col-lg-7 col-md-12 p-0 form-group input-group">
+							{!! Form::label(null, 'Buscar por rango de Fecha de Registro inicial y final', array('class' => 'mb-0')) !!}
+							<div class="col-12 p-0 form-group input-group">
+								<div class="col-lg-6 col-md-6 col-sm-6 col-12 p-0 input-group">
 									{!! Form::label('fecha_registro_inicial', 'Inicio', array('class' => 'col-3 p-0 mt-2')) !!}
-									{!! Form::date('fecha_registro_inicial', '', array('class' => 'col-7 text-right form-control input-xs', 'id' => 'fecha_registro_inicial')) !!}
+									{!! Form::date('fecha_registro_inicial', '', array('class' => 'col-7 form-control input-xs', 'id' => 'fecha_registro_inicial')) !!}
 									<div class="col-1 p-0">
 										<button class="btn btn-warning p-1" id="btn_remove_fecha_registro_inicial">
 											<span class="material-icons outlined">close</span>
 										</button>
 									</div>
 								</div>
-								<div class="col-6 p-0 input-group">
+								<div class="col-lg-6 col-md-6 col-sm-6 col-12 p-0 input-group">
 									{!! Form::label('fecha_registro_final', 'Final', array('class' => 'col-3 p-0 mt-2')) !!}
-									{!! Form::date('fecha_registro_final', '', array('class' => 'col-7 text-right form-control input-xs', 'id' => 'fecha_registro_final')) !!}
+									{!! Form::date('fecha_registro_final', '', array('class' => 'col-7 form-control input-xs', 'id' => 'fecha_registro_final')) !!}
 									<div class="col-1 p-0">
 										<button class="btn btn-warning p-1" id="btn_remove_fecha_registro_final">
 											<span class="material-icons">close</span>
@@ -33,17 +33,19 @@
 									</div>
 								</div>
 							</div>
-							<div class="col-2">
+						</div>
+
+						<div class="col-lg-5 col-md-12 p-0 form-group input-group">
+							<div class="col-lg-3 col-md-2 col-sm-2 col-3 p-0">
 								{!! Form::label('filas', 'Filas')!!}
 								{!! Form::selectRange('filas', 1, 30, 20, array('class' => 'col-12 form-control input-xs', 'onchange' => 'buscar(\''.$entidad.'\')')) !!}
 							</div>
+							<div class="col-lg-9 col-md-6 col-sm-8 col-9 d-flex justify-content-around align-items-center">
+								{!! Form::button('<i class="material-icons">search</i>Buscar', array('class' => 'btn btn-success p-2 pl-1 pr-1', 'id' => 'btnBuscar', 'onclick' => 'buscar(\''.$entidad.'\')')) !!}
+								{!! Form::button('<i class="material-icons">add</i>Registrar', array('class' => 'btn btn-primary p-2 pl-1 pr-1', 'id' => 'btnNuevo', 'onclick' => 'modal (\''.URL::route($ruta["create"], array('listar'=>'SI')).'\', \''.$tituloCheckListVehicular.'\', this);')) !!}
+							</div>
 						</div>
 
-						<div class="col-4 d-flex justify-content-around align-items-center">
-							{!! Form::button('<i class="material-icons">search</i>Buscar', array('class' => 'btn btn-success p-2 pl-1 pr-1', 'id' => 'btnBuscar', 'onclick' => 'buscar(\''.$entidad.'\')')) !!}
-							{!! Form::button('<i class="material-icons">add</i>Registrar Check list', array('class' => 'btn btn-primary p-2 pl-1 pr-1', 'id' => 'btnNuevo', 'onclick' => 'modal (\''.URL::route($ruta["create"], array('listar'=>'SI')).'\', \''.$tituloCheckListVehicular.'\', this);')) !!}
-
-						</div>
 						{!! Form::close() !!}
 						<div class="table-responsive" id="listado{{ $entidad }}">
 						</div>
