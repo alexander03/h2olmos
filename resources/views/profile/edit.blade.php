@@ -87,10 +87,10 @@
                 <div class="row">
                   <label class="col-sm-2 col-form-label" for="input-password">{{ __('Nueva contraseña') }}</label>
                   <div class="col-sm-7">
-                    <div class="form-group{{ $errors->has('password') ? ' has-danger' : '' }}">
-                      <input class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}" name="password" id="input-password" type="password" placeholder="{{ __('Nueva contraseña') }}" value="" required />
-                      @if ($errors->has('password'))
-                        <span id="password-error" class="error text-danger" for="input-password">{{ $errors->first('password') }}</span>
+                    <div class="form-group{{ $errors->has('password_confirmation') ? ' has-danger' : '' }}">
+                      <input class="form-control{{ $errors->has('password_confirmation') ? ' is-invalid' : '' }}" name="password" id="input-password" type="password" placeholder="{{ __('Nueva contraseña') }}" value="" required />
+                      @if ($errors->has('password_confirmation'))
+                        <span id="password-error" class="error text-danger" for="input-password">{{ $errors->first('password_confirmation') }}</span>
                       @endif
                     </div>
                   </div>
