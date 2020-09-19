@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Illuminate\Http\Request;
 use App\Http\Requests\ProfileRequest;
 use App\Http\Requests\PasswordRequest;
 use Illuminate\Support\Facades\Hash;
@@ -24,10 +24,11 @@ class ProfileController extends Controller
      * @param  \App\Http\Requests\ProfileRequest  $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update()
+    public function update(Request $request)
     {
-        auth()->user()->update(['name' => 'Stalyn']);
-        return back()->withStatus(__('Profile successfully updated.'));
+        auth()->user()->update(['name' => $request->get('name')]);
+
+        return back()->withStatus(__('Perfil actualizado con éxito'));
     }
 
     /**
@@ -36,10 +37,11 @@ class ProfileController extends Controller
      * @param  \App\Http\Requests\PasswordRequest  $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    // public function password(PasswordRequest $request)
-    // {
-    //     auth()->user()->update(['password' => Hash::make($request->get('password'))]);
+    public function password(Request $request)
+    {
+        
+        auth()->user()->update(['password' => Hash::make($request->get('password'))]);
 
-    //     return back()->withStatusPassword(__('Password successfully updated.'));
-    // }
+        return back()->withStatusPassword(__('Contraseña actualizada con éxito'));
+    }
 }

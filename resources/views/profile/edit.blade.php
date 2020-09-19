@@ -52,9 +52,8 @@
       </div>
       <div class="row">
         <div class="col-md-12">
-          {{-- <form method="post" action="{{ route('profile.password') }}" class="form-horizontal">
+          <form method="post" action="{{ route('profile.password') }}" class="form-horizontal">
             @csrf
-            @method('put')
 
             <div class="card ">
               <div class="card-header card-header-primary">
@@ -109,7 +108,7 @@
                 <button type="submit" class="btn btn-primary">{{ __('Actualizar contraseña') }}</button>
               </div>
             </div>
-          </form> --}}
+          </form>
         </div>
       </div>
     </div>
