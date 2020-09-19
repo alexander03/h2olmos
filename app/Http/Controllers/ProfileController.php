@@ -24,10 +24,9 @@ class ProfileController extends Controller
      * @param  \App\Http\Requests\ProfileRequest  $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(ProfileRequest $request)
+    public function update()
     {
-        auth()->user()->update($request->all());
-
+        auth()->user()->update(['name' => 'Stalyn']);
         return back()->withStatus(__('Profile successfully updated.'));
     }
 
@@ -37,10 +36,10 @@ class ProfileController extends Controller
      * @param  \App\Http\Requests\PasswordRequest  $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function password(PasswordRequest $request)
-    {
-        auth()->user()->update(['password' => Hash::make($request->get('password'))]);
+    // public function password(PasswordRequest $request)
+    // {
+    //     auth()->user()->update(['password' => Hash::make($request->get('password'))]);
 
-        return back()->withStatusPassword(__('Password successfully updated.'));
-    }
+    //     return back()->withStatusPassword(__('Password successfully updated.'));
+    // }
 }
