@@ -133,6 +133,7 @@ class TipohoraController extends Controller
         $error = DB::transaction(function() use($request){
             $tipohora = new Tipohora();
             $tipohora->codigo = $request->input('codigo');
+            $tipohora->prioridad = ($request->input('prioridad')) ? true : false;
             $tipohora->descripcion = strtoupper($request->input('descripcion'));
             $tipohora->save();
         });
@@ -197,6 +198,7 @@ class TipohoraController extends Controller
         $error = DB::transaction(function() use($request, $id){
             $tipohora = Tipohora::find($id);
             $tipohora->codigo = $request->input('codigo');
+            $tipohora->prioridad = ($request->input('prioridad')) ? true : false;
             $tipohora->descripcion = strtoupper($request->input('descripcion'));
             $tipohora->save();
         });

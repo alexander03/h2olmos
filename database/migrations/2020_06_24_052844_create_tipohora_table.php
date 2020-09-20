@@ -18,6 +18,7 @@ class CreateTipohoraTable extends Migration
             $table->bigIncrements('id');
 //            $table->integer('codigo');
             $table->string('codigo',2);
+            $table->boolean('prioridad')->default(false);
             $table->string('descripcion',25);
             $table->timestamps();
             $table->softDeletes();

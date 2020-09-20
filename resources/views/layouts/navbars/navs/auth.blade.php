@@ -27,8 +27,10 @@
             <label>Administrador</label>
           </a>
         </li>
+
+
         <li class="nav-item dropdown">
-          <a class="nav-link"  id="buttonNotify"  href="#pablo" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <a class="nav-link "  data-toggle="dropdown" id="buttonNotify"  href="#pablo"   aria-haspopup="true" aria-expanded="false" onclick="ActivarNotificaciones(this,event)">
             <i class="material-icons">notifications</i>
             <span class="notification d-none">5</span>
             <p class="d-lg-none d-md-block">
@@ -36,7 +38,7 @@
             </p>
           </a>
           <div class="dropdown-menu dropdown-menu-right" aria-labelledby="buttonNotify">
-            <a class="dropdown-item p-0" href="#">
+            <a class="dropdown-item p-0" >
               <div class="alert alert-info alert-with-icon " data-notify="container">
               <i class="material-icons" data-notify="icon">add_alert</i>
               <button type="button" class="close" data-dismiss="alert" aria-label="Close">

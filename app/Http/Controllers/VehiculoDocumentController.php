@@ -8,6 +8,8 @@ use App\Concesionaria;
 use App\Librerias\Libreria;
 use App\Vehiculodocument;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\VencimientoDucumentVehiculo;
 use App\Http\Controllers\Controller;
 
 class VehiculoDocumentController extends Controller
@@ -192,27 +194,40 @@ class VehiculoDocumentController extends Controller
 
     public function notifiacionList(){
         
-        $fecha_actual = date("d-m-Y");
-        $fecha_limite = strtotime($fecha_actual."- 1 week");
-        $filtro = ['fecha','>=',$fecha_limite];
-        $filtro = ['notificacion',0];
-        $resultado = Vehiculodocument::where($filtro)
-                    ->select('id','fecha','vehiculo_id')
-                    ->whit('vehiculo:id,modelo,placa,marca')
-                    ->orderBy('fecha')->get();
+        $fecha_actual = date("Y-m-d");
+        $fecha_limite =  date("Y-m-d",strtotime($fecha_actual."+ 1 week"));
 
-        return response() -> json($resultado);
+        $resultado = Vehiculodocument::whereBetween('fecha',[$fecha_actual,$fecha_limite])
+                     ->where('notificacion','=',false)
+                     ->select('id','fecha','tipo','vehiculo_id')
+                     ->with(['vehiculo' => function($q){
+                        $q->select('id','modelo','placa','marca_id')->with('marca:id,descripcion');
+                     }])
+                     ->orderBy('fecha')->get();
+
+
+        $vistos = Vehiculodocument::whereBetween('fecha',[$fecha_actual,$fecha_limite])
+                  ->where('notificacion','=',true)
+                  ->select('id','fecha','tipo','vehiculo_id')
+                  ->with(['vehiculo' => function($q){
+                        $q->select('id','modelo','placa','marca_id')->with('marca:id,descripcion');
+                  }])
+                  ->orderBy('fecha')->get();
+
+        $respuesta = ['notfy_new' => $resultado, 'notify_vist' => $vistos];
+
+        return response() -> json($respuesta);
     }
 
 
     public function notifiacionCount(){
         
         $fecha_actual = date("Y-m-d");
-        $fecha_limite = date("Y-m-d",strtotime($fecha_actual."- 1 week"));
+        $fecha_limite = date("Y-m-d",strtotime($fecha_actual."+ 1 week"));
 
         $concesionariaActual = $this->concesionariaActual();
 
-        $resultado = Vehiculodocument::whereBetween('fecha',[$fecha_limite,$fecha_actual])
+        $resultado = Vehiculodocument::whereBetween('fecha',[$fecha_actual,$fecha_limite])
                     ->where('notificacion','=',false)
                     ->whereHas('vehiculo',function($query) use($concesionariaActual){
                                 $query->where('concesionaria_id',  $concesionariaActual);
@@ -223,6 +238,12 @@ class VehiculoDocumentController extends Controller
         return response() -> json(array('numero' => $resultado));
     }
 
+    public function notificacionExel($id){
+        $document = Vehiculodocument::find($id);
+        $document->notificacion = true;
+        $document->save();
+        return Excel::download(new VencimientoDucumentVehiculo($id), 'vencimiento-documento-vehiculo.xlsx');
+    }
 
     private function concesionariaActual(){
         $ConcesionariaActual = Concesionaria::join('userconcesionaria','userconcesionaria.concesionaria_id','=','concesionaria.id')
