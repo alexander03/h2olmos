@@ -24,12 +24,12 @@
 			<td class="text-nowrap">{{ isset($value -> conductor) ? $value -> conductor -> nombres : $value -> conductor_fake }} {{ isset($value -> conductor) ? $value -> conductor -> apellidos : '' }}</td>
             <td class="text-nowrap">{{ isset($value -> conductor) ? $value -> conductor -> dni : 'SIN DNI'}}</td>
             <td class="text-nowrap">{{ $value -> ua -> codigo }}</td>
-            <td class="text-nowrap">{{ $value -> ua -> descripcion }}</td>
-			<td class="text-nowrap">{{ isset($value -> equipo) ? $value -> equipo -> descripcion : 'VEHÍCULO' }}</td>
-			<td class="text-nowrap">{{ isset($value -> equipo) ? $value -> equipo -> marca -> descripcion : $value -> vehiculo -> marca -> descripcion }}</td>
-			<td class="text-nowrap">{{ isset($value -> equipo) ? ( isset($value -> equipo -> modelo) ? $value -> equipo -> modelo : 'No Asignado' ) : ( isset($value -> vehiculo -> modelo) ? $value -> vehiculo -> modelo : 'No Asignado' ) }}</td>
-			<td class="text-nowrap">{{ isset($value -> equipo) ? ( isset($value -> equipo -> placa) ? $value -> equipo -> placa : 'No Asignado' ) : ( isset($value -> vehiculo -> placa) ? $value -> vehiculo -> placa : 'No Asignado' ) }}</td>
-			<td class="text-nowrap">{{ isset($value -> equipo) ? $value -> equipo -> contratista -> razonsocial : $value -> vehiculo -> contratista -> razonsocial }}</td>
+			<td class="text-nowrap">{{ $value -> ua -> descripcion }}</td>
+			<td class="text-nowrap">@if(!($value -> equipo == null && $value -> vehiculo == null)) {{ isset($value -> equipo) ? $value -> equipo -> descripcion : 'VEHÍCULO' }}@else - @endif</td>
+			<td class="text-nowrap">@if(!($value -> equipo == null && $value -> vehiculo == null)) {{ isset($value -> equipo) ? $value -> equipo -> marca -> descripcion : $value -> vehiculo -> marca -> descripcion }}@else - @endif</td>
+			<td class="text-nowrap">@if(!($value -> equipo == null && $value -> vehiculo == null)) {{ isset($value -> equipo) ? ( isset($value -> equipo -> modelo) ? $value -> equipo -> modelo : 'No Asignado' ) : ( isset($value -> vehiculo -> modelo) ? $value -> vehiculo -> modelo : 'No Asignado' ) }}@else - @endif</td>
+			<td class="text-nowrap">@if(!($value -> equipo == null && $value -> vehiculo == null)) {{ isset($value -> equipo) ? ( isset($value -> equipo -> placa) ? $value -> equipo -> placa : 'No Asignado' ) : ( isset($value -> vehiculo -> placa) ? $value -> vehiculo -> placa : 'No Asignado' ) }}@else - @endif</td>
+			<td class="text-nowrap">@if(!($value -> equipo == null && $value -> vehiculo == null)) {{ isset($value -> equipo) ? $value -> equipo -> contratista -> razonsocial : $value -> vehiculo -> contratista -> razonsocial }}@else - @endif</td>
 			<td class="text-nowrap">{{ $value -> qtdgl }}</td>
 			<td class="text-nowrap">{{ $value -> qtdl }}</td>
 			<td class="text-nowrap">{{ $value -> km }}</td>

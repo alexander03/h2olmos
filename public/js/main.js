@@ -322,9 +322,12 @@ const doSearchEquipo = () => {
         onSelection: feedback => { //VA NUESTRA LOGICA
             document.querySelector("#autoComplete_list4").innerText = '';
             const selection = feedback.selection.value;
-            document.querySelector(".js-equipo-id").value = selection.codigo;
-            document.querySelector(".js-equipo-hidden").value = selection.tipo;
-            document.querySelector(".js-equipo-desc").innerText = selection.descripcion;
+            document.querySelector('.js-equipo-id').value = selection.codigo;
+            document.querySelector('.js-equipo-hidden').value = selection.tipo;
+            document.querySelector('.js-equipo-desc').innerText = selection.descripcion;
+
+            document.querySelector('.js-ua-id').value = selection.ua;
+            document.querySelector('.js-ua-desc').innerText = selection.ua_desc;
             // console.log(feedback);
         }
     });

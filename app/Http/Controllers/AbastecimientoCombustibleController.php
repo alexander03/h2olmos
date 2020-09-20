@@ -168,7 +168,7 @@ class AbastecimientoCombustibleController extends Controller{
             'tipo_combustible' => 'required',
             'conductor_id' => ['required'],
             'ua_id' => ['required', new SearchUaPadre()],
-            'equipo_id' => ['required', new SearchEquipo()],
+            'equipo_id' => ['nullable', new SearchEquipo()],
             'qtdgl' => 'required',
             'qtdl' => 'required',
             'km' => 'required',
@@ -260,7 +260,7 @@ class AbastecimientoCombustibleController extends Controller{
             'tipo_combustible' => 'required',
             'conductor_id' => ['required'],
             'ua_id' => ['required', new SearchUaPadre()],
-            'equipo_id' => ['required', new SearchEquipo()],
+            'equipo_id' => ['nullable', new SearchEquipo()],
             'qtdgl' => 'required',
             'qtdl' => 'required',
             'km' => 'required',
@@ -390,7 +390,8 @@ class AbastecimientoCombustibleController extends Controller{
     //PETICION GET QUE DEVUELVE TODOS LOS DATOS EQUIPO O VEHICULO
     public function searchAutocompleteEquipo($query){
 
-        $consulta = "select tipo, `placa-codigo` as 'codigo', descripcion, CONCAT(`placa-codigo`, ' - ', descripcion) as 'search'
+        $consulta = "select tipo, `placa-codigo` as 'codigo', descripcion, ua, ua_desc,
+            CONCAT(`placa-codigo`, ' - ', descripcion) as 'search'
             from view_equipo_vehiculo
             where deleted_at IS NULL AND 
             concesionaria_id = {$this -> getConsecionariaActual()} AND
