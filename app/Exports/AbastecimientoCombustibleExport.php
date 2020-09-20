@@ -50,7 +50,6 @@ class AbastecimientoCombustibleExport implements FromCollection, WithHeadings
             -> unionAll($queryVehiculo)
             -> get();
 
-
         $newResult = [];
         $arrId = [];
        

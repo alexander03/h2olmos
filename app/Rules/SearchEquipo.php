@@ -30,11 +30,10 @@ class SearchEquipo implements Rule
     {
         if($value){
             try{
-                $idEquipo = explode('--', $value);
-                $equipoDB =  Equipo::where('id', $idEquipo[1]) -> get();
+                $equipoDB =  Equipo::where('id', $value) -> get();
                 if( !$equipoDB -> isEmpty() ) 
                     return true;
-                $vehiculoDB = Vehiculo::where('placa', $value) -> get();
+                $vehiculoDB = Vehiculo::where('id', $value) -> get();
                 if( !$vehiculoDB -> isEmpty() ) 
                     return true;
                 
