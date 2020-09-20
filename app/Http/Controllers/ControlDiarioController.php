@@ -53,9 +53,8 @@ class ControlDiarioController extends Controller
         $equipo_ua      = Libreria::getParam($request->input('equipo_ua'));
   		$descripcion = Libreria::getParam($request->input('descripcion'));
 
-        $anio = Libreria::getParam($request->input('anio'));
-        $mes = Libreria::getParam($request->input('mes'));
-        $dia =  Libreria::getParam($request->input('dia'));
+        $fecha1 = Libreria::getParam($request->input('fecha_registro_inicial'));
+        $fecha2 = Libreria::getParam($request->input('fecha_registro_final'));
         $filtro           = array();
         $filtro[]         = ['codigo', 'LIKE', '%'.strtoupper($ua).'%'];
         $filtro[]         = ['codigo', 'LIKE', '%'.strtoupper($equipo_ua).'%'];
@@ -66,9 +65,12 @@ class ControlDiarioController extends Controller
 			$filtro[]         = ['ua_id', '=', $ua_id];        	
         }
 */       
-        $resultado        = Controldiario::whereHas('ua', function($query) use($filtro){
+        $resultado        = Controldiario::where(function($subquery) use ($fecha1, $fecha2) {
+                                            if ( $fecha1 !== null ) $subquery->where('fecha', '>=', $fecha1);
+                                            if ( $fecha2 !== null ) $subquery->where('fecha', '<=', $fecha2);
+                                        })->whereHas('ua', function($query) use($filtro){
         									$query->where($filtro[0][0],$filtro[0][1],$filtro[0][2])->where($filtro[3][0],$filtro[3][1],$filtro[3][2]);
-        								})->orWhereHas('equipo', function($query) use($filtro){
+        								})->WhereHas('equipo', function($query) use($filtro){
         									$query->whereHas('ua', function($query) use($filtro){
                                                 $query->where($filtro[1][0],$filtro[1][1],$filtro[1][2]);
                                             })->orWhere($filtro[2][0],$filtro[2][1],$filtro[2][2]);

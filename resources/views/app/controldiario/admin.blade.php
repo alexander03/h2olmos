@@ -22,22 +22,19 @@
 				{!! Form::label('ua', 'Ua de proyecto:') !!}
 				{!! Form::text('ua', '', array('class' => 'form-control', 'id' => 'ua')) !!}
 			</div>
+			<div class="col-lg-2 col-md-2 col-sm-2 col-6 ">
+					{!! Form::label('fecha_registro_inicial', 'Fecha inicial') !!}
+					{!! Form::date('fecha_registro_inicial', '', array('class' => 'form-control input-xs', 'id' => 'fecha_registro_inicial')) !!}			
+				</div>
+			<div class="col-lg-2 col-md-2 col-sm-2 col-6 ">
+					{!! Form::label('fecha_registro_final', 'Fecha final') !!}
+					{!! Form::date('fecha_registro_final', '', array('class' => ' form-control input-xs', 'id' => 'fecha_registro_final')) !!}
+				</div>
 			<div class="col-2 col-sm-2 col-md-2 col-lg-2">
 				{!! Form::label('filas', 'Filas a mostrar:')!!}
 				{!! Form::selectRange('filas', 1, 30, 20, array('class' => 'form-control', 'onchange' => 'buscar(\''.$entidad.'\')')) !!}
 			</div>
-			<div class="col-1 col-sm-1 col-md-1 col-lg-1">
-				{!! Form::label('anio', 'Año:') !!}
-				{!! Form::text('anio', '', array('class' => 'form-control', 'id' => 'anio')) !!}
-			</div>
-			<div class="col-1 col-sm-1 col-md-1 col-lg-1">
-				{!! Form::label('mes', 'Mes:') !!}
-				{!! Form::text('mes', '', array('class' => 'form-control', 'id' => 'mes')) !!}
-			</div>
-			<div class="col-1 col-sm-1 col-md-1 col-lg-1">
-				{!! Form::label('dia', 'Dia:') !!}
-				{!! Form::text('dia', '', array('class' => 'form-control', 'id' => 'dia')) !!}
-			</div>
+
 			<div class="form-group">
 				{!! Form::button('<i class="material-icons">search</i>Buscar', array('class' => 'btn btn-success btn-sm', 'id' => 'btnBuscar', 'onclick' => 'buscar(\''.$entidad.'\')')) !!}
 				{!! Form::button('<i class="material-icons">add</i>Nuevo', array('class' => 'btn btn-info btn-sm', 'id' => 'btnNuevo', 'onclick' => 'modal (\''.URL::route($ruta["create"], array('listar'=>'SI')).'\', \''.$titulo_registrar.'\', this);')) !!}

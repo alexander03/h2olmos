@@ -16,7 +16,8 @@ class CreateTipohoraTable extends Migration
         Schema::create('tipohora', function (Blueprint $table) {
         //    $table->engine = 'InnoDB';
             $table->bigIncrements('id');
-            $table->integer('codigo');
+//            $table->integer('codigo');
+            $table->string('codigo',2);
             $table->string('descripcion',25);
             $table->timestamps();
             $table->softDeletes();

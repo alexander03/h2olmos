@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use Validator;
 use Illuminate\Http\Request;
 use App\Vehiculo;
+use App\Concesionaria;
 use App\Librerias\Libreria;
 use App\Vehiculodocument;
 use Illuminate\Support\Facades\DB;
@@ -189,6 +190,48 @@ class VehiculoDocumentController extends Controller
         return view('app.confirmarEliminar')->with(compact('modelo', 'formData', 'entidad', 'boton', 'listar','mensaje'));
     }
 
+    public function notifiacionList(){
+        
+        $fecha_actual = date("d-m-Y");
+        $fecha_limite = strtotime($fecha_actual."- 1 week");
+        $filtro = ['fecha','>=',$fecha_limite];
+        $filtro = ['notificacion',0];
+        $resultado = Vehiculodocument::where($filtro)
+                    ->select('id','fecha','vehiculo_id')
+                    ->whit('vehiculo:id,modelo,placa,marca')
+                    ->orderBy('fecha')->get();
 
+        return response() -> json($resultado);
+    }
+
+
+    public function notifiacionCount(){
+        
+        $fecha_actual = date("Y-m-d");
+        $fecha_limite = date("Y-m-d",strtotime($fecha_actual."- 1 week"));
+
+        $concesionariaActual = $this->concesionariaActual();
+
+        $resultado = Vehiculodocument::whereBetween('fecha',[$fecha_limite,$fecha_actual])
+                    ->where('notificacion','=',false)
+                    ->whereHas('vehiculo',function($query) use($concesionariaActual){
+                                $query->where('concesionaria_id',  $concesionariaActual);
+                            })
+                    ->get();
+        $resultado = $resultado->count();
+
+        return response() -> json(array('numero' => $resultado));
+    }
+
+
+    private function concesionariaActual(){
+        $ConcesionariaActual = Concesionaria::join('userconcesionaria','userconcesionaria.concesionaria_id','=','concesionaria.id')
+        ->join('users','users.id','=','userconcesionaria.user_id')
+        ->where('userconcesionaria.estado','=',true)->where('userconcesionaria.user_id','=',auth()->user()->id)
+        ->select('concesionaria.id','concesionaria.razonsocial')->get();
+        $idConcAct=$ConcesionariaActual[0]->id;
+
+        return $idConcAct;
+    }
 
 }

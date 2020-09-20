@@ -133,6 +133,8 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::post('vehiculodocument/buscar', 'VehiculoDocumentController@buscar')->name('vehiculodocument.buscar');
 	Route::get('vehiculodocument/eliminar/{id}/{listarluego}', 'VehiculoDocumentController@eliminar')->name('vehiculodocument.eliminar');
 	Route::post('vehiculodocument/{id}', 'VehiculoDocumentController@update')->name('vehiculodocument.update');
+	Route::get('vehiculodocument/notifiacion', 'VehiculoDocumentController@notifiacionCount')->name('vehiculodocument.countnotify');
+	Route::post('vehiculodocument/notifiacion', 'VehiculoDocumentController@notifiacionList');
 	Route::resource('vehiculodocument', 'VehiculoDocumentController', array('except' => array('show')));
 
 	//tipo user

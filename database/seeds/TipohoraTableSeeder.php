@@ -11,9 +11,9 @@ class TipohoraTableSeeder extends Seeder
      */
     public function run()
     {
-     App\Tipohora::create(['codigo' => 1 , 'descripcion' => 'Abastecimiento']);   
-     App\Tipohora::create(['codigo' => 2 , 'descripcion' => 'Reparación de llantas']); 
-     App\Tipohora::create(['codigo' => 3 , 'descripcion' => 'Mantenimiento Mecanico']);   
-     App\Tipohora::create(['codigo' => 4 , 'descripcion' => 'Parado Inoperativo']);       
+     App\Tipohora::create(['codigo' => '01' , 'descripcion' => 'Abastecimiento']);   
+     App\Tipohora::create(['codigo' => '02' , 'descripcion' => 'Reparación de llantas']); 
+     App\Tipohora::create(['codigo' => '03' , 'descripcion' => 'Mantenimiento Mecanico']);   
+     App\Tipohora::create(['codigo' => '04' , 'descripcion' => 'Parado Inoperativo']);       
  }
 }
