@@ -39,24 +39,16 @@ class UaController extends Controller{
         $codigo           = Libreria::getParam($request -> input('codigo'));
         $resultado        = Ua::where([
                 [ 'descripcion', 'LIKE', '%'.strtoupper($nombre).'%' ],
+                [ 'codigo', 'LIKE', '%'.$codigo.'%' ],
                 [ 'concesionaria_id', $this -> getConsecionariaActual() ] 
                 ])->orderBy('descripcion', 'ASC');
-        $resultado2       = Ua::where([
-                [ 'codigo', 'LIKE', '%'.$codigo.'%' ],
-                [ 'concesionaria_id', $this -> getConsecionariaActual() ]
-                ])->orderBy('codigo', 'ASC');
-        ($codigo) ? $lista = $resultado2 -> get() : $lista = $resultado -> get();
+        $lista            = $resultado -> get();
         $cabecera         = array();
         $cabecera[]       = array('valor' => '#', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Código', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Descripción', 'numero' => '1');
-        $cabecera[]       = array('valor' => 'Tipo', 'numero' => '1');
-        $cabecera[]       = array('valor' => 'Fondos', 'numero' => '1');
-        $cabecera[]       = array('valor' => 'Responsable', 'numero' => '1');
-        $cabecera[]       = array('valor' => 'Tipo de costo', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Ua Padre', 'numero' => '1');
-        $cabecera[]       = array('valor' => 'Unidad', 'numero' => '1');
-        $cabecera[]       = array('valor' => 'Situación', 'numero' => '1');
+        $cabecera[]       = array('valor' => 'Habilitada', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Fecha de inicio', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Fecha de fin', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Operaciones', 'numero' => '2');
@@ -72,7 +64,7 @@ class UaController extends Controller{
             if($hoy > $fechaFin){          
                $uaNew = new Ua();
                $uaNew = $uaDB;
-               $uaNew -> situacion = false;
+               $uaNew -> habilitada = false;
                $uaNew -> save();
            }
         }
@@ -84,7 +76,7 @@ class UaController extends Controller{
             $inicio          = $paramPaginacion['inicio'];
             $fin             = $paramPaginacion['fin'];
             $paginaactual    = $paramPaginacion['nuevapagina'];
-            ($codigo) ? $lista = $resultado2 -> paginate($filas) : $lista = $resultado -> paginate($filas);
+            $lista = $resultado -> paginate($filas);
             $request->replace(array('page' => $paginaactual));
 
             return view($this->folderview.'.list')->with(compact('lista', 'paginacion', 'inicio', 'fin', 'entidad', 'cabecera', 'titulo_modificar', 'titulo_eliminar', 'ruta'));
@@ -120,27 +112,18 @@ class UaController extends Controller{
         $reglas     = [
             'codigo' => 'required|unique:ua',
             'descripcion' => 'required',
-            'tipo' => 'required',
-            'fondos' => 'required',
-            'responsable' => 'required',
-            'tipo_costo' => 'required',
-            'ua_padre_id' => [ new SearchUaPadre() ],
-            'unidad_id' => ['required', new SelectDifZero()],
+            'habilitada' => 'required',
             'fecha_inicio' => 'required',
-            'fecha_fin' => 'required|after_or_equal:fecha_inicio',
+            'fecha_fin' => 'nullable|after_or_equal:fecha_inicio',
+            'ua_padre_id' => [ new SearchUaPadre() ]
         ];
         $mensajes = [
             'codigo.required' => 'Su código es requerido',
             'codigo.unique' => 'Su código proporcionado ya existe, especifique otro',
             'descripcion.required' => 'Su descripcion es requerida',
-            'tipo.required' => 'Su tipo es requerido',
-            'fondos.required' => 'Sus fondos son requeridos',
-            'responsable.required' => 'Su responsable es requerido',
-            'tipo_costo.required' => 'Su tipo de costo es requerido',
-            'unidad_id.required' => 'Su unidad es requerida',
+            'habilitada.required' => 'El estado de la ua es requerida',
             'fecha_inicio.required' => 'Su fecha de inicio es requerida',
-            'fecha_fin.required' => 'Su fecha de fin es requerida',
-            'fecha_fin.after_or_equal' => 'Su fecha de fin no puede ser menor que la de inicio',
+            'fecha_fin.after_or_equal' => 'Su fecha de fin no puede ser menor que la de inicio'
 		];
         $validacion = Validator::make($request->all(), $reglas, $mensajes);
         if ($validacion->fails()) {
@@ -153,11 +136,7 @@ class UaController extends Controller{
             $ua = new Ua();
             $ua -> codigo = $request -> input('codigo');
             $ua -> descripcion = strtoupper($request->input('descripcion'));
-            $ua -> tipo = $request -> input('tipo');
-            $ua -> fondos = $request -> input('fondos');
-            $ua -> responsable = $request -> input('responsable');
-            $ua -> tipo_costo = $request -> input('tipo_costo');
-            $ua -> unidad_id = $request -> input('unidad_id');
+            $ua -> habilitada = $request -> input('habilitada');
             $ua -> concesionaria_id = $this -> getConsecionariaActual();
             $ua -> fecha_inicio = $request -> input('fecha_inicio');
             $ua -> fecha_fin = $request -> input('fecha_fin');
@@ -195,28 +174,20 @@ class UaController extends Controller{
         $reglas     = [
             'codigo' => 'required|unique:ua,codigo,'.$id,
             'descripcion' => 'required',
-            'tipo' => 'required',
-            'fondos' => 'required',
-            'responsable' => 'required',
-            'tipo_costo' => 'required',
-            'ua_padre_id' => [ new SearchUaPadre() ],
-            'unidad_id' => ['required', new SelectDifZero()],
+            'habilitada' => 'required',
             'fecha_inicio' => 'required',
-            'fecha_fin' => 'required|after_or_equal:fecha_inicio',
+            'fecha_fin' => 'nullable|after_or_equal:fecha_inicio',
+            'ua_padre_id' => [ new SearchUaPadre() ]
         ];
         $mensajes = [
             'codigo.required' => 'Su código es requerido',
             'codigo.unique' => 'Su código proporcionado ya existe, especifique otro',
             'descripcion.required' => 'Su descripcion es requerida',
-            'tipo.required' => 'Su tipo es requerido',
-            'fondos.required' => 'Sus fondos son requeridos',
-            'responsable.required' => 'Su responsable es requerido',
-            'tipo_costo.required' => 'Su tipo de costo es requerido',
-            'unidad_id.required' => 'Su unidad es requerida',
+            'habilitada.required' => 'El estado de la ua es requerida',
             'fecha_inicio.required' => 'Su fecha de inicio es requerida',
-            'fecha_fin.required' => 'Su fecha de fin es requerida',
-            'fecha_fin.after_or_equal' => 'Su fecha de fin no puede ser menor que la de inicio',
-		];
+            'fecha_fin.after_or_equal' => 'Su fecha de fin no puede ser menor que la de inicio'
+        ];
+
         $validacion = Validator::make($request->all(), $reglas, $mensajes);
         if ($validacion->fails()) {
             return $validacion->messages()->toJson();
@@ -231,11 +202,7 @@ class UaController extends Controller{
             $ua = Ua::find($id);
             $ua -> codigo = $request -> input('codigo');
             $ua -> descripcion = strtoupper($request->input('descripcion'));
-            $ua -> tipo = $request -> input('tipo');
-            $ua -> fondos = $request -> input('fondos');
-            $ua -> responsable = $request -> input('responsable');
-            $ua -> tipo_costo = $request -> input('tipo_costo');
-            $ua -> unidad_id = $request -> input('unidad_id');
+            $ua -> habilitada = $request -> input('habilitada');
             $ua -> fecha_inicio = $request -> input('fecha_inicio');
             $ua -> fecha_fin = $request -> input('fecha_fin');
             //BUSCAR
@@ -315,7 +282,7 @@ class UaController extends Controller{
             return response() -> json($res);
 
         }catch(Exception $ex){
-            $res = ['ok' => false];
+            $res = ['ok' => false, 'ex' => $ex];
        
             return response() -> json($res);
         }

@@ -14,7 +14,6 @@ class AbastecimientoCombustibleExport implements FromCollection, WithHeadings
     */
     public function collection(){
         
-        //TODO: PEDIR FORMATO PARA ESTANDARIZAR EL CONDUCTOR FAKE
         $queryVehiculo = AbastecimientoCombustible::select('fecha_abastecimiento', 'g.descripcion as desc', 'tipo_combustible', 
             DB::raw('(CASE WHEN conductor_id IS NULL THEN conductor_fake ELSE c.nombres END) AS nom'), 'c.apellidos as ap', 
             'c.dni as dni', 'ua.codigo as code', 'ua.descripcion as descua', 

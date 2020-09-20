@@ -20,16 +20,6 @@
 			<td class="text-nowrap">{{ $contador }}</td>
 			<td class="text-nowrap">{{ $value->	codigo }}</td>
 			<td class="text-nowrap">{{ $value->	descripcion }}</td>
-			<td class="text-nowrap">{{ $value->	tipo }}</td>
-			<td class="text-nowrap">
-				@if ($value ->  fondos)
-					Si posee
-				@else
-					No posee
-				@endif
-			</td>
-			<td class="text-nowrap">{{ $value->	responsable }}</td>
-			<td class="text-nowrap">{{ $value->	tipo_costo }}</td>
 			<td class="text-nowrap">
 				@if($value -> ua_padre_id)
 					{{  $value -> uaPadre($value -> ua_padre_id)[0] -> descripcion }}
@@ -37,10 +27,9 @@
 					Sin padre
 				@endif
 			</td>
-			<td class="text-nowrap">{{ $value->	unidad -> descripcion }}</td>
-			<td class="text-nowrap">{{ ($value-> situacion) ? 'HABILITADO' : 'DESHABILITADO' }}</td>
+			<td class="text-nowrap">{{ ($value-> habilitada) ? 'HABILITADO' : 'DESHABILITADO' }}</td>
 			<td class="text-nowrap">{{ $value-> fecha_inicio }}</td>
-			<td class="text-nowrap">{{ $value-> fecha_fin }}</td>
+			<td class="text-nowrap">{{ ($value-> fecha_fin) ? $value -> fecha_fin : 'ILIMITADO' }}</td>
 			<td class="text-nowrap">{!! Form::button('<i class="material-icons">edit</i>', array('onclick' => 'modal (\''.URL::route($ruta["edit"], array($value->id, 'listar'=>'SI')).'\', \''.$titulo_modificar.'\', this);', 'class' => 'btn btn-primary btn-link btn-sm','rel'=>'tooltip','title'=>'Editar')) !!}</td>
 			<td class="text-nowrap">{!! Form::button('<i class="material-icons">close</i>', array('onclick' => 'modal (\''.URL::route($ruta["delete"], array($value->id, 'SI')).'\', \''.$titulo_eliminar.'\', this);', 'class' => 'btn btn-danger btn-link btn-sm','rel'=>'tooltip','title'=>'Eliminar')) !!}</td>
 		</tr>

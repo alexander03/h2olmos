@@ -14,20 +14,17 @@ class UaExport implements FromCollection, WithHeadings
     */
     public function collection(){
     
-        $uaList = Ua::select('ua.codigo', 'ua.descripcion', 'ua.tipo', 'ua.fondos',
-            'ua.responsable', 'ua.tipo_costo', 'un.descripcion as unidad', 
-            'u_padre.codigo as padreCodigo', 'u_padre.descripcion as padreDesc', 'ua.situacion', 
-            'ua.fecha_inicio', 'ua.fecha_fin') 
-            -> join('unidad as un', 'un.id', '=', 'ua.unidad_id') 
+        $uaList = Ua::select('ua.codigo', 'ua.descripcion', 'ua.habilitada', 'ua.fecha_inicio', 'ua.fecha_fin',
+            'u_padre.codigo as padreCodigo', 'u_padre.descripcion as padreDesc') 
             -> leftjoin('ua as u_padre', 'u_padre.id', '=', 'ua.ua_padre_id')
             -> whereNull('ua.deleted_at')
             -> get();         
 
         foreach($uaList as $ua) {
-           ($ua->getOriginal('fondos') == 0) ? $ua->fondos = 'NO POSEE' : $ua->fondos = 'SI POSEE';
            if(!$ua->getOriginal('padreCodigo')) $ua->padreCodigo = 'SIN PADRE';
            if(!$ua->getOriginal('padreDesc')) $ua->padreDesc = 'SIN PADRE';
-           ($ua->getOriginal('situacion') == 0) ? $ua->situacion = 'INHABILITADO' : $ua->situacion = 'HABILITADO';
+           ($ua->getOriginal('habilitada') == 0) ? $ua->habilitada = 'INHABILITADA' : $ua->habilitada = 'HABILITADA';
+           if(!$ua->getOriginal('fecha_fin')) $ua->fecha_fin = 'ILIMITADA';
         }
 
         return $uaList;
@@ -37,16 +34,11 @@ class UaExport implements FromCollection, WithHeadings
         return [
             'Codigo',
             'Descripción',
-            'Tipo',
-            'Fondos',
-            'Responsable',
-            'Tipo de costo',
-            'Descripción',
-            'Código ua padre',
-            'Descripción ua padre',
-            'Situación',
+            'Habilitada',
             'Fecha de inicio',
-            'Fecha de fin'
+            'Fecha de fin',
+            'Código ua padre',
+            'Descripción ua padre'
         ];
     }
 }

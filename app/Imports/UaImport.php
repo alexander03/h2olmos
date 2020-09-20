@@ -18,37 +18,31 @@ class UaImport implements ToModel
     */
     public function model(array $row){
         
-        if($row[0] === 'CODIGO') return null; //ESCAPAR FILA
+        //ESCAPAR FILA
+        if($row[0] === 'CODIGO') return null; 
+        //VALIDACIONES DE CAMPOS VACÍOS
+        if($row[0] === null || $row[1] === null 
+            || $row[2] === null || $row[3] === null) return null;
 
-        //Conversión explicita de datos fondos
-        (strtolower($row[4]) == 'si' ) ? $row[4] = 1 : $row[4] = 0; 
-        //Conversión explicita de datos unidad
-        $unidad_id = Unidad::select('id') 
-            -> where('descripcion', 'LIKE', strtoupper($row[2]))
-            -> get();
-        $row[2] = $unidad_id[0] -> id;
+        //Conversión explicita de habilitado
+        (strtolower($row[2]) == 'si' ) ? $row[2] = 1 : $row[2] = 0; 
         //Conversión explicita de datos ua padre
-        if(isset($row[7])){
+        if(isset($row[5])){
             $ua_padre_id = Ua::select('id')
-                -> where('codigo', 'LIKE', $row[7])
+                -> where('codigo', 'LIKE', $row[5])
                 -> get();
-            if(count($ua_padre_id) > 0) $row[7] = $ua_padre_id[0] -> id;
+            if(count($ua_padre_id) > 0) $row[5] = $ua_padre_id[0] -> id;
             else throw new Exception('error');
-        }else $row[7] = null;
-        
+        }else $row[5] = null;
+  
         return new Ua([
             'codigo' => $row[0],
             'descripcion' => strtoupper($row[1]),
-            'unidad_id' => $row[2],
-            'tipo' => $row[3],
-            'fondos' => $row[4],
-            'responsable' => $row[5],
-            'tipo_costo' => $row[6],
-            'ua_padre_id' => $row[7],
-            'concesionaria_id' => $this -> getConsecionariaActual(),
-            'situacion' => true,
-            'fecha_inicio' => $row[8],
-            'fecha_fin' => $row[9]
+            'habilitada' => $row[2],
+            'fecha_inicio' => $row[3],
+            'fecha_fin' => $row[4],
+            'ua_padre_id' => $row[5],
+            'concesionaria_id' => $this -> getConsecionariaActual()
         ]);
     }
 
