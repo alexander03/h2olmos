@@ -14,13 +14,29 @@
 				{!! Form::label('filter', 'Buscar por...') !!}
 				{!! Form::text('filter', '', array('class' => 'form-control input-xs', 'id' => 'filter')) !!}
 			</div>
+			<div colspan='2' class="col-8 col-sm-9 col-md-3 col-lg-3">
+				<tr>{!! Form::label('filter', 'Registros desde...') !!}
+					<button style="float:right;" class="btn btn-dark p-1" onclick="document.getElementById('fechainicio').value=''" id="btn_remove_fecha_registro_inicial">
+						<span class="material-icons outlined">close</span>
+					</button>
+				</tr>
+				<input class="form-control input-xs" id="fechainicio" name="fechainicio" type="date" value="">
+			</div>
+			<div colspan='2' class="col-8 col-sm-9 col-md-3 col-lg-3">
+				<tr>{!! Form::label('filter', 'Registros hasta...') !!}
+					<button style="float:right;" class="btn btn-dark p-1" onclick="document.getElementById('fechafin').value=''" id="btn_remove_fecha_registro_inicial">
+						<span class="material-icons outlined">close</span>
+					</button>
+				</tr>
+				<input class="form-control input-xs" id="fechafin" name="fechafin" type="date" value="">
+			</div>
 			<div class="col-3 col-sm-2 col-md-2 col-lg-1">
 				{!! Form::label('filas', 'Filas')!!}
 				{!! Form::selectRange('filas', 1, 30, 20, array('class' => 'form-control input-xs', 'onchange' => 'buscar(\''.$entidad.'\')')) !!}
 			</div>
 			<div class="form-group">
 				{!! Form::button('<i class="material-icons">search</i>Buscar', array('class' => 'btn btn-success p-2 pl-1 pr-1', 'id' => 'btnBuscar', 'onclick' => 'buscar(\''.$entidad.'\')')) !!}
-				{!! Form::button('<i class="material-icons">add</i>Registrar Repuestos', array('class' => 'btn btn-info p-2 pl-1 pr-1', 'id' => 'btnNuevo', 'onclick' => 'modal (\''.URL::route($ruta["createtrabajo"], array('listar'=>'SI')).'\', \''.$tituloRegistrar.'\', this);')) !!}
+				{!! Form::button('<i class="material-icons">add</i>Registrar', array('class' => 'btn btn-info p-2 pl-1 pr-1', 'id' => 'btnNuevo', 'onclick' => 'modal (\''.URL::route($ruta["createtrabajo"], array('listar'=>'SI')).'\', \''.$tituloRegistrar.'\', this);')) !!}
 
 			</div>
 			{!! Form::close() !!}
