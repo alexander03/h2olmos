@@ -214,5 +214,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('grupomenu/eliminar/{id}/{listarluego}', 'GrupomenuController@eliminar')->name('grupomenu.eliminar');
 	Route::resource('grupomenu', 'GrupomenuController', array('except' => array('show')));
 
+
+	Route::get('controldiario/exportExcelReport', 'ControldiarioController@exportExcelReport')->name('controldiario.exportExcelReport');
+
 });
 

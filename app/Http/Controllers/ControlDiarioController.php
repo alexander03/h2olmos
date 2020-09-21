@@ -17,6 +17,7 @@ use App\Rules\SearchUaPadre;
 use App\Rules\SearchEquipo;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
+use App\Exports\ExcelReport_HorasTrabajadas;
 
 class ControlDiarioController extends Controller
 {
@@ -450,5 +451,15 @@ class ControlDiarioController extends Controller
         $idConcAct=$ConcesionariaActual[0]->id;
 
         return $idConcAct;
+    }
+
+    public function exportExcelReport(Request $request)
+    {
+        $dates = [
+            'start_date' => '2020-09-01',
+            'end_date' => '2020-10-31'
+        ];
+        
+        return (new ExcelReport_HorasTrabajadas($dates))->download('excel.xlsx');
     }
 }
