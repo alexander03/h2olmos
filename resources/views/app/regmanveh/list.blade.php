@@ -35,7 +35,11 @@
 			<td>{{ $value->telefono }}</td>
 
 			<td>{!! Form::button('<i class="material-icons">edit</i>', array('onclick' => 'modal (\''.URL::route($ruta["edit"], array($value->id, 'listar'=>'SI')).'\', \''.$titulo_modificar.'\', this);', 'class' => 'btn btn-primary btn-link btn-sm','rel'=>'tooltip','title'=>'Editar')) !!}</td>
-			
+			<td>
+				<a href="{{ route('regmanveh.pdf.export') . '?id=' . $value->id }}" target="_blank" class="btn btn-sm btn-secondary" title="Exportar">
+						<i class="material-icons">cloud_download</i>
+				</a>
+			</td>
 			@if (!$value->deleted_at)
 			<td>{!! Form::button('<i class="material-icons">close</i>', array('onclick' => 'modal (\''.URL::route($ruta["delete"], array($value->id, 'SI')).'\', \''.$titulo_eliminar.'\', this);', 'class' => 'btn btn-danger btn-link btn-sm','rel'=>'tooltip','title'=>'Eliminar')) !!}</td>
 			@else

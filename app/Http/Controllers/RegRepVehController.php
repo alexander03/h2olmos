@@ -8,6 +8,7 @@ use App\Repuesto;
 use App\Unidad;
 use App\Equipo;
 use App\RegRepVeh;
+use App\Checklistvehicular;
 use App\Ua;
 use App\Rules\SearchUaPadre;
 use App\Librerias\Libreria;
@@ -15,6 +16,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 use App\Concesionaria;
 use App\DescripcionRegRepVeh;
+use Mpdf\Mpdf;
 
 class RegRepVehController extends Controller
 {
@@ -81,7 +83,7 @@ class RegRepVehController extends Controller
         $cabecera[]       = array('valor' => 'FechaSalida', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Tipo', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Telefono', 'numero' => '1');
-        $cabecera[]       = array('valor' => 'Opciones', 'numero' => '2');
+        $cabecera[]       = array('valor' => 'Opciones', 'numero' => '3');
         $titulo_modificar = $this->tituloModificar;
         $titulo_eliminar  = $this->tituloEliminar;
         $titulo_registrar = $this->tituloRegistrar;
@@ -443,6 +445,46 @@ public function searchAutocompleteRepuesto($query){
         return response() -> json($res);
     }
 
+public function generatePDF(Request $request) {
+    $id=$request->id;
+        if ( $request->id == null || !is_numeric($request->id) ) return;
 
+        $namefile = 'RegistroDeRepuestoVehicular - '.time().'.pdf';  
+        
+        $ConcesionariaActual = Concesionaria::join('userconcesionaria','userconcesionaria.concesionaria_id','=','concesionaria.id')
+        ->join('users','users.id','=','userconcesionaria.user_id')
+        ->where('userconcesionaria.estado','=',true)->where('userconcesionaria.user_id','=',auth()->user()->id)
+        ->select('concesionaria.id','concesionaria.razonsocial')->get();
+        $ConcAct=$ConcesionariaActual[0]->razonsocial;
+        $regrepveh = RegRepVeh::find($id);
+        $oObservaciones=DescripcionRegRepVeh::where('regrepveh_id','=',$id)
+            ->join('repuesto', 'descripcionregrepveh.repuesto_id', '=', 'repuesto.id')
+            ->join('unidad', 'repuesto.unidad_id', '=', 'unidad.id')
+            ->select('descripcionregrepveh.id as id','descripcionregrepveh.monto as monto','descripcionregrepveh.cantidad as cantidad','repuesto.codigo as codigo','repuesto.id as repuesto_id','repuesto.descripcion as descripcion','unidad.descripcion as unidad')
+        ->get();
+        
+        $data=[];
+        $data['concesionaria'] = $ConcAct;
+        $data['cliente'] = $regrepveh->cliente;
+        $data['ua_id'] = $regrepveh->ua_id;
+        $data['tipomantenimiento']=$regrepveh->tipomantenimiento==1?'Preventivo':'Correctivo';
+        $data['kmman'] = $regrepveh->kmman;
+        $data['kminicial'] = $regrepveh->kminicial;
+        $data['kmfinal'] = $regrepveh->kmfinal;
+        $data['telefono'] = $regrepveh->telefono;
+        $data['fechaentrada'] = $regrepveh->fechaentrada;
+        $data['fechasalida'] = $regrepveh->fechasalida;
+        $data['regrepveh'] = $regrepveh;
+        $data['observaciones'] = $oObservaciones;
+        $data['namefile'] = $namefile;
+        // dd($data);
+        $html = view('app.regrepveh.pdf.template_individual', $data)->render();
+
+        $mpdf = new Mpdf();
+        $mpdf->SetDisplayMode('fullpage');
+        $mpdf->WriteHTML($html);
+
+        $mpdf->Output($namefile, "I");
+    }
 
 }

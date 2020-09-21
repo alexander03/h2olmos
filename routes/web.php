@@ -200,6 +200,7 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::post('regrepveh/store', 'RegRepVehController@store')->name('regrepveh.createregrepveh');
 	Route::get('userconcesionaria/concesionaria/{id}', 'UserConcesionariaController@concesionaria')->name('userconcesionaria.concesionaria');
 	Route::get('regrepveh/search/repuesto/{query}', 'RegRepVehController@searchAutocompleteRepuesto')->name('regrepveh.search.repuesto');
+	Route::get('regrepveh/pdf/generar','RegRepVehController@generatePDF')->name('regrepveh.pdf.export');
 	Route::resource('regrepveh', 'RegRepVehController');
 
 //Rutas para Registro Trabajo Vehicular
@@ -211,6 +212,7 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::post('regmanveh/store', 'RegManVehController@store')->name('regmanveh.createregmanveh');
 	Route::get('userconcesionaria/concesionaria/{id}', 'UserConcesionariaController@concesionaria')->name('userconcesionaria.concesionaria');
 	Route::get('regmanveh/search/trabajo/{query}', 'RegManVehController@searchAutocompleteTrabajo')->name('regmanveh.search.trabajo');
+	Route::get('regmanveh/pdf/generar','RegManVehController@generatePDF')->name('regmanveh.pdf.export');
 	Route::resource('regmanveh', 'RegManVehController');
 
 

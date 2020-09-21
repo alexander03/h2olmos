@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 use App\Concesionaria;
 use App\DescripcionRegManVeh;
+use Mpdf\Mpdf;
 
 class RegManVehController extends Controller
 {
@@ -438,6 +439,44 @@ public function searchAutocompleteTrabajo($query){
         return response() -> json($res);
     }
 
+	public function generatePDF(Request $request) {
+	    $id=$request->id;
+        if ( $request->id == null || !is_numeric($request->id) ) return;
 
+        $namefile = 'RegistroDeRepuestoVehicular - '.time().'.pdf';  
+        
+        $ConcesionariaActual = Concesionaria::join('userconcesionaria','userconcesionaria.concesionaria_id','=','concesionaria.id')
+        ->join('users','users.id','=','userconcesionaria.user_id')
+        ->where('userconcesionaria.estado','=',true)->where('userconcesionaria.user_id','=',auth()->user()->id)
+        ->select('concesionaria.id','concesionaria.razonsocial')->get();
+        $ConcAct=$ConcesionariaActual[0]->razonsocial;
+        $regmanveh = RegManVeh::find($id);
+        $oObservaciones=DescripcionRegManVeh::where('regmanveh_id','=',$id)
+            ->join('trabajo', 'descripcionregmanveh.trabajo_id', '=', 'trabajo.id')
+            ->select('descripcionregmanveh.id as id','descripcionregmanveh.monto as monto','descripcionregmanveh.cantidad as cantidad','trabajo.id as trabajo_id','trabajo.descripcion as descripcion')->get();
+        
+        $data=[];
+        $data['concesionaria'] = $ConcAct;
+        $data['cliente'] = $regmanveh->cliente;
+        $data['ua_id'] = $regmanveh->ua_id;
+        $data['tipomantenimiento']=$regmanveh->tipomantenimiento==1?'Preventivo':'Correctivo';
+        $data['kmman'] = $regmanveh->kmman;
+        $data['kminicial'] = $regmanveh->kminicial;
+        $data['kmfinal'] = $regmanveh->kmfinal;
+        $data['telefono'] = $regmanveh->telefono;
+        $data['fechaentrada'] = $regmanveh->fechaentrada;
+        $data['fechasalida'] = $regmanveh->fechasalida;
+        $data['regmanveh'] = $regmanveh;
+        $data['observaciones'] = $oObservaciones;
+        $data['namefile'] = $namefile;
+        // dd($data);
+        $html = view('app.regmanveh.pdf.template_individual', $data)->render();
+
+        $mpdf = new Mpdf();
+        $mpdf->SetDisplayMode('fullpage');
+        $mpdf->WriteHTML($html);
+
+        $mpdf->Output($namefile, "I");
+	    }
 
 }
