@@ -53,7 +53,14 @@ class RegManVehController extends Controller
        	->select('concesionaria.id','concesionaria.razonsocial')->get();
        	$idConcAct=$ConcesionariaActual[0]->id;
 
+		$fechainicio= $request->input('fechainicio');
+        $fechafin= $request->input('fechafin');
+
         $resultado= RegManVeh::where('regmanveh.concesionaria_id',$idConcAct)
+        ->where(function($q) use ($fechainicio, $fechafin) {
+                if ( $fechainicio !== null ) $q->where('regmanveh.fechasalida','>=', $fechainicio);
+                if ( $fechafin !== null ) $q->where('regmanveh.fechaentrada','<=', $fechafin);
+            })
         ->where(function($q) use ($filter){
         $q->where('regmanveh.cliente', 'like', '%'.$filter.'%')
           ->orWhere('regmanveh.ua_id', 'like', '%'.$filter.'%')
@@ -173,7 +180,10 @@ class RegManVehController extends Controller
             'kminicial' => 'required',
             'kmfinal' => 'required',
             'tipomantenimiento' => 'required',
-            'telefono' => 'required'
+            'telefono' => 'required',
+            'cantidad.*' => 'required',
+            'monto.*' => 'required',
+            'cuantasdescripciones'=>'required'
         ];
 
         $mensajes = [
@@ -186,7 +196,10 @@ class RegManVehController extends Controller
             'kminicial.required' => 'Km Inicial Campo Vacío',
             'kmfinal.required' => 'Km Final Campo Vacío',
             'tipomantenimiento.required' => 'Tipo de Mantenimiento No Seleccionado',
-            'telefono.required' => 'Teléfono Campo Vacío'
+            'telefono.required' => 'Teléfono Campo Vacío',
+            'cantidad.*.required' => 'Ingrese Cantidad todas las Observaciones',
+            'monto.*.required' => 'Ingrese Monto todas las Observaciones',
+            'cuantasdescripciones.required' => 'Ingrese al menos una Observación'
         ];
         $validacion = Validator::make($request->all(), $reglas, $mensajes);
         if ($validacion->fails()) {
@@ -316,7 +329,10 @@ class RegManVehController extends Controller
             'kminicial' => 'required',
             'kmfinal' => 'required',
             'tipomantenimiento' => 'required',
-            'telefono' => 'required'
+            'telefono' => 'required',
+            'cantidad.*' => 'required',
+            'monto.*' => 'required',
+            'cuantasdescripciones'=>'required'
         ];
 
         $mensajes = [
@@ -329,7 +345,10 @@ class RegManVehController extends Controller
             'kminicial.required' => 'Km Inicial Campo Vacío',
             'kmfinal.required' => 'Km Final Campo Vacío',
             'tipomantenimiento.required' => 'Tipo de Mantenimiento No Seleccionado',
-            'telefono.required' => 'Campo Vacío'
+            'telefono.required' => 'Campo Vacío',
+            'cantidad.*.required' => 'Ingrese Cantidad todas las Observaciones',
+            'monto.*.required' => 'Ingrese Monto todas las Observaciones',
+            'cuantasdescripciones.required' => 'Ingrese al menos una Observación'
         ];
         $validacion = Validator::make($request->all(), $reglas, $mensajes);
         if ($validacion->fails()) {

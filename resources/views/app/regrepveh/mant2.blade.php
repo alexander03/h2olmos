@@ -2,7 +2,7 @@
 <div id="divMensajeError{!! $entidad !!}"></div>
 {!! Form::model($regrepveh, $formData) !!}	
 {!! Form::hidden('listar', $listar, array('id' => 'listar')) !!}
-<section class="form-row">
+<section class="form-row" id="inicioregrepveh">
 	<div class="form-group col-lg-12 col-md-12 col-sm-12">
 		{!! Form::label('concesionaria_id', 'Concesionaria Actual:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
 		<div class="col-lg-5 col-md-5 col-sm-5">
@@ -95,13 +95,7 @@
 			id="hiddendescripcion-repuesto" 
 			class="form-control js-repuesto-hiddendescripcion" 
 			value="">
-		<div class="u-ua-style js-repuesto-desc">
-			<!--?php if($abastecimiento) 
-				if(isset($abastecimiento -> repuesto)) 
-				echo $abastecimiento -> repuesto -> nombres.' '.$abastecimiento -> repuesto -> apellidos; 
-				else echo 'Conductor no registrado';
-			?-->
-		</div>
+		<div class="u-ua-style js-repuesto-desc" id="descripciongeneral"></div>
 		<input type="text" 
 			name="repuesto_id" 
 			id="id-repuesto" 
@@ -117,8 +111,8 @@
 					<th colspan="1"  class="text-center" style="width:80px;">Cantidad</th>
 					<th colspan="1"  class="text-center" style="width:100px;">Unidad</th>
 					<th colspan="1"  class="text-center" style="width:100px;">Código</th>
-					<th colspan="1"  class="text-center" style="width:80px;">Monto</th>
 					<th colspan="1"  class="text-center">Descripción</th>
+					<th colspan="1"  class="text-center" style="width:80px;">Monto</th>
 					<th colspan="1"  class="text-center" style="width:100px;">Eliminar</th>
 				</tr>
 			</thead>
@@ -134,10 +128,10 @@
 					<td><input name="cantidad[]" class='form-control' type="number" value="{{ $value->cantidad }}" style="text-align:right;width:100px;"></td>
 					<td><input disabled name="unidad[]" class="form-control" type="text" value="{{ $value->unidad }}" style="width:100px;"></td>
 					<td><input disabled name="codigo[]" class="form-control" type="text" value="{{ $value->codigo }}" style="width:100px;"></td>
-					<td><input  name="monto[]"class='form-control' type="number" value="{{ $value->monto }}" style="text-align:right;width:100px;"></td>
 					<td><input disabled name="descripcion[]" class="form-control" type="text" value="{{ $value->descripcion }}"></td>
+					<td><input  name="monto[]" onkeyup="evaluartotal()" class='form-control' type="number" value="{{ $value->monto }}" style="text-align:right;width:100px;"></td>
 					<td onclick="if(confirm('¿Desea Eliminar la Observación?')){borrarfila({{ $value->id }});deleteRow(this);}" style="color:#ff0000;text-align:center;width:50px;"><i class="material-icons text-center">close</i></td>
-					<p name	="datos{{$value->id}}"><input type="hidden" name="idobservacion[]" id="ididid" value="{{ $value->id }}">
+					<p name	="datos{{$value->id}}" type="hidden"><input type="hidden" name="idobservacion[]" id="ididid" value="{{ $value->id }}">
 					<input type="hidden" name="repuestoid[]" id="rep" value="{{ $value->repuesto_id }}">
 					<input type="hidden" name="unidad[]" id="uni" value="{{ $value->unidad }}"></p>
 				</tr>
@@ -148,6 +142,10 @@
 				@endforeach
 			</tbody>
 		</table>
+		<input  name="montofinal" disabled id="totalponer" class='form-control' type="number" value="" style="float:right; text-align:right;width:100px;">
+		<div  class='control-label' type="label" style="float:right; text-align:right;width:50px;padding:10px">Total</div>
+		<?php $items=''; if(count($oObservaciones)>1){ $items='1';}?>
+		<input type="hidden" name="cuantasdescripciones" id="cuantasdescripciones" value="{{ $items }}"></p>
 	</div>
 	<div class="form-group">
 		<div class="col-lg-12 col-md-12 col-sm-12 text-right">
@@ -174,6 +172,7 @@
 		init(IDFORMMANTENIMIENTO+'{!! $entidad !!}', 'M', '{!! $entidad !!}');
 		doSearchUA();
 		doSearchRepuesto();
+		evaluartotal();
 		const inputCode = document.getElementById('codigo');
 		inputCode.addEventListener('change', e => {
 			if(isNaN(e.target.value)) e.target.value = '';
@@ -186,45 +185,36 @@
 		})
 	}); 	
 
-	function buscarporUA(){
 
-		var uanumero= document.getElementById('ua_id').value;
-
-		var serviceURL = "mantcorrprev/buscarporua?ua="+uanumero;
-
-            $.ajax({
-                type: "GET",
-                url: serviceURL,
-                data: param = "",
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: successFunc,
-                error: errorFunc
-            });
-
-            function successFunc(data, status) {
-            var str =  JSON.stringify(data['gg']);    
-                alert(str.substr(1, str.length-2));
-            }
-            function errorFunc() {
-                alert('borraron la columna ua_id de tabla equipos, rehacer funcion -buscarporua- de controller mantprevcorr');
-            }
-
-	}
 
 	function evaluarcantidad(){
 		var fff=document.getElementsByName('nnn');
 		for (var i = 0; i < fff.length; i++) {
 
 			fff[i].innerHTML=(1+i);
+			fff[i].className="probarcambiodeclase";
+
 		}
 
 	}
 
+	function evaluartotal(){
 
+		var fff=document.getElementsByName('monto[]');
+		var total=0;
+		for (var i = 0; i < fff.length; i++) {
+			if(fff[i].value.length>0){
+			total+=parseFloat(fff[i].value);}
+		}
+		document.getElementById('totalponer').value=total;
+	}
+
+	
 
 	function agregarfila(){
+		if(document.getElementById('descripciongeneral').innerHTML.length>0){
 		a++;
+		document.getElementById('cuantasdescripciones').value='1';
 		var idrepuesto=document.getElementById("hiddenid-repuesto").value;
 		var unidad=document.getElementById("hiddenunidad-repuesto").value;
 		var codigo=document.getElementById("id-repuesto").value;
@@ -236,8 +226,8 @@
 				<td><input name="cantidad[]" class='form-control' type="number" value="" style="text-align:right;width:100px;"></td>
 				<td><input disabled name="unidad[]" class="form-control" type="text" value="${unidad}" style="width:100px;"></td>
 				<td ><input disabled name="codigo[]" class="form-control" type="text" value="${codigo}" style="width:100px;"></td>
-				<td><input  name="monto[]"class='form-control' type="number" value="" style="text-align:right;width:100px;"></td>
 				<td><input disabled name="descripcion[]" class="form-control" type="text" value="${descripcion}"></td>
+				<td><input  onkeyup="evaluartotal()" name="monto[]"class='form-control' type="number" value="" style="text-align:right;width:100px;"></td>
 				<td onclick="if(confirm('¿Desea Eliminar la Observación?')){deleteRow(this);}" style="color:#ff0000;text-align:center;width:50px;"><i class="material-icons text-center">close</i></td>
 				<p><input type="hidden" name="idobservacion[]" id="ididid" value="-1"></p>
 				<p><input type="hidden" name="repuestoid[]" id="rep" value="${idrepuesto}"></p>
@@ -245,36 +235,23 @@
 			</tr>`;
 		document.getElementById("tbody").appendChild(tr);
 
+		}else{
+			alert('no se puede garegar vacío, seleccione Repuesto');
+		}
+
    }
 
 	   function deleteRow(btn) {
 	   		a--;
+	   		if (document.getElementsByName('monto[]').length>1) {
+	   			document.getElementById('cuantasdescripciones').value='1';
+	   		}else{
+	   			document.getElementById('cuantasdescripciones').value='';
+	   		}
 			var row = btn.parentNode;
 		  	row.parentNode.removeChild(row);
 		  	evaluarcantidad();
-	   	
-
-	   /*	bootbox.dialog({
-		message : '¿Eliminar Observación?',
-		buttons: {
-			'cancel': {
-				label: 'Cancelar',
-				className: 'btn btn-default btn-sm'
-			},
-			'confirm':{
-				label: 'Eliminar',
-				className: 'btn btn-danger btn-sm'
-			}
-		}, 
-		callback: function(result) {
-	   	if(result){
-				var row = btn.parentNode;
-		  		row.parentNode.removeChild(row);
-	   		}
-
-		}
-		
-	});*/
+		  	evaluartotal();
 		  
 	}
 
@@ -292,7 +269,6 @@
 
 			var fff=document.getElementsByName('datos'+iddd);
 			for (var i = 0; i < fff.length; i++) {
-
 				fff[i].innerHTML='';
 			}
 
