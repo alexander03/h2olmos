@@ -79,7 +79,7 @@ class ExcelReport_HorasTrabajadas implements FromView
         else {
             for ($r = $this->row; $r < $this->row + $rowspan; $r++) { 
                 for ($c = $this->col; $c < $this->col + $colspan; $c++) { 
-                    if ( $r != $this->row || $c != $this->col ) $this->set($r, $c, $this->free_value);
+                    if ( $r != $this->row || $c != $this->col ) $this->set($r, $c, '');
                 }
             }
             // dd($this->data);
@@ -138,6 +138,8 @@ class ExcelReport_HorasTrabajadas implements FromView
             $this->add();
         }
         
+        $this->nextRow();
+        $this->add(Concesionaria::getConcesionariaActual()['razonsocial']);
         // dd($this->data);
         // dd([$this->data, $this->max_row, $this->max_col]);
         // dd($this->data);

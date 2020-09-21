@@ -456,8 +456,8 @@ class ControlDiarioController extends Controller
     public function exportExcelReport(Request $request)
     {
         $dates = [
-            'start_date' => '2020-09-01',
-            'end_date' => '2020-10-31'
+            'start_date' => '2020-06-01',
+            'end_date' => '2020-08-20'
         ];
         
         return (new ExcelReport_HorasTrabajadas($dates))->download('excel.xlsx');
