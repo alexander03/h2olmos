@@ -7,7 +7,7 @@ document.getElementById('buttonNotify').addEventListener('show.bs.dropdown',func
 
 const ActivarNotificaciones = (button,event)=>{
 	const lista = button.nextElementSibling;
-	lista.innerHTML = '<a class="dropdown-item" href="#">Cargando...</a>';	
+	lista.innerHTML = '<a class="dropdown-item" >Cargando...</a>';	
 
 	const headers = new Headers();
     headers.append('X-CSRF-TOKEN', document.querySelector('meta[name="csrf-token"]').content);
@@ -47,8 +47,8 @@ const ActivarNotificaciones = (button,event)=>{
 
 			for(let k in data.notify_vist){
 				const item = `
-					<a class="dropdown-item p-0" href='vehiculodocument/exel/${data.notify_vist[k].id} >
-		              <div class="alert alert-warning alert-with-icon " data-notify="container">
+					<a class="dropdown-item p-0" href='vehiculodocument/exel/${data.notify_vist[k].id}' >
+		              <div class="alert alert-success alert-with-icon " data-notify="container">
 		              <i class="material-icons" data-notify="icon">add_alert</i>
 		              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
 		                <i class="material-icons">close</i>
@@ -64,6 +64,9 @@ const ActivarNotificaciones = (button,event)=>{
 		            </a>`;
 		        
 		        Coleccion += item;
+			}
+			if(Coleccion == '<br>'){
+				Coleccion = '<a class="dropdown-item">Sin notifiaciones</a>';
 			}
 			console.log(Coleccion);
 			lista.innerHTML = Coleccion;
@@ -90,7 +93,8 @@ const pressExelVencimiento = ()=>{
 	},2000);
 }
 
-(function(){
+
+	window.ready = () =>{
 	const headers = new Headers();
     headers.append('X-CSRF-TOKEN', document.querySelector('meta[name="csrf-token"]').content);
     const config = {
@@ -103,6 +107,7 @@ const pressExelVencimiento = ()=>{
 			editButonNotify(data.numero);
 		}) 
 		.catch( error => console.log(error) );
+
 /*
 	setInterval(function(config){
 		fetch('vehiculodocument/notifiacion', config)
@@ -113,7 +118,8 @@ const pressExelVencimiento = ()=>{
 			.catch( error => console.log(error) );
 	},40000);
 */
-})();
+	}
+
 
 const editButonNotify = (numero) =>{
 	const button = document.getElementById('buttonNotify');

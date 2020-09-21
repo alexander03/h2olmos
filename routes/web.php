@@ -103,8 +103,9 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('tipohora/eliminar/{id}/{listarluego}', 'TipohoraController@eliminar')->name('tipohora.eliminar');
 	Route::resource('tipohora', 'TipohoraController', array('except' => array('show')));
 
-	//Rutas Tipohora
+	//Rutas controldiario
 	Route::post('controldiario/buscar', 'ControlDiarioController@buscar')->name('controldiario.buscar');
+	Route::post('controldiario/hequipoxua', 'ControlDiarioController@HEquipoxUa')->name('controldiario.hequipoxua');
 	Route::get('controldiario/eliminar/{id}/{listarluego}', 'ControlDiarioController@eliminar')->name('controldiario.eliminar');
 	Route::resource('controldiario', 'ControlDiarioController', array('except' => array('show')));
 
@@ -133,7 +134,7 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::post('vehiculodocument/buscar', 'VehiculoDocumentController@buscar')->name('vehiculodocument.buscar');
 	Route::get('vehiculodocument/eliminar/{id}/{listarluego}', 'VehiculoDocumentController@eliminar')->name('vehiculodocument.eliminar');
 	Route::post('vehiculodocument/{id}', 'VehiculoDocumentController@update')->name('vehiculodocument.update');
-	Route::get('vehiculodocument/notifiacion', 'VehiculoDocumentController@notifiacionCount')->name('vehiculodocument.countnotify');
+	Route::get('vehiculodocument/notifiacion', 'VehiculoDocumentController@notifiacionCount');
 	Route::get('vehiculodocument/notifiaciones', 'VehiculoDocumentController@notifiacionList');
 	Route::get('vehiculodocument/exel/{id}', 'VehiculoDocumentController@notificacionExel');
 	Route::resource('vehiculodocument', 'VehiculoDocumentController', array('except' => array('show')));

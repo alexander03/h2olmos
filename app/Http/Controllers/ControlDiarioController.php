@@ -11,6 +11,7 @@ use App\Ua;
 use App\Concesionaria;
 use App\Controldiario;
 use App\Contratista;
+use App\Exports\ReportHrsEquiposUas;
 use Illuminate\Http\Request;
 use App\Librerias\Libreria;
 use App\Rules\SearchUaPadre;
@@ -199,7 +200,10 @@ class ControlDiarioController extends Controller
     public function store(Request $request)
     {
         $listar     = Libreria::getParam($request->input('listar'), 'NO');
-        $reglas     = array('equipo_id' 			=> [new SearchEquipo()],
+        $reglas     = array(
+
+                            'equipo_id' 			=> [new SearchEquipo()],
+                            'idEquipo'              => 'required',
     						'tipohora_id.*' 			=> 'numeric',
                             'ua_id.*'               =>  [ 'required', new SearchUaPadre() ],
                             'turno'                 => 'boolean',
@@ -238,14 +242,14 @@ class ControlDiarioController extends Controller
         }
         $error = DB::transaction(function() use($request){
             
-            $idEquipo = explode('--',$request->input('equipo_id'))[1];
+//            $idEquipo = explode('--',$request->input('equipo_id'))[1];
            
 //            $equipoDB = Equipo::where('codigo',$request->input('equipo_id')) -> get();
          
             foreach ($request -> input('hora_inicio') as $key => $value) {
                 $controldiario = new Controldiario();  
-                $controldiario->equipo_id             = intval($idEquipo);
-                
+//                $controldiario->equipo_id             = intval($idEquipo);
+                $controldiario->equipo_id           = $request -> input('idEquipo');
                 if($request -> input('tipohora_id.'.$key) != 0){
                     $tipohoraDB = Tipohora::where('id',$request -> input('tipohora_id.'.$key)) ->get();
                     $controldiario->tipohora_id           = $tipohoraDB[0]->id;
@@ -337,7 +341,9 @@ class ControlDiarioController extends Controller
             return $existe;
         }
          $listar     = Libreria::getParam($request->input('listar'), 'NO');
-        $reglas     = array('equipo_id'             => [new SearchEquipo()],
+        $reglas     = array(
+                            'equipo_id'             => [new SearchEquipo()],
+                            'idEquipo'              =>'required',
                             'tipohora_id.0'             => 'numeric',
                             'ua_id.0'               =>  [ 'required', new SearchUaPadre() ],
                             'turno'                 => 'boolean',
@@ -375,11 +381,11 @@ class ControlDiarioController extends Controller
         } 
         $error = DB::transaction(function() use($request, $id){
 
-            $controldiario =  Controldiario::find($id);
+//            $controldiario =  Controldiario::find($id);
 //            $equipoDB = Equipo::where('codigo',$request->input('equipo_id')) -> get();
             $idEquipo = explode('--',$request->input('equipo_id'))[1];
-            $controldiario->equipo_id 	 		  = intval($idEquipo);
-            
+//            $controldiario->equipo_id 	 		  = intval($idEquipo);
+            $controldiario->equipo_id           = $request -> input('id');
              if($request -> input('tipohora_id.0') != 0){
                     $tipohoraDB = Tipohora::where('id',$request -> input('tipohora_id.'.$key)) ->get();
                     $controldiario->tipohora_id           = $tipohoraDB[0]->id;
@@ -444,6 +450,16 @@ class ControlDiarioController extends Controller
 
         return response() -> json($uas);
     }
+
+    public function HEquipoxUa(Request $request){
+        $concesionaria = $this->consecionariaActual();
+
+        $fecha1 = $request->input('fecha_registro_inicial');
+        $fecha2 = $request->input('fecha_registro_final');
+
+        return Excel::download(new ReportHrsEquiposUas($fecha1,$fecha2,$id), 'vencimiento-documento-vehiculo.xlsx'); 
+    }
+
     private function consecionariaActual(){
         $ConcesionariaActual = Concesionaria::join('userconcesionaria','userconcesionaria.concesionaria_id','=','concesionaria.id')
         ->join('users','users.id','=','userconcesionaria.user_id')

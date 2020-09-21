@@ -38,6 +38,7 @@
 			<div class="form-group">
 				{!! Form::button('<i class="material-icons">search</i>Buscar', array('class' => 'btn btn-success btn-sm', 'id' => 'btnBuscar', 'onclick' => 'buscar(\''.$entidad.'\')')) !!}
 				{!! Form::button('<i class="material-icons">add</i>Nuevo', array('class' => 'btn btn-info btn-sm', 'id' => 'btnNuevo', 'onclick' => 'modal (\''.URL::route($ruta["create"], array('listar'=>'SI')).'\', \''.$titulo_registrar.'\', this);')) !!}
+				{!! Form::button('<i class="material-icons">cloud_download</i>Buscar', array('class' => 'btn btn-primary btn-sm', 'id' => 'btnBuscar')) !!}
 			</div>	
 			{!! Form::close() !!}	
             <div class="table-responsive" id="listado{{ $entidad }}">
@@ -57,4 +58,21 @@
 			}
 		});
 	});
+/*
+	function DescargarEHEU(){
+		const formData = new FormData();
+		formData.append('fecha_registro_inicial', document.querySelector('#fecha_registro_inicial').value);
+		formData.append('fecha_registro_final', document.querySelector('#fecha_registro_final').value);
+		const headers = new Headers();
+	    headers.append('X-CSRF-TOKEN', document.querySelector('meta[name="csrf-token"]').content);
+		const config = {
+				headers,
+		       	method:'POST',
+		       	body:formData
+			};
+		
+		fetch('controldiario/hequipoxua',config).
+		.then(data => console.log(data.text()));
+	}
+*/
 </script>

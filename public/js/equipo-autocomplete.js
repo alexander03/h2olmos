@@ -63,6 +63,7 @@ const doSearchEquipoPrim = () => {
             const selection = feedback.selection.value;
             document.querySelector(".js-equipo-id").value = selection.codigo;
             document.querySelector(".js-equipo-desc").innerText = selection.descripcion;
+            document.querySelector('#idEquipo').value = selection.id;
             // console.log(feedback);
         }
     });

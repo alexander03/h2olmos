@@ -39,10 +39,11 @@ if ($controldiario !== NULL) {
 	<div class="col-lg-12 col-md-12 col-sm-12">
 		<div class="u-ua-style js-equipo-desc"></div>
 		<input type="text" name="equipo_id" id="equipo_id" class="form-control js-equipo-id input-xs" 
-		value="@if($controldiario){{$controldiario->equipo->ua->codigo . '--' . $controldiario->equipo->id}}@endif">
+		value="@if($controldiario){{$controldiario->equipo->ua->codigo }}@endif">
 		<small id="autoComplete_list4" class="text-danger"></small>
 	</div>
 </div>
+<input type="hidden" name="idEquipo" id="idEquipo" value="@if($controldiario){{$controldiario->equipo->id }}@endif">
 <div class="@if($controldiario) d-none @endif">
 	<p class="h6 text-secondary ml-3" style="display: inline;">Horarios</p> 
 	{!! Form::button('<i class="fa fa-plus fa-lg"></i>', array('class' => 'btn btn-success btn-sm', 'id' => 'btnAgregarHora', 'onclick' => 'nuevaFila(this);' , 'data-filas' => '1')) !!}
@@ -158,7 +159,7 @@ if ($controldiario !== NULL) {
 {!! Form::close() !!}
 <script type="text/javascript">
 	$(document).ready(function() {
-		configurarAnchoModal('450');
+		configurarAnchoModal('500');
 		init(IDFORMMANTENIMIENTO+'{!! $entidad !!}', 'M', '{!! $entidad !!}');
 		doSearchUA();
 		doSearchEquipoPrim();

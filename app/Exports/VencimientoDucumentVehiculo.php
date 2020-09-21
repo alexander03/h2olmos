@@ -27,14 +27,13 @@ class VencimientoDucumentVehiculo implements FromCollection ,WithHeadings
         		from vehiculodocument d join vehiculo v on(d.vehiculo_id = v.id ) join ua u on(v.ua_id = u.id) 
         		join marca m on(v.marca_id = m.id) join carroceria c on(v.carroceria_id = c.id) where d.id = {$this->id}
         		";
-        $resultado = Vehiculodocument::select('u.codigo' , 'v.modelo' , 'm.descripcion' , 'v.placa' , 
-        			'v.anio' , 'c.descripcion' , 'vehiculodocument.tipo' , 'vehiculodocument.fecha')
+        $resultado = Vehiculodocument::select('u.codigo' , 'v.modelo' , 'ma.descripcion as marca' , 'v.placa' , 
+        			'v.anio' , 'c.descripcion as carroceria' , 'vehiculodocument.tipo' , 'vehiculodocument.fecha')
         			->join('vehiculo as v','v.id','=','vehiculodocument.vehiculo_id')
-        			->join('ua as u','u.id','=','v.ua_id')
-        			->join('marca as m','m.id','=','v.marca_id')
+        			->join('marca as ma','ma.id','=','v.marca_id')
+                    ->join('ua as u','u.id','=','v.ua_id')
         			->join('carroceria as c','c.id','=','v.carroceria_id')
         			->where('vehiculodocument.id','=',$this->id)->get();
-
         return $resultado;
     }
 
