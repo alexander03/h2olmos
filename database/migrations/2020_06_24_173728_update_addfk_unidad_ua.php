@@ -14,10 +14,10 @@ class UpdateAddfkUnidadUa extends Migration
      */
     public function up()
     {
-        Schema::table('ua', function (Blueprint $table) {
+        // Schema::table('ua', function (Blueprint $table) {
             
-            $table -> foreign('unidad_id') -> references('id') -> on('unidad') -> onDelete('cascade');
-        });
+        //     $table -> foreign('unidad_id') -> references('id') -> on('unidad') -> onDelete('cascade');
+        // });
     }
 
     /**

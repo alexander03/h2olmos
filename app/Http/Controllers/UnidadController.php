@@ -148,17 +148,6 @@ class UnidadController extends Controller
             return $existe;
         }
 
-        $haveChilds = $unidadModel -> select('ua.codigo') 
-                        -> join('ua', 'ua.unidad_id', '=', 'unidad.id') 
-                        -> where('unidad.id', '=', $id) -> whereNull('ua.deleted_at')
-                        -> get();
-        
-        if(!empty($haveChilds[0])) {
-            $childs = true;
-            $entidadChild = 'UA';
-            return view('app.confirmarEliminar')->with(compact('childs', 'entidadChild'));
-        }
-
         $listar = "NO";
         if (!is_null(Libreria::obtenerParametro($listarLuego))) {
             $listar = $listarLuego;
