@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use Validator;
+use Illuminate\Http\Request;
 use App\Http\Requests\ProfileRequest;
 use App\Http\Requests\PasswordRequest;
 use Illuminate\Support\Facades\Hash;
+use App\Rules\PasswordRule;
 
 class ProfileController extends Controller
 {
@@ -18,29 +21,38 @@ class ProfileController extends Controller
         return view('profile.edit');
     }
 
-    /**
-     * Update the profile
-     *
-     * @param  \App\Http\Requests\ProfileRequest  $request
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function update(ProfileRequest $request)
+    public function update(Request $request)
     {
-        auth()->user()->update($request->all());
+        auth()->user()->update(['name' => $request->get('name')]);
 
-        return back()->withStatus(__('Profile successfully updated.'));
+        return back()->withStatus(__('Perfil actualizado con éxito'));
     }
 
-    /**
-     * Change the password
-     *
-     * @param  \App\Http\Requests\PasswordRequest  $request
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function password(PasswordRequest $request)
+    
+    public function password(Request $request)
     {
+        
+        $rules_old_password = [
+            'old_password' => new PasswordRule,
+        ];
+        
+        $validator_old_password = Validator::make($request->all(), $rules_old_password);
+        if($validator_old_password->fails()) return back()->withErrors($validator_old_password->errors());
+
+        $rules_password = [
+            'password' => 'required',
+            'password_confirmation' => 'required|same:password'
+        ];
+
+        $msg = [
+            'password_confirmation.same' => 'Las contraseñas no coinciden'
+        ];
+        
+        $validator_password = Validator::make($request->all(), $rules_password, $msg);
+        if($validator_password->fails()) return back()->withErrors($validator_password->errors());
+
         auth()->user()->update(['password' => Hash::make($request->get('password'))]);
 
-        return back()->withStatusPassword(__('Password successfully updated.'));
+        return back()->withStatusPassword(__('Contraseña actualizada con éxito'));
     }
 }

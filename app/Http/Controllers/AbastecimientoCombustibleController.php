@@ -168,7 +168,7 @@ class AbastecimientoCombustibleController extends Controller{
             'tipo_combustible' => 'required',
             'conductor_id' => ['required'],
             'ua_id' => ['required', new SearchUaPadre()],
-            'equipo_id' => ['required', new SearchEquipo()],
+            'equipo_id' => ['nullable', new SearchEquipo()],
             'qtdgl' => 'required',
             'qtdl' => 'required',
             'km' => 'required',
@@ -216,12 +216,11 @@ class AbastecimientoCombustibleController extends Controller{
             //BUSCAR EQUIPO
             if($request -> input('equipo_id')){
                 if($request -> input('equipo_tipo') === 'e'){
-                    $idEquipo = explode('--', $request -> input('equipo_id'));
-                    $equipoDB =  Equipo::where('id', $idEquipo[1]) -> get();
+                    $equipoDB =  Equipo::where('id', $request -> input('equipo_id')) -> get();
                     $abastecimiento -> equipo_id = (!($equipoDB -> isEmpty())) ? $equipoDB[0] -> id : null;
                 }
                 if($request -> input('equipo_tipo') === 'v'){
-                    $vehiculoDB =  Vehiculo::where('placa', $request -> input('equipo_id')) -> get();
+                    $vehiculoDB =  Vehiculo::where('id', $request -> input('equipo_id')) -> get();
                     $abastecimiento -> vehiculo_id = (!($vehiculoDB -> isEmpty())) ? $vehiculoDB[0] -> id : null;
                 }   
             }
@@ -260,7 +259,7 @@ class AbastecimientoCombustibleController extends Controller{
             'tipo_combustible' => 'required',
             'conductor_id' => ['required'],
             'ua_id' => ['required', new SearchUaPadre()],
-            'equipo_id' => ['required', new SearchEquipo()],
+            'equipo_id' => ['nullable', new SearchEquipo()],
             'qtdgl' => 'required',
             'qtdl' => 'required',
             'km' => 'required',
@@ -314,13 +313,12 @@ class AbastecimientoCombustibleController extends Controller{
             if($request -> input('equipo_id')){
                 if($request -> input('equipo_tipo') === 'e'){
                     $abastecimiento -> vehiculo_id = null;
-                    $idEquipo = explode('--', $request -> input('equipo_id'));
-                    $equipoDB =  Equipo::where('id', $idEquipo[1]) -> get();
+                    $equipoDB =  Equipo::where('id', $request -> input('equipo_id')) -> get();
                     $abastecimiento -> equipo_id = (!($equipoDB -> isEmpty())) ? $equipoDB[0] -> id : null;
                 }
                 if($request -> input('equipo_tipo') === 'v'){
                     $abastecimiento -> equipo_id = null;
-                    $vehiculoDB =  Vehiculo::where('placa', $request -> input('equipo_id')) -> get();
+                    $vehiculoDB =  Vehiculo::where('id', $request -> input('equipo_id')) -> get();
                     $abastecimiento -> vehiculo_id = (!($vehiculoDB -> isEmpty())) ? $vehiculoDB[0] -> id : null;
                 }   
             }
@@ -390,11 +388,12 @@ class AbastecimientoCombustibleController extends Controller{
     //PETICION GET QUE DEVUELVE TODOS LOS DATOS EQUIPO O VEHICULO
     public function searchAutocompleteEquipo($query){
 
-        $consulta = "select tipo, `placa-codigo` as 'codigo', descripcion, CONCAT(`placa-codigo`, ' - ', descripcion) as 'search'
+        $consulta = "select id, tipo, descripcion, ua, ua_desc,
+            CONCAT(ua, ' - ', descripcion) as 'search'
             from view_equipo_vehiculo
             where deleted_at IS NULL AND 
             concesionaria_id = {$this -> getConsecionariaActual()} AND
-            (`placa-codigo` LIKE '%".$query."%' OR descripcion LIKE '%".$query."%')";
+            (ua LIKE '%".$query."%' OR descripcion LIKE '%".$query."%')";
         $res = DB::select($consulta);
         
         return response() -> json($res);

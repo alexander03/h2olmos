@@ -18,6 +18,7 @@ use App\Rules\SearchUaPadre;
 use App\Rules\SearchEquipo;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
+use App\Exports\ExcelReport_HorasTrabajadas;
 
 class ControlDiarioController extends Controller
 {
@@ -202,8 +203,8 @@ class ControlDiarioController extends Controller
         $listar     = Libreria::getParam($request->input('listar'), 'NO');
         $reglas     = array(
 
-                            'equipo_id' 			=> [new SearchEquipo()],
-                            'idEquipo'              => 'required',
+                            'idEquipo' 			=> [new SearchEquipo()],
+//                            'idEquipo'              => 'required',
     						'tipohora_id.*' 			=> 'numeric',
                             'ua_id.*'               =>  [ 'required', new SearchUaPadre() ],
                             'turno'                 => 'boolean',
@@ -342,8 +343,8 @@ class ControlDiarioController extends Controller
         }
          $listar     = Libreria::getParam($request->input('listar'), 'NO');
         $reglas     = array(
-                            'equipo_id'             => [new SearchEquipo()],
-                            'idEquipo'              =>'required',
+                            'idEquipo'             => [new SearchEquipo()],
+//                            'idEquipo'              =>'required',
                             'tipohora_id.0'             => 'numeric',
                             'ua_id.0'               =>  [ 'required', new SearchUaPadre() ],
                             'turno'                 => 'boolean',
@@ -381,11 +382,11 @@ class ControlDiarioController extends Controller
         } 
         $error = DB::transaction(function() use($request, $id){
 
-//            $controldiario =  Controldiario::find($id);
+           $controldiario =  Controldiario::find($id);
 //            $equipoDB = Equipo::where('codigo',$request->input('equipo_id')) -> get();
-            $idEquipo = explode('--',$request->input('equipo_id'))[1];
+//            $idEquipo = explode('--',$request->input('equipo_id'))[1];
 //            $controldiario->equipo_id 	 		  = intval($idEquipo);
-            $controldiario->equipo_id           = $request -> input('id');
+            $controldiario->equipo_id           = $request -> input('idEquipo');
              if($request -> input('tipohora_id.0') != 0){
                     $tipohoraDB = Tipohora::where('id',$request -> input('tipohora_id.'.$key)) ->get();
                     $controldiario->tipohora_id           = $tipohoraDB[0]->id;
@@ -468,5 +469,15 @@ class ControlDiarioController extends Controller
         $idConcAct=$ConcesionariaActual[0]->id;
 
         return $idConcAct;
+    }
+
+    public function exportExcelReport(Request $request)
+    {
+        $dates = [
+            'start_date' => '2020-06-01',
+            'end_date' => '2020-08-20'
+        ];
+        
+        return (new ExcelReport_HorasTrabajadas($dates))->download('excel.xlsx');
     }
 }

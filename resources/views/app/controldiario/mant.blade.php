@@ -63,13 +63,13 @@ if ($controldiario !== NULL) {
 			</div>
 		</div>
 		<div class="form-row">
-			<div class="form-group col-md-3 mt-4">
+			<div class="form-group col-md-2 mt-4">
 				{!! Form::label('hora_inicio', 'hora inicio:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
 				<div class="col-lg-12 col-md-12 col-sm-12 mt-2">
 					<input type="time" class="form-control input-xs" value="@if($controldiario){{substr($controldiario->hora_inicio,0,5)}}@endif" name="hora_inicio[]" id='hora_inicio'>
 				</div>
 			</div>
-			<div class="form-group col-md-3 mt-4">
+			<div class="form-group col-md-2 mt-4">
 				{!! Form::label('hora_fin', 'hora Fin:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
 				<div class="col-lg-12 col-md-12 col-sm-12 mt-2">
 					<input type="time" class="form-control input-xs" value="@if($controldiario){{substr($controldiario->hora_fin,0,5)}}@endif" name="hora_fin[]" id='hora_fin'>
@@ -81,7 +81,7 @@ if ($controldiario !== NULL) {
 					{!! Form::number('hora_total[]', null, array('class' => 'form-control input-xs', 'id' => 'hora_total')) !!}
 				</div>
 			</div>
-			<div class="form-group col-md-6">
+			<div class="form-group col-md-4 mt-4 ms-12">
 				{!! Form::label('tipohora_id', 'Tipo de hora:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
 				<div class="col-lg-12 col-md-12 col-sm-12">
 					{!! Form::select('tipohora_id[]',$cboThoras, null, array('class' => 'form-control input-xs', 'id' => 'tipohora_id')) !!}
@@ -159,7 +159,7 @@ if ($controldiario !== NULL) {
 {!! Form::close() !!}
 <script type="text/javascript">
 	$(document).ready(function() {
-		configurarAnchoModal('500');
+		configurarAnchoModal('550');
 		init(IDFORMMANTENIMIENTO+'{!! $entidad !!}', 'M', '{!! $entidad !!}');
 		doSearchUA();
 		doSearchEquipoPrim();
@@ -200,7 +200,7 @@ if ($controldiario !== NULL) {
 								<input type="number" class="form-control input-xs" name="hora_total[]" id='hora_total_${Num}'>
 							</div>
 						</div>
-						<div class="form-group col-md-6">
+						<div class="form-group col-md-4 mt-4 ms-12">
 							<label for="tipohora_id_${Num}" class="col-lg-12 col-md-12 col-sm-12 control-label">Tipo de hora: : </label>
 							<div class="col-lg-12 col-md-12 col-sm-12">
 							</div>

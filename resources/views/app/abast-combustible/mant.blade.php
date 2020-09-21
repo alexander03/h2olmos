@@ -64,22 +64,25 @@ if ($abastecimiento !== NULL) {
 	</div>
 	<div class="form-group col-12 col-md-6 p-3">
 		<label for="id-equipo" class="pl-3">Equipo - Vehículo</label>
-		<div class="u-ua-style js-equipo-desc">
+		{{-- <div class="u-ua-style js-equipo-desc"> --}}
 			<?php 
-				if($abastecimiento) 
-					if(isset($abastecimiento -> equipo)) echo $abastecimiento -> equipo -> descripcion;
-					else if(isset($abastecimiento -> vehiculo)) echo $abastecimiento -> vehiculo -> modelo 
+				//if($abastecimiento) 
+				//	if(isset($abastecimiento -> equipo)) echo $abastecimiento -> equipo -> descripcion;
+				//	else if(isset($abastecimiento -> vehiculo)) echo $abastecimiento -> vehiculo -> modelo 
 			?>
-		</div>
+		{{-- </div> --}}
 		<input type="text" 
-			name="equipo_id" 
 			id="id-equipo" 
 			class="form-control js-equipo-id" 
-			value="<?php if($abastecimiento) if(isset($abastecimiento -> equipo)) echo $abastecimiento -> equipo -> ua -> codigo . '--' . $abastecimiento -> equipo -> id; else if(isset($abastecimiento -> vehiculo)) echo $abastecimiento -> vehiculo -> placa;?>">
+			value="<?php if($abastecimiento) if(isset($abastecimiento -> equipo)) echo $abastecimiento -> equipo -> descripcion; else if(isset($abastecimiento -> vehiculo)) echo $abastecimiento -> vehiculo -> modelo;?>">
 		<input type="hidden" 
 			name="equipo_tipo" 
 			class="js-equipo-hidden"
 			value="<?php if($abastecimiento) if(isset($abastecimiento -> equipo)) echo 'e'; else if(isset($abastecimiento -> vehiculo)) echo 'v';?>">
+		<input type="hidden"
+			name="equipo_id"
+			class="js-equipo-id-hidden"
+			value="<?php if($abastecimiento) if(isset($abastecimiento -> equipo)) echo $abastecimiento -> equipo -> id; else if(isset($abastecimiento -> vehiculo)) echo $abastecimiento -> vehiculo -> id;?>">
 		<small id="autoComplete_list4" class="text-danger"></small>
 	</div>
 	<div class="form-group col-12 col-md-6 p-3">

@@ -70,8 +70,8 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('user/reactivar/{id}', 'UserController@reactivar')->name('user.reactivar');
 
 	Route::get('profile', ['as' => 'profile.edit', 'uses' => 'ProfileController@edit']);
-	Route::put('profile', ['as' => 'profile.update', 'uses' => 'ProfileController@update']);
-	Route::put('profile/password', ['as' => 'profile.password', 'uses' => 'ProfileController@password']);
+	Route::post('profile/update', ['as' => 'profile.update', 'uses' => 'ProfileController@update']);
+	Route::post('profile/password', ['as' => 'profile.password', 'uses' => 'ProfileController@password']);
 
 	Route::post('opcionmenu/buscar', 'OpcionmenuController@buscar')->name('opcionmenu.buscar');
     Route::get('opcionmenu/eliminar/{id}/{listarluego}', 'OpcionmenuController@eliminar')->name('opcionmenu.eliminar');
@@ -217,6 +217,9 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::post('grupomenu/buscar', 'GrupomenuController@buscar')->name('grupomenu.buscar');
     Route::get('grupomenu/eliminar/{id}/{listarluego}', 'GrupomenuController@eliminar')->name('grupomenu.eliminar');
 	Route::resource('grupomenu', 'GrupomenuController', array('except' => array('show')));
+
+
+	Route::get('controldiario/exportExcelReport', 'ControldiarioController@exportExcelReport')->name('controldiario.exportExcelReport');
 
 });
 

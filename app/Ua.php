@@ -10,10 +10,10 @@ class Ua extends Model{
     use SoftDeletes;
     protected $table = 'ua';
     protected $dates = ['deleted_at'];
-    protected $fillable = ['codigo', 'descripcion', 'tipo', 
-                            'fondos', 'responsable', 'tipo_costo', 'unidad_id', 'ua_padre_id', 'concesionaria_id',
-                            'situacion', 'fecha_inicio', 'fecha_fin'];
-
+    protected $fillable = ['codigo', 'descripcion', 'habilitada', 
+                            'ua_padre_id', 'concesionaria_id',
+                            'fecha_inicio', 'fecha_fin'];
+            
     public function unidad(){
 
         return $this->belongsTo(Unidad::class, 'unidad_id');		
