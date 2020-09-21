@@ -253,6 +253,7 @@ class UaController extends Controller{
         $consulta = "SELECT id, codigo, descripcion, CONCAT(codigo, ' - ', descripcion) AS 'search'  
             FROM ua WHERE
             deleted_at IS NULL AND
+            habilitada IS TRUE AND
             concesionaria_id = {$this -> getConsecionariaActual()} AND
             (codigo LIKE '%".$query."%' OR descripcion LIKE '%".$query."%')";
         $res = DB::select($consulta);
