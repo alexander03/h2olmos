@@ -23,13 +23,13 @@ if ($controldiario !== NULL) {
 	</div>
 </div>
 <div class="form-group">
-	{!! Form::label('horometro_inicial', 'Horometro inicial :', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
+	{!! Form::label('horometro_inicial', 'Horometro inicial :', array('class' => 'col-lg-6 col-md-6 col-sm-6 control-label')) !!}
 	<div class="col-lg-12 col-md-12 col-sm-12">
 		{!! Form::text('horometro_inicial', null, array('class' => 'form-control input-xs', 'id' => 'horometro_inicial')) !!}
 	</div>
 </div>
 <div class="form-group">
-	{!! Form::label('horometro_final', 'Horometro final :', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
+	{!! Form::label('horometro_final', 'Horometro final :', array('class' => 'col-lg-6 col-md-6 col-sm-6 control-label')) !!}
 	<div class="col-lg-12 col-md-12 col-sm-12">
 		{!! Form::text('horometro_final', null, array('class' => 'form-control input-xs', 'id' => 'horometro_final')) !!}
 	</div>
@@ -159,7 +159,7 @@ if ($controldiario !== NULL) {
 {!! Form::close() !!}
 <script type="text/javascript">
 	$(document).ready(function() {
-		configurarAnchoModal('550');
+		configurarAnchoModal('650');
 		init(IDFORMMANTENIMIENTO+'{!! $entidad !!}', 'M', '{!! $entidad !!}');
 		doSearchUA();
 		doSearchEquipoPrim();

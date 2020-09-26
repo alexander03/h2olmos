@@ -51,6 +51,11 @@ class GrifoController extends Controller
         $cabecera         = array();
         $cabecera[]       = array('valor' => '#', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Descripción', 'numero' => '1');
+        $cabecera[]       = array('valor' => 'Ubicación', 'numero' => '1');
+        $cabecera[]       = array('valor' => 'Lugar de abastecimiento', 'numero' => '1');
+        $cabecera[]       = array('valor' => 'Contacto', 'numero' => '1');
+        $cabecera[]       = array('valor' => 'Correo', 'numero' => '1');
+        $cabecera[]       = array('valor' => 'Teléfono', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Operaciones', 'numero' => '2');
         
         $titulo_modificar = $this->tituloModificar;
@@ -109,8 +114,27 @@ class GrifoController extends Controller
     public function store(Request $request)
     {
         $listar     = Libreria::getParam($request->input('listar'), 'NO');
-        $reglas     = array('descripcion' => 'required|max:50');
-        $mensajes = array('descripcion.required'         => 'Debe ingresar una descripcion'
+        $reglas     = array(
+            'descripcion' => 'required|max:25',
+            'ubicacion' => 'required|max:25',
+            'abastecimiento' => 'required|max:25',
+            'contacto' => 'required|max:30',
+            'telefono' => 'required|max:9',
+            'correo' => 'required|max:25'
+        );
+        $mensajes = array(
+            'descripcion.required'         => 'Debe ingresar una descripción',
+            'descripcion.max'              => 'La descripción supera los 25 caracteres',
+            'ubicacion.required'           => 'Debe ingresar una ubicacion',
+            'ubicacion.max'                => 'La ubicacion supera los 25 caracteres',
+            'abastecimiento.required'      => 'Debe ingresar una abastecimiento',
+            'abastecimiento.max'           => 'La abastecimiento supera los 25 caracteres',
+            'contacto.required'            => 'Debe ingresar una contacto',
+            'contacto.max'                 => 'La contacto supera los 30 caracteres',
+            'telefono.required'            => 'Debe ingresar una telefono',
+            'telefono.max'                 => 'La telefono supera los 9 caracteres',
+            'correo.required'              => 'Debe ingresar una correo',
+            'correo.max'                   => 'La correo supera los 25 caracteres'
             );
         $validacion = Validator::make($request->all(), $reglas, $mensajes);
         if ($validacion->fails()) {
@@ -119,6 +143,11 @@ class GrifoController extends Controller
         $error = DB::transaction(function() use($request){
             $grifo = new Grifo();
             $grifo->descripcion = strtoupper($request->input('descripcion'));
+            $grifo->ubicacion = strtoupper($request->input('ubicacion'));
+            $grifo->abastecimiento = strtoupper($request->input('abastecimiento'));
+            $grifo->contacto = strtoupper($request->input('contacto'));
+            $grifo->telefono = $request->input('telefono');
+            $grifo->correo = $request->input('correo');
             $grifo->save();
         });
         return is_null($error) ? "OK" : $error;
@@ -169,9 +198,27 @@ class GrifoController extends Controller
         if ($existe !== true) {
             return $existe;
         }
-        $reglas     = array('descripcion' => 'required|max:50');
+        $reglas     = array(
+            'descripcion' => 'required|max:25',
+            'ubicacion' => 'required|max:25',
+            'abastecimiento' => 'required|max:25',
+            'contacto' => 'required|max:30',
+            'telefono' => 'required|max:9',
+            'correo' => 'required|max:25'
+        );
         $mensajes = array(
-            'descripcion.required'         => 'Debe ingresar una descripcion'
+            'descripcion.required'         => 'Debe ingresar una descripción',
+            'descripcion.max'              => 'La descripción supera los 25 caracteres',
+            'ubicacion.required'           => 'Debe ingresar una ubicacion',
+            'ubicacion.max'                => 'La ubicacion supera los 25 caracteres',
+            'abastecimiento.required'      => 'Debe ingresar una abastecimiento',
+            'abastecimiento.max'           => 'La abastecimiento supera los 25 caracteres',
+            'contacto.required'            => 'Debe ingresar una contacto',
+            'contacto.max'                 => 'La contacto supera los 30 caracteres',
+            'telefono.required'            => 'Debe ingresar una telefono',
+            'telefono.max'                 => 'La telefono supera los 9 caracteres',
+            'correo.required'              => 'Debe ingresar una correo',
+            'correo.max'                   => 'La correo supera los 25 caracteres'
             );
         $validacion = Validator::make($request->all(), $reglas, $mensajes);
         if ($validacion->fails()) {
@@ -180,6 +227,11 @@ class GrifoController extends Controller
         $error = DB::transaction(function() use($request, $id){
             $grifo = Grifo::find($id);
             $grifo->descripcion = strtoupper($request->input('descripcion'));
+            $grifo->ubicacion = strtoupper($request->input('ubicacion'));
+            $grifo->abastecimiento = strtoupper($request->input('abastecimiento'));
+            $grifo->contacto = strtoupper($request->input('contacto'));
+            $grifo->telefono = $request->input('telefono');
+            $grifo->correo = $request->input('correo');
             $grifo->save();
         });
         return is_null($error) ? "OK" : $error;
