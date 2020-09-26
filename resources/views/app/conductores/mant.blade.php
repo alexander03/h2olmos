@@ -176,15 +176,15 @@
 
 		//Funciones
 		const consultDB = (dni) => {
-			const uriConsult = '/existeconductor?dni=' + dni;
+			const uriConsult = './existeconductor?dni=' + dni;
 			return fetch(uriConsult)
 			.then(res => res.status === 200 ? res.json() : console.error(`Error al cosultar Conductor en la db: ${res.status}`))
 			.then(res => res[0])
 		}
 
 		const consultReniec = (dni) => {
-			const uriConsult = 'http://127.0.0.1:80/Reniec/consulta_reniec.php';
-			// const uriConsult = './Reniec/consulta_reniec.php';
+			// const uriConsult = 'http://127.0.0.1:80/Reniec/consulta_reniec.php';
+			const uriConsult = './Reniec/consulta_reniec.php';
 			return fetch(uriConsult,{
 				method: 'POST',
 				body: 'dni=' + dni,
