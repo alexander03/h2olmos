@@ -27,22 +27,34 @@
             <label>{{ Auth::user()->name }}</label>
           </a>
         </li>
-        <!--li class="nav-item dropdown">
-          <a class="nav-link" href="http://example.com" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+
+
+        <li class="nav-item dropdown">
+          <a class="nav-link "  data-toggle="dropdown" id="buttonNotify"  href="#pablo"   aria-haspopup="true" aria-expanded="false" onclick="ActivarNotificaciones(this,event)">
             <i class="material-icons">notifications</i>
-            <span class="notification">5</span>
+            <span class="notification d-none">5</span>
             <p class="d-lg-none d-md-block">
               {{ __('Some Actions') }}
             </p>
           </a>
-          <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
-            <a class="dropdown-item" href="#">{{ __('Mike John responded to your email') }}</a>
-            <a class="dropdown-item" href="#">{{ __('You have 5 new tasks') }}</a>
-            <a class="dropdown-item" href="#">{{ __('You\'re now friend with Andrew') }}</a>
-            <a class="dropdown-item" href="#">{{ __('Another Notification') }}</a>
-            <a class="dropdown-item" href="#">{{ __('Another One') }}</a>
+          <div class="dropdown-menu dropdown-menu-right" aria-labelledby="buttonNotify">
+            <a class="dropdown-item p-0" >
+              <div class="alert alert-info alert-with-icon " data-notify="container">
+              <i class="material-icons" data-notify="icon">add_alert</i>
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <i class="material-icons">close</i>
+              </button>
+              <span data-notify="message">
+                Vehículo: Modelo  - MARCA, placa PLACA
+                <br>
+                El documento DOCT , vence : FECHAAAAAAAA
+              </span>
+            </div>
+            </a>
+
+
           </div>
-        </li-->
+        </li>
         <li class="nav-item dropdown">
           <a class="nav-link" href="#pablo" id="navbarDropdownProfile" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <i class="material-icons">person</i>

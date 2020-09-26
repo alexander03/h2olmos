@@ -393,10 +393,11 @@ class EquipoController extends Controller
 
     public function searchAutocomplete($query){
 
-        $consulta = "select   eq.descripcion as 'descripcion', CONCAT(ua.codigo, ' -- ', eq.descripcion) as 'search' , concat(ua.codigo, '--', eq.id) as 'codigo'
+        $consulta = "select   eq.descripcion as 'descripcion', CONCAT(ua.codigo, ' -- ', eq.descripcion) as 'search' , ua.codigo as 'codigo' , eq.id as 'id'
             from equipo eq
             join ua on(ua.id = eq.ua_id)
             where eq.deleted_at IS NULL AND 
+            ua.habilitada IS TRUE AND
             eq.concesionaria_id = {$this -> consecionariaActual()} AND
             (ua.codigo LIKE '%".$query."%' OR eq.descripcion LIKE '%".$query."%')";
         $res = DB::select($consulta);

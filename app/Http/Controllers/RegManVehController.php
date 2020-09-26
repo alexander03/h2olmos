@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 use App\Concesionaria;
 use App\DescripcionRegManVeh;
+use Mpdf\Mpdf;
 
 class RegManVehController extends Controller
 {
@@ -53,7 +54,14 @@ class RegManVehController extends Controller
        	->select('concesionaria.id','concesionaria.razonsocial')->get();
        	$idConcAct=$ConcesionariaActual[0]->id;
 
+		$fechainicio= $request->input('fechainicio');
+        $fechafin= $request->input('fechafin');
+
         $resultado= RegManVeh::where('regmanveh.concesionaria_id',$idConcAct)
+        ->where(function($q) use ($fechainicio, $fechafin) {
+                if ( $fechainicio !== null ) $q->where('regmanveh.fechasalida','>=', $fechainicio);
+                if ( $fechafin !== null ) $q->where('regmanveh.fechaentrada','<=', $fechafin);
+            })
         ->where(function($q) use ($filter){
         $q->where('regmanveh.cliente', 'like', '%'.$filter.'%')
           ->orWhere('regmanveh.ua_id', 'like', '%'.$filter.'%')
@@ -173,7 +181,10 @@ class RegManVehController extends Controller
             'kminicial' => 'required',
             'kmfinal' => 'required',
             'tipomantenimiento' => 'required',
-            'telefono' => 'required'
+            'telefono' => 'required',
+            'cantidad.*' => 'required',
+            'monto.*' => 'required',
+            'cuantasdescripciones'=>'required'
         ];
 
         $mensajes = [
@@ -186,7 +197,10 @@ class RegManVehController extends Controller
             'kminicial.required' => 'Km Inicial Campo Vacío',
             'kmfinal.required' => 'Km Final Campo Vacío',
             'tipomantenimiento.required' => 'Tipo de Mantenimiento No Seleccionado',
-            'telefono.required' => 'Teléfono Campo Vacío'
+            'telefono.required' => 'Teléfono Campo Vacío',
+            'cantidad.*.required' => 'Ingrese Cantidad todas las Observaciones',
+            'monto.*.required' => 'Ingrese Monto todas las Observaciones',
+            'cuantasdescripciones.required' => 'Ingrese al menos una Observación'
         ];
         $validacion = Validator::make($request->all(), $reglas, $mensajes);
         if ($validacion->fails()) {
@@ -316,7 +330,10 @@ class RegManVehController extends Controller
             'kminicial' => 'required',
             'kmfinal' => 'required',
             'tipomantenimiento' => 'required',
-            'telefono' => 'required'
+            'telefono' => 'required',
+            'cantidad.*' => 'required',
+            'monto.*' => 'required',
+            'cuantasdescripciones'=>'required'
         ];
 
         $mensajes = [
@@ -329,7 +346,10 @@ class RegManVehController extends Controller
             'kminicial.required' => 'Km Inicial Campo Vacío',
             'kmfinal.required' => 'Km Final Campo Vacío',
             'tipomantenimiento.required' => 'Tipo de Mantenimiento No Seleccionado',
-            'telefono.required' => 'Campo Vacío'
+            'telefono.required' => 'Campo Vacío',
+            'cantidad.*.required' => 'Ingrese Cantidad todas las Observaciones',
+            'monto.*.required' => 'Ingrese Monto todas las Observaciones',
+            'cuantasdescripciones.required' => 'Ingrese al menos una Observación'
         ];
         $validacion = Validator::make($request->all(), $reglas, $mensajes);
         if ($validacion->fails()) {
@@ -419,6 +439,44 @@ public function searchAutocompleteTrabajo($query){
         return response() -> json($res);
     }
 
+	public function generatePDF(Request $request) {
+	    $id=$request->id;
+        if ( $request->id == null || !is_numeric($request->id) ) return;
 
+        $namefile = 'RegistroDeRepuestoVehicular - '.time().'.pdf';  
+        
+        $ConcesionariaActual = Concesionaria::join('userconcesionaria','userconcesionaria.concesionaria_id','=','concesionaria.id')
+        ->join('users','users.id','=','userconcesionaria.user_id')
+        ->where('userconcesionaria.estado','=',true)->where('userconcesionaria.user_id','=',auth()->user()->id)
+        ->select('concesionaria.id','concesionaria.razonsocial')->get();
+        $ConcAct=$ConcesionariaActual[0]->razonsocial;
+        $regmanveh = RegManVeh::find($id);
+        $oObservaciones=DescripcionRegManVeh::where('regmanveh_id','=',$id)
+            ->join('trabajo', 'descripcionregmanveh.trabajo_id', '=', 'trabajo.id')
+            ->select('descripcionregmanveh.id as id','descripcionregmanveh.monto as monto','descripcionregmanveh.cantidad as cantidad','trabajo.id as trabajo_id','trabajo.descripcion as descripcion')->get();
+        
+        $data=[];
+        $data['concesionaria'] = $ConcAct;
+        $data['cliente'] = $regmanveh->cliente;
+        $data['ua_id'] = $regmanveh->ua_id;
+        $data['tipomantenimiento']=$regmanveh->tipomantenimiento==1?'Preventivo':'Correctivo';
+        $data['kmman'] = $regmanveh->kmman;
+        $data['kminicial'] = $regmanveh->kminicial;
+        $data['kmfinal'] = $regmanveh->kmfinal;
+        $data['telefono'] = $regmanveh->telefono;
+        $data['fechaentrada'] = $regmanveh->fechaentrada;
+        $data['fechasalida'] = $regmanveh->fechasalida;
+        $data['regmanveh'] = $regmanveh;
+        $data['observaciones'] = $oObservaciones;
+        $data['namefile'] = $namefile;
+        // dd($data);
+        $html = view('app.regmanveh.pdf.template_individual', $data)->render();
+
+        $mpdf = new Mpdf();
+        $mpdf->SetDisplayMode('fullpage');
+        $mpdf->WriteHTML($html);
+
+        $mpdf->Output($namefile, "I");
+	    }
 
 }

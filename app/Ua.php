@@ -24,4 +24,13 @@ class Ua extends Model{
         return DB::select('select codigo, descripcion from ua where id = ?', [ $id ]);
     }
 
+    public function controlesdiarios()
+    {
+        return $this->hasMany('App\Controldiario')->where('controldiario.deleted_at',null);
+    }
+
+    public function equipos()
+    {
+        return $this->belongsToMany('App\Equipo','App\Controldiario')->whereNull('controldiario.deleted_at');;
+    }
 }

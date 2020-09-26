@@ -40,5 +40,9 @@ class Equipo extends Model
         return $this->belongsTo('App\Ua');
     }    
     
+    public function controlesdiarios()
+    {
+        return $this->hasMany('App\Controldiario')->where('controldiario.deleted_at',null);
+    }
 
 }

@@ -120,9 +120,10 @@ class TipohoraController extends Controller
     public function store(Request $request)
     {
         $listar     = Libreria::getParam($request->input('listar'), 'NO');
-        $reglas     = array('codigo' => 'required|' ,'descripcion' => 'required|max:50');
+        $reglas     = array('codigo' => 'required|max:2' ,'descripcion' => 'required|max:50');
         $mensajes = array(
             'codigo.required'         => 'Debe ingresar una codigo',
+            'codigo.max'              => 'El codigo supera los 2 digitos',
             'descripcion.required'         => 'Debe ingresar una descripcion'
             );
         $validacion = Validator::make($request->all(), $reglas, $mensajes);
@@ -132,6 +133,7 @@ class TipohoraController extends Controller
         $error = DB::transaction(function() use($request){
             $tipohora = new Tipohora();
             $tipohora->codigo = $request->input('codigo');
+            $tipohora->prioridad = ($request->input('prioridad')) ? true : false;
             $tipohora->descripcion = strtoupper($request->input('descripcion'));
             $tipohora->save();
         });
@@ -183,9 +185,10 @@ class TipohoraController extends Controller
         if ($existe !== true) {
             return $existe;
         }
-        $reglas     = array('codigo' => 'required|' ,'descripcion' => 'required|max:50');
+        $reglas     = array('codigo' => 'required|max:2' ,'descripcion' => 'required|max:50');
         $mensajes = array(
             'codigo.required'         => 'Debe ingresar una codigo',
+            'codigo.max'              => 'El codigo supera los 2 digitos',
             'descripcion.required'         => 'Debe ingresar una descripcion'
             );
         $validacion = Validator::make($request->all(), $reglas, $mensajes);
@@ -195,6 +198,7 @@ class TipohoraController extends Controller
         $error = DB::transaction(function() use($request, $id){
             $tipohora = Tipohora::find($id);
             $tipohora->codigo = $request->input('codigo');
+            $tipohora->prioridad = ($request->input('prioridad')) ? true : false;
             $tipohora->descripcion = strtoupper($request->input('descripcion'));
             $tipohora->save();
         });

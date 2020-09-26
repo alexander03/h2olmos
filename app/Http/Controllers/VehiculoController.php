@@ -53,7 +53,7 @@ class VehiculoController extends Controller
         $filtro           = array();
 //        $filtro[]         = ['ua', 'LIKE', '%'.strtoupper($ua).'%'];
         $filtro[]         = ['placa', 'LIKE', '%'.strtoupper($placa).'%'];
-        $filtro[]         = ['concesionaria_id', $this->consecionariaActual()];
+        $filtro[]         = ['concesionaria_id', $this->concesionariaActual()];
 /*
         if($ua_id != 0 ){
 			$filtro[]         = ['ua_id', '=', $ua_id];        	
@@ -250,7 +250,7 @@ class VehiculoController extends Controller
             $vehiculo->fechavencimientosoat = $request->input('fechavencimientosoat');
             $vehiculo->fechavencimientogps  = $request->input('fechavencimientogps');
             $vehiculo->fechavencimientortv  = $request->input('fechavencimientortv');
-*/          $vehiculo->concesionaria_id       =  $this->consecionariaActual(); 
+*/          $vehiculo->concesionaria_id       =  $this->concesionariaActual(); 
             $vehiculo->area_id 				  = $request->input('area_id');
             $vehiculo->placa 				  = $request->input('placa');
             $vehiculo->motor 				  = $request->input('motor');
@@ -467,7 +467,7 @@ class VehiculoController extends Controller
         return response() -> json($uas);
     }
 
-    private function consecionariaActual(){
+    private function concesionariaActual(){
         $ConcesionariaActual = Concesionaria::join('userconcesionaria','userconcesionaria.concesionaria_id','=','concesionaria.id')
         ->join('users','users.id','=','userconcesionaria.user_id')
         ->where('userconcesionaria.estado','=',true)->where('userconcesionaria.user_id','=',auth()->user()->id)

@@ -103,8 +103,9 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('tipohora/eliminar/{id}/{listarluego}', 'TipohoraController@eliminar')->name('tipohora.eliminar');
 	Route::resource('tipohora', 'TipohoraController', array('except' => array('show')));
 
-	//Rutas Tipohora
+	//Rutas controldiario
 	Route::post('controldiario/buscar', 'ControlDiarioController@buscar')->name('controldiario.buscar');
+	Route::post('controldiario/hequipoxua', 'ControlDiarioController@HEquipoxUa')->name('controldiario.hequipoxua');
 	Route::get('controldiario/eliminar/{id}/{listarluego}', 'ControlDiarioController@eliminar')->name('controldiario.eliminar');
 	Route::resource('controldiario', 'ControlDiarioController', array('except' => array('show')));
 
@@ -133,6 +134,9 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::post('vehiculodocument/buscar', 'VehiculoDocumentController@buscar')->name('vehiculodocument.buscar');
 	Route::get('vehiculodocument/eliminar/{id}/{listarluego}', 'VehiculoDocumentController@eliminar')->name('vehiculodocument.eliminar');
 	Route::post('vehiculodocument/{id}', 'VehiculoDocumentController@update')->name('vehiculodocument.update');
+	Route::get('vehiculodocument/notifiacion', 'VehiculoDocumentController@notifiacionCount');
+	Route::get('vehiculodocument/notifiaciones', 'VehiculoDocumentController@notifiacionList');
+	Route::get('vehiculodocument/exel/{id}', 'VehiculoDocumentController@notificacionExel');
 	Route::resource('vehiculodocument', 'VehiculoDocumentController', array('except' => array('show')));
 
 	//tipo user
@@ -196,6 +200,7 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::post('regrepveh/store', 'RegRepVehController@store')->name('regrepveh.createregrepveh');
 	Route::get('userconcesionaria/concesionaria/{id}', 'UserConcesionariaController@concesionaria')->name('userconcesionaria.concesionaria');
 	Route::get('regrepveh/search/repuesto/{query}', 'RegRepVehController@searchAutocompleteRepuesto')->name('regrepveh.search.repuesto');
+	Route::get('regrepveh/pdf/generar','RegRepVehController@generatePDF')->name('regrepveh.pdf.export');
 	Route::resource('regrepveh', 'RegRepVehController');
 
 //Rutas para Registro Trabajo Vehicular
@@ -207,6 +212,7 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::post('regmanveh/store', 'RegManVehController@store')->name('regmanveh.createregmanveh');
 	Route::get('userconcesionaria/concesionaria/{id}', 'UserConcesionariaController@concesionaria')->name('userconcesionaria.concesionaria');
 	Route::get('regmanveh/search/trabajo/{query}', 'RegManVehController@searchAutocompleteTrabajo')->name('regmanveh.search.trabajo');
+	Route::get('regmanveh/pdf/generar','RegManVehController@generatePDF')->name('regmanveh.pdf.export');
 	Route::resource('regmanveh', 'RegManVehController');
 
 
