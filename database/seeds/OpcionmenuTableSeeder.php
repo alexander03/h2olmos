@@ -138,6 +138,14 @@ class OpcionmenuTableSeeder extends Seeder
         ]);
 
         DB::table('opcionmenu')->insert([
+            'descripcion' => 'Kilometrajes',
+            'link' => 'kilometrajes',
+            'icono' => 'directions_car',
+            'orden' => 7,
+            'grupomenu_id' => 1
+        ]);
+
+        DB::table('opcionmenu')->insert([
             'descripcion' => 'Mant. corr. y prev.',
             'link' => 'mantcorrprev',
             'icono' => 'myicon',
@@ -152,6 +160,7 @@ class OpcionmenuTableSeeder extends Seeder
             'orden' => 1,
             'grupomenu_id' => 3
         ]);
+        
 
         //SISTEMA
         DB::table('opcionmenu')->insert([

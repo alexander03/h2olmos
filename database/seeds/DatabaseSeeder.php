@@ -38,7 +38,8 @@ class DatabaseSeeder extends Seeder
             AbastecimientoCombustibleTableSeeder::class,
             UserConcesionariaSeeder::class,
             RegRepVehSeeder::class,
-            RegManVehSeeder::class
+            RegManVehSeeder::class,
+            KilometrajeSeeder::class
         ]);
     }
 }

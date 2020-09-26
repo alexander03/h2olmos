@@ -164,6 +164,13 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('existeconductor', 'ConductorController@existeConductor')->name('conductores.existeconductor');
 	Route::get('conductores/activar/{id}/{listarluego}', 'ConductorController@activar')->name('conductores.activar');
 	Route::get('conductores/reactivar/{id}', 'ConductorController@reactivar')->name('conductores.reactivar');
+	//Rutas para las kilometrajes (Kilometrajes)
+	Route::post('kilometrajes/buscar', 'KilometrajeController@buscar')->name('kilometrajes.buscar');
+	Route::get('kilometrajes/eliminar/{id}/{listarluego}', 'KilometrajeController@eliminar')->name('kilometrajes.eliminar');
+	Route::resource('kilometrajes', 'KilometrajeController', array('except' => array('show')));
+	Route::get('kilometrajes/activar/{id}/{listarluego}', 'KilometrajeController@activar')->name('kilometrajes.activar');
+	Route::get('kilometrajes/reactivar/{id}', 'KilometrajeController@reactivar')->name('kilometrajes.reactivar');
+
 	//Rutas para las areas
 	Route::post('areas/buscar', 'AreaController@buscar')->name('areas.buscar');
 	Route::get('areas/eliminar/{id}/{listarluego}', 'AreaController@eliminar')->name('areas.eliminar');
