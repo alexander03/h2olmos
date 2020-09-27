@@ -46,7 +46,7 @@ class Conductor extends Model
     }
 
     public function user() {
-        return $this->hasOne('App\User', 'conductor_id');
+        return $this->belongsTo('App\User', 'user_id');
     }
 
 }

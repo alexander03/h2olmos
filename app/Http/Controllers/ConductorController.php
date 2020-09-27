@@ -106,6 +106,7 @@ class ConductorController extends Controller
         $entidad  = 'Conductor';
         $conductor = null;
         $licenciaLetra = null;
+        $username_conductor = null;
         $formData = array('conductores.store');
         $formData = array('route' => $formData, 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off', 'role' => 'form', 'enctype' => 'multipart/form-data');
         $boton    = 'Registrar';
@@ -123,39 +124,52 @@ class ConductorController extends Controller
         foreach($arrContratista as $k=>$v){
             $cboContratista += array($v->id=>$v->razonsocial);
         }
-        return view($this->folderview.'.mant')->with(compact('conductor', 'formData', 'entidad', 'boton', 'licenciaLetra', 'arrCategorias', 'cboContratista', 'listar'));
+        return view($this->folderview.'.mant')->with(compact('conductor', 'formData', 'entidad', 'boton', 'licenciaLetra', 'username_conductor', 'arrCategorias', 'cboContratista', 'listar'));
     }
 
     public function store(Request $request)
     {
         $listar     = Libreria::getParam($request->input('listar'), 'NO');
-        // $reglas     = array(
-        //     'dni' => 'required|integer|digits:8',
-        //     'licencia_letra' => 'required|alpha',
-        //     'categoria' => 'required',
-        //     'fechavencimiento' => 'required',
-        //     'contratista_id' => 'required',
-        // );
-        // $mensajes = array(
-        //     'dni.required' => 'Debe ingresar un DNI',
-        //     'dni.integer' => 'DNI inválido',
-        //     'dni.digits' => 'DNI debe tener 8 cifras',
-        //     'licencia_letra.required' => 'Licencia incompleta',
-        //     'licencia_letra.alpha' => 'Licencia inválida',
-        //     'categoria.required' => 'Seleccione categoría',
-        //     'fechavencimiento.required' => 'Seleccione fecha de vencimiento',
-        //     'contratista_id.required' => 'Seleccione contratista',
-        // );
-        // $validacion = Validator::make($request->all(), $reglas, $mensajes);
-        // if ($validacion->fails()) {
-        //     return $validacion->messages()->toJson();
-        // }
+        $reglas     = array(
+            'dni' => 'required|integer|digits:8',
+            'licencia_letra' => 'required|alpha',
+            'categoria' => 'required',
+            'fechavencimiento' => 'required',
+            'contratista_id' => 'required',
+        );
+        $mensajes = array(
+            'dni.required' => 'Debe ingresar un DNI',
+            'dni.integer' => 'DNI inválido',
+            'dni.digits' => 'DNI debe tener 8 cifras',
+            'licencia_letra.required' => 'Licencia incompleta',
+            'licencia_letra.alpha' => 'Licencia inválida',
+            'categoria.required' => 'Seleccione categoría',
+            'fechavencimiento.required' => 'Seleccione fecha de vencimiento',
+            'contratista_id.required' => 'Seleccione contratista',
+        );
+        $validacion = Validator::make($request->all(), $reglas, $mensajes);
+        if ($validacion->fails()) {
+            return $validacion->messages()->toJson();
+        }
         $error = DB::transaction(function() use($request){
             $concesionariaActual = Concesionaria::getConcesionariaActual();
 
             //Busco al conductor
             $conductorBuscado = Conductor::where('dni', $request->input('dni'))->first();
             if($conductorBuscado == null) {
+                $tipo_conductor = Tipouser::where('descripcion', 'CONDUCTOR')->first();
+                $user = new User();
+                $user->tipouser_id= $tipo_conductor->id;
+                $user->name = mb_strtoupper($request->input('nombres'), 'utf-8') .' ' . mb_strtoupper($request->input('apellidos'), 'utf-8');
+                $user->username= $request->input('username');
+                $user->password= Hash::make($request->input('password'));
+                $user->save();
+
+                $userconcesionaria = new UserConcesionaria();
+                $userconcesionaria->user_id = $user->id;
+                $userconcesionaria->concesionaria_id = $concesionariaActual->id;
+                $userconcesionaria->save();
+
                 $conductor = new Conductor();
                 $conductor->dni= $request->input('dni');
                 $conductor->apellidos= mb_strtoupper($request->input('apellidos'), 'utf-8');
@@ -164,6 +178,7 @@ class ConductorController extends Controller
                 $conductor->categoria= $request->input('categoria');
                 $conductor->fechavencimiento= mb_strtoupper($request->input('fechavencimiento'), 'utf-8');
                 $conductor->contratista_id= mb_strtoupper($request->input('contratista_id'), 'utf-8');
+                $conductor->user_id = $user->id;
                 $conductor->save();
     
                 $conductorconcesionaria = new Conductorconcesionaria();
@@ -192,21 +207,6 @@ class ConductorController extends Controller
                 $conductordocument->save();
                 $docConformidadFirma->move(public_path('files/documento_conductor/documentos_conformidad_firmas'), $nameDocConformidadFirma);
 
-                $tipo_conductor = Tipouser::where('descripcion', 'CONDUCTOR')->first();
-
-                $user = new User();
-                $user->tipouser_id= $tipo_conductor->id;
-                $user->name = $conductor->nombres . ' ' . $conductor->apellidos;
-                $user->username= $request->input('username');
-                $user->password= Hash::make($request->input('password'));
-                $user->save();
-
-                
-                $userconcesionaria = new UserConcesionaria();
-                $userconcesionaria->user_id = $user->id;
-                $userconcesionaria->concesionaria_id = $concesionariaActual->id;
-                $userconcesionaria->save();
-
             } else {
                 $conductorconcesionaria = new Conductorconcesionaria();
                 $conductorconcesionaria->conductor_id = $conductorBuscado->id;
@@ -226,7 +226,7 @@ class ConductorController extends Controller
         $listar   = Libreria::getParam($request->input('listar'), 'NO');
         $conductor = Conductor::find($id);
         $licenciaLetra = $conductor->licencia[0];
-        // $username_conductor = $conductor->user->username;
+        $username_conductor = $conductor->user->username;
 
         $entidad  = 'Conductor';
         $formData = array('conductores.update', $id);
@@ -247,7 +247,7 @@ class ConductorController extends Controller
             $cboContratista += array($v->id=>$v->razonsocial);
         }
         
-        return view($this->folderview.'.mant')->with(compact('conductor', 'formData', 'entidad', 'boton', 'licenciaLetra', 'arrCategorias', 'cboContratista', 'listar'));
+        return view($this->folderview.'.mant')->with(compact('conductor', 'formData', 'entidad', 'boton', 'licenciaLetra', 'arrCategorias', 'username_conductor', 'cboContratista', 'listar'));
     }
 
     public function update(Request $request, $id) {

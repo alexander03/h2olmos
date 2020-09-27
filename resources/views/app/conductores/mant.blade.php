@@ -93,7 +93,7 @@
 	<div class="form-group col-6  col-sm-6">
 		{!! Form::label('username', 'Usuario:', array('class' => 'col-lg-12 col-md-12 col-sm-12')) !!}
 		<div class="col-lg-12 col-md-12 col-sm-12">
-			{!! Form::text('username', null, array('class' => '', 'id' => 'username')) !!}
+			{!! Form::text('username', $username_conductor, array('class' => '', 'id' => 'username')) !!}
 		</div>
 	</div>
 	<div class="form-group col-6  col-sm-6">
