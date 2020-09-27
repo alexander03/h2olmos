@@ -20,6 +20,7 @@ class ExcelReport_HorasTrabajadas implements FromView
     private $data = [], $row = -1, $col = -1, $max_row = -1, $max_col = -1;
     private $span_value = 'span_cell', $free_value = 'free_cell';
     private $start_date, $end_date;
+    private $level = 0;
 
     public function __construct($data)
     {
@@ -334,7 +335,7 @@ class ExcelReport_HorasTrabajadas implements FromView
         $months = $this->getMonths();
         foreach ($months as $month) {
             $this->add($month['name'], ['colspan' => count($month['days'])]);
-            $this->add('Total '.$month['name']);
+            $this->add('Total ' . $month['name'], ['rowspan' => 2, 'use' => false]);
         }
         $this->add('Total general');
 
@@ -356,7 +357,7 @@ class ExcelReport_HorasTrabajadas implements FromView
             'value' => $concesionaria['razonsocial'],
             'subData' => $this->getEquipos($concesionaria['id'])
         ];
-        
+        // dd($table);
         $table = $this->formatTable($table['value'], ['subData' => $table['subData']]);
 
         $this->add($table); 
@@ -381,6 +382,7 @@ class ExcelReport_HorasTrabajadas implements FromView
             
             $new_month['days'] = $days;
             $month = new DateTime($day->format('Y-m-d'));
+            // $date = new DateTime(date('Y-m-d', strtotime($date->format('Y-m-d') . ' + 1 months')));
 
             $months[] = $new_month;
         }
@@ -460,6 +462,8 @@ class ExcelReport_HorasTrabajadas implements FromView
         $total_general = 0; $total_mes = 0; $mes = null;
         $date = new DateTime($start_date);
         
+        $this->level++;
+
         while ( $date <= $this->end_date ) {
             if ( is_null($mes) ) $mes = intval($date->format('m'));
             
@@ -476,18 +480,23 @@ class ExcelReport_HorasTrabajadas implements FromView
             // SI: se esta trabajando con el mismo mes
             if ( $mes == intval($date->format('m')) ) $total_mes += is_null($control) ? 0 : $control;
             // SINO: entonces trabajamos con el nuevo mes
-            else $total_mes = is_null($control) ? 0 : $control;
+            else {
+                $mes = intval($date->format('m'));
+                $total_mes = is_null($control) ? 0 : $control;
+            }
             
             // SI el mes que viene es el final o final de rango
-            if ( $mes != intval(date_modify(new DateTime($date->format('Y-m-d')), '+1 day')->format('m')) || $date == $this->end_date ) {
-                $value[] = $total_mes;
+            $tomorrow = new DateTime($date->format('Y-m-d'));
+            $tomorrow->modify('+1 day');
+            if ( $date == $this->end_date || $mes != intval($tomorrow->format('m')) ) {
+                $value[] = number_format($total_mes, 2);
                 $total_general += $total_mes;
             }
 
             $date->modify('+1 day');
         }
-
-        $value[] = $total_general;
+        
+        $value[] = number_format($total_general, 2);
 
         return [
             [
