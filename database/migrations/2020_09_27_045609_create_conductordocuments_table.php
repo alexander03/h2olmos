@@ -15,7 +15,7 @@ class CreateConductordocumentsTable extends Migration
     {
         Schema::create('conductordocument', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('tipo', 30); // imagen-firma, conformidad-firma
+            $table->string('tipo', 60); // imagen-firma, conformidad-firma
             $table->string('archivo')->nullable();
             $table->unsignedBigInteger('conductor_id');
             $table->foreign('conductor_id')->references('id')->on('conductor');

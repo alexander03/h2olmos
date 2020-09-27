@@ -8,7 +8,7 @@
 @endif
 <div id="divMensajeError{!! $entidad !!}"></div>
 <div id="my-div-errors" class="hidden"><h5 class="text-center p-0 m-0"><span class="badge badge-danger"></span></h5></div>
-{!! Form::model($conductor, $formData) !!}	
+{!! Form::model($conductor, $formData) !!}
 {!! Form::hidden('listar', $listar, array('id' => 'listar')) !!}
 <div class="form-row">
 	<div class="form-group col-5 col-sm-3">
@@ -71,18 +71,18 @@
 
 <div class="form-row">
 	<div class="form-group col-6  col-sm-4">
-		{!! Form::label('imagen-firma', 'Imágen de la firma:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
+		{!! Form::label('imagenfirma', 'Imágen de la firma:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
 	</div>
 	<div class="col-sm-8 d-flex align-items-end">
-		{!! Form::file('imagen-firma', ['class' => 'form-control mb-2', 'accept' => 'image/png, image/jpeg']) !!}
+		{!! Form::file('imagenfirma', ['class' => 'form-control mb-2', 'accept' => 'image/png, image/jpeg','id' => 'imagenfirma']) !!}
 	</div>
 </div>
 <div class="form-row">
 	<div class="form-group col-6  col-sm-4">
-		{!! Form::label('conformidad-firma', 'Doc. de conformidad:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
+		{!! Form::label('conformidadfirma', 'Doc. de conformidad:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
 	</div>
 	<div class="col-sm-8 d-flex align-items-end">
-		{!! Form::file('conformidad-firma', ['class' => 'form-control mb-2', 'accept' => '.pdf,.doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document']) !!}
+		{!! Form::file('conformidadfirma', ['class' => 'form-control mb-2', 'accept' => '.pdf,.doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document','id' => 'conformidadfirma']) !!}
 	</div>
 </div>
 

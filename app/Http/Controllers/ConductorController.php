@@ -8,6 +8,7 @@ use App\Conductor;
 use App\Contratista;
 use App\Concesionaria;
 use App\Conductorconcesionaria;
+use App\Conductordocument;
 use App\Librerias\Libreria;
 use Illuminate\Support\Facades\DB;
 
@@ -102,7 +103,7 @@ class ConductorController extends Controller
         $conductor = null;
         $licenciaLetra = null;
         $formData = array('conductores.store');
-        $formData = array('route' => $formData, 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
+        $formData = array('route' => $formData, 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off', 'role' => 'form', 'enctype' => 'multipart/form-data');
         $boton    = 'Registrar';
         $arrCategorias    = array(
             '' => 'Seleccione Categoría',
@@ -124,27 +125,27 @@ class ConductorController extends Controller
     public function store(Request $request)
     {
         $listar     = Libreria::getParam($request->input('listar'), 'NO');
-        $reglas     = array(
-            'dni' => 'required|integer|digits:8',
-            'licencia_letra' => 'required|alpha',
-            'categoria' => 'required',
-            'fechavencimiento' => 'required',
-            'contratista_id' => 'required',
-        );
-        $mensajes = array(
-            'dni.required' => 'Debe ingresar un DNI',
-            'dni.integer' => 'DNI inválido',
-            'dni.digits' => 'DNI debe tener 8 cifras',
-            'licencia_letra.required' => 'Licencia incompleta',
-            'licencia_letra.alpha' => 'Licencia inválida',
-            'categoria.required' => 'Seleccione categoría',
-            'fechavencimiento.required' => 'Seleccione fecha de vencimiento',
-            'contratista_id.required' => 'Seleccione contratista',
-        );
-        $validacion = Validator::make($request->all(), $reglas, $mensajes);
-        if ($validacion->fails()) {
-            return $validacion->messages()->toJson();
-        }
+        // $reglas     = array(
+        //     'dni' => 'required|integer|digits:8',
+        //     'licencia_letra' => 'required|alpha',
+        //     'categoria' => 'required',
+        //     'fechavencimiento' => 'required',
+        //     'contratista_id' => 'required',
+        // );
+        // $mensajes = array(
+        //     'dni.required' => 'Debe ingresar un DNI',
+        //     'dni.integer' => 'DNI inválido',
+        //     'dni.digits' => 'DNI debe tener 8 cifras',
+        //     'licencia_letra.required' => 'Licencia incompleta',
+        //     'licencia_letra.alpha' => 'Licencia inválida',
+        //     'categoria.required' => 'Seleccione categoría',
+        //     'fechavencimiento.required' => 'Seleccione fecha de vencimiento',
+        //     'contratista_id.required' => 'Seleccione contratista',
+        // );
+        // $validacion = Validator::make($request->all(), $reglas, $mensajes);
+        // if ($validacion->fails()) {
+        //     return $validacion->messages()->toJson();
+        // }
         $error = DB::transaction(function() use($request){
             $concesionariaActual = Concesionaria::getConcesionariaActual();
 
@@ -165,6 +166,28 @@ class ConductorController extends Controller
                 $conductorconcesionaria->conductor_id = $conductor->id;
                 $conductorconcesionaria->concesionaria_id = $concesionariaActual->id;
                 $conductorconcesionaria->save();
+
+                $imgFirma  = $request->file('imagenfirma');
+                $nameImgFirma = 'dni_' . $conductor->dni . '_' . $imgFirma->getClientOriginalName();
+
+                $conductordocument = new Conductordocument();
+                $conductordocument->tipo = 'imagen-firma';
+                $conductordocument->archivo = $nameImgFirma;
+                $conductordocument->conductor_id = $conductor->id;
+                $conductordocument->save();
+                $imgFirma->move(public_path('files/documento_conductor/imagenes_firmas'), $nameImgFirma);
+
+
+                $docConformidadFirma  = $request->file('conformidadfirma');
+                $nameDocConformidadFirma = 'dni_' . $conductor->dni . '_' . $docConformidadFirma->getClientOriginalName();
+
+                $conductordocument = new Conductordocument();
+                $conductordocument->tipo = 'conformidad-firma';
+                $conductordocument->archivo = $nameDocConformidadFirma;
+                $conductordocument->conductor_id = $conductor->id;
+                $conductordocument->save();
+                $docConformidadFirma->move(public_path('files/documento_conductor/documentos_conformidad_firmas'), $nameDocConformidadFirma);
+
             } else {
                 $conductorconcesionaria = new Conductorconcesionaria();
                 $conductorconcesionaria->conductor_id = $conductorBuscado->id;
@@ -188,7 +211,7 @@ class ConductorController extends Controller
         $licenciaLetra = $conductor->licencia[0];
         $entidad  = 'Conductor';
         $formData = array('conductores.update', $id);
-        $formData = array('route' => $formData, 'method' => 'PUT', 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
+        $formData = array('route' => $formData, 'method' => 'PUT', 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off', 'enctype' => 'multipart/form-data');
         $boton    = 'Modificar';
         $arrCategorias    = array(
             '' => 'Seleccione Categoría',
