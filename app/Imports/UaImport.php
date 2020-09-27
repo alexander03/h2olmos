@@ -24,12 +24,17 @@ class UaImport implements ToModel
         if($row[0] === null || $row[1] === null 
             || $row[2] === null || $row[3] === null) return null;
 
-        //Conversión explicita de habilitado
+        //VALIDAR QUE EL CÓDIGO SEA 8 DIGITOS
+        if(strlen($row[0]) !== 8) throw new Exception('error');
+        //CONVERSIÓN EXPLICITA DE HABILITADO
         (strtolower($row[2]) == 'si' ) ? $row[2] = 1 : $row[2] = 0; 
-        //Conversión explicita de datos ua padre
+        //CONVERSIÓN EXPLICITA DE DATOS US PADRE
         if(isset($row[5])){
             $ua_padre_id = Ua::select('id')
-                -> where('codigo', 'LIKE', $row[5])
+                -> where([
+                    [ 'codigo', 'LIKE', $row[5] ],
+                    [ 'concesionaria_id', $this -> getConsecionariaActual() ]
+                    ])
                 -> get();
             if(count($ua_padre_id) > 0) $row[5] = $ua_padre_id[0] -> id;
             else throw new Exception('error');

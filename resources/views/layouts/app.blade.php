@@ -85,6 +85,7 @@
         <script src="{{ asset('/js/main.js') }}"></script>
         <script src="{{ asset('/js/notifiacion.js') }}"></script>
         <script src="{{ asset('/js/equipo-autocomplete.js') }}"></script>
+        <script src="{{ asset('/js/utils_ua.js') }}"></script>
 
         @stack('js')
     </body>

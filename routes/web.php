@@ -83,6 +83,8 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('ua/search/{query}', 'UaController@searchAutocomplete')->name('ua.search');
 	Route::post('ua/importar', 'UaController@importExcel')->name('ua.excel.import');
 	Route::get('ua/exportar', 'UaController@exportExcel')->name('ua.excel.export');
+	Route::post('ua/deletelist', 'UaController@destroyList')->name('ua.deletelist');
+	Route::post('ua/deleteall', 'UaController@destroyAll')->name('ua.deleteall');
 	Route::resource('ua', 'UaController');
 
 	Route::post('unidad/buscar', 'UnidadController@buscar')->name('unidad.buscar');
