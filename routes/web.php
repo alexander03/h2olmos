@@ -114,6 +114,11 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('grifo/eliminar/{id}/{listarluego}', 'GrifoController@eliminar')->name('grifo.eliminar');
 	Route::resource('grifo', 'GrifoController', array('except' => array('show')));
 
+	//Rutas tipocombustible
+	Route::post('tipocombustible/buscar', 'TipocombustibleController@buscar')->name('tipocombustible.buscar');
+	Route::get('tipocombustible/eliminar/{id}/{listarluego}', 'TipocombustibleController@eliminar')->name('tipocombustible.eliminar');
+	Route::resource('tipocombustible', 'TipocombustibleController', array('except' => array('show')));
+
 	//Rutas Carroceria
 	Route::post('carroceria/buscar', 'CarroceriaController@buscar')->name('carroceria.buscar');
 	Route::get('carroceria/eliminar/{id}/{listarluego}', 'CarroceriaController@eliminar')->name('carroceria.eliminar');

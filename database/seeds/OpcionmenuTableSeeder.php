@@ -66,6 +66,14 @@ class OpcionmenuTableSeeder extends Seeder
         ]);
 
         DB::table('opcionmenu')->insert([
+            'descripcion' => 'Combustibles',
+            'link' => 'tipocombustible',
+            'icono' => 'info',
+            'orden' => 3,
+            'grupomenu_id' => 1
+        ]);
+
+        DB::table('opcionmenu')->insert([
             'descripcion' => 'Abastecimientos',
             'link' => 'abastecimiento',
             'icono' => 'face',

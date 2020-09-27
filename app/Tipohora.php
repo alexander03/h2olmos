@@ -11,6 +11,6 @@ class Tipohora extends Model
     protected $table = 'tipohora';
     protected $dates = ['deleted_at'];
 
-    protected $fillable = [ 'codigo', 'descripcion'];
+//    protected $fillable = [ 'codigo', 'descripcion'];
 
 }
