@@ -222,12 +222,12 @@ class ConductorController extends Controller
     public function edit($id, Request $request)
     {
         $existe = Libreria::verificarExistencia($id, 'conductor');
-        if ($existe !== true) {
-            return $existe;
-        }
+        if ($existe !== true) return $existe;
         $listar   = Libreria::getParam($request->input('listar'), 'NO');
         $conductor = Conductor::find($id);
         $licenciaLetra = $conductor->licencia[0];
+        // $username_conductor = $conductor->user->username;
+
         $entidad  = 'Conductor';
         $formData = array('conductores.update', $id);
         $formData = array('route' => $formData, 'method' => 'PUT', 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off', 'enctype' => 'multipart/form-data');
@@ -246,6 +246,7 @@ class ConductorController extends Controller
         foreach($arrContratista as $k=>$v){
             $cboContratista += array($v->id=>$v->razonsocial);
         }
+        
         return view($this->folderview.'.mant')->with(compact('conductor', 'formData', 'entidad', 'boton', 'licenciaLetra', 'arrCategorias', 'cboContratista', 'listar'));
     }
 

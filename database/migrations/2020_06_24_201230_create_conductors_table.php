@@ -24,6 +24,8 @@ class CreateConductorsTable extends Migration
             $table->date('fechavencimiento');
             $table->unsignedBigInteger('contratista_id');
             $table->foreign('contratista_id')->references('id')->on('contratista');
+            $table->unsignedBigInteger('user_id')->nullable();
+            $table->foreign('user_id')->references('id')->on('users');
             $table->timestamps();
             $table->softDeletes();
         });
