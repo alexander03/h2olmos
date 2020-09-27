@@ -85,6 +85,21 @@
 		{!! Form::file('conformidadfirma', ['class' => 'form-control mb-2', 'accept' => '.pdf,.doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document','id' => 'conformidadfirma']) !!}
 	</div>
 </div>
+<hr style="margin: 0">
+<div class="form-row">
+	<div class="form-group col-6  col-sm-6">
+		{!! Form::label('username', 'Usuario:', array('class' => 'col-lg-12 col-md-12 col-sm-12')) !!}
+		<div class="col-lg-12 col-md-12 col-sm-12">
+			{!! Form::text('username', null, array('class' => '', 'id' => 'username')) !!}
+		</div>
+	</div>
+	<div class="form-group col-6  col-sm-6">
+		{!! Form::label('password', 'Contraseña:', array('class' => 'col-lg-12 col-md-12 col-sm-12')) !!}
+		<div class="col-lg-12 col-md-12 col-sm-12">
+			{!! Form::password('password', null, array('id' => 'password')) !!}
+		</div>
+	</div>
+</div>
 
 <div class="form-group">
 	<div class="col-lg-12 col-md-12 col-sm-12 text-right">

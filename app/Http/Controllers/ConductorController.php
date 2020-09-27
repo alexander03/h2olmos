@@ -188,6 +188,8 @@ class ConductorController extends Controller
                 $conductordocument->save();
                 $docConformidadFirma->move(public_path('files/documento_conductor/documentos_conformidad_firmas'), $nameDocConformidadFirma);
 
+                
+
             } else {
                 $conductorconcesionaria = new Conductorconcesionaria();
                 $conductorconcesionaria->conductor_id = $conductorBuscado->id;
