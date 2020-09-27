@@ -69,6 +69,23 @@
 	</div>
 </div>
 
+<div class="form-row">
+	<div class="form-group col-6  col-sm-4">
+		{!! Form::label('imagen-firma', 'Imágen de la firma:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
+	</div>
+	<div class="col-sm-8 d-flex align-items-end">
+		{!! Form::file('imagen-firma', ['class' => 'form-control mb-2', 'accept' => 'image/png, image/jpeg']) !!}
+	</div>
+</div>
+<div class="form-row">
+	<div class="form-group col-6  col-sm-4">
+		{!! Form::label('conformidad-firma', 'Doc. de conformidad:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
+	</div>
+	<div class="col-sm-8 d-flex align-items-end">
+		{!! Form::file('conformidad-firma', ['class' => 'form-control mb-2', 'accept' => '.pdf,.doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document']) !!}
+	</div>
+</div>
+
 <div class="form-group">
 	<div class="col-lg-12 col-md-12 col-sm-12 text-right">
 		{!! Form::button('<i class="fa fa-check fa-lg"></i> '.$boton, array('class' => 'btn btn-success btn-sm', 'id' => 'btnGuardar', 'onclick' => 'guardar(\''.$entidad.'\', this)')) !!}
@@ -84,6 +101,9 @@
 	}
 	.hidden {
 		display: none;
+	}
+	.document__img-firma {
+		font-size: 17px;
 	}
 </style>
 <script type="text/javascript">
