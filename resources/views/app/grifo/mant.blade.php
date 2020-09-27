@@ -21,12 +21,12 @@ if ($grifo !== NULL) {
 		{!! Form::text('ubicacion', null, array('class' => 'form-control input-xs', 'id' => 'ubicacion')) !!}
 	</div>
 </div>
-<div class="form-group col-md-6  ">
-		{!! Form::label('abastecimiento_id', 'lugar de abastecimiento:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
-		<div class="col-lg-12 col-md-12 col-sm-12">
-			{!! Form::select('abastecimiento_id', $cboAbastecimiento, null, array('class' => 'form-control input-xs', 'id' => 'abastecimiento_id')) !!}
-		</div>
+<div class="form-group ">
+	{!! Form::label('abastecimiento_id', 'lugar de abastecimiento:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
+	<div class="col-lg-12 col-md-12 col-sm-12">
+		{!! Form::select('abastecimiento_id', $cboAbastecimiento, null, array('class' => 'form-control input-xs', 'id' => 'abastecimiento_id')) !!}
 	</div>
+</div>
 <div class="form-group">
 	{!! Form::label('contacto', 'Nombre de contacto:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
 	<div class="col-lg-12 col-md-12 col-sm-12">

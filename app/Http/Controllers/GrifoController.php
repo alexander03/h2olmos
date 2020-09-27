@@ -98,7 +98,7 @@ class GrifoController extends Controller
     public function create(Request $request)
     {   
         
-        $abastecimientos = Area::orderBy('descripcion','asc')->get();
+        $abastecimientos = Abastecimiento::orderBy('descripcion','asc')->get();
         $cboAbastecimiento = array();
         $cboAbastecimiento += array('0' => 'Selecione abastecimiento');
         foreach($abastecimientos as $k=>$v){
@@ -186,7 +186,7 @@ class GrifoController extends Controller
             return $existe;
         }
 
-        $abastecimientos = Area::orderBy('descripcion','asc')->get();
+        $abastecimientos = Abastecimiento::orderBy('descripcion','asc')->get();
         $cboAbastecimiento = array();
         $cboAbastecimiento += array('0' => 'Selecione abastecimiento');
         foreach($abastecimientos as $k=>$v){
