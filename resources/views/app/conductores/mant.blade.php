@@ -69,22 +69,25 @@
 	</div>
 </div>
 
-<div class="form-row">
-	<div class="form-group col-6  col-sm-4">
-		{!! Form::label('imagenfirma', 'Imágen de la firma:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
+@if ($readOnly == false)
+	<div class="form-row">
+		<div class="form-group col-6  col-sm-4">
+			{!! Form::label('imagenfirma', 'Imágen de la firma:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
+		</div>
+		<div class="col-sm-8 d-flex align-items-end">
+			{!! Form::file('imagenfirma', ['class' => 'form-control mb-2', 'accept' => 'image/png, image/jpeg','id' => 'imagenfirma']) !!}
+		</div>
 	</div>
-	<div class="col-sm-8 d-flex align-items-end">
-		{!! Form::file('imagenfirma', ['class' => 'form-control mb-2', 'accept' => 'image/png, image/jpeg','id' => 'imagenfirma']) !!}
+	<div class="form-row">
+		<div class="form-group col-6  col-sm-4">
+			{!! Form::label('conformidadfirma', 'Doc. de conformidad:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
+		</div>
+		<div class="col-sm-8 d-flex align-items-end">
+			{!! Form::file('conformidadfirma', ['class' => 'form-control mb-2', 'accept' => '.pdf,.doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document','id' => 'conformidadfirma']) !!}
+		</div>
 	</div>
-</div>
-<div class="form-row">
-	<div class="form-group col-6  col-sm-4">
-		{!! Form::label('conformidadfirma', 'Doc. de conformidad:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
-	</div>
-	<div class="col-sm-8 d-flex align-items-end">
-		{!! Form::file('conformidadfirma', ['class' => 'form-control mb-2', 'accept' => '.pdf,.doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document','id' => 'conformidadfirma']) !!}
-	</div>
-</div>
+@endif
+
 <hr style="margin: 0">
 <div class="form-row">
 	<div class="form-group col-6  col-sm-6">
