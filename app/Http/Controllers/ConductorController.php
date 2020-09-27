@@ -226,7 +226,7 @@ class ConductorController extends Controller
         $listar   = Libreria::getParam($request->input('listar'), 'NO');
         $conductor = Conductor::find($id);
         $licenciaLetra = $conductor->licencia[0];
-        $username_conductor = $conductor->user->username;
+        // $username_conductor = $conductor->user->username;
 
         $entidad  = 'Conductor';
         $formData = array('conductores.update', $id);
@@ -247,7 +247,7 @@ class ConductorController extends Controller
             $cboContratista += array($v->id=>$v->razonsocial);
         }
         
-        return view($this->folderview.'.mant')->with(compact('conductor', 'formData', 'entidad', 'boton', 'licenciaLetra', 'arrCategorias', 'username_conductor', 'cboContratista', 'listar'));
+        return view($this->folderview.'.mant')->with(compact('conductor', 'formData', 'entidad', 'boton', 'licenciaLetra', 'arrCategorias', 'cboContratista', 'listar'));
     }
 
     public function update(Request $request, $id) {
