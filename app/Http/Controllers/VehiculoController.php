@@ -7,7 +7,7 @@ use App\Ua;
 use App\Rules\SearchUaPadre;
 use App\Area;
 use App\Brand;
-use App\carroceria;
+use App\Carroceria;
 use App\Contratista;
 use App\Concesionaria;
 use Illuminate\Http\Request;

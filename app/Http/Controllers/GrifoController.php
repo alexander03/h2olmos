@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Validator;
 use App\Grifo;
+use App\Abastecimiento;
 use Illuminate\Http\Request;
 use App\Librerias\Libreria;
 use App\Http\Controllers\Controller;
@@ -99,6 +100,7 @@ class GrifoController extends Controller
         $listar   = Libreria::getParam($request->input('listar'), 'NO');
         $entidad  = 'Grifo';
         $grifo = null;
+        $cmbAbastecimiento = Abastecimiento::all()->get();
         $formData = array('grifo.store');
         $formData = array('route' => $formData, 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
         $boton    = 'Registrar'; 
@@ -179,6 +181,7 @@ class GrifoController extends Controller
         $listar   = Libreria::getParam($request->input('listar'), 'NO');
         $grifo = Grifo::find($id);
         $entidad  = 'Grifo';
+        $cmbAbastecimiento = Abastecimiento::all()->get();
         $formData = array('grifo.update', $id);
         $formData = array('route' => $formData, 'method' => 'PUT', 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
         $boton    = 'Modificar';

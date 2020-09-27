@@ -105,7 +105,7 @@ Route::group(['middleware' => 'auth'], function () {
 
 	//Rutas controldiario
 	Route::post('controldiario/buscar', 'ControlDiarioController@buscar')->name('controldiario.buscar');
-	Route::post('controldiario/hequipoxua', 'ControlDiarioController@HEquipoxUa')->name('controldiario.hequipoxua');
+	Route::get('controldiario/hequipoxua', 'ControlDiarioController@HEquipoxUa')->name('controldiario.hequipoxua');
 	Route::get('controldiario/eliminar/{id}/{listarluego}', 'ControlDiarioController@eliminar')->name('controldiario.eliminar');
 	Route::resource('controldiario', 'ControlDiarioController', array('except' => array('show')));
 
@@ -129,6 +129,11 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::post('vehiculo/buscar', 'VehiculoController@buscar')->name('vehiculo.buscar');
 	Route::get('vehiculo/eliminar/{id}/{listarluego}', 'VehiculoController@eliminar')->name('vehiculo.eliminar');
 	Route::resource('vehiculo', 'VehiculoController', array('except' => array('show')));
+
+	//Rutas Abastecimiento
+	Route::post('abastecimiento/buscar', 'AbastecimientoController@buscar')->name('abastecimiento.buscar');
+	Route::get('abastecimiento/eliminar/{id}/{listarluego}', 'AbastecimientoController@eliminar')->name('abastecimiento.eliminar');
+	Route::resource('abastecimiento', 'AbastecimientoController', array('except' => array('show')));
 
 	//Rutas VehiculoDocument
 	Route::post('vehiculodocument/buscar', 'VehiculoDocumentController@buscar')->name('vehiculodocument.buscar');

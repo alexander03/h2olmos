@@ -24,11 +24,11 @@
 			</div>
 			<div class="col-lg-2 col-md-2 col-sm-2 col-6 ">
 					{!! Form::label('fecha_registro_inicial', 'Fecha inicial') !!}
-					{!! Form::date('fecha_registro_inicial', '', array('class' => 'form-control input-xs', 'id' => 'fecha_registro_inicial')) !!}			
+					{!! Form::date('fecha_registro_inicial', '', array('class' => 'form-control input-xs', 'id' => 'fecha_registro_inicial', 'onchange' => 'EditbtnExelHEU()')) !!}			
 				</div>
 			<div class="col-lg-2 col-md-2 col-sm-2 col-6 ">
 					{!! Form::label('fecha_registro_final', 'Fecha final') !!}
-					{!! Form::date('fecha_registro_final', '', array('class' => ' form-control input-xs', 'id' => 'fecha_registro_final')) !!}
+					{!! Form::date('fecha_registro_final', '', array('class' => ' form-control input-xs', 'id' => 'fecha_registro_final', 'onchange' => 'EditbtnExelHEU()')) !!}
 				</div>
 			<div class="col-2 col-sm-2 col-md-2 col-lg-2">
 				{!! Form::label('filas', 'Filas a mostrar:')!!}
@@ -39,7 +39,11 @@
 				{!! Form::button('<i class="material-icons">search</i>Buscar', array('class' => 'btn btn-success btn-sm', 'id' => 'btnBuscar', 'onclick' => 'buscar(\''.$entidad.'\')')) !!}
 				{!! Form::button('<i class="material-icons">add</i>Nuevo', array('class' => 'btn btn-info btn-sm', 'id' => 'btnNuevo', 'onclick' => 'modal (\''.URL::route($ruta["create"], array('listar'=>'SI')).'\', \''.$titulo_registrar.'\', this);')) !!}
 
-				{!! Form::button('<i class="material-icons">cloud_download</i>Report H.ExU', array('class' => 'btn btn-primary btn-sm', 'id' => 'btnBuscar')) !!}
+				
+
+				<a href="{{ route('controldiario.hequipoxua') }}?" target="_blank" id="btnExelHEU" class="btn btn-sm btn-primary">
+					<i class="material-icons">cloud_download</i> Report H.ExU
+				</a>
 
 				<a href="{{ route('controldiario.exportExcelReport') }}" target="_blank" class="btn btn-sm btn-primary" title="Exportar">
 					<i class="material-icons">cloud_download</i> Exportar
@@ -64,8 +68,25 @@
 			}
 		});
 	});
+
+	let EditbtnExelHEU = () =>{
+		
+		const fecha1 = document.getElementById('fecha_registro_inicial').value;
+		const fecha2 = document.getElementById('fecha_registro_final').value;
+
+		let ruta = document.getElementById('btnExelHEU').getAttribute('href');
+
+		ruta = ruta.split('?')[0];
+		
+		let newRuta = ruta + `?fecha_registro_inicial=${fecha1}&fecha_registro_final=${fecha2}`;
+
+		document.getElementById('btnExelHEU').setAttribute('href',newRuta);
+	};
+
+	
 /*
 	function DescargarEHEU(){
+		
 		const formData = new FormData();
 		formData.append('fecha_registro_inicial', document.querySelector('#fecha_registro_inicial').value);
 		formData.append('fecha_registro_final', document.querySelector('#fecha_registro_final').value);
@@ -77,8 +98,9 @@
 		       	body:formData
 			};
 		
-		fetch('controldiario/hequipoxua',config).
+		fetch('controldiario/hequipoxua',config)
 		.then(data => console.log(data.text()));
+		
 	}
 */
 </script>

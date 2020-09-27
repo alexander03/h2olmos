@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateGrifoTable extends Migration
+class CreateAbastecimientoTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,16 +13,11 @@ class CreateGrifoTable extends Migration
      */
     public function up()
     {
-        Schema::create('grifo', function (Blueprint $table) {
-        //    $table->engine = 'InnoDB';
+        Schema::create('abastecimiento', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('descripcion',25);
-            $table->string('ubicacion',25);
-            $table->string('contacto', 30);
-            $table->string('telefono', 9);
-            $table->string('correo', 25);
-            $table->timestamps();
+            $table->string('descripcion',45);
             $table->softDeletes();
+            $table->timestamps();
         });
     }
 
@@ -33,6 +28,6 @@ class CreateGrifoTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('grifo');
+        Schema::dropIfExists('abastecimiento');
     }
 }
