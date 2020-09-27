@@ -5,12 +5,9 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Tipohora extends Model
-{	
-	use SoftDeletes;
-    protected $table = 'tipohora';
+class Abastecimiento extends Model
+{
+    use SoftDeletes;
+    protected $table = 'Abastecimiento';
     protected $dates = ['deleted_at'];
-
-//    protected $fillable = [ 'codigo', 'descripcion'];
-
 }

@@ -7,7 +7,7 @@
 	<thead>
 		<tr>
 			@foreach($cabecera as $key => $value)
-				<th @if((int)$value['numero'] > 1) colspan="{{ $value['numero'] }}" @endif>{!! $value['valor'] !!}</th>
+				<th @if((int)$value['numero'] > 1) colspan="{{ $value['numero'] }}" @endif class="text-center">{!! $value['valor'] !!}</th>
 			@endforeach
 		</tr>
 	</thead>
@@ -19,11 +19,6 @@
 		<tr>
 			<td>{{ $contador }}</td>
 			<td>{{ $value->descripcion }}</td>
-			<td>{{ $value->ubicacion }}</td>
-			<td>{{ $value->abastecimiento->descripcion }}</td>
-			<td>{{ $value->contacto }}</td>
-			<td>{{ $value->telefono }}</td>
-			<td>{{ $value->correo }}</td>
 			<td>{!! Form::button('<i class="material-icons">edit</i>', array('onclick' => 'modal (\''.URL::route($ruta["edit"], array($value->id, 'listar'=>'SI')).'\', \''.$titulo_modificar.'\', this);', 'class' => 'btn btn-primary btn-link btn-sm','rel'=>'tooltip','title'=>'Editar')) !!}</td>
 			<td>{!! Form::button('<i class="material-icons">close</i>', array('onclick' => 'modal (\''.URL::route($ruta["delete"], array($value->id, 'SI')).'\', \''.$titulo_eliminar.'\', this);', 'class' => 'btn btn-danger btn-link btn-sm','rel'=>'tooltip','title'=>'Eliminar')) !!}</td>
 		</tr>

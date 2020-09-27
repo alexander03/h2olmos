@@ -107,7 +107,7 @@ Route::group(['middleware' => 'auth'], function () {
 
 	//Rutas controldiario
 	Route::post('controldiario/buscar', 'ControlDiarioController@buscar')->name('controldiario.buscar');
-	Route::post('controldiario/hequipoxua', 'ControlDiarioController@HEquipoxUa')->name('controldiario.hequipoxua');
+	Route::get('controldiario/hequipoxua', 'ControlDiarioController@HEquipoxUa')->name('controldiario.hequipoxua');
 	Route::get('controldiario/eliminar/{id}/{listarluego}', 'ControlDiarioController@eliminar')->name('controldiario.eliminar');
 	Route::resource('controldiario', 'ControlDiarioController', array('except' => array('show')));
 
@@ -115,6 +115,11 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::post('grifo/buscar', 'GrifoController@buscar')->name('grifo.buscar');
 	Route::get('grifo/eliminar/{id}/{listarluego}', 'GrifoController@eliminar')->name('grifo.eliminar');
 	Route::resource('grifo', 'GrifoController', array('except' => array('show')));
+
+	//Rutas tipocombustible
+	Route::post('tipocombustible/buscar', 'TipocombustibleController@buscar')->name('tipocombustible.buscar');
+	Route::get('tipocombustible/eliminar/{id}/{listarluego}', 'TipocombustibleController@eliminar')->name('tipocombustible.eliminar');
+	Route::resource('tipocombustible', 'TipocombustibleController', array('except' => array('show')));
 
 	//Rutas Carroceria
 	Route::post('carroceria/buscar', 'CarroceriaController@buscar')->name('carroceria.buscar');
@@ -131,6 +136,11 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::post('vehiculo/buscar', 'VehiculoController@buscar')->name('vehiculo.buscar');
 	Route::get('vehiculo/eliminar/{id}/{listarluego}', 'VehiculoController@eliminar')->name('vehiculo.eliminar');
 	Route::resource('vehiculo', 'VehiculoController', array('except' => array('show')));
+
+	//Rutas Abastecimiento
+	Route::post('abastecimiento/buscar', 'AbastecimientoController@buscar')->name('abastecimiento.buscar');
+	Route::get('abastecimiento/eliminar/{id}/{listarluego}', 'AbastecimientoController@eliminar')->name('abastecimiento.eliminar');
+	Route::resource('abastecimiento', 'AbastecimientoController', array('except' => array('show')));
 
 	//Rutas VehiculoDocument
 	Route::post('vehiculodocument/buscar', 'VehiculoDocumentController@buscar')->name('vehiculodocument.buscar');
