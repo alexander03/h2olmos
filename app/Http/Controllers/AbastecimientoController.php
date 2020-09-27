@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use Validator;
 use Illuminate\Http\Request;
 use App\Abastecimiento;
+use App\Librerias\Libreria;
+use Illuminate\Support\Facades\DB;
 
 
 class AbastecimientoController extends Controller

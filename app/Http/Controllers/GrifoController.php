@@ -96,15 +96,22 @@ class GrifoController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function create(Request $request)
-    {
+    {   
+        
+        $abastecimientos = Area::orderBy('descripcion','asc')->get();
+        $cboAbastecimiento = array();
+        $cboAbastecimiento += array('0' => 'Selecione abastecimiento');
+        foreach($abastecimientos as $k=>$v){
+            $cboAbastecimiento += array($v->id=>$v->descripcion);
+        }
+
         $listar   = Libreria::getParam($request->input('listar'), 'NO');
         $entidad  = 'Grifo';
         $grifo = null;
-        $cmbAbastecimiento = Abastecimiento::all()->get();
         $formData = array('grifo.store');
         $formData = array('route' => $formData, 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
         $boton    = 'Registrar'; 
-        return view($this->folderview.'.mant')->with(compact('grifo', 'formData', 'entidad', 'boton', 'listar'));
+        return view($this->folderview.'.mant')->with(compact('grifo', 'cboAbastecimiento', 'formData', 'entidad', 'boton', 'listar'));
     }
 
     /**
@@ -119,7 +126,7 @@ class GrifoController extends Controller
         $reglas     = array(
             'descripcion' => 'required|max:25',
             'ubicacion' => 'required|max:25',
-            'abastecimiento' => 'required|max:25',
+            'abastecimiento_id' => 'numeric|mix:1',
             'contacto' => 'required|max:30',
             'telefono' => 'required|max:9',
             'correo' => 'required|max:25'
@@ -129,8 +136,8 @@ class GrifoController extends Controller
             'descripcion.max'              => 'La descripción supera los 25 caracteres',
             'ubicacion.required'           => 'Debe ingresar una ubicacion',
             'ubicacion.max'                => 'La ubicacion supera los 25 caracteres',
-            'abastecimiento.required'      => 'Debe ingresar una abastecimiento',
-            'abastecimiento.max'           => 'La abastecimiento supera los 25 caracteres',
+            'abastecimiento_id.numeric'       => 'Abastecimiento invalido',
+            'abastecimiento_id.min'           => 'Debe selecionar un lugar de abastecimiento',
             'contacto.required'            => 'Debe ingresar una contacto',
             'contacto.max'                 => 'La contacto supera los 30 caracteres',
             'telefono.required'            => 'Debe ingresar una telefono',
@@ -178,14 +185,21 @@ class GrifoController extends Controller
         if ($existe !== true) {
             return $existe;
         }
+
+        $abastecimientos = Area::orderBy('descripcion','asc')->get();
+        $cboAbastecimiento = array();
+        $cboAbastecimiento += array('0' => 'Selecione abastecimiento');
+        foreach($abastecimientos as $k=>$v){
+            $cboAbastecimiento += array($v->id=>$v->descripcion);
+        }
+        
         $listar   = Libreria::getParam($request->input('listar'), 'NO');
         $grifo = Grifo::find($id);
         $entidad  = 'Grifo';
-        $cmbAbastecimiento = Abastecimiento::all()->get();
         $formData = array('grifo.update', $id);
         $formData = array('route' => $formData, 'method' => 'PUT', 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
         $boton    = 'Modificar';
-        return view($this->folderview.'.mant')->with(compact('grifo', 'formData', 'entidad', 'boton', 'listar'));
+        return view($this->folderview.'.mant')->with(compact('grifo', 'formData','cboAbastecimiento' ,'entidad', 'boton', 'listar'));
     }
 
     /**
@@ -204,7 +218,7 @@ class GrifoController extends Controller
         $reglas     = array(
             'descripcion' => 'required|max:25',
             'ubicacion' => 'required|max:25',
-            'abastecimiento' => 'required|max:25',
+            'abastecimiento_id' => 'numeric|mix:1',
             'contacto' => 'required|max:30',
             'telefono' => 'required|max:9',
             'correo' => 'required|max:25'
@@ -214,8 +228,8 @@ class GrifoController extends Controller
             'descripcion.max'              => 'La descripción supera los 25 caracteres',
             'ubicacion.required'           => 'Debe ingresar una ubicacion',
             'ubicacion.max'                => 'La ubicacion supera los 25 caracteres',
-            'abastecimiento.required'      => 'Debe ingresar una abastecimiento',
-            'abastecimiento.max'           => 'La abastecimiento supera los 25 caracteres',
+            'abastecimiento_id.numeric'       => 'Abastecimiento invalido',
+            'abastecimiento_id.min'           => 'Debe selecionar un lugar de abastecimiento',
             'contacto.required'            => 'Debe ingresar una contacto',
             'contacto.max'                 => 'La contacto supera los 30 caracteres',
             'telefono.required'            => 'Debe ingresar una telefono',

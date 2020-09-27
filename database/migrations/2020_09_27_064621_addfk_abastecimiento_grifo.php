@@ -14,7 +14,7 @@ class AddfkAbastecimientoGrifo extends Migration
     public function up()
     {
         Schema::table('grifo', function (Blueprint $table) {
-            
+            $table->unsignedBigInteger('abastecimiento_id');
             $table->foreign('abastecimiento_id')->references('id')->on('abastecimiento');
         });
     }

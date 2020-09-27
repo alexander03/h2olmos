@@ -20,7 +20,7 @@
 			<td>{{ $contador }}</td>
 			<td>{{ $value->descripcion }}</td>
 			<td>{{ $value->ubicacion }}</td>
-			<td>{{ $value->abastecimiento }}</td>
+			<td>{{ $value->abastecimiento->descripcion }}</td>
 			<td>{{ $value->contacto }}</td>
 			<td>{{ $value->telefono }}</td>
 			<td>{{ $value->correo }}</td>
