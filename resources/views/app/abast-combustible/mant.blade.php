@@ -118,6 +118,64 @@ if ($abastecimiento !== NULL) {
 			class="form-control" 
 			value="<?php if($abastecimiento) echo $abastecimiento -> abastecimiento_dia?>">
 	</div>
+	<div class="form-group col-md-6 p-3">
+		<label for="id-lugar" class="pl-3">Lugar de abastecimiento</label>
+		<input type="text" class="form-control" style="display: none">
+		<section class="d-flex mt-1"> 
+			<select class="form-control" name="lugar_abastecimiento" id="id-lugar">
+				<option value="">Seleccionar lugar de abastecimiento</option>
+			</select>
+		</section>	
+	</div>
+	<div class="form-group col-md-6 p-3">
+		<label for="id-tipo-combustible" class="pl-3">Tipo de combustible</label>
+		<input type="text" class="form-control" style="display: none">
+		<section class="d-flex mt-1"> 
+			<select class="form-control" name="tipo_combustible" id="id-tipo-combustible">
+				<option value="">Seleccionar tipo de combustible</option>
+			</select>
+		</section>	
+	</div>
+	<div class="form-group col-12 col-md-6 p-3">
+		<label for="id-motivo" class="pl-3">Motivo</label>
+		<input type="text" 
+			name="motivo" 
+			id="id-motivo" 
+			class="form-control" 
+			value="<?php if($abastecimiento) echo $abastecimiento -> motivo?>">
+	</div>
+	<div class="form-group col-md-6 p-3">
+		<label class="pl-3">Comprobante</label>
+		<input type="text" class="form-control" style="display: none">
+		<section class="d-flex mt-1"> 
+			<select class="form-control" name="comprobante">
+				<option value="">Seleccionar comprobante</option>
+				<option value="BOLETA" <?php if($abastecimiento) if($abastecimiento -> comprobante) echo 'selected' ?>>Boleta</option>
+				<option value="FACTURA" <?php if($abastecimiento) if(!$abastecimiento -> comprobante) echo 'selected' ?>>Factura</option>
+				<option value="OTROS" <?php if($abastecimiento) if(!$abastecimiento -> comprobante) echo 'selected' ?>>Otros</option>
+			</select>
+		</section>	
+	</div>
+	<div class="form-group col-12 col-md-6 p-3">
+		<label for="id-comprobante" class="pl-3">Numero de comprobante</label>
+		<input type="number" 
+			name="numero_comprobante" 
+			id="id-comprobante" 
+			class="form-control" 
+			value="<?php if($abastecimiento) echo $abastecimiento -> numero_comprobante?>">
+	</div>
+	<div class="form-group col-md-6 p-3">
+		<label for="id-f-init" class="pl-3">Fecha de inicio</label>
+		<input type="date" name="fecha_inicio" 
+			id="id-f-init" class="form-control" 
+			value="<?php if($abastecimiento) echo $abastecimiento->fecha_inicio; else echo date('yy-m-d'); ?>">
+	</div>
+	<div class="form-group col-md-6 p-3">
+		<label for="id-f-fin" class="pl-3">Fecha de fin</label>
+		<input type="date" name="fecha_fin" 
+			id="id-f-fin" class="form-control" 
+			value="<?php if($abastecimiento) echo $abastecimiento->fecha_fin; ?>">
+	</div>
 	
 	<div class="form-group w-100">
 		<div class="col-lg-12 col-md-12 col-sm-12 text-right">

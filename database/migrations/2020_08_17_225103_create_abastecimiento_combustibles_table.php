@@ -27,6 +27,11 @@ class CreateAbastecimientoCombustiblesTable extends Migration
             $table -> float('qtdl');
             $table -> float('km');
             $table -> float('abastecimiento_dia');
+            $table -> text('motivo');
+            $table -> string('comprobante');
+            $table -> unsignedBigInteger('numero_comprobante');
+            $table -> date('fecha_inicio');
+            $table -> date('fecha_fin');
             $table -> timestamps();
             $table -> softDeletes();
         });

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\AbastecimientoCombustible;
 use App\Concesionaria;
 use App\Controldiario;
 use App\Equipo;
@@ -273,6 +274,14 @@ class UaController extends Controller{
             return view('app.confirmarEliminar')->with(compact('childs', 'entidadChild'));
         }
 
+        //SEARCH SI TIENE RELACION CON ABASTECIMIENTO DE COMBUSTIBLE
+        $childControl = AbastecimientoCombustible::where('ua_id', '=', $id) -> get();
+        if( isset($childControl[0]) ){
+            $childs = true;
+            $entidadChild = 'Abastecimiento de combustible';
+            return view('app.confirmarEliminar')->with(compact('childs', 'entidadChild'));
+        }
+       
         $listar = "NO";
         if (!is_null(Libreria::obtenerParametro($listarLuego))) {
             $listar = $listarLuego;
@@ -305,6 +314,10 @@ class UaController extends Controller{
         //SEARCH SI TIENE RELACION CON CONTROL DIARIO
         $childControl = Controldiario::where('ua_id', '=', $id) -> get();
         if( isset($childControl[0]) ) throw new Exception('Tiene relación con control diario.');
+
+        //SEARCH SI TIENE RELACION CON ABASTECIMIENTO DE COMBUSTIBLE
+        $childControl = AbastecimientoCombustible::where('ua_id', '=', $id) -> get();
+        if( isset($childControl[0]) ) throw new Exception('Tiene relación con abastecimiento combustible.');
     }
 
     public function destroyList(Request $request){

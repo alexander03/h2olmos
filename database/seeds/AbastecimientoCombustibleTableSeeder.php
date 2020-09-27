@@ -24,6 +24,11 @@ class AbastecimientoCombustibleTableSeeder extends Seeder{
             'qtdl' => 30.6,
             'km' => 128.5,
             'abastecimiento_dia' => 21.33,
+            'motivo' => 'Llenado de mi tanque que ya no poseía',
+            'comprobante' => 'BOLETA',
+            'numero_comprobante' => 1,
+            'fecha_inicio' => now(),
+            'fecha_fin' => '2021-09-12',
             'created_at' => now(),
             'updated_at' => now()
         ]);
@@ -40,6 +45,11 @@ class AbastecimientoCombustibleTableSeeder extends Seeder{
             'qtdl' => 320.6,
             'km' => 18.5,
             'abastecimiento_dia' => 21.21,
+            'motivo' => 'Llenado de mi tanque que ya no poseía',
+            'comprobante' => 'BOLETA',
+            'numero_comprobante' => 2,
+            'fecha_inicio' => now(),
+            'fecha_fin' => '2021-09-12',
             'created_at' => now(),
             'updated_at' => now()
         ]);
@@ -55,7 +65,12 @@ class AbastecimientoCombustibleTableSeeder extends Seeder{
             'qtdgl' => 200.6,
             'qtdl' => 320.6,
             'km' => 128.5,
-            'abastecimiento_dia' => 2.36,
+            'abastecimiento_dia' => 2.36, 
+            'motivo' => 'Llenado de mi tanque que ya no poseía',
+            'comprobante' => 'BOLETA',
+            'numero_comprobante' => 3,
+            'fecha_inicio' => now(),
+            'fecha_fin' => '2021-09-12',
             'created_at' => now(),
             'updated_at' => now()
         ]);
