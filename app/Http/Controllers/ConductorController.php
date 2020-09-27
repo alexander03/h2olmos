@@ -9,6 +9,10 @@ use App\Contratista;
 use App\Concesionaria;
 use App\Conductorconcesionaria;
 use App\Conductordocument;
+use App\Tipouser;
+use App\User;
+use App\UserConcesionaria;
+use Illuminate\Support\Facades\Hash;
 use App\Librerias\Libreria;
 use Illuminate\Support\Facades\DB;
 
@@ -188,7 +192,20 @@ class ConductorController extends Controller
                 $conductordocument->save();
                 $docConformidadFirma->move(public_path('files/documento_conductor/documentos_conformidad_firmas'), $nameDocConformidadFirma);
 
+                $tipo_conductor = Tipouser::where('descripcion', 'CONDUCTOR')->first();
+
+                $user = new User();
+                $user->tipouser_id= $tipo_conductor->id;
+                $user->name = $conductor->nombres . ' ' . $conductor->apellidos;
+                $user->username= $request->input('username');
+                $user->password= Hash::make($request->input('password'));
+                $user->save();
+
                 
+                $userconcesionaria = new UserConcesionaria();
+                $userconcesionaria->user_id = $user->id;
+                $userconcesionaria->concesionaria_id = $concesionariaActual->id;
+                $userconcesionaria->save();
 
             } else {
                 $conductorconcesionaria = new Conductorconcesionaria();
