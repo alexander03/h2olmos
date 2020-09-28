@@ -6,6 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   
     <style type="text/css">
+
+        @page {
+            margin: 0mm;
+            border: 0mm;
+        }
         body{
             font-size: 8px;
             font-family: "Arial";
@@ -153,7 +158,7 @@
                     <tr>
                         <td width="30%" class="text-bold">UNIDAD:&nbsp;<span></span></td>
                         <td width="35%" class="text-bold">MARCA:&nbsp;<span></span></td>
-                        <td colspan="2" class="table-borderless">TIPO DE MANTENIMIENTO</td>
+                        <td colspan="2" class="text-bold table-borderless">TIPO DE MANTENIMIENTO:</td>
                     </tr>
                     <tr>
                         <td class="text-bold">PLACA:&nbsp;<span></span></td>

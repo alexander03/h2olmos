@@ -459,7 +459,7 @@ public function searchAutocompleteTrabajo($query){
         $data['concesionaria'] = $ConcAct;
         $data['cliente'] = $regmanveh->cliente;
         $data['ua_id'] = $regmanveh->ua_id;
-        $data['tipomantenimiento']=$regmanveh->tipomantenimiento==1?'Preventivo':'Correctivo';
+        $data['tipomantenimiento']=$regmanveh->tipomantenimiento==1?'PREVENTIVO':'CORRECTIVO';
         $data['kmman'] = $regmanveh->kmman;
         $data['kminicial'] = $regmanveh->kminicial;
         $data['kmfinal'] = $regmanveh->kmfinal;
