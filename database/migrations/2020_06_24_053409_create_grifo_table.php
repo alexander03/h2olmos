@@ -17,6 +17,10 @@ class CreateGrifoTable extends Migration
         //    $table->engine = 'InnoDB';
             $table->bigIncrements('id');
             $table->string('descripcion',25);
+            $table->string('ubicacion',25);
+            $table->string('contacto', 30);
+            $table->string('telefono', 9);
+            $table->string('correo', 25);
             $table->timestamps();
             $table->softDeletes();
         });

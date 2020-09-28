@@ -20,6 +20,14 @@
 					{!! Form::text('codigo', '', array('class' => 'form-control input-xs mr-2', 'id' => 'codigo')) !!}
 				</div>
 				<div class="col-2 col-sm-2 col-md-2 col-lg-2">
+					<label for="id-is-father">Es padre</label>
+					<select id="id-is-father" name="is_father" class="form-control input-xs mr-2">
+						<option value="">Seleccionar opción</option>
+						<option value="SI">SI</option>
+						<option value="NO">NO</option> 
+					</select>
+				</div>
+				<div class="col-2 col-sm-2 col-md-2 col-lg-2">
 					{!! Form::label('filas', 'Filas a mostrar:')!!}
 					{!! Form::selectRange('filas', 1, 30, 20, array('class' => 'form-control input-xs', 'onchange' => 'buscar(\''.$entidad.'\')')) !!}
 				</div>
@@ -27,15 +35,17 @@
 					{!! Form::button('<i class="material-icons">search</i>Buscar', array('class' => 'btn btn-success btn-sm', 'id' => 'btnBuscar', 'onclick' => 'buscar(\''.$entidad.'\')')) !!}
 					{!! Form::button('<i class="material-icons">add</i>Nuevo', array('class' => 'btn btn-info btn-sm', 'id' => 'btnNuevo', 'onclick' => 'modal (\''.URL::route($ruta["create"], array('listar'=>'SI')).'\', \''.$titulo_registrar.'\', this);')) !!}
 				</div>
-				<div class="form-group">
-					<a href="#" class="ml-1 btn btn-sm btn-primary js-import-excel">
-						<i class="material-icons">cloud_upload</i> Importar
-					</a>
-					<input class="js-import-excel-file" type="file" accept=".xls, .xlsx">
-					<a href="{{ route('ua.excel.export') }}" class="btn btn-sm btn-dark">
-						<i class="material-icons">cloud_download</i> Exportar
-					</a>
-				</div>
+				<section class="col-12 d-flex justify-content-center">
+					<div class="form-group">
+						<a href="#" class="ml-1 btn btn-sm btn-primary js-import-excel">
+							<i class="material-icons">cloud_upload</i> Importar
+						</a>
+						<input class="js-import-excel-file" type="file" accept=".xls, .xlsx">
+						<a href="{{ route('ua.excel.export') }}" class="btn btn-sm btn-dark">
+							<i class="material-icons">cloud_download</i> Exportar
+						</a>
+					</div>
+				</section>
 				
 				{!! Form::close() !!}
             	<div class="table-responsive" id="listado{{ $entidad }}">
@@ -59,7 +69,8 @@
 				<h3 class="text-danger text-center">Error al importar</h3>
 				<p class="text-center text-secondary">
 					No se pudo importar, el formato no coincide, 
-					existen datos repetidos o códigos no existentes.
+					existen datos repetidos, códigos no existentes o 
+					alguna ua padre no pertenece a esta concesionaria.
 				</p>
 				<div class="d-flex justify-content-center">
 					<button class="btn btn-success" data-dismiss="modal">Aceptar</button>

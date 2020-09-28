@@ -14,7 +14,8 @@ class AbastecimientoCombustibleExport implements FromCollection, WithHeadings
     */
     public function collection(){
         
-        $queryVehiculo = AbastecimientoCombustible::select('abastecimiento_combustible.id as id', 'fecha_abastecimiento', 'g.descripcion as desc', 'tipo_combustible', 
+        $queryVehiculo = AbastecimientoCombustible::select('abastecimiento_combustible.id as id', 'fecha_abastecimiento', 'g.descripcion as desc', 
+            'tcom.descripcion as tipo_combustible', 
             DB::raw('(CASE WHEN conductor_id IS NULL THEN conductor_fake ELSE c.nombres END) AS nom'), 'c.apellidos as ap', 
             'c.dni as dni', 'ua.codigo as code', 'ua.descripcion as descua', 
             DB::raw('(CASE WHEN vh.modelo IS NULL THEN "-" ELSE vh.modelo END) AS desceq'), 
@@ -22,16 +23,20 @@ class AbastecimientoCombustibleExport implements FromCollection, WithHeadings
             DB::raw('(CASE WHEN vh.modelo IS NULL THEN "-" ELSE vh.modelo END) AS eqmode'), 
             DB::raw('(CASE WHEN vh.placa IS NULL THEN "-" ELSE vh.placa END) AS eqpl'),
             DB::raw('(CASE WHEN ct.razonsocial IS NULL THEN "-" ELSE ct.razonsocial END) AS crza'), 
-            'qtdgl', 'qtdl', 'km', 'abastecimiento_dia')
+            'qtdgl', 'qtdl', 'km', 'abastecimiento_dia', 'motivo', 'comprobante', 'numero_comprobante',
+            'abastecimiento_combustible.fecha_inicio', 'abastecimiento_combustible.fecha_fin', 'abast.descripcion as abasDesc')
             -> leftJoin('grifo as g', 'g.id', '=', 'grifo_id')
             -> leftJoin('conductor as c', 'c.id', '=', 'conductor_id')
             -> leftjoin('ua', 'ua.id', '=', 'ua_id')
             -> leftJoin('vehiculo as vh', 'vh.id', '=', 'vehiculo_id')
             -> leftJoin('marca as mc', 'mc.id', '=', 'vh.marca_id')
             -> leftJoin('contratista as ct', 'ct.id', '=', 'vh.contratista_id')
+            -> leftJoin('tipocombustible as tcom', 'tcom.id', '=', 'abastecimiento_combustible.tipocombustible_id')
+            -> leftJoin('abastecimiento as abast', 'abast.id', '=', 'abastecimiento_combustible.abastecimiento_id')
             -> whereNull('abastecimiento_combustible.deleted_at');
 
-        $resultQuery = AbastecimientoCombustible::select('abastecimiento_combustible.id as id', 'fecha_abastecimiento', 'g.descripcion as desc', 'tipo_combustible', 
+        $resultQuery = AbastecimientoCombustible::select('abastecimiento_combustible.id as id', 'fecha_abastecimiento', 'g.descripcion as desc', 
+            'tcom.descripcion as tipo_combustible', 
             DB::raw('(CASE WHEN conductor_id IS NULL THEN conductor_fake ELSE c.nombres END) AS nom'), 'c.apellidos as ap', 
             'c.dni as dni', 'ua.codigo as code', 'ua.descripcion as descua',
             DB::raw('(CASE WHEN eq.descripcion IS NULL THEN "-" ELSE eq.descripcion END) AS desceq'),
@@ -39,13 +44,16 @@ class AbastecimientoCombustibleExport implements FromCollection, WithHeadings
             DB::raw('(CASE WHEN eq.modelo IS NULL THEN "-" ELSE eq.modelo END) AS eqmode'), 
             DB::raw('(CASE WHEN eq.placa IS NULL THEN "-" ELSE eq.placa END) AS eqpl'), 
             DB::raw('(CASE WHEN ct.razonsocial IS NULL THEN "-" ELSE ct.razonsocial END) AS crza'), 
-            'qtdgl', 'qtdl', 'km', 'abastecimiento_dia')
+            'qtdgl', 'qtdl', 'km', 'abastecimiento_dia', 'motivo', 'comprobante', 'numero_comprobante',
+            'abastecimiento_combustible.fecha_inicio', 'abastecimiento_combustible.fecha_fin', 'abast.descripcion as abasDesc')
             -> leftJoin('grifo as g', 'g.id', '=', 'grifo_id')
             -> leftJoin('conductor as c', 'c.id', '=', 'conductor_id')
             -> leftjoin('ua', 'ua.id', '=', 'ua_id')
             -> leftJoin('equipo as eq', 'eq.id', '=', 'equipo_id')
             -> leftJoin('marca as mc', 'mc.id', '=', 'eq.marca_id')
             -> leftJoin('contratista as ct', 'ct.id', '=', 'eq.contratista_id')
+            -> leftJoin('tipocombustible as tcom', 'tcom.id', '=', 'abastecimiento_combustible.tipocombustible_id')
+            -> leftJoin('abastecimiento as abast', 'abast.id', '=', 'abastecimiento_combustible.abastecimiento_id')
             -> whereNull('abastecimiento_combustible.deleted_at')
             -> unionAll($queryVehiculo)
             -> get();
@@ -91,7 +99,13 @@ class AbastecimientoCombustibleExport implements FromCollection, WithHeadings
             'QTD(GL)',
             'QTD(L)',
             'KM',
-            'Abastecimiento por día'
+            'Abastecimiento por día',
+            'Motivo',
+            'Comprobante',
+            'Número de comprobante',
+            'Fecha de inicio',
+            'Fecha de fin',
+            'Lugar de abastecimiento'
         ];
     }
 }
