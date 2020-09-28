@@ -45,5 +45,8 @@ class Conductor extends Model
         return $query->select('id', 'nombres', 'apellidos')->orderBy('apellidos', 'ASC')->get();
     }
 
+    public function user() {
+        return $this->belongsTo('App\User', 'user_id');
+    }
 
 }

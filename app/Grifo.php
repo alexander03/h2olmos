@@ -12,4 +12,9 @@ class Grifo extends Model
     protected $dates = ['deleted_at'];
 
     protected $fillable = ['descripcion'];
+
+    public function abastecimiento()
+    {
+        return $this->belongsTo('App\Abastecimiento');
+    }
 }

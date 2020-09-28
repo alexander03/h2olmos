@@ -149,19 +149,6 @@ class BrandController extends Controller
         return is_null($error) ? "OK" : $error;
     }
 
-    public function destroy($id)
-    {
-        $existe = Libreria::verificarExistencia($id, 'marca');
-        if ($existe !== true) {
-            return $existe;
-        }
-        $error = DB::transaction(function() use($id){
-            $brand = Brand::find($id);
-            $brand->delete();
-        });
-        return is_null($error) ? "OK" : $error;
-    }
-
     public function eliminar($id, $listarLuego)
     {
         $existe = Libreria::verificarExistencia($id, 'marca');
@@ -178,6 +165,19 @@ class BrandController extends Controller
         $formData = array('route' => array('marcas.destroy', $id), 'method' => 'DELETE', 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
         $boton    = 'Eliminar';
         return view('app.confirmarEliminar')->with(compact('modelo', 'formData', 'entidad', 'boton', 'listar','mensaje'));
+    }
+    
+    public function destroy($id)
+    {
+        $existe = Libreria::verificarExistencia($id, 'marca');
+        if ($existe !== true) {
+            return $existe;
+        }
+        $error = DB::transaction(function() use($id){
+            $brand = Brand::find($id);
+            $brand->delete();
+        });
+        return is_null($error) ? "OK" : $error;
     }
 
     public function activar($id, $listarLuego){

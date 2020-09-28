@@ -8,6 +8,11 @@ use App\Conductor;
 use App\Contratista;
 use App\Concesionaria;
 use App\Conductorconcesionaria;
+use App\Conductordocument;
+use App\Tipouser;
+use App\User;
+use App\UserConcesionaria;
+use Illuminate\Support\Facades\Hash;
 use App\Librerias\Libreria;
 use Illuminate\Support\Facades\DB;
 
@@ -101,8 +106,9 @@ class ConductorController extends Controller
         $entidad  = 'Conductor';
         $conductor = null;
         $licenciaLetra = null;
+        $username_conductor = null;
         $formData = array('conductores.store');
-        $formData = array('route' => $formData, 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
+        $formData = array('route' => $formData, 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off', 'role' => 'form', 'enctype' => 'multipart/form-data');
         $boton    = 'Registrar';
         $arrCategorias    = array(
             '' => 'Seleccione Categoría',
@@ -118,7 +124,7 @@ class ConductorController extends Controller
         foreach($arrContratista as $k=>$v){
             $cboContratista += array($v->id=>$v->razonsocial);
         }
-        return view($this->folderview.'.mant')->with(compact('conductor', 'formData', 'entidad', 'boton', 'licenciaLetra', 'arrCategorias', 'cboContratista', 'listar'));
+        return view($this->folderview.'.mant')->with(compact('conductor', 'formData', 'entidad', 'boton', 'licenciaLetra', 'username_conductor', 'arrCategorias', 'cboContratista', 'listar'));
     }
 
     public function store(Request $request)
@@ -151,6 +157,19 @@ class ConductorController extends Controller
             //Busco al conductor
             $conductorBuscado = Conductor::where('dni', $request->input('dni'))->first();
             if($conductorBuscado == null) {
+                $tipo_conductor = Tipouser::where('descripcion', 'CONDUCTOR')->first();
+                $user = new User();
+                $user->tipouser_id= $tipo_conductor->id;
+                $user->name = mb_strtoupper($request->input('nombres'), 'utf-8') .' ' . mb_strtoupper($request->input('apellidos'), 'utf-8');
+                $user->username= $request->input('username');
+                $user->password= Hash::make($request->input('password'));
+                $user->save();
+
+                $userconcesionaria = new UserConcesionaria();
+                $userconcesionaria->user_id = $user->id;
+                $userconcesionaria->concesionaria_id = $concesionariaActual->id;
+                $userconcesionaria->save();
+
                 $conductor = new Conductor();
                 $conductor->dni= $request->input('dni');
                 $conductor->apellidos= mb_strtoupper($request->input('apellidos'), 'utf-8');
@@ -159,12 +178,35 @@ class ConductorController extends Controller
                 $conductor->categoria= $request->input('categoria');
                 $conductor->fechavencimiento= mb_strtoupper($request->input('fechavencimiento'), 'utf-8');
                 $conductor->contratista_id= mb_strtoupper($request->input('contratista_id'), 'utf-8');
+                $conductor->user_id = $user->id;
                 $conductor->save();
     
                 $conductorconcesionaria = new Conductorconcesionaria();
                 $conductorconcesionaria->conductor_id = $conductor->id;
                 $conductorconcesionaria->concesionaria_id = $concesionariaActual->id;
                 $conductorconcesionaria->save();
+
+                $imgFirma  = $request->file('imagenfirma');
+                $nameImgFirma = 'dni_' . $conductor->dni . '_' . $imgFirma->getClientOriginalName();
+
+                $conductordocument = new Conductordocument();
+                $conductordocument->tipo = 'imagen-firma';
+                $conductordocument->archivo = $nameImgFirma;
+                $conductordocument->conductor_id = $conductor->id;
+                $conductordocument->save();
+                $imgFirma->move(public_path('files/documento_conductor/imagenes_firmas'), $nameImgFirma);
+
+
+                $docConformidadFirma  = $request->file('conformidadfirma');
+                $nameDocConformidadFirma = 'dni_' . $conductor->dni . '_' . $docConformidadFirma->getClientOriginalName();
+
+                $conductordocument = new Conductordocument();
+                $conductordocument->tipo = 'conformidad-firma';
+                $conductordocument->archivo = $nameDocConformidadFirma;
+                $conductordocument->conductor_id = $conductor->id;
+                $conductordocument->save();
+                $docConformidadFirma->move(public_path('files/documento_conductor/documentos_conformidad_firmas'), $nameDocConformidadFirma);
+
             } else {
                 $conductorconcesionaria = new Conductorconcesionaria();
                 $conductorconcesionaria->conductor_id = $conductorBuscado->id;
@@ -180,15 +222,15 @@ class ConductorController extends Controller
     public function edit($id, Request $request)
     {
         $existe = Libreria::verificarExistencia($id, 'conductor');
-        if ($existe !== true) {
-            return $existe;
-        }
+        if ($existe !== true) return $existe;
         $listar   = Libreria::getParam($request->input('listar'), 'NO');
         $conductor = Conductor::find($id);
         $licenciaLetra = $conductor->licencia[0];
+        // $username_conductor = $conductor->user->username;
+
         $entidad  = 'Conductor';
         $formData = array('conductores.update', $id);
-        $formData = array('route' => $formData, 'method' => 'PUT', 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
+        $formData = array('route' => $formData, 'method' => 'PUT', 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off', 'enctype' => 'multipart/form-data');
         $boton    = 'Modificar';
         $arrCategorias    = array(
             '' => 'Seleccione Categoría',
@@ -204,6 +246,7 @@ class ConductorController extends Controller
         foreach($arrContratista as $k=>$v){
             $cboContratista += array($v->id=>$v->razonsocial);
         }
+        
         return view($this->folderview.'.mant')->with(compact('conductor', 'formData', 'entidad', 'boton', 'licenciaLetra', 'arrCategorias', 'cboContratista', 'listar'));
     }
 

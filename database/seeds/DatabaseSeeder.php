@@ -1,5 +1,6 @@
 <?php
 
+use App\AbastecimientoCombustible;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -12,6 +13,7 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         $this->call([
+            AbastecimientoTableSeeder::class,
             CarroceriaTableSeeder::class,
             ConcesionariaTableSeeder::class,
             TipouserTableSeeder::class,
@@ -38,7 +40,9 @@ class DatabaseSeeder extends Seeder
             AbastecimientoCombustibleTableSeeder::class,
             UserConcesionariaSeeder::class,
             RegRepVehSeeder::class,
-            RegManVehSeeder::class
+            RegManVehSeeder::class,
+            KilometrajeSeeder::class,
+            TipoCombustibleTableSeeder::class
         ]);
     }
 }

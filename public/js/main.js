@@ -361,7 +361,6 @@ const doImportExcel = () => {
     document.querySelector('.js-import-excel-file').addEventListener(
         'change', 
         async (event) => {
-
             const file = event.target.files[0];
             if(file.type.includes('application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') || 
                 file.type.includes('application/vnd.ms-excel')){
@@ -383,8 +382,10 @@ const doImportExcel = () => {
                     //Carga tabla
                     if(ok) buscarCompaginado('', 'Accion realizada correctamente', 'Ua', 'OK');
                     else $('#modalError').modal('show');
-    
-            }
+                    
+                    //Borrar archivo
+                    document.querySelector('.js-import-excel-file').value = "";
+            }   
         }
     );
 };
@@ -398,7 +399,6 @@ const convertGLtoL = () => {
         document.querySelector('.js-qtd-l').value = value * 3.7854;
     });
 }
-
 
 const doSearchRepuesto = () => {
 
@@ -488,6 +488,7 @@ const doSearchRepuesto = () => {
       });
     });*/
 };
+
 const doSearchTrabajo = () => {
 
     var autoCompletejsTrabajo = new autoComplete({

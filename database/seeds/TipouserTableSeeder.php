@@ -21,6 +21,12 @@ class TipouserTableSeeder extends Seeder
             'descripcion' => 'EMPLEADO',
             'created_at' => now(),
             'updated_at' => now()
-        ]);    
+        ]);
+
+        DB::table('tipouser')->insert([
+            'descripcion' => 'CONDUCTOR',
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
     }
 }

@@ -8,7 +8,7 @@
 @endif
 <div id="divMensajeError{!! $entidad !!}"></div>
 <div id="my-div-errors" class="hidden"><h5 class="text-center p-0 m-0"><span class="badge badge-danger"></span></h5></div>
-{!! Form::model($conductor, $formData) !!}	
+{!! Form::model($conductor, $formData) !!}
 {!! Form::hidden('listar', $listar, array('id' => 'listar')) !!}
 <div class="form-row">
 	<div class="form-group col-5 col-sm-3">
@@ -69,6 +69,43 @@
 	</div>
 </div>
 
+@if ($readOnly == false)
+	<div class="form-row">
+		<div class="form-group col-6  col-sm-4">
+			{!! Form::label('imagenfirma', 'Imágen de la firma:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
+		</div>
+		<div class="col-sm-8 d-flex align-items-end">
+			{!! Form::file('imagenfirma', ['class' => 'form-control mb-2', 'accept' => 'image/png, image/jpeg','id' => 'imagenfirma']) !!}
+		</div>
+	</div>
+	<div class="form-row">
+		<div class="form-group col-6  col-sm-4">
+			{!! Form::label('conformidadfirma', 'Doc. de conformidad:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
+		</div>
+		<div class="col-sm-8 d-flex align-items-end">
+			{!! Form::file('conformidadfirma', ['class' => 'form-control mb-2', 'accept' => '.pdf,.doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document','id' => 'conformidadfirma']) !!}
+		</div>
+	</div>
+	
+	<hr style="margin: 0">
+	<div class="form-row">
+		<div class="form-group col-6  col-sm-6">
+			{!! Form::label('username', 'Usuario:', array('class' => 'col-lg-12 col-md-12 col-sm-12')) !!}
+			<div class="col-lg-12 col-md-12 col-sm-12">
+				{!! Form::text('username', $username_conductor, array('class' => '', 'id' => 'username')) !!}
+			</div>
+		</div>
+		<div class="form-group col-6  col-sm-6">
+			{!! Form::label('password', 'Contraseña:', array('class' => 'col-lg-12 col-md-12 col-sm-12')) !!}
+			<div class="col-lg-12 col-md-12 col-sm-12">
+				{!! Form::password('password', null, array('id' => 'password')) !!}
+			</div>
+		</div>
+	</div>
+@endif
+
+
+
 <div class="form-group">
 	<div class="col-lg-12 col-md-12 col-sm-12 text-right">
 		{!! Form::button('<i class="fa fa-check fa-lg"></i> '.$boton, array('class' => 'btn btn-success btn-sm', 'id' => 'btnGuardar', 'onclick' => 'guardar(\''.$entidad.'\', this)')) !!}
@@ -84,6 +121,9 @@
 	}
 	.hidden {
 		display: none;
+	}
+	.document__img-firma {
+		font-size: 17px;
 	}
 </style>
 <script type="text/javascript">
@@ -176,15 +216,15 @@
 
 		//Funciones
 		const consultDB = (dni) => {
-			const uriConsult = '/existeconductor?dni=' + dni;
+			const uriConsult = './existeconductor?dni=' + dni;
 			return fetch(uriConsult)
 			.then(res => res.status === 200 ? res.json() : console.error(`Error al cosultar Conductor en la db: ${res.status}`))
 			.then(res => res[0])
 		}
 
 		const consultReniec = (dni) => {
-			const uriConsult = 'http://127.0.0.1:80/Reniec/consulta_reniec.php';
-			// const uriConsult = './Reniec/consulta_reniec.php';
+			// const uriConsult = 'http://127.0.0.1:80/Reniec/consulta_reniec.php';
+			const uriConsult = './Reniec/consulta_reniec.php';
 			return fetch(uriConsult,{
 				method: 'POST',
 				body: 'dni=' + dni,

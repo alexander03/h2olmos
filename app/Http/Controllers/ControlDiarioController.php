@@ -16,6 +16,7 @@ use Illuminate\Http\Request;
 use App\Librerias\Libreria;
 use App\Rules\SearchUaPadre;
 use App\Rules\SearchEquipo;
+use Maatwebsite\Excel\Facades\Excel;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use App\Exports\ExcelReport_HorasTrabajadas;
@@ -455,10 +456,11 @@ class ControlDiarioController extends Controller
     public function HEquipoxUa(Request $request){
         $concesionaria = $this->consecionariaActual();
 
-        $fecha1 = $request->input('fecha_registro_inicial');
-        $fecha2 = $request->input('fecha_registro_final');
+        $fecha1 = $request->fecha_registro_inicial;
+        $fecha2 = $request->fecha_registro_final;
 
-        return Excel::download(new ReportHrsEquiposUas($fecha1,$fecha2,$id), 'vencimiento-documento-vehiculo.xlsx'); 
+        
+        return Excel::download(new ReportHrsEquiposUas($fecha1,$fecha2,$concesionaria), 'vencimiento-documento-vehiculo.xlsx'); 
     }
 
     private function consecionariaActual(){

@@ -13,7 +13,7 @@ class UaTableSeeder extends Seeder
     public function run()
     {
         DB::table('ua')->insert([
-            'codigo' => '1000',
+            'codigo' => 'ABCD1234',
             'descripcion' => 'Esta ua es prueba 01',
             'concesionaria_id' => 1,
             'habilitada' => true,
@@ -23,7 +23,7 @@ class UaTableSeeder extends Seeder
             'updated_at' => now()
         ]);
         DB::table('ua')->insert([
-            'codigo' => '10002',
+            'codigo' => 'ABCD1233',
             'descripcion' => 'Esta ua es prueba 02',
             'concesionaria_id' => 1,
             'habilitada' => true,
@@ -33,7 +33,7 @@ class UaTableSeeder extends Seeder
             'updated_at' => now()
         ]);
         DB::table('ua')->insert([
-            'codigo' => '10003',
+            'codigo' => 'ABCD1232',
             'descripcion' => 'Esta ua es prueba 03',
             'concesionaria_id' => 1,
             'habilitada' => true,
@@ -43,7 +43,7 @@ class UaTableSeeder extends Seeder
             'updated_at' => now()
         ]);
         DB::table('ua')->insert([
-            'codigo' => '10004',
+            'codigo' => 'ABCD1231',
             'descripcion' => 'Esta ua es prueba 04',
             'concesionaria_id' => 1,
             'habilitada' => true,

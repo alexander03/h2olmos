@@ -66,6 +66,22 @@ class OpcionmenuTableSeeder extends Seeder
         ]);
 
         DB::table('opcionmenu')->insert([
+            'descripcion' => 'Combustibles',
+            'link' => 'tipocombustible',
+            'icono' => 'info',
+            'orden' => 3,
+            'grupomenu_id' => 1
+        ]);
+
+        DB::table('opcionmenu')->insert([
+            'descripcion' => 'Abastecimientos',
+            'link' => 'abastecimientolugar',
+            'icono' => 'face',
+            'orden' => 3,
+            'grupomenu_id' => 1
+        ]);
+
+        DB::table('opcionmenu')->insert([
             ['descripcion' => 'Areas',
             'link' => 'areas',
             'icono' => 'info',
@@ -138,9 +154,17 @@ class OpcionmenuTableSeeder extends Seeder
         ]);
 
         DB::table('opcionmenu')->insert([
+            'descripcion' => 'Kilometrajes',
+            'link' => 'kilometrajes',
+            'icono' => 'directions_car',
+            'orden' => 7,
+            'grupomenu_id' => 1
+        ]);
+
+        DB::table('opcionmenu')->insert([
             'descripcion' => 'Mant. corr. y prev.',
             'link' => 'mantcorrprev',
-            'icono' => 'myicon',
+            'icono' => 'api',
             'orden' => 1,
             'grupomenu_id' => 3
         ]);
@@ -148,10 +172,11 @@ class OpcionmenuTableSeeder extends Seeder
         DB::table('opcionmenu')->insert([
             'descripcion' => 'Abast. combustible',
             'link' => 'abastecimiento',
-            'icono' => 'myicon',
+            'icono' => 'api',
             'orden' => 1,
             'grupomenu_id' => 3
         ]);
+        
 
         //SISTEMA
         DB::table('opcionmenu')->insert([

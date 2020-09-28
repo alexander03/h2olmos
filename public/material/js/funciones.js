@@ -15,14 +15,44 @@ var contadorModal       = 0;
 * @param  {string} idformulario
 * @return {string} respuesta
 */
+// function submitForm (idformulario) {
+// 	var parametros = $(idformulario).serialize();
+// 	var accion     = $(idformulario).attr('action');
+// 	var metodo     = $(idformulario).attr('method');
+// 	var respuesta  = $.ajax({
+// 		url : accion,
+// 		type: metodo,
+// 		data: parametros,
+// 	});
+// 	return respuesta;
+// }
+
+/**
+* Permite hacer un submit a un formulario(incluyendo formularios con files) y retorna la respuesta del envio, o el error que se produzca
+* @param  {string} idformulario
+* @return {string} respuesta
+*/
 function submitForm (idformulario) {
+	if ($(idformulario).attr('enctype') != undefined) {
+		const formulario = $(idformulario)[0];
+		let formData = new FormData(formulario);
+		let respuesta = $.ajax({	
+			url : formulario.getAttribute('action'),
+			type: formulario.getAttribute('method'),
+			data: formData,
+			processData: false,
+			contentType: false,
+		});
+		return respuesta;
+	}
+
 	var parametros = $(idformulario).serialize();
 	var accion     = $(idformulario).attr('action');
 	var metodo     = $(idformulario).attr('method');
 	var respuesta  = $.ajax({
 		url : accion,
 		type: metodo,
-		data: parametros
+		data: parametros,
 	});
 	return respuesta;
 }

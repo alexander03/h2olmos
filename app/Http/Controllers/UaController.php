@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\AbastecimientoCombustible;
 use App\Concesionaria;
+use App\Controldiario;
+use App\Equipo;
 use App\Librerias\Libreria;
 use App\Rules\SearchUaPadre;
 use App\Rules\SelectDifZero;
@@ -14,6 +17,7 @@ use Illuminate\Support\Facades\Validator;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\UaExport;
 use App\Imports\UaImport;
+use App\Vehiculo;
 use DateTime;
 use Exception;
 
@@ -37,17 +41,31 @@ class UaController extends Controller{
         $entidad          = 'Ua';
         $nombre           = Libreria::getParam($request->input('descripcion'));
         $codigo           = Libreria::getParam($request -> input('codigo'));
-        $resultado        = Ua::where([
+        $esPadre           = Libreria::getParam($request -> input('is_father'));
+        $resultado        = Ua::
+            select('ua.id', 'codigo', 'descripcion', 'habilitada', 'fecha_inicio', 'fecha_fin',
+                'ua.ua_padre_id', 'concesionaria_id', 'created_at', 'updated_at', 'deleted_at',
+                DB::raw('(CASE WHEN child.ua_padre_id IS NOT NULL THEN "SI" ELSE "NO" END) AS es_padre')
+            )
+            -> leftJoin(
+                DB::raw('(SELECT ua_padre_id FROM ua) AS child'), 'child.ua_padre_id', '=', 'ua.id'
+                )
+            -> where([
                 [ 'descripcion', 'LIKE', '%'.strtoupper($nombre).'%' ],
                 [ 'codigo', 'LIKE', '%'.$codigo.'%' ],
+                [ DB::raw('CASE WHEN child.ua_padre_id IS NOT NULL THEN "SI" ELSE "NO" END'), 'LIKE', '%'.$esPadre.'%' ],
                 [ 'concesionaria_id', $this -> getConsecionariaActual() ] 
-                ])->orderBy('descripcion', 'ASC');
+                ])
+            -> orderBy('descripcion', 'ASC')
+            -> distinct();
         $lista            = $resultado -> get();
         $cabecera         = array();
         $cabecera[]       = array('valor' => '#', 'numero' => '1');
+        $cabecera[]       = array('valor' => 'Seleccionar', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Código', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Descripción', 'numero' => '1');
-        $cabecera[]       = array('valor' => 'Ua Padre', 'numero' => '1');
+        $cabecera[]       = array('valor' => 'Ua padre', 'numero' => '1');
+        $cabecera[]       = array('valor' => 'Es padre', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Habilitada', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Fecha de inicio', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Fecha de fin', 'numero' => '1');
@@ -110,7 +128,7 @@ class UaController extends Controller{
     public function store(Request $request){
 
         $reglas     = [
-            'codigo' => 'required|unique:ua',
+            'codigo' => 'required|unique:ua|size:8',
             'descripcion' => 'required',
             'habilitada' => 'required',
             'fecha_inicio' => 'required',
@@ -120,6 +138,7 @@ class UaController extends Controller{
         $mensajes = [
             'codigo.required' => 'Su código es requerido',
             'codigo.unique' => 'Su código proporcionado ya existe, especifique otro',
+            'codigo.size' => 'Su código debe ser de 8 carácteres',
             'descripcion.required' => 'Su descripcion es requerida',
             'habilitada.required' => 'El estado de la ua es requerida',
             'fecha_inicio.required' => 'Su fecha de inicio es requerida',
@@ -172,7 +191,7 @@ class UaController extends Controller{
     public function update(Request $request, $id){
 
         $reglas     = [
-            'codigo' => 'required|unique:ua,codigo,'.$id,
+            'codigo' => 'required|unique:ua,codigo,'.$id.'|size:8',
             'descripcion' => 'required',
             'habilitada' => 'required',
             'fecha_inicio' => 'required',
@@ -182,6 +201,7 @@ class UaController extends Controller{
         $mensajes = [
             'codigo.required' => 'Su código es requerido',
             'codigo.unique' => 'Su código proporcionado ya existe, especifique otro',
+            'codigo.size' => 'Su código debe ser de 8 carácteres',
             'descripcion.required' => 'Su descripcion es requerida',
             'habilitada.required' => 'El estado de la ua es requerida',
             'fecha_inicio.required' => 'Su fecha de inicio es requerida',
@@ -215,13 +235,53 @@ class UaController extends Controller{
         return is_null($error) ? "OK" : $error;
     }
 
-    public function eliminar($id, $listarLuego, Ua $uaModel){
+    public function eliminar($id, $listarLuego){
 
         $existe = Libreria::verificarExistencia($id, 'ua');
         if ($existe !== true) {
             return $existe;
         }
 
+        //SEARCH SI ES PADRE
+        $isFather = Ua::where('ua_padre_id', '=', $id) -> get();
+        if( isset($isFather[0]) ){
+            $childs = true;
+            $entidadChild = 'UA';
+            return view('app.confirmarEliminar')->with(compact('childs', 'entidadChild'));
+        }
+
+        //SEARCH SI TIENE RELACION CON EQUIPO
+        $childEquipo = Equipo::where('ua_id', '=', $id) -> get();
+        if( isset($childEquipo[0]) ){
+            $childs = true;
+            $entidadChild = 'Equipo';
+            return view('app.confirmarEliminar')->with(compact('childs', 'entidadChild'));
+        }
+
+        //SEARCH SI TIENE RELACION CON VEHICULO
+        $childVehiculo = Vehiculo::where('ua_id', '=', $id) -> get();
+        if( isset($childVehiculo[0]) ){
+            $childs = true;
+            $entidadChild = 'Vehículo';
+            return view('app.confirmarEliminar')->with(compact('childs', 'entidadChild'));
+        }
+
+        //SEARCH SI TIENE RELACION CON CONTROL DIARIO
+        $childControl = Controldiario::where('ua_id', '=', $id) -> get();
+        if( isset($childControl[0]) ){
+            $childs = true;
+            $entidadChild = 'Control diario';
+            return view('app.confirmarEliminar')->with(compact('childs', 'entidadChild'));
+        }
+
+        //SEARCH SI TIENE RELACION CON ABASTECIMIENTO DE COMBUSTIBLE
+        $childControl = AbastecimientoCombustible::where('ua_id', '=', $id) -> get();
+        if( isset($childControl[0]) ){
+            $childs = true;
+            $entidadChild = 'Abastecimiento de combustible';
+            return view('app.confirmarEliminar')->with(compact('childs', 'entidadChild'));
+        }
+       
         $listar = "NO";
         if (!is_null(Libreria::obtenerParametro($listarLuego))) {
             $listar = $listarLuego;
@@ -232,6 +292,73 @@ class UaController extends Controller{
         $formData = array('route' => array('ua.destroy', $id), 'method' => 'DELETE', 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
         $boton    = 'Eliminar';
         return view('app.confirmarEliminar')->with(compact('modelo', 'formData', 'entidad', 'boton', 'listar','mensaje'));
+    }
+
+    private function handleVerifyUa($id){
+
+        $existe = Libreria::verificarExistencia($id, 'ua');
+        if ($existe !== true) throw new Exception('No existe una ua con este id.');
+    
+        //SEARCH SI ES PADRE
+        $isFather = Ua::where('ua_padre_id', '=', $id) -> get();
+        if( isset($isFather[0]) ) throw new Exception('Esta asignada como padre.');
+        
+        //SEARCH SI TIENE RELACION CON EQUIPO
+        $childEquipo = Equipo::where('ua_id', '=', $id) -> get();
+        if( isset($childEquipo[0]) ) throw new Exception('Tiene relación con equipo.');
+        
+        //SEARCH SI TIENE RELACION CON VEHICULO
+        $childVehiculo = Vehiculo::where('ua_id', '=', $id) -> get();
+        if( isset($childVehiculo[0]) ) throw new Exception('Tiene relación con vehiculo.');
+
+        //SEARCH SI TIENE RELACION CON CONTROL DIARIO
+        $childControl = Controldiario::where('ua_id', '=', $id) -> get();
+        if( isset($childControl[0]) ) throw new Exception('Tiene relación con control diario.');
+
+        //SEARCH SI TIENE RELACION CON ABASTECIMIENTO DE COMBUSTIBLE
+        $childControl = AbastecimientoCombustible::where('ua_id', '=', $id) -> get();
+        if( isset($childControl[0]) ) throw new Exception('Tiene relación con abastecimiento combustible.');
+    }
+
+    public function destroyList(Request $request){
+        
+        $uaList = explode(',', $request -> get('uaList'));
+        $errors = [];
+    
+        foreach ($uaList as $uaId) {
+            try{
+                $this -> handleVerifyUa($uaId);
+                $this -> destroy($uaId);
+            }catch(Exception $exception){
+                $ua = Ua::where('id', $uaId) -> get();
+                $ua[0]['error'] = $exception -> getMessage();
+                array_push($errors, $ua[0]);
+            }
+        }
+       
+        $res = [ 'ok' => true, 'errors' => $errors ];
+
+        return response() -> json($res);
+    }
+
+    public function destroyAll(){
+        
+        $uaList = Ua::all();
+        $errors = [];
+        foreach ($uaList as $ua) {
+            try{
+                $this -> handleVerifyUa($ua -> id);
+                $this -> destroy($ua -> id);
+            }catch(Exception $exception){
+                $ua = Ua::where('id', $ua -> id) -> get();
+                $ua[0]['error'] = $exception -> getMessage();
+                array_push($errors, $ua[0]);
+            }
+        }
+
+        $res = [ 'ok' => true, 'errors' => $errors ];
+
+        return response() -> json($res);
     }
 
     public function destroy($id){

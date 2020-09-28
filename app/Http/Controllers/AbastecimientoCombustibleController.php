@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Abastecimiento;
 use App\AbastecimientoCombustible;
 use App\Concesionaria;
 use App\Conductor;
@@ -22,6 +23,7 @@ use App\Imports\UaImport;
 use App\Rules\SearchConductorRule;
 use App\Rules\SearchEquipo;
 use App\Rules\SearchGrifoRule;
+use App\Tipocombustible;
 use App\Vehiculo;
 use Exception;
 
@@ -119,6 +121,12 @@ class AbastecimientoCombustibleController extends Controller{
         $cabecera[]       = array('valor' => 'QTD(L)', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Km', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Abastecimiento por día', 'numero' => '1');
+        $cabecera[]       = array('valor' => 'Motivo', 'numero' => '1');
+        $cabecera[]       = array('valor' => 'Comprobante', 'numero' => '1');
+        $cabecera[]       = array('valor' => 'Número de comprobante', 'numero' => '1');
+        $cabecera[]       = array('valor' => 'Fecha de inicio', 'numero' => '1');
+        $cabecera[]       = array('valor' => 'Fecha de fin', 'numero' => '1');
+        $cabecera[]       = array('valor' => 'Lugar de abastecimiento', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Operaciones', 'numero' => '2');
         
         $titulo_modificar = $this->tituloModificar;
@@ -156,8 +164,10 @@ class AbastecimientoCombustibleController extends Controller{
         $formData = array('abastecimiento.store');
         $formData = array('route' => $formData, 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
         $boton    = 'Registrar'; 
+        $lstAbastecimientos = Abastecimiento::all();
+        $lstTipoCombustibles = Tipocombustible::all();
 
-        return view($this->folderview.'.mant')->with(compact('abastecimiento', 'formData', 'entidad', 'boton', 'listar'));
+        return view($this->folderview.'.mant')->with(compact('abastecimiento', 'formData', 'entidad', 'boton', 'listar', 'lstAbastecimientos', 'lstTipoCombustibles'));
     }
 
     public function store(Request $request){
@@ -165,27 +175,41 @@ class AbastecimientoCombustibleController extends Controller{
         $reglas = [
             'fecha_abastecimiento' => 'required',
             'grifo_id' => ['required', new SearchGrifoRule()],
-            'tipo_combustible' => 'required',
             'conductor_id' => ['required'],
             'ua_id' => ['required', new SearchUaPadre()],
             'equipo_id' => ['nullable', new SearchEquipo()],
             'qtdgl' => 'required',
             'qtdl' => 'required',
             'km' => 'required',
-            'abastecimiento_dia' => 'required'
+            'abastecimiento_dia' => 'required',
+            'motivo' => 'required',
+            'comprobante' => 'required',
+            'numero_comprobante' => 'required',
+            'fecha_inicio' => 'required',
+            'fecha_fin' => 'nullable|after_or_equal:fecha_inicio',
+            'abastecimiento_id' => 'required',
+            'tipocombustible_id' => 'required'
         ];
         $mensajes = [
             'fecha_abastecimiento.required' => 'Su fecha de abastecimiento es requerida',
             'grifo_id.required' => 'El grifo es requerido',
-            'tipo_combustible.required' => 'El tipo de combustible es requerido',
             'conductor_id.required' => 'El conductor es requerido',
             'ua_id.required' => 'Su ua es requerida',
             'equipo_id.required' => 'El equipo o vehículo es requerido',
             'qtdgl.required' => 'Su QTD(GL) es requerido',
             'qtdl.required' => 'Su QTD(L) es requerido',
             'km.required' => 'Su km es requerido',
-            'abastecimiento_dia.required' => 'Su abastecimiento por día es requerido'
-		];
+            'abastecimiento_dia.required' => 'Su abastecimiento por día es requerido',
+            'motivo.required' => 'El motivo es requerido',
+            'comprobante.required' => 'El comprobante es requerido',
+            'numero_comprobante.required' => 'El número de comprobante es requerido',
+            'fecha_inicio.required' => 'Su fecha de inicio es requerida',
+            'fecha_fin.required' => 'Su fecha de fin es requerida',
+            'fecha_fin.after_or_equal' => 'Su fecha de fin no puede ser menor que la de inicio',
+            'abastecimiento_id.required' => 'El lugar de abastecimiento es requerido',
+            'tipocombustible_id.required' => 'El tipo de combustible es requerido'
+        ];
+        
         $validacion = Validator::make($request->all(), $reglas, $mensajes);
         if ($validacion->fails()) {
             return $validacion->messages()->toJson();
@@ -201,7 +225,6 @@ class AbastecimientoCombustibleController extends Controller{
                 $grifoDB =  Grifo::where('descripcion', $request -> input('grifo_id')) -> get();
                 $abastecimiento -> grifo_id = (!($grifoDB -> isEmpty())) ? $grifoDB[0] -> id : null;
             }
-            $abastecimiento -> tipo_combustible = $request -> input('tipo_combustible');
             //BUSCAR CONDUCTOR
             if($request -> input('conductor_id')){
                 $conductorDB =  Conductor::where('dni', $request -> input('conductor_id')) -> get();
@@ -228,6 +251,14 @@ class AbastecimientoCombustibleController extends Controller{
             $abastecimiento -> qtdl = $request -> input('qtdl');
             $abastecimiento -> km = $request -> input('km');
             $abastecimiento -> abastecimiento_dia = $request -> input('abastecimiento_dia');
+            $abastecimiento -> motivo = $request -> input('motivo');
+            $abastecimiento -> comprobante = $request -> input('comprobante');
+            $abastecimiento -> numero_comprobante = $request -> input('numero_comprobante');
+            $abastecimiento -> fecha_inicio = $request -> input('fecha_inicio');
+            $abastecimiento -> fecha_fin = $request -> input('fecha_fin');
+            $abastecimiento -> abastecimiento_id = $request -> input('abastecimiento_id');
+            $abastecimiento -> tipocombustible_id = $request -> input('tipocombustible_id');
+
             $abastecimiento -> save();
         });
         return is_null($error) ? "OK" : $error;
@@ -247,8 +278,10 @@ class AbastecimientoCombustibleController extends Controller{
         $formData = array('abastecimiento.update', $id);
         $formData = array('route' => $formData, 'method' => 'PUT', 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
         $boton    = 'Modificar';
+        $lstAbastecimientos = Abastecimiento::all();
+        $lstTipoCombustibles = Tipocombustible::all();
 
-        return view($this->folderview.'.mant')->with(compact('abastecimiento', 'formData', 'entidad', 'boton', 'listar'));
+        return view($this->folderview.'.mant')->with(compact('abastecimiento', 'formData', 'entidad', 'boton', 'listar', 'lstAbastecimientos', 'lstTipoCombustibles'));
     }
 
     public function update(Request $request, $id){
@@ -256,28 +289,42 @@ class AbastecimientoCombustibleController extends Controller{
         $reglas = [
             'fecha_abastecimiento' => 'required',
             'grifo_id' => ['required', new SearchGrifoRule()],
-            'tipo_combustible' => 'required',
             'conductor_id' => ['required'],
             'ua_id' => ['required', new SearchUaPadre()],
             'equipo_id' => ['nullable', new SearchEquipo()],
             'qtdgl' => 'required',
             'qtdl' => 'required',
             'km' => 'required',
-            'abastecimiento_dia' => 'required'
+            'abastecimiento_dia' => 'required',
+            'motivo' => 'required',
+            'comprobante' => 'required',
+            'numero_comprobante' => 'required',
+            'fecha_inicio' => 'required',
+            'fecha_fin' => 'nullable|after_or_equal:fecha_inicio',
+            'abastecimiento_id' => 'required',
+            'tipocombustible_id' => 'required'
         ];
 
         $mensajes = [
             'fecha_abastecimiento.required' => 'Su fecha de abastecimiento es requerida',
             'grifo_id.required' => 'El grifo es requerido',
-            'tipo_combustible.required' => 'El tipo de combustible es requerido',
             'conductor_id.required' => 'El conductor es requerido',
             'ua_id.required' => 'Su ua es requerida',
             'equipo_id.required' => 'El equipo o vehículo es requerido',
             'qtdgl.required' => 'Su QTD(GL) es requerido',
             'qtdl.required' => 'Su QTD(L) es requerido',
             'km.required' => 'Su km es requerido',
-            'abastecimiento_dia.required' => 'Su abastecimiento por día es requerido'
-		];
+            'abastecimiento_dia.required' => 'Su abastecimiento por día es requerido',
+            'motivo.required' => 'El motivo es requerido',
+            'comprobante.required' => 'El comprobante es requerido',
+            'numero_comprobante.required' => 'El número de comprobante es requerido',
+            'fecha_inicio.required' => 'Su fecha de inicio es requerida',
+            'fecha_fin.required' => 'Su fecha de fin es requerida',
+            'fecha_fin.after_or_equal' => 'Su fecha de fin no puede ser menor que la de inicio',
+            'abastecimiento_id.required' => 'El lugar de abastecimiento es requerido',
+            'tipocombustible_id.required' => 'El tipo de combustible es requerido'
+        ];
+        
         $validacion = Validator::make($request->all(), $reglas, $mensajes);
         if ($validacion->fails()) {
             return $validacion->messages()->toJson();
@@ -296,7 +343,6 @@ class AbastecimientoCombustibleController extends Controller{
                 $grifoDB =  Grifo::where('descripcion', $request -> input('grifo_id')) -> get();
                 $abastecimiento -> grifo_id = (!($grifoDB -> isEmpty())) ? $grifoDB[0] -> id : null;
             }
-            $abastecimiento -> tipo_combustible = $request -> input('tipo_combustible');
             //BUSCAR CONDUCTOR
             if($request -> input('conductor_id')){
                 $abastecimiento -> conductor_fake = null;
@@ -326,6 +372,14 @@ class AbastecimientoCombustibleController extends Controller{
             $abastecimiento -> qtdl = $request -> input('qtdl');
             $abastecimiento -> km = $request -> input('km');
             $abastecimiento -> abastecimiento_dia = $request -> input('abastecimiento_dia');
+            $abastecimiento -> motivo = $request -> input('motivo');
+            $abastecimiento -> comprobante = $request -> input('comprobante');
+            $abastecimiento -> numero_comprobante = $request -> input('numero_comprobante');
+            $abastecimiento -> fecha_inicio = $request -> input('fecha_inicio');
+            $abastecimiento -> fecha_fin = $request -> input('fecha_fin');
+            $abastecimiento -> abastecimiento_id = $request -> input('abastecimiento_id');
+            $abastecimiento -> tipocombustible_id = $request -> input('tipocombustible_id');
+
             $abastecimiento -> save();
         });
         return is_null($error) ? "OK" : $error;

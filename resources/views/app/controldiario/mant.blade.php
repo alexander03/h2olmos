@@ -22,16 +22,18 @@ if ($controldiario !== NULL) {
 		>
 	</div>
 </div>
-<div class="form-group">
-	{!! Form::label('horometro_inicial', 'Horometro inicial :', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
-	<div class="col-lg-12 col-md-12 col-sm-12">
-		{!! Form::text('horometro_inicial', null, array('class' => 'form-control input-xs', 'id' => 'horometro_inicial')) !!}
+<div class="form-row">
+	<div class="form-group col-lg-6 col-md-6 col-sm-6">
+		{!! Form::label('horometro_inicial', 'Horometro inicial :', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
+		<div class="col-lg-12 col-md-12 col-sm-12">
+			{!! Form::text('horometro_inicial', null, array('class' => 'form-control input-xs', 'id' => 'horometro_inicial')) !!}
+		</div>
 	</div>
-</div>
-<div class="form-group">
-	{!! Form::label('horometro_final', 'Horometro final :', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
-	<div class="col-lg-12 col-md-12 col-sm-12">
-		{!! Form::text('horometro_final', null, array('class' => 'form-control input-xs', 'id' => 'horometro_final')) !!}
+	<div class="form-group col-lg-6 col-md-6 col-sm-6">
+		{!! Form::label('horometro_final', 'Horometro final :', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
+		<div class="col-lg-12 col-md-12 col-sm-12">
+			{!! Form::text('horometro_final', null, array('class' => 'form-control input-xs', 'id' => 'horometro_final')) !!}
+		</div>
 	</div>
 </div>
 <div class="form-group">
@@ -63,25 +65,25 @@ if ($controldiario !== NULL) {
 			</div>
 		</div>
 		<div class="form-row">
-			<div class="form-group col-md-2 mt-4">
+			<div class="form-group col-md-2 mt-4 col-sm-6 col-6">
 				{!! Form::label('hora_inicio', 'hora inicio:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
 				<div class="col-lg-12 col-md-12 col-sm-12 mt-2">
 					<input type="time" class="form-control input-xs" value="@if($controldiario){{substr($controldiario->hora_inicio,0,5)}}@endif" name="hora_inicio[]" id='hora_inicio'>
 				</div>
 			</div>
-			<div class="form-group col-md-2 mt-4">
+			<div class="form-group col-md-2 mt-4 col-sm-6 col-6">
 				{!! Form::label('hora_fin', 'hora Fin:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
 				<div class="col-lg-12 col-md-12 col-sm-12 mt-2">
 					<input type="time" class="form-control input-xs" value="@if($controldiario){{substr($controldiario->hora_fin,0,5)}}@endif" name="hora_fin[]" id='hora_fin'>
 				</div>
 			</div>
-			<div class="form-group col-md-3 mt-4">
+			<div class="form-group col-md-3 mt-4 col-sm-6 col-6">
 				{!! Form::label('hora_total', 'horas totales:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
 				<div class="col-lg-12 col-md-12 col-sm-12 mt-2">
 					{!! Form::number('hora_total[]', null, array('class' => 'form-control input-xs', 'id' => 'hora_total')) !!}
 				</div>
 			</div>
-			<div class="form-group col-md-4 mt-4 ms-12">
+			<div class="form-group col-md-4 mt-4 ms-12 col-sm-6 col-6">
 				{!! Form::label('tipohora_id', 'Tipo de hora:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
 				<div class="col-lg-12 col-md-12 col-sm-12">
 					{!! Form::select('tipohora_id[]',$cboThoras, null, array('class' => 'form-control input-xs', 'id' => 'tipohora_id')) !!}
@@ -159,7 +161,7 @@ if ($controldiario !== NULL) {
 {!! Form::close() !!}
 <script type="text/javascript">
 	$(document).ready(function() {
-		configurarAnchoModal('550');
+		configurarAnchoModal('650');
 		init(IDFORMMANTENIMIENTO+'{!! $entidad !!}', 'M', '{!! $entidad !!}');
 		doSearchUA();
 		doSearchEquipoPrim();

@@ -31,6 +31,7 @@ class CreateVehiculoTable extends Migration
             $table->unsignedBigInteger('contratista_id');
             $table->foreign('contratista_id')->references('id')->on('contratista');
             $table->string('chasis',20);
+            $table->float('kilometraje',6,2);
             $table->unsignedBigInteger('carroceria_id');
 //            $table->boolean('carroceria');
             $table->string('color',20);
