@@ -13,8 +13,9 @@ class RegRepVehSeeder extends Seeder
     {
         DB::table('regrepveh')->insert([
             'concesionaria_id' => 1,
-            'ua_id' => 1001,
+            'ua_id' => 'ABCD1234',
             'cliente' => 'cliente de H2O',
+            'ordencompra' => '10101010',
             'kmman' => 10,
             'kminicial' => 12,
             'kmfinal' => 13,
@@ -26,8 +27,9 @@ class RegRepVehSeeder extends Seeder
 
         DB::table('regrepveh')->insert([
             'concesionaria_id' => 2,
-            'ua_id' => 1000,
+            'ua_id' => 'ABCD9999',
             'cliente' => 'cliente de CTO',
+            'ordencompra' => '20202020',
             'kmman' => 100,
             'kminicial' => 120,
             'kmfinal' => 130,

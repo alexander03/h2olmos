@@ -14,8 +14,58 @@ class AreaTableSeeder extends Seeder
         DB::table('area')->insert([
 
 	        ['descripcion' => 'O&M',
-	        'created_at' => now(),
-	        'updated_at' => now()],
+            'nivel' => 1,
+            'areapadre_id' => null,
+            'created_at' => now(),
+            'updated_at' => now()],
+
+            ['descripcion' => 'PRODUCCION',
+            'nivel' => 1,
+            'areapadre_id' => null,
+            'created_at' => now(),
+            'updated_at' => now()],
+
+            ['descripcion' => 'RECURSOS HUMANOS',
+            'nivel' => 1,
+            'areapadre_id' => null,
+            'created_at' => now(),
+            'updated_at' => now()],
+
+            ['descripcion' => 'EMPAQUETADO',
+            'nivel' => 2,
+            'areapadre_id' => 2,
+            'created_at' => now(),
+            'updated_at' => now()],
+
+            ['descripcion' => 'RECEPCION MATERIALES',
+            'nivel' => 2,
+            'areapadre_id' => 2,
+            'created_at' => now(),
+            'updated_at' => now()],
+
+            ['descripcion' => 'CONTRATACION PERSONAL',
+            'nivel' => 2,
+            'areapadre_id' => 3,
+            'created_at' => now(),
+            'updated_at' => now()],
+
+            ['descripcion' => 'CAPACITACION',
+            'nivel' => 2,
+            'areapadre_id' => 3,
+            'created_at' => now(),
+            'updated_at' => now()],
+
+            ['descripcion' => 'RECEPCION MAQUINARIA',
+            'nivel' => 3,
+            'areapadre_id' => 5,
+            'created_at' => now(),
+            'updated_at' => now()],
+
+            ['descripcion' => 'RECEPCION ARTICULOS OFICINA',
+            'nivel' => 3,
+            'areapadre_id' => 5,
+            'created_at' => now(),
+            'updated_at' => now()],
 
         ]);
     }

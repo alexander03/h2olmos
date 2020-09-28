@@ -211,7 +211,7 @@
                     @foreach($observaciones as $key => $obs)
                         <?php $contador++; ?>
                     <tr>
-                        <td width="6%" class="text">{{$contador+1}}</td>
+                        <td width="6%" class="text-center">{{$contador}}</td>
                         <td width="7%" class="text">{{$obs->cantidad}}</td>
                         <td width="79%" class="text">{{$obs->descripcion}}</td>
                         <td width="8%" class="text">{{$obs->monto}}</td>

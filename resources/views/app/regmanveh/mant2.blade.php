@@ -4,21 +4,19 @@
 {!! Form::hidden('listar', $listar, array('id' => 'listar')) !!}
 <section class="form-row">
 	<div class="form-group col-lg-12 col-md-12 col-sm-12">
-		{!! Form::label('concesionaria_id', 'Concesionaria Actual:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
-		<div class="col-lg-5 col-md-5 col-sm-5">
-			{!! Form::select('concesionaria_id', $oConcesionarias, null, array('class' => 'form-control input-xs', 'id' => 'concesionaria_id')) !!}
-		</div>
-	</div>
-	<div class="form-group col-lg-5 col-md-5 col-sm-5">
-		{!! Form::label('consecion', 'Conseción:', array('class' => 'col-12 col-sm-12 control-label')) !!}
-		<div class="col-12 col-sm-12">
-			<input class='form-control input-xs' id='conces' maxlength='100' type='text' disabled value="Concesión Trasvase Olmos">
-		</div>
+		<h4 name="idconc" id="oConcesionaria">Concesionaria: {{ $oConcesionaria }}</h4>
+		<input type="hidden" name="concesionaria_id" id="concesionaria_id" value="{{ $idconc }}">
 	</div>
 	<div class="form-group col-lg-7 col-md-7 col-sm-7">
 		{!! Form::label('client', 'Cliente:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
 		<div class="col-lg-12 col-md-12 col-sm-12">
 			{!! Form::text('cliente', null, array('class' => 'form-control input-xs', 'id' => 'cliente', 'maxlength' => '100')) !!}
+		</div>
+	</div>
+	<div class="form-group col-lg-5 col-md-5 col-sm-5">
+		{!! Form::label('ordencompra', 'Orden de Compra:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
+		<div class="col-lg-12 col-md-12 col-sm-12">
+			{!! Form::text('ordencompra', null, array('class' => 'form-control input-xs', 'id' => 'ordencompra', 'maxlength' => '100')) !!}
 		</div>
 	</div>
 	<div class="mt-8 mb-4 ml-6  col-lg-12 col-md-12 col-sm-12">
@@ -27,6 +25,7 @@
 	<div class="form-group col-4 col-md-4 p-3 u-search-ua">
 		<label for="ua" class="pl-3">Código Ua</label>
 		<div class="u-ua-style js-ua-desc">
+			{{$ua}}
 		</div>
 		{!! Form::text('ua_id', null, array('class' => 'form-control input-xs js-ua-id', 'id' => 'ua_id', 'maxlength' => '15')) !!}
 		
@@ -35,13 +34,13 @@
 	
 	<div class="form-group col-lg-4 col-md-4 col-sm-4">
 		{!! Form::label('fin', 'Fecha Entrada:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
-		<div class="col-lg-12 col-md-12 col-sm-12">
+		<div class="col-lg-12 col-md-12 col-sm-12" style="margin-top: 15px">
 			{!! Form::date('fechaentrada', null, array('class' => 'form-control input-xs', 'id' => 'fechaentrada', 'maxlength' => '100')) !!}
 		</div>
 	</div>
 	<div class="form-group col-lg-4 col-md-4 col-sm-4">
 		{!! Form::label('fin', 'Fecha Salida:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
-		<div class="col-lg-12 col-md-12 col-sm-12">
+		<div class="col-lg-12 col-md-12 col-sm-12" style="margin-top: 15px">
 			{!! Form::date('fechasalida', null, array('class' => 'form-control input-xs', 'id' => 'fechasalida', 'maxlength' => '100')) !!}
 		</div>
 	</div>
@@ -69,9 +68,9 @@
 			{!! Form::select('tipomantenimiento',array(''=>'Seleccione Tipo','1'=>'Preventivo','2'=>'Correctivo'), null, array('class' => 'form-control input-xs', 'id' => 'tipomantenimiento', 'maxlength' => '100')) !!}
 		</div>
 	</div>
-	<div class="form-group col-lg-4 col-md-4 col-sm-4">
+	<div class="form-group col-lg-4 col-md-4 col-sm-4" style="margin-top: 21px">
 		{!! Form::label('telefono', 'Telefono:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
-		<div class="col-lg-12 col-md-12 col-sm-12">
+		<div class="col-lg-12 col-md-12 col-sm-12" style="margin-top: 20px">
 			{!! Form::number('telefono', null, array('class' => 'form-control input-xs', 'id' => 'telefono', 'maxlength' => '100')) !!}
 		</div>
 	</div>

@@ -16,6 +16,9 @@ class CreateAreaTable extends Migration
         Schema::create('area', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('descripcion', 100);
+            $table->integer('nivel');
+            $table->unsignedBigInteger('areapadre_id')-> nullable();
+            $table->foreign('areapadre_id')->references('id')->on('area');
             $table->timestamps();
             $table->softDeletes();
         });

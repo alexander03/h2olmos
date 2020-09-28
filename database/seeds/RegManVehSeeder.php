@@ -13,8 +13,9 @@ class RegManVehSeeder extends Seeder
     {
        DB::table('regmanveh')->insert([
             'concesionaria_id' => 1,
-            'ua_id' => 1001,
+            'ua_id' => 'ABCD1234',
             'cliente' => 'cliente de H2O',
+            'ordencompra' => '10101010',
             'kmman' => 10,
             'kminicial' => 12,
             'kmfinal' => 13,
@@ -26,8 +27,9 @@ class RegManVehSeeder extends Seeder
 
         DB::table('regmanveh')->insert([
             'concesionaria_id' => 2,
-            'ua_id' => 1000,
+            'ua_id' => 'ABCD9999',
             'cliente' => 'cliente de CTO',
+            'ordencompra' => '10101010',
             'kmman' => 100,
             'kminicial' => 120,
             'kmfinal' => 130,
@@ -66,6 +68,19 @@ class RegManVehSeeder extends Seeder
             'cantidad' => 14,
             'monto' => 2500,
             'trabajo_id' => 2,
+        ]);
+
+
+//agrago UA para CTO
+        DB::table('ua')->insert([
+            'codigo' => 'ABCD9999',
+            'descripcion' => 'Esta ua es prueba de CTO',
+            'concesionaria_id' => 2,
+            'habilitada' => true,
+            'fecha_inicio' => now(),
+            'fecha_fin' => '2021-09-12',
+            'created_at' => now(),
+            'updated_at' => now()
         ]);
 
     }

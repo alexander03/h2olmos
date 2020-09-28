@@ -17,7 +17,8 @@ class CreateTableRegrepveh extends Migration
             $table->bigIncrements('id');
             $table->integer('concesionaria_id');;
             $table->string('cliente',250);
-            $table->integer('ua_id');
+            $table->string('ordencompra',250);
+            $table->string('ua_id');
             $table->integer('kmman');
             $table->integer('kminicial');
             $table->integer('kmfinal');

@@ -11,5 +11,5 @@ class Area extends Model
 	protected $table = 'area';
     //use SoftDeletes;
     
-    protected $fillable = ['descripcion'];
+    protected $fillable = ['descripcion','nivel','areapadre_id'];
 }

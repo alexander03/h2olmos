@@ -38,11 +38,17 @@ class AreaController extends Controller
         $filas            = $request->input('filas');
         $entidad          = 'Area';
         $nombre             = Libreria::getParam($request->input('descripcion'));
-        $resultado        = Area::where('descripcion', 'LIKE', '%'.strtoupper($nombre).'%')->orderBy('descripcion', 'ASC');
-        $lista            = $resultado->get();
+        $resultado        = DB::table('area')->where('descripcion', 'LIKE', '%'.strtoupper($nombre).'%')
+        ->select('id','descripcion','areapadre_id as areapadre_id', 'areapadre_id as areapadre_descripcion','nivel');
+        $lista=$resultado->get();
+
+        
+
         $cabecera         = array();
         $cabecera[]       = array('valor' => '#', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Descripción', 'numero' => '1');
+        $cabecera[]       = array('valor' => 'Nivel', 'numero' => '1');
+        $cabecera[]       = array('valor' => 'Pertenece a...', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Operaciones', 'numero' => '2');
         
         $titulo_modificar = $this->tituloModificar;
@@ -57,7 +63,16 @@ class AreaController extends Controller
             $paginaactual    = $paramPaginacion['nuevapagina'];
             $lista           = $resultado->paginate($filas);
             $request->replace(array('page' => $paginaactual));
-            return view($this->folderview.'.list')->with(compact('lista', 'paginacion', 'inicio', 'fin', 'entidad', 'cabecera', 'titulo_modificar', 'titulo_eliminar', 'ruta'));
+
+            $listapadres=array();
+            foreach ($lista as $key => $value) {
+                if($value->areapadre_id!=null){
+               $listapadres[]= Area::find($value->areapadre_id)->descripcion;}
+                else{
+                $listapadres[]="Ninguno";}
+            }
+
+            return view($this->folderview.'.list')->with(compact('lista','listapadres', 'paginacion', 'inicio', 'fin', 'entidad', 'cabecera', 'titulo_modificar', 'titulo_eliminar', 'ruta'));
         }
         return view($this->folderview.'.list')->with(compact('lista', 'entidad'));
     }
@@ -79,7 +94,15 @@ class AreaController extends Controller
         $formData = array('areas.store');
         $formData = array('route' => $formData, 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
         $boton    = 'Registrar'; 
-        return view($this->folderview.'.mant')->with(compact('area', 'formData', 'entidad', 'boton', 'listar'));
+
+        $areas = Area::where('nivel','<=','2')->orderBy('descripcion','asc')->get();
+        $cboArea = array();
+        $cboArea += array('0' => 'Selecione área');
+        foreach($areas as $k=>$v){
+            $cboArea += array($v->id=>$v->descripcion);
+        }
+
+        return view($this->folderview.'.mant')->with(compact('area', 'formData', 'entidad','cboArea', 'boton', 'listar'));
     }
 
     public function store(Request $request)
@@ -97,6 +120,13 @@ class AreaController extends Controller
         $error = DB::transaction(function() use($request){
             $area = new Area();
             $area->descripcion= strtoupper($request->input('descripcion'));
+            if($request->input('areapadre_id')!=0){
+                $area->areapadre_id= strtoupper($request->input('areapadre_id'));
+                $area->nivel= (Area::find($request->input('areapadre_id'))->get())->nivel+1;
+            }
+            else{
+                $area->nivel=1;
+            }
             $area->save();
         });
         return is_null($error) ? "OK" : $error;
@@ -109,12 +139,19 @@ class AreaController extends Controller
             return $existe;
         }
         $listar   = Libreria::getParam($request->input('listar'), 'NO');
+         $areas = Area::orderBy('descripcion','asc')->get();
+        $cboArea = array();
+        $cboArea += array('0' => 'Selecione área');
+        foreach($areas as $k=>$v){
+            if($v->id!=$id)
+            $cboArea += array($v->id=>$v->descripcion);
+        }
         $area = Area::find($id);
         $entidad  = 'Area';
         $formData = array('areas.update', $id);
         $formData = array('route' => $formData, 'method' => 'PUT', 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
         $boton    = 'Modificar';
-        return view($this->folderview.'.mant')->with(compact('area', 'formData', 'entidad', 'boton', 'listar'));
+        return view($this->folderview.'.mant')->with(compact('area', 'formData','cboArea', 'entidad', 'boton', 'listar'));
     }
 
     public function update(Request $request, $id)
@@ -135,6 +172,14 @@ class AreaController extends Controller
         $error = DB::transaction(function() use($request, $id){
             $area = Area::find($id);
             $area->descripcion= strtoupper($request->input('descripcion'));
+            if($request->input('areapadre_id')!=0){
+                $area->areapadre_id= strtoupper($request->input('areapadre_id'));
+                $area->nivel= (Area::find($request->input('areapadre_id'))->get())->nivel+1;
+            }
+            else{
+                $area->nivel=1;
+                $area->areapadre_id=null;
+            }
             $area->save();
         });
         return is_null($error) ? "OK" : $error;

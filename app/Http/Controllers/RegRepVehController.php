@@ -66,6 +66,7 @@ class RegRepVehController extends Controller
         $q->where('regrepveh.cliente', 'like', '%'.$filter.'%')
           ->orWhere('regrepveh.ua_id', 'like', '%'.$filter.'%')
           ->orWhere('regrepveh.telefono', 'like', '%'.$filter.'%')
+          ->orWhere('regrepveh.ordencompra', 'like', '%'.$filter.'%')
           ->orWhere('regrepveh.fechaentrada', 'like', '%'.$filter.'%')
           ->orWhere('regrepveh.fechasalida', 'like', '%'.$filter.'%');
      	});
@@ -75,6 +76,7 @@ class RegRepVehController extends Controller
         $cabecera         = array();
         $cabecera[]       = array('valor' => '#', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Cliente', 'numero' => '1');
+        $cabecera[]       = array('valor' => 'Orden de Compra', 'numero' => '1');
         $cabecera[]       = array('valor' => 'UA', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Km Inicial', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Km Mant.', 'numero' => '1');
@@ -125,10 +127,9 @@ class RegRepVehController extends Controller
        	->select('concesionaria.id','concesionaria.razonsocial')->get();
         $oObservaciones=array(new DescripcionRegRepVeh());
         $oObservaciones[0]->id=-1 ; 
-
-        foreach($arrConcesionarias as $k=>$v){
-            $oConcesionarias = array($v->id=>$v->razonsocial);
-        }
+        $ua="";
+        $idconc=$arrConcesionarias[0]->id;
+        $oConcesionaria=$arrConcesionarias[0]->razonsocial;
         //$oTipos=array('' => 'Seleccione Tipo');
         $oTipos=array('' => 'Seleccione Tipo');
         $oTipos=array('1' => 'Preventivo');
@@ -136,7 +137,7 @@ class RegRepVehController extends Controller
         $formData = array('regrepveh.createregrepveh');
         $formData = array('route' => $formData, 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
         $boton    = 'Registrar'; 
-        return view($this->folderview.'.mant2')->with(compact('regrepveh', 'oTipos','formData', 'entidad','oConcesionarias','oObservaciones', 'boton', 'listar'));
+        return view($this->folderview.'.mant2')->with(compact('regrepveh', 'oTipos','formData', 'entidad','oConcesionaria','idconc','ua','oObservaciones', 'boton', 'listar'));
     }
 
     public function buscarporua(Request $request){
@@ -174,6 +175,7 @@ class RegRepVehController extends Controller
         $reglas = [
             'concesionaria_id' => 'required',
             'cliente' => 'required|max:250',
+            'ordencompra' => 'required|max:250',
             'ua_id' => ['required', new SearchUaPadre()],
             'fechaentrada' => 'required',
             'fechasalida' => 'required',
@@ -189,7 +191,9 @@ class RegRepVehController extends Controller
 
         $mensajes = [
             'cliente.required' => 'Cliente Campo Vacío',
-            'cliente.max' => 'Nombre de Cliente muy largo, máximo 250 caracteres',
+            'ordencompra.required' => 'Orden compra Campo Vacío',
+            'cliente.max' => 'Nombre de Cliente muy extenso, máximo 250 caracteres',
+            'ordencompra.max' => 'Orden de Compra muy extensa, máximo 250 caracteres',
             'ua_id.required' => 'UA Campo Vacío',
             'fechaentrada.required' => 'Fecha Entrada Campo Vacío',
             'fechasalida.required' => 'Fecha Salida Campo Vacío',
@@ -217,6 +221,7 @@ class RegRepVehController extends Controller
             $regrepv = new RegRepVeh();
             $regrepv -> id =$next_id;
             $regrepv -> cliente  = $request -> input('cliente');
+            $regrepv -> ordencompra  = $request -> input('ordencompra');
             $regrepv -> concesionaria_id  = $request -> input('concesionaria_id');
             $regrepv -> ua_id = $request -> input('ua_id');
             $regrepv -> kminicial = $request -> input('kminicial');
@@ -296,10 +301,8 @@ class RegRepVehController extends Controller
         ->where('userconcesionaria.estado','=',true)->where('userconcesionaria.user_id','=',auth()->user()->id)
        	->select('concesionaria.id','concesionaria.razonsocial')->get();
 
-        foreach($arrConcesionarias as $k=>$v){
-            $oConcesionarias = array($v->id=>$v->razonsocial);
-        }
-        
+        $idconc=$arrConcesionarias[0]->id;
+        $oConcesionaria=$arrConcesionarias[0]->razonsocial;
 
         $listar   = Libreria::getParam($request->input('listar'), 'NO');
         $regrepveh = RegRepVeh::find($id);
@@ -309,14 +312,14 @@ class RegRepVehController extends Controller
             ->select('descripcionregrepveh.id as id','descripcionregrepveh.monto as monto','descripcionregrepveh.cantidad as cantidad','repuesto.codigo as codigo','repuesto.id as repuesto_id','repuesto.descripcion as descripcion','unidad.descripcion as unidad')
         ->get();
 
-
-
+        $oua = Ua::where('codigo','=',$regrepveh->ua_id)->get();
+        $ua= $oua[0]->descripcion;
         
         $entidad  = 'RegRepVeh';
         $formData = array('regrepveh.update', $id);
         $formData = array('route' => $formData, 'method' => 'PUT', 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
         $boton    = 'Modificar';
-        return view($this->folderview.'.mant2')->with(compact('regrepveh','oConcesionarias','oObservaciones', 'formData', 'entidad', 'boton', 'listar'));
+        return view($this->folderview.'.mant2')->with(compact('regrepveh','oConcesionaria','idconc','ua','oObservaciones', 'formData', 'entidad', 'boton', 'listar'));
     }
 
     public function update(Request $request, $id)
@@ -325,6 +328,7 @@ class RegRepVehController extends Controller
         $reglas = [
             'concesionaria_id' => 'required',
             'cliente' => 'required|max:250',
+            'ordencompra' => 'required|max:250',
             'ua_id' => ['required', new SearchUaPadre()],
             'fechaentrada' => 'required',
             'fechasalida' => 'required',
@@ -340,7 +344,9 @@ class RegRepVehController extends Controller
 
         $mensajes = [
             'cliente.required' => 'Cliente Campo Vacío',
-            'cliente.max' => 'Nombre de Cliente muy largo, máximo 250 caracteres',
+            'ordencompra.required' => 'Orden compra Campo Vacío',
+            'cliente.max' => 'Nombre de Cliente muy extenso, máximo 250 caracteres',
+            'ordencompra.max' => 'Orden de Compra muy extensa, máximo 250 caracteres',
             'ua_id.required' => 'UA Campo Vacío',
             'fechaentrada.required' => 'Fecha Entrada Campo Vacío',
             'fechasalida.required' => 'Fecha Salida Campo Vacío',
@@ -381,6 +387,7 @@ class RegRepVehController extends Controller
         $error = DB::transaction(function() use($request, $id){
             $regrepv = RegRepVeh::find($id);
             $regrepv -> cliente  = $request -> input('cliente');
+            $regrepv -> ordencompra  = $request -> input('ordencompra');
             $regrepv -> concesionaria_id  = $request -> input('concesionaria_id');
             $regrepv -> ua_id = $request -> input('ua_id');
             $regrepv -> kmman = $request -> input('kmman');
@@ -466,6 +473,7 @@ public function generatePDF(Request $request) {
         $data=[];
         $data['concesionaria'] = $ConcAct;
         $data['cliente'] = $regrepveh->cliente;
+        $data['ordencompra'] = $regrepveh->ordencompra;
         $data['ua_id'] = $regrepveh->ua_id;
         $data['tipomantenimiento']=$regrepveh->tipomantenimiento==1?'Preventivo':'Correctivo';
         $data['kmman'] = $regrepveh->kmman;

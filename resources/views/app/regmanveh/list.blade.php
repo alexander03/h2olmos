@@ -19,6 +19,7 @@
 		<tr>
 			<td>{{ $contador }}</td>
 			<td>{{ $value->cliente }}</td>
+			<td>{{ $value->ordencompra }}</td>
 			<td>{{ $value->ua_id }}</td>
 			<td>{{ $value->kmman }}</td>
 			<td>{{ $value->kminicial }}</td>

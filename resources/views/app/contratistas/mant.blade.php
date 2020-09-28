@@ -16,19 +16,19 @@
 <div class="form-group">
 	{!! Form::label('propietario', 'Propietario:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
 	<div class="col-lg-12 col-md-12 col-sm-12">
-		{!! Form::text('propietario', null, array('class' => 'form-control input-xs', 'id' => 'propietario', 'maxlength' => '11')) !!}
+		{!! Form::text('propietario', null, array('class' => 'form-control input-xs', 'id' => 'propietario')) !!}
 	</div>
 </div>
 <div class="form-group">
 	{!! Form::label('email', 'E-Mail:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
 	<div class="col-lg-12 col-md-12 col-sm-12">
-		{!! Form::text('email', null, array('class' => 'form-control input-xs', 'id' => 'email', 'maxlength' => '11')) !!}
+		{!! Form::text('email', null, array('class' => 'form-control input-xs', 'id' => 'email')) !!}
 	</div>
 </div>
 <div class="form-group">
 	{!! Form::label('telefono', 'Teléfono:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
 	<div class="col-lg-12 col-md-12 col-sm-12">
-		{!! Form::text('telefono', null, array('class' => 'form-control input-xs', 'id' => 'telefono', 'maxlength' => '11')) !!}
+		{!! Form::text('telefono', null, array('class' => 'form-control input-xs', 'id' => 'telefono', 'maxlength' => '30')) !!}
 	</div>
 </div>
 <div class="form-group">
