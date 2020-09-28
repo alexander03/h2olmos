@@ -75,7 +75,7 @@ class OpcionmenuTableSeeder extends Seeder
 
         DB::table('opcionmenu')->insert([
             'descripcion' => 'Abastecimientos',
-            'link' => 'abastecimiento',
+            'link' => 'abastecimientolugar',
             'icono' => 'face',
             'orden' => 3,
             'grupomenu_id' => 1
@@ -156,7 +156,7 @@ class OpcionmenuTableSeeder extends Seeder
         DB::table('opcionmenu')->insert([
             'descripcion' => 'Mant. corr. y prev.',
             'link' => 'mantcorrprev',
-            'icono' => 'myicon',
+            'icono' => 'api',
             'orden' => 1,
             'grupomenu_id' => 3
         ]);
@@ -164,7 +164,7 @@ class OpcionmenuTableSeeder extends Seeder
         DB::table('opcionmenu')->insert([
             'descripcion' => 'Abast. combustible',
             'link' => 'abastecimiento',
-            'icono' => 'myicon',
+            'icono' => 'api',
             'orden' => 1,
             'grupomenu_id' => 3
         ]);

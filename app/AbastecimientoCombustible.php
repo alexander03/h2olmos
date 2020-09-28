@@ -39,4 +39,14 @@ class AbastecimientoCombustible extends Model{
 
         return $this->belongsTo(Vehiculo::class, 'vehiculo_id');
     }
+
+    public function abastecimiento(){
+
+        return $this->belongsTo(Abastecimiento::class, 'abastecimiento_id');
+    }
+
+    public function tipoCombustible(){
+
+        return $this->belongsTo(Tipocombustible::class, 'tipocombustible_id');
+    }
 }

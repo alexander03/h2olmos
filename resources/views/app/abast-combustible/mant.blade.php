@@ -26,13 +26,19 @@ if ($abastecimiento !== NULL) {
 			value="<?php if($abastecimiento) echo $abastecimiento -> grifo -> descripcion ?>">
 		<small id="autoComplete_list2" class="text-danger"></small>
 	</div>
-	<div class="form-group col-12 col-md-6 p-3">
-		<label for="id-tipo-comb" class="pl-3">Tipo de combustible</label>
-		<input type="text" 
-			name="tipo_combustible" 
-			id="id-tipo-comb" 
-			class="form-control" 
-			value="<?php if($abastecimiento) echo $abastecimiento -> tipo_combustible ?>">
+	<div class="form-group col-md-6 p-3">
+		<label for="id-tipo-combustible" class="pl-3">Tipo de combustible</label>
+		<input type="text" class="form-control" style="display: none">
+		<section class="d-flex mt-1"> 
+			<select class="form-control" name="tipocombustible_id" id="id-tipo-combustible">
+				<option value="">Seleccionar tipo de combustible</option>
+				@foreach ($lstTipoCombustibles as $tipC)
+					<option value="{{ $tipC -> id }}" <?php if($abastecimiento) if($abastecimiento -> tipocombustible_id == $tipC -> id) echo 'selected' ?>>
+						{{ $tipC -> descripcion }}
+					</option>
+				@endforeach
+			</select>
+		</section>	
 	</div>
 	<div class="form-group col-12 col-md-6 p-3">
 		<label for="id-conductor" class="pl-3">Conductor</label>
@@ -122,17 +128,13 @@ if ($abastecimiento !== NULL) {
 		<label for="id-lugar" class="pl-3">Lugar de abastecimiento</label>
 		<input type="text" class="form-control" style="display: none">
 		<section class="d-flex mt-1"> 
-			<select class="form-control" name="lugar_abastecimiento" id="id-lugar">
+			<select class="form-control" name="abastecimiento_id" id="id-lugar">
 				<option value="">Seleccionar lugar de abastecimiento</option>
-			</select>
-		</section>	
-	</div>
-	<div class="form-group col-md-6 p-3">
-		<label for="id-tipo-combustible" class="pl-3">Tipo de combustible</label>
-		<input type="text" class="form-control" style="display: none">
-		<section class="d-flex mt-1"> 
-			<select class="form-control" name="tipo_combustible" id="id-tipo-combustible">
-				<option value="">Seleccionar tipo de combustible</option>
+				@foreach ($lstAbastecimientos as $abast)
+					<option value="{{ $abast -> id }}" <?php if($abastecimiento) if($abastecimiento -> abastecimiento_id == $abast -> id) echo 'selected' ?>>
+						{{ $abast -> descripcion }}
+					</option>
+				@endforeach
 			</select>
 		</section>	
 	</div>
@@ -151,8 +153,8 @@ if ($abastecimiento !== NULL) {
 			<select class="form-control" name="comprobante">
 				<option value="">Seleccionar comprobante</option>
 				<option value="BOLETA" <?php if($abastecimiento) if($abastecimiento -> comprobante) echo 'selected' ?>>Boleta</option>
-				<option value="FACTURA" <?php if($abastecimiento) if(!$abastecimiento -> comprobante) echo 'selected' ?>>Factura</option>
-				<option value="OTROS" <?php if($abastecimiento) if(!$abastecimiento -> comprobante) echo 'selected' ?>>Otros</option>
+				<option value="FACTURA" <?php if($abastecimiento) if($abastecimiento -> comprobante) echo 'selected' ?>>Factura</option>
+				<option value="OTROS" <?php if($abastecimiento) if($abastecimiento -> comprobante) echo 'selected' ?>>Otros</option>
 			</select>
 		</section>	
 	</div>

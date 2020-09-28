@@ -138,9 +138,9 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::resource('vehiculo', 'VehiculoController', array('except' => array('show')));
 
 	//Rutas Abastecimiento
-	Route::post('abastecimiento/buscar', 'AbastecimientoController@buscar')->name('abastecimiento.buscar');
-	Route::get('abastecimiento/eliminar/{id}/{listarluego}', 'AbastecimientoController@eliminar')->name('abastecimiento.eliminar');
-	Route::resource('abastecimiento', 'AbastecimientoController', array('except' => array('show')));
+	Route::post('abastecimientolugar/buscar', 'AbastecimientoController@buscar')->name('abastecimientolugar.buscar');
+	Route::get('abastecimientolugar/eliminar/{id}/{listarluego}', 'AbastecimientoController@eliminar')->name('abastecimientolugar.eliminar');
+	Route::resource('abastecimientolugar', 'AbastecimientoController', array('except' => array('show')));
 
 	//Rutas VehiculoDocument
 	Route::post('vehiculodocument/buscar', 'VehiculoDocumentController@buscar')->name('vehiculodocument.buscar');
