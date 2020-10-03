@@ -452,7 +452,7 @@ public function searchAutocompleteTrabajo($query){
 	    $id=$request->id;
         if ( $request->id == null || !is_numeric($request->id) ) return;
 
-        $namefile = 'RegistroDeMantenimientoVehicular - '.time().'.pdf';  
+        $namefile = 'RegistroDeRepuestoVehicular - '.time().'.pdf';  
         
         $ConcesionariaActual = Concesionaria::join('userconcesionaria','userconcesionaria.concesionaria_id','=','concesionaria.id')
         ->join('users','users.id','=','userconcesionaria.user_id')

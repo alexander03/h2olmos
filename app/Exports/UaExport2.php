@@ -8,27 +8,33 @@ use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 
-class UaExport implements FromCollection, WithHeadings
+class UaExport2 implements FromCollection, WithHeadings
 {
     /**
     * @return \Illuminate\Support\Collection
     */
     public function collection(){
     
-        $uaList = Ua::select('ua.codigo', 'ua.descripcion', 'ua.habilitada', 'ua.fecha_inicio', 'ua.fecha_fin',
-            'u_padre.codigo as padreCodigo', 'u_padre.descripcion as padreDesc','c.razonsocial as concesionaria') 
+        $uaList = Ua::select('ua.codigo', 'ua.descripcion', 
+            'u_padre.codigo as padreCodigo', 'u_padre.descripcion as padreDesc','c.razonsocial as concesionaria','u_padre.ua_padre_id') 
             -> leftjoin('ua as u_padre', 'u_padre.id', '=', 'ua.ua_padre_id')
             -> join('concesionaria as c','c.id','=','ua.concesionaria_id')
             -> whereNull('ua.deleted_at')
             -> where('ua.concesionaria_id','=',$this -> getConsecionariaActual())
+            -> orderBy('ua.codigo','asc')
             -> get();         
 
         foreach($uaList as $ua) {
-           if(!$ua->getOriginal('padreCodigo')) $ua->padreCodigo = 'SIN PADRE';
-           if(!$ua->getOriginal('padreDesc')) $ua->padreDesc = 'SIN PADRE';
-           ($ua->getOriginal('habilitada') == 0) ? $ua->habilitada = 'INHABILITADA' : $ua->habilitada = 'HABILITADA';
-           if(!$ua->getOriginal('fecha_fin')) $ua->fecha_fin = 'ILIMITADA';
-           $ua->fecha_inicio = date("d/m/Y",strtotime($ua->fecha_inicio));
+            if(!$ua->getOriginal('padreCodigo')){
+                $ua->padreCodigo = 'SIN PADRE';
+            }else{
+                $ua->descripcion = '                  '.$ua->descripcion;
+                if(!is_null($ua->ua_padre_id) && $ua->ua_padre_id>0){
+                    $ua->descripcion = '                  '.$ua->descripcion;    
+                }
+            }
+            $ua->ua_padre_id='';
+            if(!$ua->getOriginal('padreDesc')) $ua->padreDesc = 'SIN PADRE';
         }
 
         return $uaList;
@@ -38,9 +44,6 @@ class UaExport implements FromCollection, WithHeadings
         return [
             'Codigo',
             'Descripción',
-            'Habilitada',
-            'Fecha de inicio',
-            'Fecha de fin',
             'Código ua padre',
             'Descripción ua padre',
             'Concesionaria'

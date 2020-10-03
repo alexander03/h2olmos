@@ -47,7 +47,7 @@ if ($controldiario !== NULL) {
 </div>
 <input type="hidden" name="idEquipo" id="idEquipo" value="@if($controldiario){{$controldiario->equipo->id }}@endif">
 <div class="@if($controldiario) d-none @endif">
-	<p class="h6 text-secondary ml-3" style="display: inline;">Horarios</p> 
+	<p class="h6 text-secondary ml-3" style="display: inline;">DETALLE DE HORAS TRABAJADAS</p> 
 	{!! Form::button('<i class="fa fa-plus fa-lg"></i>', array('class' => 'btn btn-success btn-sm', 'id' => 'btnAgregarHora', 'onclick' => 'nuevaFila(this);' , 'data-filas' => '1')) !!}
 	{!! Form::button('<i class="fa fa-minus fa-lg"></i>', array('class' => 'btn btn-success btn-sm', 'id' => 'btnAgregarHora', 'onclick' => 'quitarFila(this);' , 'data-filas' => '1')) !!}
 </div>
@@ -65,28 +65,70 @@ if ($controldiario !== NULL) {
 			</div>
 		</div>
 		<div class="form-row">
-			<div class="form-group col-md-2 mt-4 col-sm-6 col-6">
+			<div class="form-group col-md-2 mt-4 col-sm-6 col-6" hidden="">
 				{!! Form::label('hora_inicio', 'hora inicio:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
 				<div class="col-lg-12 col-md-12 col-sm-12 mt-2">
 					<input type="time" class="form-control input-xs" value="@if($controldiario){{substr($controldiario->hora_inicio,0,5)}}@endif" name="hora_inicio[]" id='hora_inicio'>
 				</div>
 			</div>
-			<div class="form-group col-md-2 mt-4 col-sm-6 col-6">
+			<div class="form-group col-md-2 mt-4 col-sm-6 col-6" hidden="">
 				{!! Form::label('hora_fin', 'hora Fin:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
 				<div class="col-lg-12 col-md-12 col-sm-12 mt-2">
 					<input type="time" class="form-control input-xs" value="@if($controldiario){{substr($controldiario->hora_fin,0,5)}}@endif" name="hora_fin[]" id='hora_fin'>
 				</div>
 			</div>
-			<div class="form-group col-md-3 mt-4 col-sm-6 col-6">
-				{!! Form::label('hora_total', 'horas totales:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
+			<div class="form-group col-md-4 mt-4 col-sm-4 col-4">
+				{!! Form::label('hora_total', 'HORAS TRABAJADAS:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
 				<div class="col-lg-12 col-md-12 col-sm-12 mt-2">
 					{!! Form::number('hora_total[]', null, array('class' => 'form-control input-xs', 'id' => 'hora_total')) !!}
 				</div>
 			</div>
-			<div class="form-group col-md-4 mt-4 ms-12 col-sm-6 col-6">
-				{!! Form::label('tipohora_id', 'Tipo de hora:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
+			<div class="form-group col-md-4 mt-4 col-sm-4 col-4">
+				{!! Form::label('tipohora_id', 'Tipo de Horas Paradas:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
 				<div class="col-lg-12 col-md-12 col-sm-12">
 					{!! Form::select('tipohora_id[]',$cboThoras, null, array('class' => 'form-control input-xs', 'id' => 'tipohora_id')) !!}
+				</div>
+			</div>
+			<div class="form-group col-md-4 mt-4 col-sm-4 col-4">
+				{!! Form::label('hora_parada', 'HORAS PARADAS:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
+				<div class="col-lg-12 col-md-12 col-sm-12 mt-2">
+					{!! Form::number('hora_parada[]', null, array('class' => 'form-control input-xs', 'id' => 'hora_parada')) !!}
+				</div>
+			</div>
+			<div class="form-group col-md-4 mt-4 col-sm-4 col-4">
+				{!! Form::label('viajes', 'Nro. Viajes:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
+				<div class="col-lg-12 col-md-12 col-sm-12 mt-2">
+					{!! Form::number('viajes[]', null, array('class' => 'form-control input-xs', 'id' => 'viajes')) !!}
+				</div>
+			</div>
+			<div class="form-group col-md-4 mt-4 col-sm-4 col-4">
+				{!! Form::label('km_inicial', 'Km. Inicial:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
+				<div class="col-lg-12 col-md-12 col-sm-12 mt-2">
+					{!! Form::number('km_inicial[]', null, array('class' => 'form-control input-xs', 'id' => 'km_inicial')) !!}
+				</div>
+			</div>
+			<div class="form-group col-md-4 mt-4 col-sm-4 col-4">
+				{!! Form::label('acceso_origen', 'Acceso Origen:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
+				<div class="col-lg-12 col-md-12 col-sm-12 mt-2">
+					{!! Form::text('acceso_origen[]', null, array('class' => 'form-control input-xs', 'id' => 'acceso_origen')) !!}
+				</div>
+			</div>
+			<div class="form-group col-md-4 mt-4 col-sm-4 col-4">
+				{!! Form::label('km_destino', 'Km. Destino:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
+				<div class="col-lg-12 col-md-12 col-sm-12 mt-2">
+					{!! Form::number('km_destino[]', null, array('class' => 'form-control input-xs', 'id' => 'km_destino')) !!}
+				</div>
+			</div>
+			<div class="form-group col-md-4 mt-4 col-sm-4 col-4">
+				{!! Form::label('acceso_destino', 'Acceso Destino:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
+				<div class="col-lg-12 col-md-12 col-sm-12 mt-2">
+					{!! Form::text('acceso_destino[]', null, array('class' => 'form-control input-xs', 'id' => 'acceso_destino')) !!}
+				</div>
+			</div>
+			<div class="form-group col-md-4 mt-4 col-sm-4 col-4">
+				{!! Form::label('tipo_material', 'Tipo Material:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
+				<div class="col-lg-12 col-md-12 col-sm-12 mt-2">
+					{!! Form::text('tipo_material[]', null, array('class' => 'form-control input-xs', 'id' => 'tipo_material')) !!}
 				</div>
 			</div>
 			<div class="form-group col-md-12">
@@ -161,7 +203,7 @@ if ($controldiario !== NULL) {
 {!! Form::close() !!}
 <script type="text/javascript">
 	$(document).ready(function() {
-		configurarAnchoModal('650');
+		configurarAnchoModal('750');
 		init(IDFORMMANTENIMIENTO+'{!! $entidad !!}', 'M', '{!! $entidad !!}');
 		doSearchUA();
 		doSearchEquipoPrim();
@@ -184,27 +226,33 @@ if ($controldiario !== NULL) {
 						</div>
 					</div>
 					<div class="form-row">
-						<div class="form-group col-md-3 mt-4">
+						<div class="form-group col-md-3 mt-4" hidden="">
 							<label For="hora_inicio_${Num}" class="col-lg-12 col-md-12 col-sm-12 control-label">Hora inicio : </label>
 							<div class="col-lg-12 col-md-12 col-sm-12 mt-2">
 								<input type="time" class="form-control input-xs" name="hora_inicio[]" id='hora_inicio_${Num}'>
 							</div>
 						</div>
-						<div class="form-group col-md-3 mt-4">
+						<div class="form-group col-md-3 mt-4" hidden="">
 							<label For="hora_fin_${Num}" class="col-lg-12 col-md-12 col-sm-12 control-label">Hora fin : </label>
 							<div class="col-lg-12 col-md-12 col-sm-12 mt-2">
 								<input type="time" class="form-control input-xs" name="hora_fin[]" id='hora_fin_${Num}'>
 							</div>
 						</div>
-						<div class="form-group col-md-3 mt-4">
-							<label For="hora_total_${Num}" class="col-lg-12 col-md-12 col-sm-12 control-label">Horas totales : </label>
+						<div class="form-group col-md-4 mt-4">
+							<label For="hora_total_${Num}" class="col-lg-12 col-md-12 col-sm-12 control-label">HORAS TRABAJADAS : </label>
 							<div class="col-lg-12 col-md-12 col-sm-12 mt-2">
 								<input type="number" class="form-control input-xs" name="hora_total[]" id='hora_total_${Num}'>
 							</div>
 						</div>
-						<div class="form-group col-md-4 mt-4 ms-12">
-							<label for="tipohora_id_${Num}" class="col-lg-12 col-md-12 col-sm-12 control-label">Tipo de hora: : </label>
+						<div class="form-group col-md-4 mt-4">
+							<label for="tipohora_id_${Num}" class="col-lg-12 col-md-12 col-sm-12 control-label">Tipo de horas paradas : </label>
 							<div class="col-lg-12 col-md-12 col-sm-12">
+							</div>
+						</div>
+						<div class="form-group col-md-4 mt-4">
+							<label For="hora_parada_${Num}" class="col-lg-12 col-md-12 col-sm-12 control-label">HORAS PARADAS : </label>
+							<div class="col-lg-12 col-md-12 col-sm-12 mt-2">
+								<input type="number" class="form-control input-xs" name="hora_parada[]" id='hora_parada_${Num}'>
 							</div>
 						</div>
 						<div class="form-group col-md-12 mt-12">
@@ -213,6 +261,42 @@ if ($controldiario !== NULL) {
 								<input type="text" class="form-control input-xs" name="observaciones[]" id='observaciones_${Num}'>
 							</div>
 						</div>
+						<div class="form-group col-md-4 mt-4 col-sm-4 col-4">
+            				{!! Form::label('viajes_${Num}', 'Nro. Viajes:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
+            				<div class="col-lg-12 col-md-12 col-sm-12 mt-2">
+            					{!! Form::number('viajes[]', null, array('class' => 'form-control input-xs', 'id' => 'viajes_${Num}')) !!}
+            				</div>
+            			</div>
+            			<div class="form-group col-md-4 mt-4 col-sm-4 col-4">
+            				{!! Form::label('km_inicial_${Num}', 'Km. Inicial:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
+            				<div class="col-lg-12 col-md-12 col-sm-12 mt-2">
+            					{!! Form::number('km_inicial[]', null, array('class' => 'form-control input-xs', 'id' => 'km_inicial_${Num}')) !!}
+            				</div>
+            			</div>
+            			<div class="form-group col-md-4 mt-4 col-sm-4 col-4">
+            				{!! Form::label('acceso_origen_${Num}', 'Acceso Origen:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
+            				<div class="col-lg-12 col-md-12 col-sm-12 mt-2">
+            					{!! Form::text('acceso_origen[]', null, array('class' => 'form-control input-xs', 'id' => 'acceso_origen_${Num}')) !!}
+            				</div>
+            			</div>
+            			<div class="form-group col-md-4 mt-4 col-sm-4 col-4">
+            				{!! Form::label('km_destino_${Num}', 'Km. Destino:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
+            				<div class="col-lg-12 col-md-12 col-sm-12 mt-2">
+            					{!! Form::number('km_destino[]', null, array('class' => 'form-control input-xs', 'id' => 'km_destino_${Num}')) !!}
+            				</div>
+            			</div>
+            			<div class="form-group col-md-4 mt-4 col-sm-4 col-4">
+            				{!! Form::label('acceso_destino_${Num}', 'Acceso Destino:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
+            				<div class="col-lg-12 col-md-12 col-sm-12 mt-2">
+            					{!! Form::text('acceso_destino[]', null, array('class' => 'form-control input-xs', 'id' => 'acceso_destino_${Num}')) !!}
+            				</div>
+            			</div>
+            			<div class="form-group col-md-4 mt-4 col-sm-4 col-4">
+            				{!! Form::label('tipo_material_${Num}', 'Tipo Material:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
+            				<div class="col-lg-12 col-md-12 col-sm-12 mt-2">
+            					{!! Form::text('tipo_material[]', null, array('class' => 'form-control input-xs', 'id' => 'tipo_material_${Num}')) !!}
+            				</div>
+            			</div>
 					</div>
 					<hr>
 			`;

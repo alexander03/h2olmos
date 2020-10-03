@@ -28,7 +28,7 @@ class Libreria
 			$fin = $cantidadTotal;
 		}
 
-		$cadenaPagina  = "<div class=\"my-3 card-header card-header-tabs card-header-info\" style=\"width: fit-content;padding: 0px;margin-left: 0;padding-left: 5px;cursor:pointer;\"><span class=\"nav-tabs-title\">TOTAL DE REGISTROS " . $cantidadTotal . "</span>";
+		$cadenaPagina  = "<div class=\"my-3 card-header card-header-tabs card-header-info\" style=\"width: fit-content;padding: 0px;margin-left: 0;padding-left: 5px;cursor:pointer;\"><span class=\"nav-tabs-title\">TOTAL DE REGISTROS (" . $cantidadTotal . ")</span>";
 		$puntosDelante = "";
 		$puntosDetras  = "";
 		$cadenaPagina .= "<ul class=\"pagination nav nav-tabs\">";

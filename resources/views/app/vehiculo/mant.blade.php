@@ -76,21 +76,27 @@ if ($vehiculo !== NULL) {
 		</div>
 	</div>
 	<div class="form-group col-md-6 ">
-		{!! Form::label('contratista_id', 'Contratista:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
+		{!! Form::label('contratista_id', 'Subcontratista:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
 		<div class="col-lg-12 col-md-12 col-sm-12">
 			{!! Form::select('contratista_id', $cboContratista, null, array('class' => 'form-control input-xs', 'id' => 'contratista_id')) !!}
-		</div>
-	</div>
-	<div class="form-group col-md-6 mt-4">
-		{!! Form::label('kilometraje', 'Kilometraje: referencial', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
-		<div class="col-lg-12 col-md-12 col-sm-12">
-			{!! Form::text('kilometraje', null, array('class' => 'form-control input-xs', 'id' => 'kilometraje')) !!}
 		</div>
 	</div>
 	<div class="form-group col-md-6 ">
 		{!! Form::label('carroceria_id', 'Carrocería:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
 		<div class="col-lg-12 col-md-12 col-sm-12">
 			{!! Form::select('carroceria_id', $cboCarroceria ,null, array('class' => 'form-control input-xs', 'id' => 'carroceria_id')) !!}
+		</div>
+	</div>
+	<div class="form-group col-md-6 ">
+		{!! Form::label('kilometraje_id', 'Regla:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
+		<div class="col-lg-12 col-md-12 col-sm-12">
+			{!! Form::select('kilometraje_id', $cboKilometraje ,null, array('class' => 'form-control input-xs', 'id' => 'kilometraje_id')) !!}
+		</div>
+	</div>
+	<div class="form-group col-md-6">
+		{!! Form::label('kilometraje', 'Kilometraje: referencial', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
+		<div class="col-lg-12 col-md-12 col-sm-12">
+			{!! Form::text('kilometraje', null, array('class' => 'form-control input-xs', 'id' => 'kilometraje')) !!}
 		</div>
 	</div>
 </div>

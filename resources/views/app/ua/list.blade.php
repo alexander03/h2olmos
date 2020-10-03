@@ -39,10 +39,10 @@
 				</div>
 			</td>
 			<td class="text-nowrap">{{ $value->	codigo }}</td>
-			<td class="text-nowrap">{{ $value->	descripcion }}</td>
-			<td class="text-nowrap">
+			<td class="text-nowrap text-left">{{ $value->	descripcion }}</td>
+			<td class="text-nowrap text-left">
 				@if($value -> ua_padre_id)
-					{{  $value -> uaPadre($value -> ua_padre_id)[0] -> descripcion }}
+					<?php echo '<strong>'.$value -> uaPadre($value -> ua_padre_id)[0] -> codigo.'</strong> '.$value -> uaPadre($value -> ua_padre_id)[0] -> descripcion; ?>
 				@else
 					Sin padre
 				@endif
@@ -51,7 +51,7 @@
 				{{ $value -> es_padre }}
 			</td>
 			<td class="text-nowrap">{{ ($value-> habilitada) ? 'HABILITADO' : 'DESHABILITADO' }}</td>
-			<td class="text-nowrap">{{ $value-> fecha_inicio }}</td>
+			<td class="text-nowrap">{{ date("d/m/Y",strtotime($value-> fecha_inicio)) }}</td>
 			<td class="text-nowrap">{{ ($value-> fecha_fin) ? $value -> fecha_fin : 'ILIMITADO' }}</td>
 			<td class="text-nowrap">{!! Form::button('<i class="material-icons">edit</i>', array('onclick' => 'modal (\''.URL::route($ruta["edit"], array($value->id, 'listar'=>'SI')).'\', \''.$titulo_modificar.'\', this);', 'class' => 'btn btn-primary btn-link btn-sm','rel'=>'tooltip','title'=>'Editar')) !!}</td>
 			<td class="text-nowrap">{!! Form::button('<i class="material-icons">close</i>', array('onclick' => 'modal (\''.URL::route($ruta["delete"], array($value->id, 'SI')).'\', \''.$titulo_eliminar.'\', this);', 'class' => 'btn btn-danger btn-link btn-sm','rel'=>'tooltip','title'=>'Eliminar')) !!}</td>

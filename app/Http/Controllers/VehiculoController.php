@@ -6,6 +6,7 @@ use App\Vehiculo;
 use App\Ua;
 use App\Rules\SearchUaPadre;
 use App\Area;
+use App\Kilometraje;
 use App\Brand;
 use App\Carroceria;
 use App\Contratista;
@@ -72,12 +73,13 @@ class VehiculoController extends Controller
         $cabecera[]       = array('valor' => 'Año de Fbr', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Placa', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Motor', 'numero' => '1');
-        $cabecera[]       = array('valor' => 'Contratista', 'numero' => '1');
+        $cabecera[]       = array('valor' => 'Subcontratista', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Area', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Asientos', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Chasis', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Carrocería', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Color', 'numero' => '1');
+        $cabecera[]       = array('valor' => 'Regla', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Registros', 'numero' => '1');
 /*
         $cabecera[]       = array('valor' => 'Vencimiento SOAT', 'numero' => '1');
@@ -159,9 +161,16 @@ class VehiculoController extends Controller
 
         $contratistas = Contratista::orderBy('razonsocial','asc')->get();
         $cboContratista = array();
-        $cboContratista += array('0' => 'Selecione contratista');
+        $cboContratista += array('0' => 'Selecione subcontratista');
         foreach($contratistas as $k=>$v){
             $cboContratista += array($v->id=>$v->razonsocial);
+        }
+        
+        $kilometraje = Kilometraje::orderBy('descripcion','asc')->get();
+        $cboKilometraje = array();
+        $cboKilometraje += array('0' => 'Selecione regla');
+        foreach($kilometraje as $k=>$v){
+            $cboKilometraje += array($v->id=>$v->descripcion);
         }
 /*
         $uas = Ua::orderBy('descripcion','asc')->get();
@@ -177,7 +186,7 @@ class VehiculoController extends Controller
         $formData = array('vehiculo.store');
         $formData = array('route' => $formData, 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
         $boton    = 'Registrar'; 
-        return view($this->folderview.'.mant')->with(compact('vehiculo', 'formData', 'entidad', 'boton', 'listar', 'cboMarca', 'cboArea', 'cboContratista', 'cboCarroceria'));
+        return view($this->folderview.'.mant')->with(compact('vehiculo', 'formData', 'entidad', 'boton', 'listar', 'cboMarca', 'cboArea', 'cboContratista', 'cboCarroceria', 'cboKilometraje'));
     }
 
     /**
@@ -262,6 +271,7 @@ class VehiculoController extends Controller
             $vehiculo->carroceria_id 				  = $request->input('carroceria_id');
             $vehiculo->color 				  = $request->input('color');
             $vehiculo->kilometraje            = $request->input('kilometraje');
+            $vehiculo->kilometraje_id            = $request->input('kilometraje_id');
             
 
             $vehiculo->save();
@@ -319,10 +329,17 @@ class VehiculoController extends Controller
 
         $contratistas = Contratista::orderBy('razonsocial','asc')->get();
         $cboContratista = array();
-        $cboContratista += array('0' => 'Selecione contratista');
+        $cboContratista += array('0' => 'Selecione subcontratista');
 //        $cboContratista += array('1' => 'Wea');
         foreach($contratistas as $k=>$v){
             $cboContratista += array($v->id=>$v->razonsocial);
+        }
+        
+        $kilometraje = Kilometraje::orderBy('descripcion','asc')->get();
+        $cboKilometraje = array();
+        $cboKilometraje += array('0' => 'Selecione regla');
+        foreach($kilometraje as $k=>$v){
+            $cboKilometraje += array($v->id=>$v->descripcion);
         }
 
 /*        $uas = Ua::orderBy('descripcion','asc')->get();
@@ -337,7 +354,7 @@ class VehiculoController extends Controller
         $formData = array('vehiculo.update', $id);
         $formData = array('route' => $formData, 'method' => 'PUT', 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
         $boton    = 'Modificar';
-        return view($this->folderview.'.mant')->with(compact('vehiculo', 'formData', 'entidad', 'boton', 'listar', 'cboMarca', 'cboArea' ,'cboContratista', 'cboCarroceria'));
+        return view($this->folderview.'.mant')->with(compact('vehiculo', 'formData', 'entidad', 'boton', 'listar', 'cboMarca', 'cboArea' ,'cboContratista', 'cboCarroceria', 'cboKilometraje'));
     }
 
     /**
@@ -426,6 +443,7 @@ class VehiculoController extends Controller
             $vehiculo->carroceria_id 				  = $request->input('carroceria_id');
             $vehiculo->color 				  = $request->input('color');
             $vehiculo->kilometraje            = $request->input('kilometraje');
+            $vehiculo->kilometraje_id            = $request->input('kilometraje_id');
             
 
             $vehiculo->save();

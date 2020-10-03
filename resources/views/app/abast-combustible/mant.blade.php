@@ -41,7 +41,25 @@ if ($abastecimiento !== NULL) {
 		</section>	
 	</div>
 	<div class="form-group col-12 col-md-6 p-3">
-		<label for="id-conductor" class="pl-3">Conductor</label>
+	</div>
+	<div class="form-group col-12 col-md-6 p-3">
+		<label for="id-usuario" class="pl-3">Usuario</label>
+		<input type="text" 
+			name="usuario" 
+			id="id-usuario" 
+			class="form-control" 
+			value="<?php if($abastecimiento) echo ''?>">
+	</div>
+	<div class="form-group col-12 col-md-6 p-3">
+		<label for="id-password" class="pl-3">Password</label>
+		<input type="password" 
+			name="password" 
+			id="id-password" 
+			class="form-control" 
+			value="<?php if($abastecimiento) echo ''?>">
+	</div>
+	<div class="form-group col-12 col-md-6 p-3" hidden="">
+		<label for="id-conductor" class="pl-3">Conductor(Ap. y Nom.)</label>
 		<div class="u-ua-style js-conductor-desc">
 			<?php if($abastecimiento) 
 				if(isset($abastecimiento -> conductor)) 
@@ -56,6 +74,7 @@ if ($abastecimiento !== NULL) {
 			value="<?php if($abastecimiento) echo ( isset($abastecimiento -> conductor) ) ? $abastecimiento -> conductor -> dni : $abastecimiento -> conductor_fake;?>">
 		<small id="autoComplete_list3" class="text-danger"></small>
 	</div>
+	
 	<div class="form-group col-12 col-md-6 p-3 u-search-ua">
 		<label for="id-ua" class="pl-3">Código Ua</label>
 		<div class="u-ua-style js-ua-desc">
@@ -160,23 +179,23 @@ if ($abastecimiento !== NULL) {
 	</div>
 	<div class="form-group col-12 col-md-6 p-3">
 		<label for="id-comprobante" class="pl-3">Numero de comprobante</label>
-		<input type="number" 
+		<input type="text" 
 			name="numero_comprobante" 
 			id="id-comprobante" 
 			class="form-control" 
 			value="<?php if($abastecimiento) echo $abastecimiento -> numero_comprobante?>">
 	</div>
 	<div class="form-group col-md-6 p-3">
-		<label for="id-f-init" class="pl-3">Fecha de inicio</label>
-		<input type="date" name="fecha_inicio" 
+		<label for="id-f-init" class="pl-3">Hora de inicio</label>
+		<input type="time" name="hora_inicio" 
 			id="id-f-init" class="form-control" 
-			value="<?php if($abastecimiento) echo $abastecimiento->fecha_inicio; else echo date('yy-m-d'); ?>">
+			value="<?php if($abastecimiento) echo $abastecimiento->hora_inicio; else echo ''; ?>">
 	</div>
 	<div class="form-group col-md-6 p-3">
-		<label for="id-f-fin" class="pl-3">Fecha de fin</label>
-		<input type="date" name="fecha_fin" 
+		<label for="id-f-fin" class="pl-3">Hora de fin</label>
+		<input type="time" name="hora_fin" 
 			id="id-f-fin" class="form-control" 
-			value="<?php if($abastecimiento) echo $abastecimiento->fecha_fin; ?>">
+			value="<?php if($abastecimiento) echo $abastecimiento->hora_fin; ?>">
 	</div>
 	
 	<div class="form-group w-100">

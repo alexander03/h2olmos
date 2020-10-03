@@ -23,6 +23,11 @@ class Ua extends Model{
 
         return DB::select('select codigo, descripcion from ua where id = ?', [ $id ]);
     }
+    
+    public function uaHija($id){
+
+        return DB::select('select codigo, descripcion from ua where ua_padre_id = ?', [ $id ]);
+    }
 
     public function controlesdiarios()
     {

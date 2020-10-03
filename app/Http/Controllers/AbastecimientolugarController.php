@@ -3,29 +3,27 @@
 namespace App\Http\Controllers;
 
 use Validator;
-use App\Tipohora;
 use Illuminate\Http\Request;
+use App\Abastecimiento;
 use App\Librerias\Libreria;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 
-class TipohoraController extends Controller
+
+class AbastecimientolugarController extends Controller
 {
-    protected $folderview      = 'app.tipohora';
-    protected $tituloAdmin     = 'Tipo de Horas Paradas';
-    protected $tituloRegistrar = 'Registrar tipo de horas paradas';
-    protected $tituloModificar = 'Modificar tipo de horas paradas';
-    protected $tituloEliminar  = 'Eliminar tipo de horas paradas';
-    protected $rutas           = array('create' => 'tipohora.create', 
-            'edit'   => 'tipohora.edit', 
-            'delete' => 'tipohora.eliminar',
-            'search' => 'tipohora.buscar',
-            'index'  => 'tipohora.index',
+    protected $folderview      = 'app.abastecimiento';
+    protected $tituloAdmin     = 'Lugar de Abastecimiento';
+    protected $tituloRegistrar = 'Registrar lugar de abastecimiento';
+    protected $tituloModificar = 'Modificar lugar de abastecimiento';
+    protected $tituloEliminar  = 'Eliminar lugar de abastecimiento';
+    protected $rutas           = array('create' => 'abastecimientolugar.create', 
+            'edit'   => 'abastecimientolugar.edit', 
+            'delete' => 'abastecimientolugar.eliminar',
+            'search' => 'abastecimientolugar.buscar',
+            'index'  => 'abastecimientolugar.index',
         );
 
-
-
-        /**
+       /**
      * Create a new controller instance.
      *
      * @return void
@@ -35,31 +33,21 @@ class TipohoraController extends Controller
         $this->middleware('auth');
     }
 
-    /**
-     * Mostrar el resultado de búsquedas
-     * 
-     * @return Response 
-     */
     public function buscar(Request $request)
     {
         $pagina           = $request->input('page');
         $filas            = $request->input('filas');
-        $entidad          = 'Tipohora';
-        $codigo           = Libreria::getParam($request->input('codigo'));
+        $entidad          = 'Abastecimiento';
         $descripcion      = Libreria::getParam($request->input('descripcion'));
         
         $filtro           = array();
         $filtro[]         = ['descripcion', 'LIKE', '%'.strtoupper($descripcion).'%'];
 
-/*        if($codigo){
-            $filtro[]        = ['codigo', '=', $codigo];
-        }*/
 
-        $resultado        = Tipohora::where($filtro)->orderBy('descripcion', 'ASC');
+        $resultado        = Abastecimiento::where($filtro)->orderBy('descripcion', 'ASC');
         $lista            = $resultado->get();
         $cabecera         = array();
         $cabecera[]       = array('valor' => '#', 'numero' => '1');
-        $cabecera[]       = array('valor' => 'Código', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Descripción', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Operaciones', 'numero' => '2');
         
@@ -80,15 +68,9 @@ class TipohoraController extends Controller
         return view($this->folderview.'.list')->with(compact('lista', 'entidad'));
     }
 
-
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-        $entidad          = 'Tipohora';
+        $entidad          = 'Abastecimiento';
         $title            = $this->tituloAdmin;
         $titulo_registrar = $this->tituloRegistrar;
         $ruta             = $this->rutas;
@@ -103,13 +85,14 @@ class TipohoraController extends Controller
     public function create(Request $request)
     {
         $listar   = Libreria::getParam($request->input('listar'), 'NO');
-        $entidad  = 'Tipohora';
-        $tipohora = null;
-        $formData = array('tipohora.store');
+        $entidad  = 'Abastecimiento';
+        $abastecimiento = null;
+        $formData = array('abastecimientolugar.store');
         $formData = array('route' => $formData, 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
         $boton    = 'Registrar'; 
-        return view($this->folderview.'.mant')->with(compact('tipohora', 'formData', 'entidad', 'boton', 'listar'));
+        return view($this->folderview.'.mant')->with(compact('abastecimiento', 'formData', 'entidad', 'boton', 'listar'));
     }
+
 
     /**
      * Store a newly created resource in storage.
@@ -120,26 +103,24 @@ class TipohoraController extends Controller
     public function store(Request $request)
     {
         $listar     = Libreria::getParam($request->input('listar'), 'NO');
-        $reglas     = array('codigo' => 'required|max:2' ,'descripcion' => 'required|max:50');
+        $reglas     = array(
+            'descripcion' => 'required|max:45'
+        );
         $mensajes = array(
-            'codigo.required'         => 'Debe ingresar una codigo',
-            'codigo.max'              => 'El codigo supera los 2 digitos',
-            'descripcion.required'         => 'Debe ingresar una descripcion'
+            'descripcion.required'         => 'Debe ingresar una descripción',
+            'descripcion.max'              => 'La descripción supera los 45 caracteres'
             );
         $validacion = Validator::make($request->all(), $reglas, $mensajes);
         if ($validacion->fails()) {
             return $validacion->messages()->toJson();
         }
         $error = DB::transaction(function() use($request){
-            $tipohora = new Tipohora();
-            $tipohora->codigo = $request->input('codigo');
-            $tipohora->prioridad = ($request->input('prioridad')) ? true : false;
-            $tipohora->descripcion = strtoupper($request->input('descripcion'));
-            $tipohora->save();
+            $abastecimiento = new Abastecimiento();
+            $abastecimiento->descripcion = strtoupper($request->input('descripcion'));
+            $abastecimiento->save();
         });
         return is_null($error) ? "OK" : $error;
     }
-
     /**
      * Display the specified resource.
      *
@@ -159,17 +140,17 @@ class TipohoraController extends Controller
      */
     public function edit($id, Request $request)
     {
-        $existe = Libreria::verificarExistencia($id, 'tipohora');
+        $existe = Libreria::verificarExistencia($id, 'abastecimiento');
         if ($existe !== true) {
             return $existe;
         }
         $listar   = Libreria::getParam($request->input('listar'), 'NO');
-        $tipohora = Tipohora::find($id);
-        $entidad  = 'Tipohora';
-        $formData = array('tipohora.update', $id);
+        $abastecimiento = Abastecimiento::find($id);
+        $entidad  = 'Abastecimiento';
+        $formData = array('abastecimientolugar.update', $id);
         $formData = array('route' => $formData, 'method' => 'PUT', 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
         $boton    = 'Modificar';
-        return view($this->folderview.'.mant')->with(compact('tipohora', 'formData', 'entidad', 'boton', 'listar'));
+        return view($this->folderview.'.mant')->with(compact('abastecimiento', 'formData', 'entidad', 'boton', 'listar'));
     }
 
     /**
@@ -181,26 +162,25 @@ class TipohoraController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $existe = Libreria::verificarExistencia($id, 'tipohora');
+        $existe = Libreria::verificarExistencia($id, 'abastecimiento');
         if ($existe !== true) {
             return $existe;
         }
-        $reglas     = array('codigo' => 'required|max:2' ,'descripcion' => 'required|max:50');
+        $reglas     = array(
+            'descripcion' => 'required|max:45'
+        );
         $mensajes = array(
-            'codigo.required'         => 'Debe ingresar una codigo',
-            'codigo.max'              => 'El codigo supera los 2 digitos',
-            'descripcion.required'         => 'Debe ingresar una descripcion'
+            'descripcion.required'         => 'Debe ingresar una descripción',
+            'descripcion.max'              => 'La descripción supera los 45 caracteres'
             );
         $validacion = Validator::make($request->all(), $reglas, $mensajes);
         if ($validacion->fails()) {
             return $validacion->messages()->toJson();
         } 
         $error = DB::transaction(function() use($request, $id){
-            $tipohora = Tipohora::find($id);
-            $tipohora->codigo = $request->input('codigo');
-            $tipohora->prioridad = ($request->input('prioridad')) ? true : false;
-            $tipohora->descripcion = strtoupper($request->input('descripcion'));
-            $tipohora->save();
+            $abastecimiento = Abastecimiento::find($id);
+            $abastecimiento->descripcion = strtoupper($request->input('descripcion'));
+            $abastecimiento->save();
         });
         return is_null($error) ? "OK" : $error;
     }
@@ -213,20 +193,20 @@ class TipohoraController extends Controller
      */
     public function destroy($id)
     {
-        $existe = Libreria::verificarExistencia($id, 'tipohora');
+        $existe = Libreria::verificarExistencia($id, 'abastecimiento');
         if ($existe !== true) {
             return $existe;
         }
         $error = DB::transaction(function() use($id){
-            $tipohora = Tipohora::find($id);
-            $tipohora->delete();
+            $abastecimiento = Abastecimiento::find($id);
+            $abastecimiento->delete();
         });
         return is_null($error) ? "OK" : $error;
     }
 
     public function eliminar($id, $listarLuego)
     {
-        $existe = Libreria::verificarExistencia($id, 'tipohora');
+        $existe = Libreria::verificarExistencia($id, 'Abastecimiento');
         if ($existe !== true) {
             return $existe;
         }
@@ -235,9 +215,9 @@ class TipohoraController extends Controller
             $listar = $listarLuego;
         }
         $mensaje = true;
-        $modelo   = Tipohora::find($id);
-        $entidad  = 'Tipohora';
-        $formData = array('route' => array('tipohora.destroy', $id), 'method' => 'DELETE', 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
+        $modelo   = Abastecimiento::find($id);
+        $entidad  = 'Abastecimiento';
+        $formData = array('route' => array('abastecimientolugar.destroy', $id), 'method' => 'DELETE', 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
         $boton    = 'Eliminar';
         return view('app.confirmarEliminar')->with(compact('modelo', 'formData', 'entidad', 'boton', 'listar','mensaje'));
     }
