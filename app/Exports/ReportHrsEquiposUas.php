@@ -125,7 +125,7 @@ class ReportHrsEquiposUas implements FromCollection, WithHeadings
             $HorasUa->offsetSet(0,$fila);
 
             //revisa el resto de equipos
-            if( count($FragUa->equipos) > 1 ){
+            if( count($FragUa->equipos) >= 1 ){
                 for($valor = 1 ; $valor < count($FragUa->equipos) ; $valor++){
 
                     //Acumulación de horas

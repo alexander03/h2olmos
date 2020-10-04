@@ -1133,7 +1133,7 @@ CREATE TABLE `vehiculo` (
   `color` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
   `concesionaria_id` bigint(20) UNSIGNED NOT NULL,
   `carroceria_id` int(11) NOT NULL,
-  `kilometraje` decimal(18,2) NOT NULL,
+  `kilometraje_ref` decimal(18,2) NOT NULL,
   `kilometraje_id` int(11) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
@@ -1144,7 +1144,7 @@ CREATE TABLE `vehiculo` (
 -- Volcado de datos para la tabla `vehiculo`
 --
 
-INSERT INTO `vehiculo` (`id`, `placa`, `motor`, `modelo`, `asientos`, `anio`, `marca_id`, `ua_id`, `area_id`, `contratista_id`, `chasis`, `color`, `concesionaria_id`, `carroceria_id`, `kilometraje`, `kilometraje_id`, `created_at`, `updated_at`, `deleted_at`) VALUES
+INSERT INTO `vehiculo` (`id`, `placa`, `motor`, `modelo`, `asientos`, `anio`, `marca_id`, `ua_id`, `area_id`, `contratista_id`, `chasis`, `color`, `concesionaria_id`, `carroceria_id`, `kilometraje_ref`, `kilometraje_id`, `created_at`, `updated_at`, `deleted_at`) VALUES
 (1, 'AXF-554', 'DIESEL', 'AX-SDAS', 4, 2019, 1, 28, 2, 3, 'JASKFJA', 'ROJO', 1, 4, 3000.00, 5, '2020-09-29 10:06:29', '2020-09-29 10:06:29', NULL);
 
 -- --------------------------------------------------------
