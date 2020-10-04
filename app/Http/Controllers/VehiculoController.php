@@ -198,6 +198,7 @@ class VehiculoController extends Controller
     						'contratista_id'  		=> 'numeric|min:1',
     						'asientos'				=> 'required|numeric',
     						'area_id' 				=> 'numeric|min:1',
+                            'kilometraje_id'        => 'numeric|min:1',
     						'color' 				=> 'required|max:20',
 //                            'unidad'                => 'required|max:25',
     						'chasis' 				=> 'required|max:20',
@@ -223,6 +224,7 @@ class VehiculoController extends Controller
             'asientos.numeric'				  => 'Debe ingresar un número valido',
             'color.required'				  => 'Debe ingresar un color',
             'color.max'				 		  => 'El color sobrepasa los 20 carácteres',
+            'kilometraje_id.min'              => 'Debe seleccionar una regla de kilometraje',
 //            'unidad.required'                 => 'Debe ingresar descripción de la unidad',
 //            'unidad.max'                      => 'El unidad sobrepasa los 25 carácteres',
             'chasis.required'				  => 'Debe ingresar el codigo de chasis',
@@ -243,11 +245,11 @@ class VehiculoController extends Controller
         $error = DB::transaction(function() use($request){
             $vehiculo = new Vehiculo();
 //            $vehiculo->ua 	 		  = strtoupper($request->input('ua'));
-            $vehiculo->ua_id             =  Ua::where('codigo',$request->input('ua_id'))->get()[0]->id;
-            $vehiculo->modelo 			  = strtoupper($request->input('modelo'));
+            $vehiculo->ua_id                  =  Ua::where('codigo',$request->input('ua_id'))->get()[0]->id;
+            $vehiculo->modelo 			      = strtoupper($request->input('modelo'));
             $vehiculo->marca_id 			  = $request->input('marca_id');
             $vehiculo->anio 				  = $request->input('anio');
-            $vehiculo->contratista_id 	  = $request->input('contratista_id');
+            $vehiculo->contratista_id 	      = $request->input('contratista_id');
 /*            
             $vehiculo->unidad                = $request->input('unidad'); 
             $vehiculo->fechavencimientosoat = $request->input('fechavencimientosoat');
@@ -255,11 +257,12 @@ class VehiculoController extends Controller
             $vehiculo->fechavencimientortv  = $request->input('fechavencimientortv');
 */          $vehiculo->concesionaria_id       =  $this->concesionariaActual(); 
             $vehiculo->area_id 				  = $request->input('area_id');
+            $vehiculo->kilometraje_id         = $request->input('kilometraje_id');
             $vehiculo->placa 				  = $request->input('placa');
             $vehiculo->motor 				  = $request->input('motor');
-            $vehiculo->asientos 				  = $request->input('asientos');
+            $vehiculo->asientos 		      = $request->input('asientos');
             $vehiculo->chasis 				  = $request->input('chasis');
-            $vehiculo->carroceria_id 				  = $request->input('carroceria_id');
+            $vehiculo->carroceria_id 		  = $request->input('carroceria_id');
             $vehiculo->color 				  = $request->input('color');
             $vehiculo->kilometraje            = $request->input('kilometraje');
             
@@ -362,6 +365,7 @@ class VehiculoController extends Controller
     						'asientos'				=> 'required|numeric',
     						'contratista_id'  		=> 'numeric|min:1',
     						'area_id' 				=> 'numeric|min:1',
+                            'kilometraje_id'        => 'numeric|min:1',
     						'color'					=> 'required|max:20',
     						'chasis' 				=> 'required|max:20',
                             'kilometraje'           => 'required|numeric',
@@ -388,6 +392,7 @@ class VehiculoController extends Controller
             'asientos.numeric'				  => 'Debe ingresar un número valido',
             'color.required'				  => 'Debe ingresar un color',
             'color.max'				 		  => 'El color sobrepasa los 20 carácteres',
+            'kilometraje_id.min'              => 'Debe seleccionar una regla de kilometraje',
 //            'unidad.required'                 => 'Debe ingresar descripción de la unidad',
 //            'unidad.max'                      => 'El unidad sobrepasa los 25 carácteres',
             'chasis.required'				  => 'Debe ingresar el codigo de chasis',
@@ -408,22 +413,23 @@ class VehiculoController extends Controller
         $error = DB::transaction(function() use($request, $id){
             $vehiculo =  Vehiculo::find($id);
 //            $vehiculo->ua 	 		  = strtoupper($request->input('ua'));
-            $vehiculo->ua_id             =  Ua::where('codigo',$request->input('ua_id'))->get()[0]->id;
-            $vehiculo->modelo 			  = strtoupper($request->input('modelo'));
+            $vehiculo->ua_id                  =  Ua::where('codigo',$request->input('ua_id'))->get()[0]->id;
+            $vehiculo->modelo 			      = strtoupper($request->input('modelo'));
             $vehiculo->marca_id 			  = $request->input('marca_id');
             $vehiculo->anio 				  = $request->input('anio');
-            $vehiculo->contratista_id 	  = $request->input('contratista_id');
+            $vehiculo->contratista_id 	      = $request->input('contratista_id');
 /*
             $vehiculo->fechavencimientosoat = $request->input('fechavencimientosoat');
             $vehiculo->fechavencimientogps  = $request->input('fechavencimientogps');
             $vehiculo->fechavencimientortv  = $request->input('fechavencimientortv');
             $vehiculo->unidad                = $request->input('unidad');  
 */          $vehiculo->area_id 				  = $request->input('area_id');
+            $vehiculo->kilometraje_id         = $request->input('kilometraje_id');
             $vehiculo->placa 				  = $request->input('placa');
             $vehiculo->motor 				  = $request->input('motor');
-            $vehiculo->asientos 				  = $request->input('asientos');
+            $vehiculo->asientos 			  = $request->input('asientos');
             $vehiculo->chasis 				  = $request->input('chasis');
-            $vehiculo->carroceria_id 				  = $request->input('carroceria_id');
+            $vehiculo->carroceria_id    	  = $request->input('carroceria_id');
             $vehiculo->color 				  = $request->input('color');
             $vehiculo->kilometraje            = $request->input('kilometraje');
             
