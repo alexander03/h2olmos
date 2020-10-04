@@ -86,7 +86,7 @@ class VehiculoController extends Controller
         $cabecera[]       = array('valor' => 'Vencimiento GPS', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Vencimiento RTV', 'numero' => '1');
 */
-        $cabecera[]       = array('valor' => 'Operaciones', 'numero' => '2');
+        $cabecera[]       = array('valor' => 'Opciones', 'numero' => '2');
         
         $titulo_modificar = $this->tituloModificar;
         $titulo_eliminar  = $this->tituloEliminar;

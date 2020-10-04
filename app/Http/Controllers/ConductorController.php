@@ -57,7 +57,7 @@ class ConductorController extends Controller
         $cabecera[]       = array('valor' => 'Licencia', 'numero' => '1');
         $cabecera[]       = array('valor' => 'F.Vencimiento', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Contratista', 'numero' => '1');
-        $cabecera[]       = array('valor' => 'Operaciones', 'numero' => '2');
+        $cabecera[]       = array('valor' => 'Opciones', 'numero' => '2');
         $titulo_modificar = $this->tituloModificar;
         $titulo_eliminar  = $this->tituloEliminar;
         $titulo_activar  = $this->tituloActivar;
