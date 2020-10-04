@@ -46,13 +46,19 @@ if ($equipo !== NULL) {
 	</div>
 </div>
 <div class="form-group ">
+	{!! Form::label('capacidad_carga', 'Capac. Carga(m3):', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
+	<div class="col-lg-12 col-md-12 col-sm-12">
+		{!! Form::number('capacidad_carga', null, array('class' => 'form-control input-xs', 'id' => 'capacidad_carga')) !!}
+	</div>
+</div>
+<div class="form-group ">
 	{!! Form::label('marca_id', 'Marca:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
 	<div class="col-lg-12 col-md-12 col-sm-12">
 		{!! Form::select('marca_id', $cboMarca, null, array('class' => 'form-control input-xs', 'id' => 'marca_id')) !!}
 	</div>
 </div>
 <div class="form-group ">
-	{!! Form::label('contratista_id', 'Contratista:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
+	{!! Form::label('contratista_id', 'Subcontratista:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
 	<div class="col-lg-12 col-md-12 col-sm-12">
 		{!! Form::select('contratista_id', $cboContratista, null, array('class' => 'form-control input-xs', 'id' => 'contratista_id')) !!}
 	</div>
@@ -73,7 +79,7 @@ if ($equipo !== NULL) {
 {!! Form::close() !!}
 <script type="text/javascript">
 	$(document).ready(function() {
-		configurarAnchoModal('350');
+		configurarAnchoModal('450');
 		init(IDFORMMANTENIMIENTO+'{!! $entidad !!}', 'M', '{!! $entidad !!}');
 		doSearchUA();
 	}); 

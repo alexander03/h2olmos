@@ -18,18 +18,13 @@
 		@foreach ($lista as $key => $value)
 		<tr>
 			<td>{{ $contador }}</td>
-			<td>{{ $value->fecha }}</td>
+			<td>{{ date("d/m/Y",strtotime($value->fecha)) }}</td>
 			<td>{{ $value->equipo->ua->codigo }}</td>
 			<td>{{ $value->equipo->descripcion }}</td>
 			<td>{{ $value->equipo->contratista->razonsocial }}</td>
 			<td>
 				@if($value->ua)
-					{{ $value->ua->codigo }}
-				@endif
-			</td>
-			<td>
-				@if($value->tipohora_id && $value->tipohora_id !=1)
-					{{ $value->tipohora->codigo }}
+					{{ $value->ua->codigo.' '.$value->ua->descripcion }}
 				@endif
 			</td>
 			<td>
@@ -37,19 +32,12 @@
 				{{ $value->hora_total }}
 			</td>
 			<td>
-		{{--		@if($value->ua)
-					{{ $value->ua->descripcion }}
-				@else
-					{{ $value->tipohora->descripcion }}
-				@endif  --}}
-				{{ $value->ua->descripcion }}
+				@if($value->tipohora_id && $value->tipohora_id !=1)
+					{{ $value->tipohora->codigo.' '.$value->tipohora->descripcion }}
+				@endif
 			</td>
 			<td>
-				@if($value->tipohora_id )
-					{{ $value->tipohora->descripcion }}
-				@else
-					Horas de trabajo
-				@endif
+			    {{ $value->hora_parada }}
 			</td>
 			<td>
 				@if($value->turno)

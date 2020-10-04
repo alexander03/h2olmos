@@ -25,8 +25,19 @@ class Vehiculo extends Model
     {
         return $this->belongsTo('App\Area');
     }
+    
+    public function carroceria()
+    {
+        return $this->belongsTo('App\Carroceria','carroceria_id');
+    }
+    
     public function ua()
     {
         return $this->belongsTo('App\Ua');
+    }
+    
+    public function kilometraje2()
+    {
+        return $this->belongsTo('App\Kilometraje','kilometraje_id');
     }
 }

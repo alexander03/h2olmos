@@ -28,7 +28,18 @@ if ($ua !== NULL) {
 			</select>
 		</section>	
 	</div>
-	<div class="form-group col-md-6 p-3 u-search-ua">
+	<div class="form-group col-md-6 p-3">
+		<label class="pl-3">Pertenece a una UA</label>
+		<input type="text" class="form-control" style="display: none">
+		<section class="d-flex mt-1"> 
+			<select class="form-control" name="espadre" onchange="if(this.value=='N'){$('.u-search-ua').css('display','none');}else{$('.u-search-ua').css('display','');}">
+				<option value="S" <?php if($ua) if($ua->ua_padre_id /*|| count($ua->uaHija($ua->id))>0*/) echo 'selected' ?>>ACTIVADO</option>
+				<option value="N" <?php if($ua) if(!$ua->ua_padre_id>0 /*&& count($ua->uaHija($ua->id))==0*/) echo 'selected' ?>>DESACTIVADO</option>
+			</select>
+		</section>	
+	</div>
+	
+	<div class="form-group col-md-6 p-3 u-search-ua" style="<?php if(!is_null($ua) && !is_null($ua->ua_padre_id)){echo '';}else{'display:none;';}?>">
 		<label for="autoComplete" class="pl-3">Código Ua Padre</label>
 		<div class="u-ua-style js-ua-desc">
 			<?php if($ua) if($ua -> ua_padre_id)echo $ua -> uaPadre($ua -> ua_padre_id)[0] -> descripcion; else echo 'Sin padre';?>
