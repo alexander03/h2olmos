@@ -10,6 +10,7 @@ use App\Brand;
 use App\Carroceria;
 use App\Contratista;
 use App\Concesionaria;
+use App\Kilometraje;
 use Illuminate\Http\Request;
 use App\Librerias\Libreria;
 use App\Http\Controllers\Controller;
@@ -163,6 +164,13 @@ class VehiculoController extends Controller
         foreach($contratistas as $k=>$v){
             $cboContratista += array($v->id=>$v->razonsocial);
         }
+
+        $kilometrajes = Kilometraje::orderBy('descripcion','asc')->get();
+        $cboKilometraje = array();
+        $cboKilometraje += array('0' => 'Selecione kilometraje');
+        foreach($kilometrajes as $k=>$v){
+            $cboKilometraje += array($v->id => $v->descripcion . ':   ' . $v->limite_inf . '-' . $v->limite_sup);
+        }
 /*
         $uas = Ua::orderBy('descripcion','asc')->get();
         $cboUa = array();
@@ -177,7 +185,7 @@ class VehiculoController extends Controller
         $formData = array('vehiculo.store');
         $formData = array('route' => $formData, 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
         $boton    = 'Registrar'; 
-        return view($this->folderview.'.mant')->with(compact('vehiculo', 'formData', 'entidad', 'boton', 'listar', 'cboMarca', 'cboArea', 'cboContratista', 'cboCarroceria'));
+        return view($this->folderview.'.mant')->with(compact('vehiculo', 'formData', 'entidad', 'boton', 'listar', 'cboMarca', 'cboArea', 'cboContratista','cboKilometraje' , 'cboCarroceria'));
     }
 
     /**
@@ -202,7 +210,7 @@ class VehiculoController extends Controller
     						'color' 				=> 'required|max:20',
 //                            'unidad'                => 'required|max:25',
     						'chasis' 				=> 'required|max:20',
-                            'kilometraje'           => 'required|numeric',
+                            'kilometraje_ref'           => 'required|numeric',
                             'ua_id'                 => ['required', new SearchUaPadre() ]
 /*                          
     						'fechavencimientosoat'  => 'required',
@@ -230,8 +238,8 @@ class VehiculoController extends Controller
             'chasis.required'				  => 'Debe ingresar el codigo de chasis',
             'chasis.max'				 	  => 'El chasis sobrepasa los 20 carácteres',
             'contratista_id.min'   	  		  => 'Debe asignar un contratista',
-            'kilometraje.required'            => 'Kilometraje referencial es obligatorio',
-            'kilometraje.numeric'             => 'Debe ingresar un kilometraje válido'
+            'kilometraje_ref.required'            => 'Kilometraje referencial es obligatorio',
+            'kilometraje_ref.numeric'             => 'Debe ingresar un kilometraje válido'
 /*
             'fechavencimientosoat.required'   => 'Debe ingresar la fecha de vencimiento de SOAT',
             'fechavencimientogps.required'    => 'Debe ingresar la fecha de vencimiento de GPS',
@@ -264,7 +272,7 @@ class VehiculoController extends Controller
             $vehiculo->chasis 				  = $request->input('chasis');
             $vehiculo->carroceria_id 		  = $request->input('carroceria_id');
             $vehiculo->color 				  = $request->input('color');
-            $vehiculo->kilometraje            = $request->input('kilometraje');
+            $vehiculo->kilometraje_ref            = $request->input('kilometraje_ref');
             
 
             $vehiculo->save();
@@ -328,6 +336,13 @@ class VehiculoController extends Controller
             $cboContratista += array($v->id=>$v->razonsocial);
         }
 
+        $kilometrajes = Kilometraje::orderBy('descripcion','asc')->get();
+        $cboKilometraje = array();
+        $cboKilometraje += array('0' => 'Selecione kilometraje');
+        foreach($kilometrajes as $k=>$v){
+            $cboKilometraje += array($v->id => $v->descripcion . ':  ' . $v->limite_inf . '-' . $v->limite_sup);
+        }
+
 /*        $uas = Ua::orderBy('descripcion','asc')->get();
         $cboUa = array();
         $cboUa += array('0' => 'Selecione UA');
@@ -340,7 +355,7 @@ class VehiculoController extends Controller
         $formData = array('vehiculo.update', $id);
         $formData = array('route' => $formData, 'method' => 'PUT', 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
         $boton    = 'Modificar';
-        return view($this->folderview.'.mant')->with(compact('vehiculo', 'formData', 'entidad', 'boton', 'listar', 'cboMarca', 'cboArea' ,'cboContratista', 'cboCarroceria'));
+        return view($this->folderview.'.mant')->with(compact('vehiculo', 'formData', 'entidad', 'boton', 'listar', 'cboMarca', 'cboArea' ,'cboContratista','cboKilometraje' ,'cboCarroceria'));
     }
 
     /**
@@ -368,7 +383,7 @@ class VehiculoController extends Controller
                             'kilometraje_id'        => 'numeric|min:1',
     						'color'					=> 'required|max:20',
     						'chasis' 				=> 'required|max:20',
-                            'kilometraje'           => 'required|numeric',
+                            'kilometraje_ref'           => 'required|numeric',
                             'ua_id'                 => ['required', new SearchUaPadre() ]
 
 //                            'unidad'                => 'required|max:25',
@@ -398,8 +413,8 @@ class VehiculoController extends Controller
             'chasis.required'				  => 'Debe ingresar el codigo de chasis',
             'chasis.max'				 	  => 'El chasis sobrepasa los 20 carácteres',
             'contratista_id.min'   	  		  => 'Debe asignar un contratista',
-            'kilometraje.required'            => 'Kilometraje referencial es obligatorio',
-            'kilometraje.numeric'             => 'Debe ingresar un kilometraje válido'
+            'kilometraje_ref.required'            => 'Kilometraje referencial es obligatorio',
+            'kilometraje_ref.numeric'             => 'Debe ingresar un kilometraje válido'
 /*
             'fechavencimientosoat.required'   => 'Debe ingresar la fecha de vencimiento de SOAT',
             'fechavencimientogps.required'    => 'Debe ingresar la fecha de vencimiento de GPS',
@@ -431,7 +446,7 @@ class VehiculoController extends Controller
             $vehiculo->chasis 				  = $request->input('chasis');
             $vehiculo->carroceria_id    	  = $request->input('carroceria_id');
             $vehiculo->color 				  = $request->input('color');
-            $vehiculo->kilometraje            = $request->input('kilometraje');
+            $vehiculo->kilometraje_ref            = $request->input('kilometraje_ref');
             
 
             $vehiculo->save();
