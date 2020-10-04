@@ -16,11 +16,11 @@ class AbastecimientoController extends Controller
     protected $tituloRegistrar = 'Registrar abastecimiento';
     protected $tituloModificar = 'Modificar abastecimiento';
     protected $tituloEliminar  = 'Eliminar abastecimiento';
-    protected $rutas           = array('create' => 'abastecimiento.create', 
-            'edit'   => 'abastecimiento.edit', 
-            'delete' => 'abastecimiento.eliminar',
-            'search' => 'abastecimiento.buscar',
-            'index'  => 'abastecimiento.index',
+    protected $rutas           = array('create' => 'abastecimientolugar.create', 
+            'edit'   => 'abastecimientolugar.edit', 
+            'delete' => 'abastecimientolugar.eliminar',
+            'search' => 'abastecimientolugar.buscar',
+            'index'  => 'abastecimientolugar.index',
         );
 
        /**
@@ -87,7 +87,7 @@ class AbastecimientoController extends Controller
         $listar   = Libreria::getParam($request->input('listar'), 'NO');
         $entidad  = 'Abastecimiento';
         $abastecimiento = null;
-        $formData = array('abastecimiento.store');
+        $formData = array('abastecimientolugar.store');
         $formData = array('route' => $formData, 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
         $boton    = 'Registrar'; 
         return view($this->folderview.'.mant')->with(compact('abastecimiento', 'formData', 'entidad', 'boton', 'listar'));
@@ -147,7 +147,7 @@ class AbastecimientoController extends Controller
         $listar   = Libreria::getParam($request->input('listar'), 'NO');
         $abastecimiento = Abastecimiento::find($id);
         $entidad  = 'Abastecimiento';
-        $formData = array('abastecimiento.update', $id);
+        $formData = array('abastecimientolugar.update', $id);
         $formData = array('route' => $formData, 'method' => 'PUT', 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
         $boton    = 'Modificar';
         return view($this->folderview.'.mant')->with(compact('abastecimiento', 'formData', 'entidad', 'boton', 'listar'));
@@ -217,7 +217,7 @@ class AbastecimientoController extends Controller
         $mensaje = true;
         $modelo   = Abastecimiento::find($id);
         $entidad  = 'Abastecimiento';
-        $formData = array('route' => array('abastecimiento.destroy', $id), 'method' => 'DELETE', 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
+        $formData = array('route' => array('abastecimientolugar.destroy', $id), 'method' => 'DELETE', 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
         $boton    = 'Eliminar';
         return view('app.confirmarEliminar')->with(compact('modelo', 'formData', 'entidad', 'boton', 'listar','mensaje'));
     }

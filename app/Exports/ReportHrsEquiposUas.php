@@ -63,7 +63,7 @@ class ReportHrsEquiposUas implements FromCollection, WithHeadings
         $fechaFin = $this->fecha2;
         $info = Ua::where('concesionaria_id',$this->concesionaria)
                 ->whereHas('controlesdiarios', function($q) use($fechaInicio, $fechaFin){
-                    $q->whereBetween('fecha',[$fechaInicio,$fechaFin])->where('tipohora_id',null);
+                    $q->whereBetween('fecha',[$fechaInicio,$fechaFin])->where('hora_total','!=',null);
             	})->select('ua.id','ua.codigo','ua.descripcion')
         		->with(['equipos' => function($q) use($fechaInicio, $fechaFin){
         			$q->select('equipo.id','equipo.descripcion' ,'equipo.ua_id' )->with('ua:id,codigo');
@@ -97,7 +97,7 @@ class ReportHrsEquiposUas implements FromCollection, WithHeadings
             $reglas = [];
             $reglas[] = ['ua_id',$FragUa->id];
             $reglas[] = ['equipo_id',$FragUa->equipos[0]->id];
-            $reglas[] = ['tipohora_id',null];
+            $reglas[] = ['hora_total','!=',null];
 
             $controles = Controldiario::whereBetween('controldiario.fecha',[$fechaInicio,$fechaFin])
                             ->where($reglas)->select('id','hora_total','fecha')->get();
@@ -125,7 +125,7 @@ class ReportHrsEquiposUas implements FromCollection, WithHeadings
             $HorasUa->offsetSet(0,$fila);
 
             //revisa el resto de equipos
-            if( count($FragUa->equipos) > 1 ){
+            if( count($FragUa->equipos) >= 1 ){
                 for($valor = 1 ; $valor < count($FragUa->equipos) ; $valor++){
 
                     //Acumulación de horas
@@ -135,7 +135,7 @@ class ReportHrsEquiposUas implements FromCollection, WithHeadings
                     $reglas = [];
                     $reglas[] = ['ua_id',$FragUa->id];
                     $reglas[] = ['equipo_id',$FragUa->equipos[$valor]->id];
-                    $reglas[] = ['tipohora_id',null];
+                    $reglas[] = ['hora_total','!=',null];
                     $controles = Controldiario::whereBetween('controldiario.fecha',[$fechaInicio,$fechaFin])
                             ->where($reglas)->select('id','hora_total','fecha')->get();
                     
