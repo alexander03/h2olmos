@@ -73,7 +73,7 @@ class EquipoController extends Controller
         $cabecera[]       = array('valor' => 'Capac. Carga(m3)', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Subcontratista', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Area', 'numero' => '1');
-        $cabecera[]       = array('valor' => 'Operaciones', 'numero' => '2');
+        $cabecera[]       = array('valor' => 'Opciones', 'numero' => '2');
         
         $titulo_modificar = $this->tituloModificar;
         $titulo_eliminar  = $this->tituloEliminar;

@@ -127,7 +127,7 @@ class AbastecimientoCombustibleController extends Controller{
         $cabecera[]       = array('valor' => 'Hora de inicio', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Hora de fin', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Lugar de abastecimiento', 'numero' => '1');
-        $cabecera[]       = array('valor' => 'Operaciones', 'numero' => '2');
+        $cabecera[]       = array('valor' => 'Opciones', 'numero' => '2');
         
         $titulo_modificar = $this->tituloModificar;
         $titulo_eliminar  = $this->tituloEliminar;

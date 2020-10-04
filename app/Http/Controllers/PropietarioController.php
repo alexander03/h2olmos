@@ -49,7 +49,7 @@ class PropietarioController extends Controller
         $cabecera[]       = array('valor' => 'Observacion', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Ubicación', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Ua', 'numero' => '1');
-        $cabecera[]       = array('valor' => 'Operaciones', 'numero' => '2');
+        $cabecera[]       = array('valor' => 'Opciones', 'numero' => '2');
         
         $titulo_modificar = $this->tituloModificar;
         $titulo_eliminar  = $this->tituloEliminar;

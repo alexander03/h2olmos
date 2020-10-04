@@ -118,7 +118,7 @@ class ControlDiarioController extends Controller
         $cabecera[]       = array('valor' => 'Material', 'numero' => '1');
         */
 		$cabecera[]       = array('valor' => 'Observaciones', 'numero' => '1');
-		$cabecera[]       = array('valor' => 'Operaciones', 'numero' => '2');
+		$cabecera[]       = array('valor' => 'Opciones', 'numero' => '2');
 
         
         $titulo_modificar = $this->tituloModificar;

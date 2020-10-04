@@ -48,7 +48,7 @@ class ContratistaController extends Controller
         $cabecera[]       = array('valor' => 'Propietario', 'numero' => '1');
         $cabecera[]       = array('valor' => 'e-mail', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Teléfono', 'numero' => '1');
-        $cabecera[]       = array('valor' => 'Operaciones', 'numero' => '2');
+        $cabecera[]       = array('valor' => 'Opciones', 'numero' => '2');
         
         $titulo_modificar = $this->tituloModificar;
         $titulo_eliminar  = $this->tituloEliminar;

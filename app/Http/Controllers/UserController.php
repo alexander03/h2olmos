@@ -54,7 +54,7 @@ class UserController extends Controller
         $cabecera[]       = array('valor' => 'Persona', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Tipo de usuario', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Username', 'numero' => '1');
-        $cabecera[]       = array('valor' => 'Operaciones', 'numero' => '2');
+        $cabecera[]       = array('valor' => 'Opciones', 'numero' => '2');
         $titulo_modificar = $this->tituloModificar;
         $titulo_eliminar  = $this->tituloEliminar;
         $titulo_activar  = $this->tituloActivar;
