@@ -28,6 +28,7 @@
 			</td>
 			<td>{{ $value->anio }}</td>
 			<td>{{ $value->placa }}</td>
+			<td>{{ $value->capacidad_carga }}</td>
 			<td>
 				@if($value->contratista)
 					{{ $value->contratista->razonsocial }}

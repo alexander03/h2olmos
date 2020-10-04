@@ -6,6 +6,7 @@ use App\Vehiculo;
 use App\Ua;
 use App\Rules\SearchUaPadre;
 use App\Area;
+use App\Kilometraje;
 use App\Brand;
 use App\Carroceria;
 use App\Contratista;
@@ -73,19 +74,20 @@ class VehiculoController extends Controller
         $cabecera[]       = array('valor' => 'Año de Fbr', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Placa', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Motor', 'numero' => '1');
-        $cabecera[]       = array('valor' => 'Contratista', 'numero' => '1');
+        $cabecera[]       = array('valor' => 'Subcontratista', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Area', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Asientos', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Chasis', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Carrocería', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Color', 'numero' => '1');
+        $cabecera[]       = array('valor' => 'Regla', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Registros', 'numero' => '1');
 /*
         $cabecera[]       = array('valor' => 'Vencimiento SOAT', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Vencimiento GPS', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Vencimiento RTV', 'numero' => '1');
 */
-        $cabecera[]       = array('valor' => 'Operaciones', 'numero' => '2');
+        $cabecera[]       = array('valor' => 'Opciones', 'numero' => '2');
         
         $titulo_modificar = $this->tituloModificar;
         $titulo_eliminar  = $this->tituloEliminar;
@@ -160,16 +162,16 @@ class VehiculoController extends Controller
 
         $contratistas = Contratista::orderBy('razonsocial','asc')->get();
         $cboContratista = array();
-        $cboContratista += array('0' => 'Selecione contratista');
+        $cboContratista += array('0' => 'Selecione subcontratista');
         foreach($contratistas as $k=>$v){
             $cboContratista += array($v->id=>$v->razonsocial);
         }
-
-        $kilometrajes = Kilometraje::orderBy('descripcion','asc')->get();
+        
+        $kilometraje = Kilometraje::orderBy('descripcion','asc')->get();
         $cboKilometraje = array();
-        $cboKilometraje += array('0' => 'Selecione kilometraje');
-        foreach($kilometrajes as $k=>$v){
-            $cboKilometraje += array($v->id => $v->descripcion . ':   ' . $v->limite_inf . '-' . $v->limite_sup);
+        $cboKilometraje += array('0' => 'Selecione regla');
+        foreach($kilometraje as $k=>$v){
+            $cboKilometraje += array($v->id=>$v->descripcion . ':  ' .  $v->limite_inf . '-' . $v->limite_sup);
         }
 /*
         $uas = Ua::orderBy('descripcion','asc')->get();
@@ -185,7 +187,8 @@ class VehiculoController extends Controller
         $formData = array('vehiculo.store');
         $formData = array('route' => $formData, 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
         $boton    = 'Registrar'; 
-        return view($this->folderview.'.mant')->with(compact('vehiculo', 'formData', 'entidad', 'boton', 'listar', 'cboMarca', 'cboArea', 'cboContratista','cboKilometraje' , 'cboCarroceria'));
+        return view($this->folderview.'.mant')->with(compact('vehiculo', 'formData', 'entidad', 'boton', 'listar', 'cboMarca', 'cboArea', 'cboContratista', 'cboCarroceria', 'cboKilometraje'));
+
     }
 
     /**
@@ -273,6 +276,7 @@ class VehiculoController extends Controller
             $vehiculo->carroceria_id 		  = $request->input('carroceria_id');
             $vehiculo->color 				  = $request->input('color');
             $vehiculo->kilometraje_ref            = $request->input('kilometraje_ref');
+            $vehiculo->kilometraje_id            = $request->input('kilometraje_id');
             
 
             $vehiculo->save();
@@ -330,10 +334,17 @@ class VehiculoController extends Controller
 
         $contratistas = Contratista::orderBy('razonsocial','asc')->get();
         $cboContratista = array();
-        $cboContratista += array('0' => 'Selecione contratista');
+        $cboContratista += array('0' => 'Selecione subcontratista');
 //        $cboContratista += array('1' => 'Wea');
         foreach($contratistas as $k=>$v){
             $cboContratista += array($v->id=>$v->razonsocial);
+        }
+        
+        $kilometraje = Kilometraje::orderBy('descripcion','asc')->get();
+        $cboKilometraje = array();
+        $cboKilometraje += array('0' => 'Selecione regla');
+        foreach($kilometraje as $k=>$v){
+            $cboKilometraje += array($v->id=>$v->descripcion . ':  ' .  $v->limite_inf . '-' . $v->limite_sup);
         }
 
         $kilometrajes = Kilometraje::orderBy('descripcion','asc')->get();
@@ -355,7 +366,7 @@ class VehiculoController extends Controller
         $formData = array('vehiculo.update', $id);
         $formData = array('route' => $formData, 'method' => 'PUT', 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
         $boton    = 'Modificar';
-        return view($this->folderview.'.mant')->with(compact('vehiculo', 'formData', 'entidad', 'boton', 'listar', 'cboMarca', 'cboArea' ,'cboContratista','cboKilometraje' ,'cboCarroceria'));
+        return view($this->folderview.'.mant')->with(compact('vehiculo', 'formData', 'entidad', 'boton', 'listar', 'cboMarca', 'cboArea' ,'cboContratista', 'cboCarroceria', 'cboKilometraje'));
     }
 
     /**
@@ -383,7 +394,7 @@ class VehiculoController extends Controller
                             'kilometraje_id'        => 'numeric|min:1',
     						'color'					=> 'required|max:20',
     						'chasis' 				=> 'required|max:20',
-                            'kilometraje_ref'           => 'required|numeric',
+                            'kilometraje_ref'       => 'required|numeric',
                             'ua_id'                 => ['required', new SearchUaPadre() ]
 
 //                            'unidad'                => 'required|max:25',
@@ -413,8 +424,8 @@ class VehiculoController extends Controller
             'chasis.required'				  => 'Debe ingresar el codigo de chasis',
             'chasis.max'				 	  => 'El chasis sobrepasa los 20 carácteres',
             'contratista_id.min'   	  		  => 'Debe asignar un contratista',
-            'kilometraje_ref.required'            => 'Kilometraje referencial es obligatorio',
-            'kilometraje_ref.numeric'             => 'Debe ingresar un kilometraje válido'
+            'kilometraje_ref.required'        => 'Kilometraje referencial es obligatorio',
+            'kilometraje_ref.numeric'         => 'Debe ingresar un kilometraje válido'
 /*
             'fechavencimientosoat.required'   => 'Debe ingresar la fecha de vencimiento de SOAT',
             'fechavencimientogps.required'    => 'Debe ingresar la fecha de vencimiento de GPS',
@@ -446,7 +457,8 @@ class VehiculoController extends Controller
             $vehiculo->chasis 				  = $request->input('chasis');
             $vehiculo->carroceria_id    	  = $request->input('carroceria_id');
             $vehiculo->color 				  = $request->input('color');
-            $vehiculo->kilometraje_ref            = $request->input('kilometraje_ref');
+            $vehiculo->kilometraje_ref        = $request->input('kilometraje_ref');
+            $vehiculo->kilometraje_id         = $request->input('kilometraje_id');
             
 
             $vehiculo->save();

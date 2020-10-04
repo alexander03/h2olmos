@@ -12,10 +12,10 @@ use Illuminate\Support\Facades\DB;
 class TipohoraController extends Controller
 {
     protected $folderview      = 'app.tipohora';
-    protected $tituloAdmin     = 'Tipo de hora';
-    protected $tituloRegistrar = 'Registrar tipo de hora';
-    protected $tituloModificar = 'Modificar tipo de hora';
-    protected $tituloEliminar  = 'Eliminar tipo de hora';
+    protected $tituloAdmin     = 'Tipo de Horas Paradas';
+    protected $tituloRegistrar = 'Registrar tipo de horas paradas';
+    protected $tituloModificar = 'Modificar tipo de horas paradas';
+    protected $tituloEliminar  = 'Eliminar tipo de horas paradas';
     protected $rutas           = array('create' => 'tipohora.create', 
             'edit'   => 'tipohora.edit', 
             'delete' => 'tipohora.eliminar',
@@ -61,7 +61,7 @@ class TipohoraController extends Controller
         $cabecera[]       = array('valor' => '#', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Código', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Descripción', 'numero' => '1');
-        $cabecera[]       = array('valor' => 'Operaciones', 'numero' => '2');
+        $cabecera[]       = array('valor' => 'Opciones', 'numero' => '2');
         
         $titulo_modificar = $this->tituloModificar;
         $titulo_eliminar  = $this->tituloEliminar;

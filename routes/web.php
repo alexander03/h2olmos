@@ -83,6 +83,7 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('ua/search/{query}', 'UaController@searchAutocomplete')->name('ua.search');
 	Route::post('ua/importar', 'UaController@importExcel')->name('ua.excel.import');
 	Route::get('ua/exportar', 'UaController@exportExcel')->name('ua.excel.export');
+	Route::get('ua/exportar2', 'UaController@exportExcel2')->name('ua.excel.export2');
 	Route::post('ua/deletelist', 'UaController@destroyList')->name('ua.deletelist');
 	Route::post('ua/deleteall', 'UaController@destroyAll')->name('ua.deleteall');
 	Route::resource('ua', 'UaController');
@@ -138,9 +139,9 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::resource('vehiculo', 'VehiculoController', array('except' => array('show')));
 
 	//Rutas Abastecimiento
-	Route::post('abastecimientolugar/buscar', 'AbastecimientoController@buscar')->name('abastecimientolugar.buscar');
-	Route::get('abastecimientolugar/eliminar/{id}/{listarluego}', 'AbastecimientoController@eliminar')->name('abastecimientolugar.eliminar');
-	Route::resource('abastecimientolugar', 'AbastecimientoController', array('except' => array('show')));
+	Route::post('abastecimientolugar/buscar', 'AbastecimientolugarController@buscar')->name('abastecimientolugar.buscar');
+	Route::get('abastecimientolugar/eliminar/{id}/{listarluego}', 'AbastecimientolugarController@eliminar')->name('abastecimientolugar.eliminar');
+	Route::resource('abastecimientolugar', 'AbastecimientolugarController', array('except' => array('show')));
 
 	//Rutas VehiculoDocument
 	Route::post('vehiculodocument/buscar', 'VehiculoDocumentController@buscar')->name('vehiculodocument.buscar');
@@ -245,3 +246,11 @@ Route::group(['middleware' => 'auth'], function () {
 
 });
 
+
+Route::get('/clear', function() {
+    $run = Artisan::call('config:clear');
+    $run = Artisan::call('cache:clear');
+    $run = Artisan::call('config:cache');
+    return "Cleared!";
+
+});

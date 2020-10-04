@@ -44,6 +44,9 @@
 						<a href="{{ route('ua.excel.export') }}" class="btn btn-sm btn-dark">
 							<i class="material-icons">cloud_download</i> Exportar
 						</a>
+						<a href="{{ route('ua.excel.export2') }}" class="btn btn-sm btn-dark">
+							<i class="material-icons">cloud_download</i> Exportar jerarquia
+						</a>
 					</div>
 				</section>
 				
@@ -72,6 +75,7 @@
 					existen datos repetidos, códigos no existentes o 
 					alguna ua padre no pertenece a esta concesionaria.
 				</p>
+				<p class="text-center text-secondary" id='MensajeError'></p>
 				<div class="d-flex justify-content-center">
 					<button class="btn btn-success" data-dismiss="modal">Aceptar</button>
 				</div>

@@ -57,7 +57,7 @@ class GrifoController extends Controller
         $cabecera[]       = array('valor' => 'Contacto', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Correo', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Teléfono', 'numero' => '1');
-        $cabecera[]       = array('valor' => 'Operaciones', 'numero' => '2');
+        $cabecera[]       = array('valor' => 'Opciones', 'numero' => '2');
         
         $titulo_modificar = $this->tituloModificar;
         $titulo_eliminar  = $this->tituloEliminar;
@@ -126,7 +126,7 @@ class GrifoController extends Controller
         $reglas     = array(
             'descripcion' => 'required|max:25',
             'ubicacion' => 'required|max:25',
-            'abastecimiento_id' => 'numeric|mix:1',
+            'abastecimiento_id' => 'numeric',
             'contacto' => 'required|max:30',
             'telefono' => 'required|max:9',
             'correo' => 'required|max:25'
@@ -153,7 +153,7 @@ class GrifoController extends Controller
             $grifo = new Grifo();
             $grifo->descripcion = strtoupper($request->input('descripcion'));
             $grifo->ubicacion = strtoupper($request->input('ubicacion'));
-            $grifo->abastecimiento = strtoupper($request->input('abastecimiento'));
+            $grifo->abastecimiento_id = strtoupper($request->input('abastecimiento_id'));
             $grifo->contacto = strtoupper($request->input('contacto'));
             $grifo->telefono = $request->input('telefono');
             $grifo->correo = $request->input('correo');
@@ -218,7 +218,7 @@ class GrifoController extends Controller
         $reglas     = array(
             'descripcion' => 'required|max:25',
             'ubicacion' => 'required|max:25',
-            'abastecimiento_id' => 'numeric|mix:1',
+            'abastecimiento_id' => 'numeric',
             'contacto' => 'required|max:30',
             'telefono' => 'required|max:9',
             'correo' => 'required|max:25'
@@ -245,7 +245,7 @@ class GrifoController extends Controller
             $grifo = Grifo::find($id);
             $grifo->descripcion = strtoupper($request->input('descripcion'));
             $grifo->ubicacion = strtoupper($request->input('ubicacion'));
-            $grifo->abastecimiento = strtoupper($request->input('abastecimiento'));
+            $grifo->abastecimiento_id = strtoupper($request->input('abastecimiento_id'));
             $grifo->contacto = strtoupper($request->input('contacto'));
             $grifo->telefono = $request->input('telefono');
             $grifo->correo = $request->input('correo');

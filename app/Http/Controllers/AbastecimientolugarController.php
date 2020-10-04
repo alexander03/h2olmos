@@ -4,28 +4,26 @@ namespace App\Http\Controllers;
 
 use Validator;
 use Illuminate\Http\Request;
-use App\Opcionmenu;
-use App\Grupomenu;
+use App\Abastecimiento;
 use App\Librerias\Libreria;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 
-class OpcionmenuController extends Controller
-{
 
-    protected $folderview      = 'app.opcionmenu';
-    protected $tituloAdmin     = 'Opcion Menu';
-    protected $tituloRegistrar = 'Registrar opcion menu';
-    protected $tituloModificar = 'Modificar opcion menu';
-    protected $tituloEliminar  = 'Eliminar opcion menu';
-    protected $rutas           = array('create' => 'opcionmenu.create', 
-            'edit'   => 'opcionmenu.edit', 
-            'delete' => 'opcionmenu.eliminar',
-            'search' => 'opcionmenu.buscar',
-            'index'  => 'opcionmenu.index',
+class AbastecimientolugarController extends Controller
+{
+    protected $folderview      = 'app.abastecimiento';
+    protected $tituloAdmin     = 'Lugar de Abastecimiento';
+    protected $tituloRegistrar = 'Registrar lugar de abastecimiento';
+    protected $tituloModificar = 'Modificar lugar de abastecimiento';
+    protected $tituloEliminar  = 'Eliminar lugar de abastecimiento';
+    protected $rutas           = array('create' => 'abastecimientolugar.create', 
+            'edit'   => 'abastecimientolugar.edit', 
+            'delete' => 'abastecimientolugar.eliminar',
+            'search' => 'abastecimientolugar.buscar',
+            'index'  => 'abastecimientolugar.index',
         );
 
-         /**
+       /**
      * Create a new controller instance.
      *
      * @return void
@@ -35,27 +33,22 @@ class OpcionmenuController extends Controller
         $this->middleware('auth');
     }
 
-
-    /**
-     * Mostrar el resultado de búsquedas
-     * 
-     * @return Response 
-     */
     public function buscar(Request $request)
     {
         $pagina           = $request->input('page');
         $filas            = $request->input('filas');
-        $entidad          = 'Opcionmenu';
-        $nombre             = Libreria::getParam($request->input('descripcion'));
-        $resultado        = Opcionmenu::where('descripcion', 'LIKE', '%'.strtoupper($nombre).'%')->orderBy('descripcion', 'ASC');
+        $entidad          = 'Abastecimiento';
+        $descripcion      = Libreria::getParam($request->input('descripcion'));
+        
+        $filtro           = array();
+        $filtro[]         = ['descripcion', 'LIKE', '%'.strtoupper($descripcion).'%'];
+
+
+        $resultado        = Abastecimiento::where($filtro)->orderBy('descripcion', 'ASC');
         $lista            = $resultado->get();
         $cabecera         = array();
         $cabecera[]       = array('valor' => '#', 'numero' => '1');
-        $cabecera[]       = array('valor' => 'Grupo Menu', 'numero' => '1');
-        $cabecera[]       = array('valor' => 'Nombre', 'numero' => '1');
-        $cabecera[]       = array('valor' => 'Orden', 'numero' => '1');
-        $cabecera[]       = array('valor' => 'Link', 'numero' => '1');
-        $cabecera[]       = array('valor' => 'Icono', 'numero' => '1');
+        $cabecera[]       = array('valor' => 'Descripción', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Opciones', 'numero' => '2');
         
         $titulo_modificar = $this->tituloModificar;
@@ -74,14 +67,10 @@ class OpcionmenuController extends Controller
         }
         return view($this->folderview.'.list')->with(compact('lista', 'entidad'));
     }
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function index()
     {
-        $entidad          = 'Opcionmenu';
+        $entidad          = 'Abastecimiento';
         $title            = $this->tituloAdmin;
         $titulo_registrar = $this->tituloRegistrar;
         $ruta             = $this->rutas;
@@ -96,18 +85,14 @@ class OpcionmenuController extends Controller
     public function create(Request $request)
     {
         $listar   = Libreria::getParam($request->input('listar'), 'NO');
-        $entidad  = 'Opcionmenu';
-        $grupomenu = Grupomenu::orderBy('descripcion','asc')->get();
-        $cboGrupo = array();
-        foreach($grupomenu as $k=>$v){
-            $cboGrupo += array($v->id=>$v->descripcion);
-        }
-        $opcionmenu = null;
-        $formData = array('opcionmenu.store');
+        $entidad  = 'Abastecimiento';
+        $abastecimiento = null;
+        $formData = array('abastecimientolugar.store');
         $formData = array('route' => $formData, 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
         $boton    = 'Registrar'; 
-        return view($this->folderview.'.mant')->with(compact('opcionmenu', 'formData', 'entidad', 'boton', 'listar', 'cboGrupo'));
+        return view($this->folderview.'.mant')->with(compact('abastecimiento', 'formData', 'entidad', 'boton', 'listar'));
     }
+
 
     /**
      * Store a newly created resource in storage.
@@ -118,26 +103,24 @@ class OpcionmenuController extends Controller
     public function store(Request $request)
     {
         $listar     = Libreria::getParam($request->input('listar'), 'NO');
-        $reglas     = array('descripcion' => 'required|max:50');
+        $reglas     = array(
+            'descripcion' => 'required|max:45'
+        );
         $mensajes = array(
-            'descripcion.required'         => 'Debe ingresar una descripcion'
+            'descripcion.required'         => 'Debe ingresar una descripción',
+            'descripcion.max'              => 'La descripción supera los 45 caracteres'
             );
         $validacion = Validator::make($request->all(), $reglas, $mensajes);
         if ($validacion->fails()) {
             return $validacion->messages()->toJson();
         }
         $error = DB::transaction(function() use($request){
-            $opcionmenu = new Opcionmenu();
-            $opcionmenu->descripcion= strtoupper($request->input('descripcion'));
-            $opcionmenu->icono = $request->input('icono');
-            $opcionmenu->orden = $request->input('orden');
-            $opcionmenu->link = $request->input('link');
-            $opcionmenu->grupomenu_id = $request->input('grupomenu_id');
-            $opcionmenu->save();
+            $abastecimiento = new Abastecimiento();
+            $abastecimiento->descripcion = strtoupper($request->input('descripcion'));
+            $abastecimiento->save();
         });
         return is_null($error) ? "OK" : $error;
     }
-
     /**
      * Display the specified resource.
      *
@@ -157,22 +140,17 @@ class OpcionmenuController extends Controller
      */
     public function edit($id, Request $request)
     {
-        $existe = Libreria::verificarExistencia($id, 'opcionmenu');
+        $existe = Libreria::verificarExistencia($id, 'abastecimiento');
         if ($existe !== true) {
             return $existe;
         }
-        $grupomenu = Grupomenu::orderBy('descripcion','asc')->get();
-        $cboGrupo = array();
-        foreach($grupomenu as $k=>$v){
-            $cboGrupo += array($v->id=>$v->descripcion);
-        }
         $listar   = Libreria::getParam($request->input('listar'), 'NO');
-        $opcionmenu = Opcionmenu::find($id);
-        $entidad  = 'Opcionmenu';
-        $formData = array('opcionmenu.update', $id);
+        $abastecimiento = Abastecimiento::find($id);
+        $entidad  = 'Abastecimiento';
+        $formData = array('abastecimientolugar.update', $id);
         $formData = array('route' => $formData, 'method' => 'PUT', 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
         $boton    = 'Modificar';
-        return view($this->folderview.'.mant')->with(compact('opcionmenu', 'formData', 'entidad', 'boton', 'listar', 'cboGrupo'));
+        return view($this->folderview.'.mant')->with(compact('abastecimiento', 'formData', 'entidad', 'boton', 'listar'));
     }
 
     /**
@@ -184,26 +162,25 @@ class OpcionmenuController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $existe = Libreria::verificarExistencia($id, 'opcionmenu');
+        $existe = Libreria::verificarExistencia($id, 'abastecimiento');
         if ($existe !== true) {
             return $existe;
         }
-        $reglas     = array('descripcion' => 'required|max:50');
+        $reglas     = array(
+            'descripcion' => 'required|max:45'
+        );
         $mensajes = array(
-            'descripcion.required'         => 'Debe ingresar un nombre'
+            'descripcion.required'         => 'Debe ingresar una descripción',
+            'descripcion.max'              => 'La descripción supera los 45 caracteres'
             );
         $validacion = Validator::make($request->all(), $reglas, $mensajes);
         if ($validacion->fails()) {
             return $validacion->messages()->toJson();
         } 
         $error = DB::transaction(function() use($request, $id){
-            $opcionmenu = Opcionmenu::find($id);
-            $opcionmenu->descripcion= strtoupper($request->input('descripcion'));
-            $opcionmenu->icono = $request->input('icono');
-            $opcionmenu->orden = $request->input('orden');
-            $opcionmenu->link = $request->input('link');
-            $opcionmenu->grupomenu_id = $request->input('grupomenu_id');
-            $opcionmenu->save();
+            $abastecimiento = Abastecimiento::find($id);
+            $abastecimiento->descripcion = strtoupper($request->input('descripcion'));
+            $abastecimiento->save();
         });
         return is_null($error) ? "OK" : $error;
     }
@@ -216,20 +193,20 @@ class OpcionmenuController extends Controller
      */
     public function destroy($id)
     {
-        $existe = Libreria::verificarExistencia($id, 'opcionmenu');
+        $existe = Libreria::verificarExistencia($id, 'abastecimiento');
         if ($existe !== true) {
             return $existe;
         }
         $error = DB::transaction(function() use($id){
-            $opcionmenu = Opcionmenu::find($id);
-            $opcionmenu->delete();
+            $abastecimiento = Abastecimiento::find($id);
+            $abastecimiento->delete();
         });
         return is_null($error) ? "OK" : $error;
     }
 
     public function eliminar($id, $listarLuego)
     {
-        $existe = Libreria::verificarExistencia($id, 'opcionmenu');
+        $existe = Libreria::verificarExistencia($id, 'Abastecimiento');
         if ($existe !== true) {
             return $existe;
         }
@@ -237,12 +214,11 @@ class OpcionmenuController extends Controller
         if (!is_null(Libreria::obtenerParametro($listarLuego))) {
             $listar = $listarLuego;
         }
-        $mensaje=true;
-        $modelo   = Opcionmenu::find($id);
-        $entidad  = 'Opcionmenu';
-        $formData = array('route' => array('opcionmenu.destroy', $id), 'method' => 'DELETE', 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
+        $mensaje = true;
+        $modelo   = Abastecimiento::find($id);
+        $entidad  = 'Abastecimiento';
+        $formData = array('route' => array('abastecimientolugar.destroy', $id), 'method' => 'DELETE', 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
         $boton    = 'Eliminar';
         return view('app.confirmarEliminar')->with(compact('modelo', 'formData', 'entidad', 'boton', 'listar','mensaje'));
     }
-    
 }

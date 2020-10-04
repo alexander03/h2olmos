@@ -42,13 +42,16 @@
 			<td>{{ $value->asientos }}</td>
 			<td>{{ $value->chasis }}</td>
 			<td>
-				@if($value->carroceria == 0)
-					PICK UP
-				@else
-					SUV
+				@if($value->carroceria)
+					{{ $value->carroceria->descripcion }}
 				@endif
 			</td>
 			<td>{{ $value->color }}</td>
+			<td>
+				@if($value->kilometraje_id>0)
+					{{ $value->kilometraje2->descripcion }}
+				@endif
+			</td>
 			<td>{!! Form::button('<i class="material-icons">info</i>', array('onclick' => 'modal (\''.URL::route('vehiculodocument.index', array('vehiculo_id' =>$value->id, 'listar'=>'NO')).'\',  \'Registros: Documentos de vehiculo\' , this);', 'class' => 'btn btn-info btn-link btn-sm','rel'=>'tooltip','title'=>'Registros')) !!}</td>
 			<td>{!! Form::button('<i class="material-icons">edit</i>', array('onclick' => 'modal (\''.URL::route($ruta["edit"], array($value->id, 'listar'=>'SI')).'\', \''.$titulo_modificar.'\', this);', 'class' => 'btn btn-primary btn-link btn-sm','rel'=>'tooltip','title'=>'Editar')) !!}</td>
 			<td>{!! Form::button('<i class="material-icons">close</i>', array('onclick' => 'modal (\''.URL::route($ruta["delete"], array($value->id, 'SI')).'\', \''.$titulo_eliminar.'\', this);', 'class' => 'btn btn-danger btn-link btn-sm','rel'=>'tooltip','title'=>'Eliminar')) !!}</td>

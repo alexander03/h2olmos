@@ -29,8 +29,8 @@ class CreateAbastecimientoCombustiblesTable extends Migration
             $table -> text('motivo');
             $table -> string('comprobante');
             $table -> unsignedBigInteger('numero_comprobante');
-            $table -> date('fecha_inicio');
-            $table -> date('fecha_fin');
+            $table -> time('hora_inicio');
+            $table -> time('hora_fin');
             $table -> unsignedBigInteger('abastecimiento_id');
             $table -> unsignedBigInteger('tipocombustible_id');
             $table -> timestamps();

@@ -53,7 +53,7 @@ class GrupomenuController extends Controller
         $cabecera[]       = array('valor' => 'Nombre', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Orden', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Icono', 'numero' => '1');
-        $cabecera[]       = array('valor' => 'Operaciones', 'numero' => '2');
+        $cabecera[]       = array('valor' => 'Opciones', 'numero' => '2');
         
         $titulo_modificar = $this->tituloModificar;
         $titulo_eliminar  = $this->tituloEliminar;

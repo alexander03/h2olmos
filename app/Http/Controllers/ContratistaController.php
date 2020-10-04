@@ -11,10 +11,10 @@ use Illuminate\Support\Facades\DB;
 class ContratistaController extends Controller
 {
     protected $folderview      = 'app.contratistas';
-    protected $tituloAdmin     = 'Contratistas';
-    protected $tituloRegistrar = 'Registrar contratista';
-    protected $tituloModificar = 'Modificar contratista';
-    protected $tituloEliminar  = 'Eliminar contratista';
+    protected $tituloAdmin     = 'Subcontratistas';
+    protected $tituloRegistrar = 'Registrar subcontratista';
+    protected $tituloModificar = 'Modificar subcontratista';
+    protected $tituloEliminar  = 'Eliminar subcontratista';
     protected $rutas           = array('create' => 'contratistas.create', 
             'edit'   => 'contratistas.edit', 
             'delete' => 'contratistas.eliminar',
@@ -48,7 +48,7 @@ class ContratistaController extends Controller
         $cabecera[]       = array('valor' => 'Propietario', 'numero' => '1');
         $cabecera[]       = array('valor' => 'e-mail', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Teléfono', 'numero' => '1');
-        $cabecera[]       = array('valor' => 'Operaciones', 'numero' => '2');
+        $cabecera[]       = array('valor' => 'Opciones', 'numero' => '2');
         
         $titulo_modificar = $this->tituloModificar;
         $titulo_eliminar  = $this->tituloEliminar;

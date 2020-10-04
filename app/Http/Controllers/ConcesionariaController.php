@@ -46,8 +46,8 @@ class ConcesionariaController extends Controller
         $cabecera[]       = array('valor' => '#', 'numero' => '1');
         $cabecera[]       = array('valor' => 'RUC', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Razon Social', 'numero' => '1');
-        $cabecera[]       = array('valor' => 'Abreviatura', 'numero' => '1');
-        $cabecera[]       = array('valor' => 'Operaciones', 'numero' => '2');
+        $cabecera[]       = array('valor' => 'Nombre Corto', 'numero' => '1');
+        $cabecera[]       = array('valor' => 'Opciones', 'numero' => '2');
         
         $titulo_modificar = $this->tituloModificar;
         $titulo_eliminar  = $this->tituloEliminar;

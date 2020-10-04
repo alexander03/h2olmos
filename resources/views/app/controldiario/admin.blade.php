@@ -69,7 +69,7 @@
 		});
 	});
 
-	let EditbtnExelHEU = () =>{
+	var EditbtnExelHEU = () =>{
 		
 		const fecha1 = document.getElementById('fecha_registro_inicial').value;
 		const fecha2 = document.getElementById('fecha_registro_final').value;

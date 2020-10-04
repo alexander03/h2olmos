@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\UaExport;
+use App\Exports\UaExport2;
 use App\Imports\UaImport;
 use App\Vehiculo;
 use DateTime;
@@ -48,7 +49,7 @@ class UaController extends Controller{
                 DB::raw('(CASE WHEN child.ua_padre_id IS NOT NULL THEN "SI" ELSE "NO" END) AS es_padre')
             )
             -> leftJoin(
-                DB::raw('(SELECT ua_padre_id FROM ua) AS child'), 'child.ua_padre_id', '=', 'ua.id'
+                DB::raw('(SELECT ua_padre_id FROM ua where deleted_at is null) AS child'), 'child.ua_padre_id', '=', 'ua.id'
                 )
             -> where([
                 [ 'descripcion', 'LIKE', '%'.strtoupper($nombre).'%' ],
@@ -56,6 +57,7 @@ class UaController extends Controller{
                 [ DB::raw('CASE WHEN child.ua_padre_id IS NOT NULL THEN "SI" ELSE "NO" END'), 'LIKE', '%'.$esPadre.'%' ],
                 [ 'concesionaria_id', $this -> getConsecionariaActual() ] 
                 ])
+            -> orderBy('codigo', 'ASC')
             -> orderBy('descripcion', 'ASC')
             -> distinct();
         $lista            = $resultado -> get();
@@ -66,10 +68,10 @@ class UaController extends Controller{
         $cabecera[]       = array('valor' => 'Descripción', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Ua padre', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Es padre', 'numero' => '1');
-        $cabecera[]       = array('valor' => 'Habilitada', 'numero' => '1');
+        $cabecera[]       = array('valor' => 'Estado', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Fecha de inicio', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Fecha de fin', 'numero' => '1');
-        $cabecera[]       = array('valor' => 'Operaciones', 'numero' => '2');
+        $cabecera[]       = array('valor' => 'Opciones', 'numero' => '2');
         
         $titulo_modificar = $this->tituloModificar;
         $titulo_eliminar  = $this->tituloEliminar;
@@ -128,7 +130,7 @@ class UaController extends Controller{
     public function store(Request $request){
 
         $reglas     = [
-            'codigo' => 'required|unique:ua|size:8',
+            'codigo' => 'required|unique:ua|max:8',
             'descripcion' => 'required',
             'habilitada' => 'required',
             'fecha_inicio' => 'required',
@@ -138,7 +140,7 @@ class UaController extends Controller{
         $mensajes = [
             'codigo.required' => 'Su código es requerido',
             'codigo.unique' => 'Su código proporcionado ya existe, especifique otro',
-            'codigo.size' => 'Su código debe ser de 8 carácteres',
+            'codigo.max' => 'Su código debe ser maximo de 8 carácteres',
             'descripcion.required' => 'Su descripcion es requerida',
             'habilitada.required' => 'El estado de la ua es requerida',
             'fecha_inicio.required' => 'Su fecha de inicio es requerida',
@@ -191,7 +193,7 @@ class UaController extends Controller{
     public function update(Request $request, $id){
 
         $reglas     = [
-            'codigo' => 'required|unique:ua,codigo,'.$id.'|size:8',
+            'codigo' => 'required|unique:ua,codigo,'.$id.'|max:8',
             'descripcion' => 'required',
             'habilitada' => 'required',
             'fecha_inicio' => 'required',
@@ -201,7 +203,7 @@ class UaController extends Controller{
         $mensajes = [
             'codigo.required' => 'Su código es requerido',
             'codigo.unique' => 'Su código proporcionado ya existe, especifique otro',
-            'codigo.size' => 'Su código debe ser de 8 carácteres',
+            'codigo.max' => 'Su código debe ser de maximo de 8 carácteres',
             'descripcion.required' => 'Su descripcion es requerida',
             'habilitada.required' => 'El estado de la ua es requerida',
             'fecha_inicio.required' => 'Su fecha de inicio es requerida',
@@ -399,7 +401,7 @@ class UaController extends Controller{
             return response() -> json($res);
 
         }catch(Exception $ex){
-            $res = ['ok' => false, 'ex' => $ex];
+            $res = ['ok' => false, 'ex' => $ex->getMessage()];
        
             return response() -> json($res);
         }
@@ -408,6 +410,11 @@ class UaController extends Controller{
     public function exportExcel(){
 
         return Excel::download(new UaExport, 'ua-list.xlsx');
+    }
+    
+    public function exportExcel2(){
+
+        return Excel::download(new UaExport2, 'UA-Jerarquia-Reporte.xlsx');
     }
 
     private function getConsecionariaActual(){

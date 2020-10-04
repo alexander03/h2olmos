@@ -124,10 +124,10 @@ class AbastecimientoCombustibleController extends Controller{
         $cabecera[]       = array('valor' => 'Motivo', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Comprobante', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Número de comprobante', 'numero' => '1');
-        $cabecera[]       = array('valor' => 'Fecha de inicio', 'numero' => '1');
-        $cabecera[]       = array('valor' => 'Fecha de fin', 'numero' => '1');
+        $cabecera[]       = array('valor' => 'Hora de inicio', 'numero' => '1');
+        $cabecera[]       = array('valor' => 'Hora de fin', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Lugar de abastecimiento', 'numero' => '1');
-        $cabecera[]       = array('valor' => 'Operaciones', 'numero' => '2');
+        $cabecera[]       = array('valor' => 'Opciones', 'numero' => '2');
         
         $titulo_modificar = $this->tituloModificar;
         $titulo_eliminar  = $this->tituloEliminar;
@@ -185,8 +185,8 @@ class AbastecimientoCombustibleController extends Controller{
             'motivo' => 'required',
             'comprobante' => 'required',
             'numero_comprobante' => 'required',
-            'fecha_inicio' => 'required',
-            'fecha_fin' => 'nullable|after_or_equal:fecha_inicio',
+            'hora_inicio' => 'required',
+            'hora_fin' => 'nullable|after_or_equal:hora_inicio',
             'abastecimiento_id' => 'required',
             'tipocombustible_id' => 'required'
         ];
@@ -203,9 +203,9 @@ class AbastecimientoCombustibleController extends Controller{
             'motivo.required' => 'El motivo es requerido',
             'comprobante.required' => 'El comprobante es requerido',
             'numero_comprobante.required' => 'El número de comprobante es requerido',
-            'fecha_inicio.required' => 'Su fecha de inicio es requerida',
-            'fecha_fin.required' => 'Su fecha de fin es requerida',
-            'fecha_fin.after_or_equal' => 'Su fecha de fin no puede ser menor que la de inicio',
+            'hora_inicio.required' => 'Su fecha de inicio es requerida',
+            'hora_fin.required' => 'Su fecha de fin es requerida',
+            'hora_fin.after_or_equal' => 'Su fecha de fin no puede ser menor que la de inicio',
             'abastecimiento_id.required' => 'El lugar de abastecimiento es requerido',
             'tipocombustible_id.required' => 'El tipo de combustible es requerido'
         ];
@@ -254,8 +254,8 @@ class AbastecimientoCombustibleController extends Controller{
             $abastecimiento -> motivo = $request -> input('motivo');
             $abastecimiento -> comprobante = $request -> input('comprobante');
             $abastecimiento -> numero_comprobante = $request -> input('numero_comprobante');
-            $abastecimiento -> fecha_inicio = $request -> input('fecha_inicio');
-            $abastecimiento -> fecha_fin = $request -> input('fecha_fin');
+            $abastecimiento -> hora_inicio = $request -> input('hora_inicio');
+            $abastecimiento -> hora_fin = $request -> input('hora_fin');
             $abastecimiento -> abastecimiento_id = $request -> input('abastecimiento_id');
             $abastecimiento -> tipocombustible_id = $request -> input('tipocombustible_id');
 
@@ -299,8 +299,8 @@ class AbastecimientoCombustibleController extends Controller{
             'motivo' => 'required',
             'comprobante' => 'required',
             'numero_comprobante' => 'required',
-            'fecha_inicio' => 'required',
-            'fecha_fin' => 'nullable|after_or_equal:fecha_inicio',
+            'hora_inicio' => 'required',
+            'hora_fin' => 'nullable|after_or_equal:hora_inicio',
             'abastecimiento_id' => 'required',
             'tipocombustible_id' => 'required'
         ];
@@ -318,8 +318,8 @@ class AbastecimientoCombustibleController extends Controller{
             'motivo.required' => 'El motivo es requerido',
             'comprobante.required' => 'El comprobante es requerido',
             'numero_comprobante.required' => 'El número de comprobante es requerido',
-            'fecha_inicio.required' => 'Su fecha de inicio es requerida',
-            'fecha_fin.required' => 'Su fecha de fin es requerida',
+            'hora_inicio.required' => 'Su fecha de inicio es requerida',
+            'hora_fin.required' => 'Su fecha de fin es requerida',
             'fecha_fin.after_or_equal' => 'Su fecha de fin no puede ser menor que la de inicio',
             'abastecimiento_id.required' => 'El lugar de abastecimiento es requerido',
             'tipocombustible_id.required' => 'El tipo de combustible es requerido'
@@ -375,8 +375,8 @@ class AbastecimientoCombustibleController extends Controller{
             $abastecimiento -> motivo = $request -> input('motivo');
             $abastecimiento -> comprobante = $request -> input('comprobante');
             $abastecimiento -> numero_comprobante = $request -> input('numero_comprobante');
-            $abastecimiento -> fecha_inicio = $request -> input('fecha_inicio');
-            $abastecimiento -> fecha_fin = $request -> input('fecha_fin');
+            $abastecimiento -> hora_inicio = $request -> input('hora_inicio');
+            $abastecimiento -> hora_fin = $request -> input('hora_fin');
             $abastecimiento -> abastecimiento_id = $request -> input('abastecimiento_id');
             $abastecimiento -> tipocombustible_id = $request -> input('tipocombustible_id');
 

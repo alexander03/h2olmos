@@ -70,9 +70,10 @@ class EquipoController extends Controller
         $cabecera[]       = array('valor' => 'Marca', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Año de Fbr', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Placa', 'numero' => '1');
-        $cabecera[]       = array('valor' => 'Contratista', 'numero' => '1');
+        $cabecera[]       = array('valor' => 'Capac. Carga(m3)', 'numero' => '1');
+        $cabecera[]       = array('valor' => 'Subcontratista', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Area', 'numero' => '1');
-        $cabecera[]       = array('valor' => 'Operaciones', 'numero' => '2');
+        $cabecera[]       = array('valor' => 'Opciones', 'numero' => '2');
         
         $titulo_modificar = $this->tituloModificar;
         $titulo_eliminar  = $this->tituloEliminar;
@@ -141,7 +142,7 @@ class EquipoController extends Controller
 
         $contratistas = Contratista::orderBy('razonsocial','asc')->get();
         $cboContratista = array();
-        $cboContratista += array('0' => 'Selecione contratista');
+        $cboContratista += array('0' => 'Selecione subcontratista');
         foreach($contratistas as $k=>$v){
             $cboContratista += array($v->id=>$v->razonsocial);
         }
@@ -212,6 +213,8 @@ class EquipoController extends Controller
             $equipo->modelo 			  = strtoupper($request->input('modelo'));
             $equipo->marca_id 			  = $request->input('marca_id');
             $equipo->anio 				  = $request->input('anio');
+            $equipo->placa 				  = $request->input('placa');
+            $equipo->capacidad_carga      = $request->input('capacidad_carga');
             $equipo->contratista_id 	  = $request->input('contratista_id');
             $equipo->concesionaria_id     =  $this->consecionariaActual();
             
@@ -270,7 +273,7 @@ class EquipoController extends Controller
 
         $contratistas = Contratista::orderBy('razonsocial','asc')->get();
         $cboContratista = array();
-        $cboContratista += array('0' => 'Selecione contratista');
+        $cboContratista += array('0' => 'Selecione subcontratista');
 //        $cboContratista += array('1' => 'Wea');
         foreach($contratistas as $k=>$v){
             $cboContratista += array($v->id=>$v->razonsocial);
@@ -345,6 +348,8 @@ class EquipoController extends Controller
             $equipo->modelo 			  = strtoupper($request->input('modelo'));
             $equipo->marca_id 			  = $request->input('marca_id');
             $equipo->anio 				  = $request->input('anio');
+            $equipo->capacidad_carga      = $request->input('capacidad_carga');
+            $equipo->placa 				  = $request->input('placa');
             $equipo->contratista_id 	  = $request->input('contratista_id');
             if($request->input('area_id') != 0){
             	$equipo->area_id 				  = $request->input('area_id');
