@@ -21,9 +21,9 @@ class CreateControldiarioTable extends Migration
             $table->foreign('ua_id')->references('id')->on('ua');
             $table->boolean('turno');
             $table->float('horometro_inicial',6,2);
-            $table->float('horometro_final',6,2);
-            $table->time('hora_inicio');
-            $table->time('hora_fin');
+            $table->float('horometro_final',6,2);        
+//            $table->time('hora_inicio');
+//            $table->time('hora_fin');
             $table->float('hora_total',4,2);
             $table->unsignedBigInteger('tipohora_id')->nullable();
             $table->foreign('tipohora_id')->references('id')->on('tipohora');
