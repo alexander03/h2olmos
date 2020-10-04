@@ -10,6 +10,22 @@ if ($abastecimiento !== NULL) {
 {!! Form::hidden('listar', $listar, array('id' => 'listar')) !!}
 <section class="form-row">
 	<div class="form-group col-12 col-md-6 p-3">
+		<label for="id-usuario" class="pl-3">Usuario</label>
+		<input type="text" 
+			name="usuario" 
+			id="id-usuario" 
+			class="form-control" 
+			value="<?php if($abastecimiento) echo ''?>">
+	</div>
+	<div class="form-group col-12 col-md-6 p-3">
+		<label for="id-password" class="pl-3">Password</label>
+		<input type="password" 
+			name="password" 
+			id="id-password" 
+			class="form-control" 
+			value="<?php if($abastecimiento) echo ''?>">
+	</div>
+	<div class="form-group col-12 col-md-6 p-3">
 		<label for="id-fa" class="pl-3">Fecha de abastecimiento</label>
 		<input type="date" 
 			name="fecha_abastecimiento" 
@@ -41,53 +57,6 @@ if ($abastecimiento !== NULL) {
 		</section>	
 	</div>
 	<div class="form-group col-12 col-md-6 p-3">
-	</div>
-	<div class="form-group col-12 col-md-6 p-3">
-		<label for="id-usuario" class="pl-3">Usuario</label>
-		<input type="text" 
-			name="usuario" 
-			id="id-usuario" 
-			class="form-control" 
-			value="<?php if($abastecimiento) echo ''?>">
-	</div>
-	<div class="form-group col-12 col-md-6 p-3">
-		<label for="id-password" class="pl-3">Password</label>
-		<input type="password" 
-			name="password" 
-			id="id-password" 
-			class="form-control" 
-			value="<?php if($abastecimiento) echo ''?>">
-	</div>
-	<div class="form-group col-12 col-md-6 p-3" hidden="">
-		<label for="id-conductor" class="pl-3">Conductor(Ap. y Nom.)</label>
-		<div class="u-ua-style js-conductor-desc">
-			<?php if($abastecimiento) 
-				if(isset($abastecimiento -> conductor)) 
-				echo $abastecimiento -> conductor -> nombres.' '.$abastecimiento -> conductor -> apellidos; 
-				else echo 'Conductor no registrado';
-			?>
-		</div>
-		<input type="text" 
-			name="conductor_id" 
-			id="id-conductor" 
-			class="form-control js-conductor-id" 
-			value="<?php if($abastecimiento) echo ( isset($abastecimiento -> conductor) ) ? $abastecimiento -> conductor -> dni : $abastecimiento -> conductor_fake;?>">
-		<small id="autoComplete_list3" class="text-danger"></small>
-	</div>
-	
-	<div class="form-group col-12 col-md-6 p-3 u-search-ua">
-		<label for="id-ua" class="pl-3">Código Ua</label>
-		<div class="u-ua-style js-ua-desc">
-			<?php if($abastecimiento) if(isset($abastecimiento -> ua)) echo $abastecimiento -> ua -> descripcion; else echo 'Sin ua';?>
-		</div>
-		<input type="text" 
-			name="ua_id" 
-			id="id-ua" 
-			class="form-control js-ua-id" 
-			value="<?php if($abastecimiento) echo $abastecimiento -> ua -> codigo?>">
-		<small id="autoComplete_list1" class="text-danger"></small>
-	</div>
-	<div class="form-group col-12 col-md-6 p-3">
 		<label for="id-equipo" class="pl-3">Equipo - Vehículo</label>
 		{{-- <div class="u-ua-style js-equipo-desc"> --}}
 			<?php 
@@ -109,6 +78,18 @@ if ($abastecimiento !== NULL) {
 			class="js-equipo-id-hidden"
 			value="<?php if($abastecimiento) if(isset($abastecimiento -> equipo)) echo $abastecimiento -> equipo -> id; else if(isset($abastecimiento -> vehiculo)) echo $abastecimiento -> vehiculo -> id;?>">
 		<small id="autoComplete_list4" class="text-danger"></small>
+	</div>
+	<div class="form-group col-12 col-md-6 p-3 u-search-ua">
+		<label for="id-ua" class="pl-3">Código Ua</label>
+		<div class="u-ua-style js-ua-desc">
+			<?php if($abastecimiento) if(isset($abastecimiento -> ua)) echo $abastecimiento -> ua -> descripcion; else echo 'Sin ua';?>
+		</div>
+		<input type="text" 
+			name="ua_id" 
+			id="id-ua" 
+			class="form-control js-ua-id" 
+			value="<?php if($abastecimiento) echo $abastecimiento -> ua -> codigo?>">
+		<small id="autoComplete_list1" class="text-danger"></small>
 	</div>
 	<div class="form-group col-12 col-md-6 p-3">
 		<label for="id-qtdgl" class="pl-3">QTD(GL)</label>
@@ -197,7 +178,7 @@ if ($abastecimiento !== NULL) {
 			id="id-f-fin" class="form-control" 
 			value="<?php if($abastecimiento) echo $abastecimiento->hora_fin; ?>">
 	</div>
-	
+
 	<div class="form-group w-100">
 		<div class="col-lg-12 col-md-12 col-sm-12 text-right">
 			{!! Form::button('<i class="fa fa-check fa-lg"></i> '.$boton, array('class' => 'btn btn-success btn-sm', 'id' => 'btnGuardar', 'onclick' => 'guardar(\''.$entidad.'\', this)')) !!}
@@ -212,7 +193,7 @@ if ($abastecimiento !== NULL) {
 		init(IDFORMMANTENIMIENTO+'{!! $entidad !!}', 'M', '{!! $entidad !!}');
 		doSearchUA();
 		doSearchGrifo();
-		doSearchConductor();
+		// doSearchConductor();
 		doSearchEquipo();
 		convertGLtoL();
 	}); 

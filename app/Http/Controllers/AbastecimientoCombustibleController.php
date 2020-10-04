@@ -20,12 +20,15 @@ use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\UaExport;
 use App\Grifo;
 use App\Imports\UaImport;
+use App\Rules\AuthenticateUser;
 use App\Rules\SearchConductorRule;
 use App\Rules\SearchEquipo;
 use App\Rules\SearchGrifoRule;
 use App\Tipocombustible;
+use App\User;
 use App\Vehiculo;
 use Exception;
+use Illuminate\Support\Facades\Hash;
 
 use function PHPSTORM_META\map;
 
@@ -175,7 +178,8 @@ class AbastecimientoCombustibleController extends Controller{
         $reglas = [
             'fecha_abastecimiento' => 'required',
             'grifo_id' => ['required', new SearchGrifoRule()],
-            'conductor_id' => ['required'],
+            'usuario' => ['required'],
+            'password' => ['required', new AuthenticateUser($request->input('usuario'))],
             'ua_id' => ['required', new SearchUaPadre()],
             'equipo_id' => ['nullable', new SearchEquipo()],
             'qtdgl' => 'required',
@@ -193,7 +197,8 @@ class AbastecimientoCombustibleController extends Controller{
         $mensajes = [
             'fecha_abastecimiento.required' => 'Su fecha de abastecimiento es requerida',
             'grifo_id.required' => 'El grifo es requerido',
-            'conductor_id.required' => 'El conductor es requerido',
+            'usuario.required' => 'El usuario es requerido',
+            'password.required' => 'El password es requerido',
             'ua_id.required' => 'Su ua es requerida',
             'equipo_id.required' => 'El equipo o vehículo es requerido',
             'qtdgl.required' => 'Su QTD(GL) es requerido',
@@ -214,7 +219,7 @@ class AbastecimientoCombustibleController extends Controller{
         if ($validacion->fails()) {
             return $validacion->messages()->toJson();
         }
-
+        
         $listar     = Libreria::getParam($request->input('listar'), 'NO');
         
         $error = DB::transaction(function() use($request){
@@ -289,7 +294,8 @@ class AbastecimientoCombustibleController extends Controller{
         $reglas = [
             'fecha_abastecimiento' => 'required',
             'grifo_id' => ['required', new SearchGrifoRule()],
-            'conductor_id' => ['required'],
+            'usuario' => ['required'],
+            'password' => ['required'],
             'ua_id' => ['required', new SearchUaPadre()],
             'equipo_id' => ['nullable', new SearchEquipo()],
             'qtdgl' => 'required',
@@ -308,7 +314,8 @@ class AbastecimientoCombustibleController extends Controller{
         $mensajes = [
             'fecha_abastecimiento.required' => 'Su fecha de abastecimiento es requerida',
             'grifo_id.required' => 'El grifo es requerido',
-            'conductor_id.required' => 'El conductor es requerido',
+            'usuario.required' => 'El usuario es requerido',
+            'password.required' => 'El password es requerido',
             'ua_id.required' => 'Su ua es requerida',
             'equipo_id.required' => 'El equipo o vehículo es requerido',
             'qtdgl.required' => 'Su QTD(GL) es requerido',
