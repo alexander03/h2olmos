@@ -38,10 +38,11 @@ class CreateControldiarioTable extends Migration
             $table->integer('acceso_destino')->nullable();
 //            $table->unsignedBigInteger('uadestino_id')->nullable();
 //            $table->foreign('uadestino_id')->references('id')->on('ua');
-            $table->float('horometro_inicial')->nullable();
-            $table->float('horometro_final')->nullable();
+
+//            $table->float('horometro_inicial')->nullable();
+//            $table->float('horometro_final')->nullable();
             $table->string('tipo_material')->nullable();
-*/
+
             $table->date('fecha');
             $table->longText('observaciones')->nullable();
             $table->softDeletes();
