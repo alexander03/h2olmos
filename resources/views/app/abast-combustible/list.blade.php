@@ -22,7 +22,7 @@
 			<td class="text-nowrap">{{ $value -> grifo -> descripcion }}</td>
 			<td class="text-nowrap">{{ $value -> tipoCombustible -> descripcion }}</td> 
 			<td class="text-nowrap">{{ isset($value -> usuario) ? $value -> usuario -> name : '' }}</td>
-            <td class="text-nowrap">{{ isset($value -> usuario) ? $value -> usuario -> conductor -> dni : 'SIN DNI'}}</td>
+            <td class="text-nowrap">{{ isset($value -> usuario) ? (isset($value -> usuario -> conductor) ? $value -> usuario -> conductor -> dni : 'SIN DNI') : '-'}}</td>
             <td class="text-nowrap">{{ $value -> ua -> codigo }}</td>
 			<td class="text-nowrap">{{ $value -> ua -> descripcion }}</td>
 			<td class="text-nowrap">@if(!($value -> equipo == null && $value -> vehiculo == null)) {{ isset($value -> equipo) ? $value -> equipo -> descripcion : 'VEHÍCULO' }}@else - @endif</td>

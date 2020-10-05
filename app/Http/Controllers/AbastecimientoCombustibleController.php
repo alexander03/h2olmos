@@ -230,12 +230,10 @@ class AbastecimientoCombustibleController extends Controller{
                 $grifoDB =  Grifo::where('descripcion', $request -> input('grifo_id')) -> get();
                 $abastecimiento -> grifo_id = (!($grifoDB -> isEmpty())) ? $grifoDB[0] -> id : null;
             }
-            //BUSCAR CONDUCTOR
-            if($request -> input('conductor_id')){
-                $conductorDB =  Conductor::where('dni', $request -> input('conductor_id')) -> get();
-                $abastecimiento -> conductor_id = (!($conductorDB -> isEmpty())) ? $conductorDB[0] -> id : null;
-                if($abastecimiento -> conductor_id === null) $abastecimiento -> conductor_fake = strtoupper($request -> input('conductor_id'));
-            }
+            //BUSCAR USUARIO
+            $usuarioDB = User::where('username', $request -> input('usuario')) -> get();
+            $abastecimiento -> user_id = $usuarioDB[0] -> id;
+            
             //BUSCAR UA
             if($request -> input('ua_id')){
                 $uaDB =  Ua::where('codigo', $request -> input('ua_id')) -> get();
@@ -462,7 +460,7 @@ class AbastecimientoCombustibleController extends Controller{
 
     //EXPORT EXCEL
     public function exportExcel(){
-
+        
         return Excel::download(new AbastecimientoCombustibleExport, 'abast-combustible-list.xlsx');
     }
 

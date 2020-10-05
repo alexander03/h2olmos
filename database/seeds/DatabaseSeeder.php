@@ -34,7 +34,7 @@ class DatabaseSeeder extends Seeder
             KilometrajeSeeder::class,
             EquipoTableSeeder::class,
             VehiculoTableSeeder::class,
-            ControlDiarioTableSeeder::class,
+            // ControlDiarioTableSeeder::class, //FALTA CAMPOS ??? NO FUNCA
             AccesoTableSeeder::class,
             VehiculoDocumentTableSeeder::class,
             ChecklistvehicularTableSeeder::class,

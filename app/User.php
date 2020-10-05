@@ -64,6 +64,6 @@ class User extends Authenticatable
     }
 
     public function conductor(){
-        return $this -> hasOne(Conductor::class, 'id');
+        return $this -> hasOne(Conductor::class, 'user_id');
     }
 }
