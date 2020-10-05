@@ -1,50 +1,51 @@
 
-          <div>			
-			{!! Form::open(['route' => $ruta["search"], 'method' => 'POST' ,'onsubmit' => 'return false;', 'class' => 'row', 'role' => 'form', 'autocomplete' => 'off', 'id' => 'formBusqueda'.$entidad]) !!}
-			{!! Form::hidden('page', 1, array('id' => 'page')) !!}
-			{!! Form::hidden('accion', 'listar', array('id' => 'accion')) !!}
-			<div class="col-2 col-sm-2 col-md-2 col-lg-2">
-				{!! Form::label('tipo', 'Tipo:') !!}
-				{!! Form::select('tipo',['SOAT'=>'SOAT', 'GPS' => 'GPS' , 'RTV' => 'RTV'] ,'', array('class' => 'form-control', 'id' => 'tipo')) !!}
-				{!! Form::hidden('vehiculo_id',  $vehiculo_id, array('class' => 'form-control', 'id' => 'vehiculo_id')) !!}
-			</div>
-			<div class="col-4 col-sm-4 col-md-4 col-lg-4">
-				{!! Form::label('filas', 'Filas a mostrar:')!!}
-				{!! Form::selectRange('filas', 1, 30, 5, array('class' => 'form-control', 'onchange' => 'buscar(\''.$entidad.'\')')) !!}
-			</div>
-			<div class="form-group">
-				{!! Form::button('<i class="material-icons">search</i>Buscar', array('class' => 'btn btn-success btn-sm', 'id' => 'btnBuscar', 'onclick' => 'buscar(\''.$entidad.'\')')) !!}
-				<button class="btn btn-info btn-sm" id='document-nuevo'><i class="material-icons">add</i>Nuevo</button>
-			</div>
-			{!! Form::close() !!}
+<div>			
+	{!! Form::open(['route' => $ruta["search"], 'method' => 'POST' ,'onsubmit' => 'return false;', 'class' => 'row', 'role' => 'form', 'autocomplete' => 'off', 'id' => 'formBusqueda'.$entidad]) !!}
+	{!! Form::hidden('page', 1, array('id' => 'page')) !!}
+	{!! Form::hidden('accion', 'listar', array('id' => 'accion')) !!}
+	<div class="row container">
+		<div class="col-2 col-8">
+			{!! Form::label('tipo', 'Tipo:') !!}
+			{!! Form::select('tipo',['imagen'=>'Imagen de firma', 'doc_conformidad' => 'Doc. conformidad'] ,'', array('class' => 'form-control', 'id' => 'tipo')) !!}
+			{!! Form::hidden('vehiculo_id',  $vehiculo_id, array('class' => 'form-control', 'id' => 'vehiculo_id')) !!}
+		</div>
+		<div class="col-4 col-4">
+			{!! Form::label('filas', 'Filas:')!!}
+			{!! Form::selectRange('filas', 1, 30, 5, array('class' => 'form-control', 'onchange' => 'buscar(\''.$entidad.'\')')) !!}
+		</div>
+	</div>
+	<div class="row container d-flex justify-content-around">
+		{!! Form::button('<i class="material-icons">search</i>Buscar', array('class' => 'btn btn-success btn-sm', 'id' => 'btnBuscar', 'onclick' => 'buscar(\''.$entidad.'\')')) !!}
+		<button class="btn btn-info btn-sm" id='document-nuevo'><i class="material-icons">add</i>Nuevo</button>
+	</div>
+	{!! Form::close() !!}
 
-			<div class="mt-2 p-2 rounded border border-info d-none" id='content-form-document'>
-				<div id='divMensajeError{{ $entidad }}'></div>
-				{!! Form::open([ 'route' => 'vehiculodocument.store' ,'method' => 'POST' ,'onsubmit' => 'return false;', 'class' => 'form-inline', 'role' => 'form', 'autocomplete' => 'off', 'id' => 'form-document', 'enctype' => 'multipart/form-data']) !!}
-				<div class="form-row col-12">
-					<label class="my-1 mr-2" for="fecha">Fecha</label>
-					<input type="date" name="fecha" class="form-control input-xs my-1 mr-sm-2" id='fecha'>
-				
-					{!! Form::label('tipo', 'Tipo:') !!}
-					{!! Form::select('tipo',['SOAT'=>'SOAT', 'GPS' => 'GPS' , 'RTV' => 'RTV'] ,'', array('class' => 'form-control mr-4', 'id' => 'tipo')) !!}
-					<input type="file" name="archivo" class="form-control input-xs my-1 mr-sm-2" id='archivo'>
+	<div class="mt-2 p-2 rounded border border-info d-none" id='content-form-document'>
+		<div id='divMensajeError{{ $entidad }}'></div>
+		{!! Form::open([ 'route' => 'vehiculodocument.store' ,'method' => 'POST' ,'onsubmit' => 'return false;', 'class' => 'form-inline', 'role' => 'form', 'autocomplete' => 'off', 'id' => 'form-document', 'enctype' => 'multipart/form-data']) !!}
+		<div class="form-row col-12">
+			<label class="my-1 mr-2" for="fecha">Fecha</label>
+			<input type="date" name="fecha" class="form-control input-xs my-1 mr-sm-2" id='fecha'>
+		
+			{!! Form::label('tipo', 'Tipo:') !!}
+			{!! Form::select('tipo',['SOAT'=>'SOAT', 'GPS' => 'GPS' , 'RTV' => 'RTV'] ,'', array('class' => 'form-control mr-4', 'id' => 'tipo')) !!}
+			<input type="file" name="archivo" class="form-control input-xs my-1 mr-sm-2" id='archivo'>
 
-					{!! Form::hidden('vehiculo_id',  $vehiculo_id, array('class' => 'form-control', 'id' => 'vehiculo_id')) !!}
-					<input type="hidden" name="vehiculodocumentid" id='vehiculodocumentid'>
-				</div>
-				<div>
-					<button class="btn btn-info btn-sm" id='document-enviar'>Enviar</button>
-					<button class="btn btn-warning btn-sm" id='document-cancelar'> Cancelar</button>
-				</div>
-				{!! Form::close() !!}
-			</div>
+			{{-- {!! Form::hidden('vehiculo_id',  $vehiculo_id, array('class' => 'form-control', 'id' => 'vehiculo_id')) !!} --}}
+			<input type="hidden" name="vehiculodocumentid" id='vehiculodocumentid'>
+		</div>
+		<div>
+			<button class="btn btn-info btn-sm" id='document-enviar'>Enviar</button>
+			<button class="btn btn-warning btn-sm" id='document-cancelar'> Cancelar</button>
+		</div>
+		{!! Form::close() !!}
+	</div>
 
-			<div class="card">
-	            <div class="table-responsive" id="listado{{ $entidad }}">
-				</div>
-			</div>
-			{!! Form::button('<i class="fa fa-exclamation fa-lg"></i> Cerrar', array('class' => 'btn btn-warning btn-sm', 'id' => 'btnCancelar'.$entidad, 'onclick' => 'cerrarModal();')) !!}
-		 </div>
+	<div class="card">
+		<div class="table-responsive" id="listado{{ $entidad }}"></div>
+	</div>
+	{!! Form::button('<i class="fa fa-exclamation fa-lg"></i> Cerrar', array('class' => 'btn btn-warning btn-sm', 'id' => 'btnCancelar'.$entidad, 'onclick' => 'cerrarModal();')) !!}
+</div>
 
 
 <script>

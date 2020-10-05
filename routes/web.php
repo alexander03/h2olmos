@@ -178,6 +178,8 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('conductores/activar/{id}/{listarluego}', 'ConductorController@activar')->name('conductores.activar');
 	Route::get('conductores/reactivar/{id}', 'ConductorController@reactivar')->name('conductores.reactivar');
 
+	//Rutas para Conductordocumentos
+	Route::post('conductordocument/buscar', 'VehiculoDocumentController@buscar')->name('conductordocument.buscar');
 	Route::resource('conductordocument', 'ConductordocumentController', array('except' => array('show')));
 	
 	//Rutas para las kilometrajes (Kilometrajes)
