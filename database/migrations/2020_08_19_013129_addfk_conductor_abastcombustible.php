@@ -15,7 +15,8 @@ class AddfkConductorAbastcombustible extends Migration
     {
         Schema::table('abastecimiento_combustible', function (Blueprint $table) {
             
-            $table->foreign('conductor_id')->references('id')->on('conductor');
+            // $table->foreign('conductor_id')->references('id')->on('conductor');
+            $table->foreign('user_id')->references('id')->on('users');
         });
     }
 

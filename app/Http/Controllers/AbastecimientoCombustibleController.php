@@ -111,7 +111,7 @@ class AbastecimientoCombustibleController extends Controller{
         $cabecera[]       = array('valor' => 'Fecha de abastecimiento', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Grifo', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Tipo de combustible', 'numero' => '1');
-        $cabecera[]       = array('valor' => 'Conductor', 'numero' => '1');
+        $cabecera[]       = array('valor' => 'Conductor - Responsable', 'numero' => '1');
         $cabecera[]       = array('valor' => 'DNI', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Codigo UA', 'numero' => '1');
         $cabecera[]       = array('valor' => 'UA', 'numero' => '1');

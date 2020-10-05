@@ -62,4 +62,8 @@ class User extends Authenticatable
     public function getConcesionarias() {
         return $this->belongsToMany('App\Concesionaria', 'userconcesionaria')->withPivot('estado');
     }
+
+    public function conductor(){
+        return $this -> hasOne(Conductor::class, 'id');
+    }
 }
