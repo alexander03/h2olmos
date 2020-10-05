@@ -27,7 +27,7 @@ class CreateControldiarioTable extends Migration
             $table->float('hora_total',4,2);
             $table->unsignedBigInteger('tipohora_id')->nullable();
             $table->foreign('tipohora_id')->references('id')->on('tipohora');
-            $table->float('hora_parada',4,2);
+            $table->float('hora_parada',4,2)->nullable();
             $table->integer('viajes')->nullable();
             $table->integer('km_inicio')->nullable();
             $table->integer('acceso_origen')->nullable();

@@ -18,8 +18,9 @@ class ControlDiarioTableSeeder extends Seeder
             'horometro_inicial' => 4523.52,
             'horometro_final'  => 4541.12,
             'fecha' => '2020-8-20',
+//            'hora_inicio' => '15:00',
             'hora_total' => 1.5,
-            'hora_fin' => '17:00',
+//            'hora_fin' => '17:00',
             'created_at' => now(),
             'updated_at' => now()
         ]);
@@ -31,8 +32,9 @@ class ControlDiarioTableSeeder extends Seeder
             'ua_id' => 4,
             'tipohora_id' => 2,
             'fecha' => '2020-8-20',
+//            'hora_inicio' => '15:00',
             'hora_total' => 1.5,
-            'hora_fin' => '17:00',
+//            'hora_fin' => '17:00',
             'created_at' => now(),
             'updated_at' => now()
         ]);        

@@ -100,6 +100,7 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('abastecimiento/search/equipo/{query}', 'AbastecimientoCombustibleController@searchAutocompleteEquipo')->name('abastecimiento.search.equipo');
 	Route::get('abastecimiento/exportar', 'AbastecimientoCombustibleController@exportExcel')->name('abastecimiento.excel.export');
 	Route::resource('abastecimiento', 'AbastecimientoCombustibleController');
+	Route::post('abastecimiento/controldiario', 'AbastecimientoCombustibleController@exportControlDiario')->name('abastecimiento.controldiario');
 
     //Rutas Tipohora
 	Route::post('tipohora/buscar', 'TipohoraController@buscar')->name('tipohora.buscar');
