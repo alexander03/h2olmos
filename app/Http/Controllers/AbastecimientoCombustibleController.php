@@ -30,6 +30,7 @@ use App\User;
 use App\Vehiculo;
 use Exception;
 use Illuminate\Support\Facades\Hash;
+use Mpdf\Mpdf;
 
 use function PHPSTORM_META\map;
 
@@ -474,6 +475,26 @@ class AbastecimientoCombustibleController extends Controller{
             return Excel::download(new ReporteDiariodeCombustible($request->fecha,$request->grifo), 'abast-combustible-diario.xlsx');
         }else{
 
+            $namefile = 'abast-combustible-diario-' . $request->fecha . '.pdf';
+
+
+
+/*      DATO DE PRUEBAAAAAAAAAAAA
+    insetar el resultado del query en el array data
+
+    se espera que el colection tenga los atributos espcificados en el array de prueba
+
+            $data = [];
+            $data[] = ['nombre' => 'pepe quispe gonzales calle', 'dni' => '456132789' ,'ua' => '456123777' , 
+                        'equipo' => 'camion' , 'placa' => '2et456' , 'galones' => '4655', 'h_inicio' => '12:00' , 'h_fin' => '18:23'];
+*/
+
+            $data['data'] = $result;
+            $html = view('app.abast-combustible.pdf.control_diario_combustible', $data)->render();
+            $mpdf = new Mpdf(['orientation' => 'L']);
+            $mpdf->SetDisplayMode('fullpage');
+            $mpdf->WriteHTML($html);
+            $mpdf->Output($namefile, "I");
         }
     }
 
