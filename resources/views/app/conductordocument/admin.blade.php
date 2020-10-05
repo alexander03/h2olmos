@@ -4,19 +4,19 @@
 	{!! Form::hidden('page', 1, array('id' => 'page')) !!}
 	{!! Form::hidden('accion', 'listar', array('id' => 'accion')) !!}
 	<div class="row container">
-		<div class="col-2 col-8">
+		<div class="col-8 col-sm-4">
 			{!! Form::label('tipo', 'Tipo:') !!}
 			{!! Form::select('tipo',['imagen'=>'Imagen de firma', 'doc_conformidad' => 'Doc. conformidad'] ,'', array('class' => 'form-control', 'id' => 'tipo')) !!}
 			{!! Form::hidden('vehiculo_id',  $vehiculo_id, array('class' => 'form-control', 'id' => 'vehiculo_id')) !!}
 		</div>
-		<div class="col-4 col-4">
+		<div class="col-4 col-sm-3">
 			{!! Form::label('filas', 'Filas:')!!}
 			{!! Form::selectRange('filas', 1, 30, 5, array('class' => 'form-control', 'onchange' => 'buscar(\''.$entidad.'\')')) !!}
 		</div>
-	</div>
-	<div class="row container d-flex justify-content-around">
-		{!! Form::button('<i class="material-icons">search</i>Buscar', array('class' => 'btn btn-success btn-sm', 'id' => 'btnBuscar', 'onclick' => 'buscar(\''.$entidad.'\')')) !!}
-		<button class="btn btn-info btn-sm" id='document-nuevo'><i class="material-icons">add</i>Nuevo</button>
+		<div class="col-12 col-sm-5 d-flex justify-content-around align-items-center mt-2 mt-sm-0">
+			{!! Form::button('<i class="material-icons">search</i>Buscar', array('class' => 'btn btn-success p-2 pl-1 pr-1', 'id' => 'btnBuscar', 'onclick' => 'buscar(\''.$entidad.'\')')) !!}
+			<button class="btn btn-info p-2 pl-1 pr-1" id='document-nuevo'><i class="material-icons">add</i>Nuevo</button>
+		</div>
 	</div>
 	{!! Form::close() !!}
 
