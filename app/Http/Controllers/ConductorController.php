@@ -24,12 +24,14 @@ class ConductorController extends Controller
     protected $tituloModificar = 'Modificar conductor';
     protected $tituloEliminar  = 'Eliminar conductor';
     protected $tituloActivar  = 'Activar conductor';
+    protected $tituloDocumentos  = 'Documentos';
     protected $rutas           = array('create' => 'conductores.create', 
             'edit'   => 'conductores.edit', 
             'delete' => 'conductores.eliminar',
             'activar' => 'conductores.activar',
             'search' => 'conductores.buscar',
             'index'  => 'conductores.index',
+            'documentos_index' => 'conductordocument.index',
     );
 
     public function __construct()
@@ -57,10 +59,11 @@ class ConductorController extends Controller
         $cabecera[]       = array('valor' => 'Licencia', 'numero' => '1');
         $cabecera[]       = array('valor' => 'F.Vencimiento', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Contratista', 'numero' => '1');
-        $cabecera[]       = array('valor' => 'Opciones', 'numero' => '2');
+        $cabecera[]       = array('valor' => 'Opciones', 'numero' => '3');
         $titulo_modificar = $this->tituloModificar;
         $titulo_eliminar  = $this->tituloEliminar;
         $titulo_activar  = $this->tituloActivar;
+        $titulo_documentos  = $this->tituloDocumentos;
         $ruta             = $this->rutas;
         if (count($lista) > 0) {
             $clsLibreria     = new Libreria();
@@ -71,7 +74,7 @@ class ConductorController extends Controller
             $paginaactual    = $paramPaginacion['nuevapagina'];
             $lista           = $resultado->paginate($filas);
             $request->replace(array('page' => $paginaactual));
-            return view($this->folderview.'.list')->with(compact('lista', 'paginacion', 'inicio', 'fin', 'entidad', 'cabecera', 'titulo_modificar', 'titulo_eliminar', 'titulo_activar', 'ruta'));
+            return view($this->folderview.'.list')->with(compact('lista', 'paginacion', 'inicio', 'fin', 'entidad', 'cabecera', 'titulo_modificar', 'titulo_eliminar', 'titulo_activar', 'titulo_documentos', 'ruta'));
         }
         return view($this->folderview.'.list')->with(compact('lista', 'entidad'));
     }
