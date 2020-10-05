@@ -21,11 +21,11 @@
 			<td>{{ date('d/m/Y', strtotime($value->created_at)) }}</td>
 			@switch($value->tipo)
 					@case('imagen-firma')
-							<td>Imagen de firma</td>
+							<td data-tipo="{{$value->tipo}}">Imagen de firma</td>
 							<td><a target="_blank" href="{{asset('files/documento_conductor/imagenes_firmas')}}/{{$value->archivo}}">Archivo</a></td>
 							@break
 					@case('conformidad-firma')
-							<td>Doc. conformidad</td>
+							<td data-tipo="{{$value->tipo}}">Doc. conformidad</td>
 							<td><a target="_blank" href="{{asset('files/documento_conductor/documentos_conformidad_firmas')}}/{{$value->archivo}}">Archivo</a></td>
 							@break
 					@default

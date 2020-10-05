@@ -23,16 +23,14 @@
 	<div class="mt-2 p-2 rounded border border-info d-none" id='content-form-document'>
 		<div id='divMensajeError{{ $entidad }}'></div>
 		{!! Form::open([ 'route' => 'vehiculodocument.store' ,'method' => 'POST' ,'onsubmit' => 'return false;', 'class' => 'form-inline', 'role' => 'form', 'autocomplete' => 'off', 'id' => 'form-document', 'enctype' => 'multipart/form-data']) !!}
-		<div class="form-row col-12">
-			<label class="my-1 mr-2" for="fecha">Fecha</label>
-			<input type="date" name="fecha" class="form-control input-xs my-1 mr-sm-2" id='fecha'>
-		
-			{!! Form::label('tipo', 'Tipo:') !!}
-			{!! Form::select('tipo',['SOAT'=>'SOAT', 'GPS' => 'GPS' , 'RTV' => 'RTV'] ,'', array('class' => 'form-control mr-4', 'id' => 'tipo')) !!}
-			<input type="file" name="archivo" class="form-control input-xs my-1 mr-sm-2" id='archivo'>
+		<div class="row container mb-3">
+			{!! Form::label('tipo', 'Tipo:', ['class' => 'col-4 justify-content-start']) !!}
+			{!! Form::select('tipo',['imagen-firma'=>'Imagen de firma', 'conformidad-firma' => 'Doc. conformidad'] ,'', array('class' => 'form-control col-8', 'id' => 'tipo')) !!}
+			{!! Form::label('archivo', 'Archivo:', ['class' => 'col-4 justify-content-start']) !!}
+			{!! Form::file('archivo', ['class' => 'form-control input-xs mt-2', 'id' => 'archivo']) !!}
 
 			{!! Form::hidden('conductor_id',  $conductor_id, array('class' => 'form-control', 'id' => 'conductor_id')) !!}
-			<input type="hidden" name="vehiculodocumentid" id='vehiculodocumentid'>
+			<input type="hidden" name="conductordocument_id" id='conductordocument_id'>
 		</div>
 		<div>
 			<button class="btn btn-info btn-sm" id='document-enviar'>Enviar</button>
@@ -77,14 +75,11 @@
 	});
 	function editar_document(document_id,btn){
 		const formulario = document.getElementById('form-document');
-		formulario.setAttribute('action','{{ URL::route("vehiculodocument.store") }}' +'/'+ document_id);
-		//formulario.setAttribute('method','PUT');
+		formulario.setAttribute('action','{{ URL::route("conductordocument.store") }}' +'/'+ document_id);
+
 		const fila = btn.parentElement.parentElement;
-		const fecha = fila.children[1].textContent.split('/');
-		const fechaCorregida = `${fecha[2]}-${fecha[1]}-${fecha[0]}`;
-		formulario.querySelector('#fecha').value = fechaCorregida;
-		formulario.querySelector('#tipo').value = fila.children[2].textContent;
-		formulario.querySelector('#vehiculodocumentid').value = Number(document_id);
+		formulario.querySelector('#tipo').value = fila.children[2].dataset.tipo;
+		formulario.querySelector('#conductordocument_id').value = Number(document_id);
 		document.getElementById('content-form-document').classList.remove('d-none');
 	}
 

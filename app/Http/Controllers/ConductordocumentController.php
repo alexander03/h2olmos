@@ -77,5 +77,36 @@ class ConductordocumentController extends Controller
         return view($this->folderview.'.admin')->with(compact('entidad', 'title', 'titulo_registrar', 'ruta', 'conductor_id'));
     }
 
-    
+    public function store(Request $request){
+        $reglas = array(
+    		'fecha'   => 'required',
+            'archivo' => 'required'
+        );
+        $mensajes = array(
+        	'fecha.required'   => 'Debe ingresar una fecha',  
+            'archivo.required' => 'Debe ingresar archivo'
+        );
+
+        $validacion = Validator::make($request->all(), $reglas, $mensajes);
+
+        if ($validacion->fails()) return $validacion->messages()->toJson();
+
+        $error = DB::transaction(function() use($request){
+
+     		$conductordocument = new Conductordocument();
+
+     		$conductordocument->tipo =  $request->input('tipo');
+
+            $archivo  = $request->file('archivo');
+            $fileName =   date("Y_m_d") . '_'. $archivo->getClientOriginalName();
+            $vehiculodocument->archivo =  $fileName;
+            $archivo->move(public_path('files/documento_vehiculo/'), $fileName);       
+            
+
+     		$vehiculodocument->vehiculo_id = $request->input('vehiculo_id');
+
+            $vehiculodocument->save();
+        });
+        return is_null($error) ? "OK" : $error;
+    }
 }
