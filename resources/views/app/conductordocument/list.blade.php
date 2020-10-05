@@ -18,9 +18,20 @@
 		@foreach ($lista as $key => $value)
 		<tr>
 			<td>{{ $contador }}</td>
-			<td>{{ $value->fecha }}</td>
-			<td>{{ $value->tipo }}</td>
-			<td><a target="_blank" href="{{asset('files/documento_vehiculo')}}/{{$value->archivo}}">Archivo</a></td>
+			<td>{{ date('d/m/Y', strtotime($value->created_at)) }}</td>
+			@switch($value->tipo)
+					@case('imagen-firma')
+							<td>Imagen de firma</td>
+							<td><a target="_blank" href="{{asset('files/documento_conductor/imagenes_firmas')}}/{{$value->archivo}}">Archivo</a></td>
+							@break
+					@case('conformidad-firma')
+							<td>Doc. conformidad</td>
+							<td><a target="_blank" href="{{asset('files/documento_conductor/documentos_conformidad_firmas')}}/{{$value->archivo}}">Archivo</a></td>
+							@break
+					@default
+						<td>Otro doc.</td>			
+			@endswitch
+			
 			<td>{!! Form::button('<i class="material-icons">edit</i>', array('onclick' => 'editar_document (\''.$value->id.'\', this);', 'class' => 'btn btn-primary btn-link btn-sm','rel'=>'tooltip','title'=>'Editar')) !!}</td>
 			<td>{!! Form::button('<i class="material-icons">close</i>', array('onclick' => 'modal (\''.URL::route($ruta["delete"], array($value->id, 'SI')).'\', \''.$titulo_eliminar.'\', this);', 'class' => 'btn btn-danger btn-link btn-sm','rel'=>'tooltip','title'=>'Eliminar')) !!}</td>
 		</tr>

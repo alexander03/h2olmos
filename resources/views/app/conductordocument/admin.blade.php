@@ -1,23 +1,23 @@
 
 <div>			
 	{!! Form::open(['route' => $ruta["search"], 'method' => 'POST' ,'onsubmit' => 'return false;', 'class' => 'row', 'role' => 'form', 'autocomplete' => 'off', 'id' => 'formBusqueda'.$entidad]) !!}
-	{!! Form::hidden('page', 1, array('id' => 'page')) !!}
-	{!! Form::hidden('accion', 'listar', array('id' => 'accion')) !!}
-	<div class="row container">
-		<div class="col-8 col-sm-4">
-			{!! Form::label('tipo', 'Tipo:') !!}
-			{!! Form::select('tipo',['imagen'=>'Imagen de firma', 'doc_conformidad' => 'Doc. conformidad'] ,'', array('class' => 'form-control', 'id' => 'tipo')) !!}
-			{!! Form::hidden('vehiculo_id',  $vehiculo_id, array('class' => 'form-control', 'id' => 'vehiculo_id')) !!}
+		{!! Form::hidden('page', 1, array('id' => 'page')) !!}
+		{!! Form::hidden('accion', 'listar', array('id' => 'accion')) !!}
+		<div class="row container">
+			<div class="col-8 col-sm-4">
+				{!! Form::label('tipo', 'Tipo:') !!}
+				{!! Form::select('tipo',['all' => 'Todos','imagen-firma'=>'Imagen de firma', 'conformidad-firma' => 'Doc. conformidad'] ,'', array('class' => 'form-control', 'id' => 'tipo')) !!}
+				{!! Form::hidden('conductor_id',  $conductor_id, array('class' => 'form-control', 'id' => 'conductor_id')) !!}
+			</div>
+			<div class="col-4 col-sm-3">
+				{!! Form::label('filas', 'Filas:')!!}
+				{!! Form::selectRange('filas', 1, 30, 5, array('class' => 'form-control', 'onchange' => 'buscar(\''.$entidad.'\')')) !!}
+			</div>
+			<div class="col-12 col-sm-5 d-flex justify-content-around align-items-center mt-2 mt-sm-0">
+				{!! Form::button('<i class="material-icons">search</i>Buscar', array('class' => 'btn btn-success p-2 pl-1 pr-1', 'id' => 'btnBuscar', 'onclick' => 'buscar(\''.$entidad.'\')')) !!}
+				<button class="btn btn-info p-2 pl-1 pr-1" id='document-nuevo'><i class="material-icons">add</i>Nuevo</button>
+			</div>
 		</div>
-		<div class="col-4 col-sm-3">
-			{!! Form::label('filas', 'Filas:')!!}
-			{!! Form::selectRange('filas', 1, 30, 5, array('class' => 'form-control', 'onchange' => 'buscar(\''.$entidad.'\')')) !!}
-		</div>
-		<div class="col-12 col-sm-5 d-flex justify-content-around align-items-center mt-2 mt-sm-0">
-			{!! Form::button('<i class="material-icons">search</i>Buscar', array('class' => 'btn btn-success p-2 pl-1 pr-1', 'id' => 'btnBuscar', 'onclick' => 'buscar(\''.$entidad.'\')')) !!}
-			<button class="btn btn-info p-2 pl-1 pr-1" id='document-nuevo'><i class="material-icons">add</i>Nuevo</button>
-		</div>
-	</div>
 	{!! Form::close() !!}
 
 	<div class="mt-2 p-2 rounded border border-info d-none" id='content-form-document'>
@@ -31,7 +31,7 @@
 			{!! Form::select('tipo',['SOAT'=>'SOAT', 'GPS' => 'GPS' , 'RTV' => 'RTV'] ,'', array('class' => 'form-control mr-4', 'id' => 'tipo')) !!}
 			<input type="file" name="archivo" class="form-control input-xs my-1 mr-sm-2" id='archivo'>
 
-			{{-- {!! Form::hidden('vehiculo_id',  $vehiculo_id, array('class' => 'form-control', 'id' => 'vehiculo_id')) !!} --}}
+			{!! Form::hidden('conductor_id',  $conductor_id, array('class' => 'form-control', 'id' => 'conductor_id')) !!}
 			<input type="hidden" name="vehiculodocumentid" id='vehiculodocumentid'>
 		</div>
 		<div>
@@ -80,7 +80,9 @@
 		formulario.setAttribute('action','{{ URL::route("vehiculodocument.store") }}' +'/'+ document_id);
 		//formulario.setAttribute('method','PUT');
 		const fila = btn.parentElement.parentElement;
-		formulario.querySelector('#fecha').value = fila.children[1].textContent;
+		const fecha = fila.children[1].textContent.split('/');
+		const fechaCorregida = `${fecha[2]}-${fecha[1]}-${fecha[0]}`;
+		formulario.querySelector('#fecha').value = fechaCorregida;
 		formulario.querySelector('#tipo').value = fila.children[2].textContent;
 		formulario.querySelector('#vehiculodocumentid').value = Number(document_id);
 		document.getElementById('content-form-document').classList.remove('d-none');

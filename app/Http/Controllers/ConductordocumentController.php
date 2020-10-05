@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Librerias\Libreria;
 use App\Conductor;
 use App\Conductordocument;
 use Illuminate\Support\Facades\DB;
@@ -37,20 +38,14 @@ class ConductordocumentController extends Controller
         $filas            = $request->input('filas');
         $entidad          = 'conductordocument';
 
-        $vehiculo_id      = Libreria::getParam($request->input('vehiculo_id'));
+        $conductor_id      = Libreria::getParam($request->input('conductor_id'));
         $tipo             = Libreria::getParam($request->input('tipo'));
-  
 
-        $filtro           = array();
-        $filtro[]         = ['vehiculo_id',$vehiculo_id];
-        $filtro[]         = ['tipo', $tipo];
-
-        $resultado        = Vehiculodocument::where($filtro)->orderBy('fecha');
-
+        $resultado        = Conductordocument::getlist($conductor_id, $tipo);
         $lista            = $resultado->get();
         $cabecera         = array();
         $cabecera[]       = array('valor' => '#', 'numero' => '1');
-        $cabecera[]       = array('valor' => 'Fecha de V', 'numero' => '1');
+        $cabecera[]       = array('valor' => 'F. Registro', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Tipo', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Archivo', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Opciones', 'numero' => '2');
@@ -78,7 +73,9 @@ class ConductordocumentController extends Controller
         $title            = $this->tituloAdmin;
         $titulo_registrar = $this->tituloRegistrar;
         $ruta             = $this->rutas;
-        $vehiculo_id	  = $request->input('vehiculo_id');
-        return view($this->folderview.'.admin')->with(compact('entidad', 'title', 'titulo_registrar', 'ruta', 'vehiculo_id'));
+        $conductor_id	  = $request->input('conductor_id');
+        return view($this->folderview.'.admin')->with(compact('entidad', 'title', 'titulo_registrar', 'ruta', 'conductor_id'));
     }
+
+    
 }
