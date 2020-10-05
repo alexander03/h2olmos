@@ -5,10 +5,9 @@ namespace App\Exports;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use App\AbastecimientoCombustible;
 use Illuminate\Support\Facades\DB;
-use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 
-class ReporteDiariodeCombustible implements FromCollection
+class ReporteDiariodeCombustible  implements FromCollection, WithHeadings
 {	
 
 	private $fecha;
@@ -25,16 +24,33 @@ class ReporteDiariodeCombustible implements FromCollection
     */
     public function collection()
     {
-		$consulta = "CONCAT(cond.nombres, ' - ', cond.apellidos) as 'nombres' , cond.dni, ua.codigo , 
-					vh.descripcion, vh.placa, combust.qtdgl , combust.hora_inicio , combust.hora_fin , contra.descripcion
-					FROM abastecimiento_combustible combust join conductor cond ON(combust.conductor_id = cond.id)
+    	$fecha = $this->fecha;
+    	$idGrifo = $this->idgrifo;
+/*
+		$consulta1 = "SELECT us.name  , cond.dni, ua.codigo , 
+					vh.modelo, vh.placa, combust.qtdgl , combust.hora_inicio , combust.hora_fin 
+					FROM abastecimiento_combustible combust JOIN users us ON( combust.user_id = us.id)
 					JOIN ua ON(combust.ua_Id = ua.id)
-					JOIN vehiculo vh ON(vh.id = combust.vehiculo_id)
-					JOIN contratista contra ON(contra.id = vh.contratista_id)
-					WHERE combust.fecha_abastecimiento = {$this->fecha } AND 
-					combust.grifo_id = {$this->idgrifo} ";
+					JOIN vehiculo vh ON(combust.vehiculo_id = vh.id)
+					JOIN conductor cond ON(cond.user_id = us.id)
+					WHERE combust.fecha_abastecimiento = {$fecha} AND 
+					combust.grifo_id = {$idGrifo} ";
 
-		return DB::select($consulta);
+		$colect1 = collect(DB::select($consulta1));
+
+
+		$consulta2 = "SELECT us.name  , cond.dni, ua.codigo , 
+					equi.modelo , '  ' as espacio , combust.qtdgl , combust.hora_inicio , combust.hora_fin 
+					FROM abastecimiento_combustible combust JOIN users us ON( combust.user_id = us.id)
+					JOIN ua ON(combust.ua_Id = ua.id)
+					JOIN equipo equi ON(combust.equipo_id = equi.id)
+					JOIN conductor cond ON(cond.user_id = us.id)
+					WHERE combust.fecha_abastecimiento = {$fecha} AND 
+					combust.grifo_id = {$idGrifo} ";
+
+		$colect2 = collect(DB::select($consulta2));
+*/
+		return  $resultQuery;
     }
 
     public function headings(): array{
@@ -48,9 +64,6 @@ class ReporteDiariodeCombustible implements FromCollection
             'GALONES',
             'H - INICIO',
             'H - TERMINO',
-            'C ANTERIOR',
-            'COD ACTUAL',
-            'EMPRESA'
         ];
 
         

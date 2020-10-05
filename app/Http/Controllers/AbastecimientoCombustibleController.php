@@ -8,6 +8,7 @@ use App\Concesionaria;
 use App\Conductor;
 use App\Equipo;
 use App\Exports\AbastecimientoCombustibleExport;
+use App\Exports\ReporteDiariodeCombustible;
 use App\Librerias\Libreria;
 use App\Rules\SearchUaPadre;
 use App\Rules\SelectDifZero;
@@ -20,12 +21,15 @@ use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\UaExport;
 use App\Grifo;
 use App\Imports\UaImport;
+use App\Rules\AuthenticateUser;
 use App\Rules\SearchConductorRule;
 use App\Rules\SearchEquipo;
 use App\Rules\SearchGrifoRule;
 use App\Tipocombustible;
+use App\User;
 use App\Vehiculo;
 use Exception;
+use Illuminate\Support\Facades\Hash;
 
 use function PHPSTORM_META\map;
 
@@ -108,7 +112,7 @@ class AbastecimientoCombustibleController extends Controller{
         $cabecera[]       = array('valor' => 'Fecha de abastecimiento', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Grifo', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Tipo de combustible', 'numero' => '1');
-        $cabecera[]       = array('valor' => 'Conductor', 'numero' => '1');
+        $cabecera[]       = array('valor' => 'Conductor - Responsable', 'numero' => '1');
         $cabecera[]       = array('valor' => 'DNI', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Codigo UA', 'numero' => '1');
         $cabecera[]       = array('valor' => 'UA', 'numero' => '1');
@@ -153,7 +157,8 @@ class AbastecimientoCombustibleController extends Controller{
         $title            = $this->tituloAdmin;
         $titulo_registrar = $this->tituloRegistrar;
         $ruta             = $this->rutas;
-        return view($this->folderview.'.admin')->with(compact('entidad', 'title', 'titulo_registrar', 'ruta'));
+        $cboGrifos = Grifo::select('id','descripcion')->get();
+        return view($this->folderview.'.admin')->with(compact('entidad', 'cboGrifos' ,'title', 'titulo_registrar', 'ruta'));
     }
 
     public function create(Request $request){
@@ -175,7 +180,8 @@ class AbastecimientoCombustibleController extends Controller{
         $reglas = [
             'fecha_abastecimiento' => 'required',
             'grifo_id' => ['required', new SearchGrifoRule()],
-            'conductor_id' => ['required'],
+            'usuario' => ['required'],
+            'password' => ['required', new AuthenticateUser($request->input('usuario'))],
             'ua_id' => ['required', new SearchUaPadre()],
             'equipo_id' => ['nullable', new SearchEquipo()],
             'qtdgl' => 'required',
@@ -193,7 +199,8 @@ class AbastecimientoCombustibleController extends Controller{
         $mensajes = [
             'fecha_abastecimiento.required' => 'Su fecha de abastecimiento es requerida',
             'grifo_id.required' => 'El grifo es requerido',
-            'conductor_id.required' => 'El conductor es requerido',
+            'usuario.required' => 'El usuario es requerido',
+            'password.required' => 'El password es requerido',
             'ua_id.required' => 'Su ua es requerida',
             'equipo_id.required' => 'El equipo o vehículo es requerido',
             'qtdgl.required' => 'Su QTD(GL) es requerido',
@@ -214,7 +221,7 @@ class AbastecimientoCombustibleController extends Controller{
         if ($validacion->fails()) {
             return $validacion->messages()->toJson();
         }
-
+        
         $listar     = Libreria::getParam($request->input('listar'), 'NO');
         
         $error = DB::transaction(function() use($request){
@@ -289,7 +296,8 @@ class AbastecimientoCombustibleController extends Controller{
         $reglas = [
             'fecha_abastecimiento' => 'required',
             'grifo_id' => ['required', new SearchGrifoRule()],
-            'conductor_id' => ['required'],
+            'usuario' => ['required'],
+            'password' => ['required'],
             'ua_id' => ['required', new SearchUaPadre()],
             'equipo_id' => ['nullable', new SearchEquipo()],
             'qtdgl' => 'required',
@@ -308,7 +316,8 @@ class AbastecimientoCombustibleController extends Controller{
         $mensajes = [
             'fecha_abastecimiento.required' => 'Su fecha de abastecimiento es requerida',
             'grifo_id.required' => 'El grifo es requerido',
-            'conductor_id.required' => 'El conductor es requerido',
+            'usuario.required' => 'El usuario es requerido',
+            'password.required' => 'El password es requerido',
             'ua_id.required' => 'Su ua es requerida',
             'equipo_id.required' => 'El equipo o vehículo es requerido',
             'qtdgl.required' => 'Su QTD(GL) es requerido',
@@ -457,6 +466,15 @@ class AbastecimientoCombustibleController extends Controller{
     public function exportExcel(){
 
         return Excel::download(new AbastecimientoCombustibleExport, 'abast-combustible-list.xlsx');
+    }
+
+    public function exportControlDiario(Request $request){
+
+        if($request->tipo == 1){
+            return Excel::download(new ReporteDiariodeCombustible($request->fecha,$request->grifo), 'abast-combustible-diario.xlsx');
+        }else{
+
+        }
     }
 
     private function getConsecionariaActual(){

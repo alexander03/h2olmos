@@ -20,9 +20,14 @@ class AbastecimientoCombustible extends Model{
         return $this->belongsTo(Grifo::class, 'grifo_id');		
     }
 
-    public function conductor(){
+    // public function conductor(){
 
-        return $this->belongsTo(Conductor::class, 'conductor_id');		
+    //     return $this->belongsTo(Conductor::class, 'conductor_id');		
+    // }
+
+    public function usuario(){
+
+        return $this->belongsTo(User::class, 'user_id');		
     }
     
     public function ua(){

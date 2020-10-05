@@ -20,9 +20,9 @@
 			<td class="text-nowrap">{{ $contador }}</td>
 			<td class="text-nowrap">{{ date("d/m/Y",strtotime($value -> fecha_abastecimiento)) }}</td>
 			<td class="text-nowrap">{{ $value -> grifo -> descripcion }}</td>
-			<td class="text-nowrap">{{ $value -> tipoCombustible -> descripcion }}</td>
-			<td class="text-nowrap">{{ isset($value -> conductor) ? $value -> conductor -> nombres : $value -> conductor_fake }} {{ isset($value -> conductor) ? $value -> conductor -> apellidos : '' }}</td>
-            <td class="text-nowrap">{{ isset($value -> conductor) ? $value -> conductor -> dni : 'SIN DNI'}}</td>
+			<td class="text-nowrap">{{ $value -> tipoCombustible -> descripcion }}</td> 
+			<td class="text-nowrap">{{ isset($value -> usuario) ? $value -> usuario -> name : '' }}</td>
+            <td class="text-nowrap">{{ isset($value -> usuario) ? $value -> usuario -> conductor -> dni : 'SIN DNI'}}</td>
             <td class="text-nowrap">{{ $value -> ua -> codigo }}</td>
 			<td class="text-nowrap">{{ $value -> ua -> descripcion }}</td>
 			<td class="text-nowrap">@if(!($value -> equipo == null && $value -> vehiculo == null)) {{ isset($value -> equipo) ? $value -> equipo -> descripcion : 'VEHÍCULO' }}@else - @endif</td>
