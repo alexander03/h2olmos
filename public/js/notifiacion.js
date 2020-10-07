@@ -94,7 +94,9 @@ const pressExelVencimiento = ()=>{
 }
 
 
-	window.ready = () =>{
+	const countNotify = () =>{
+
+	
 	const headers = new Headers();
     headers.append('X-CSRF-TOKEN', document.querySelector('meta[name="csrf-token"]').content);
     const config = {
@@ -131,3 +133,4 @@ const editButonNotify = (numero) =>{
 		span.innerText = numero;
 	}
 }
+

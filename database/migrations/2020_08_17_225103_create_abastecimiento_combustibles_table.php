@@ -17,7 +17,8 @@ class CreateAbastecimientoCombustiblesTable extends Migration
             $table -> bigIncrements('id');
             $table -> date('fecha_abastecimiento');
             $table -> unsignedBigInteger('grifo_id');
-            $table -> unsignedBigInteger('conductor_id') -> nullable();
+            // $table -> unsignedBigInteger('conductor_id') -> nullable();
+            $table -> unsignedBigInteger('user_id') -> nullable();
             $table -> string('conductor_fake') -> nullable();
             $table -> unsignedBigInteger('ua_id');
             $table -> unsignedBigInteger('equipo_id') -> nullable();
@@ -28,9 +29,9 @@ class CreateAbastecimientoCombustiblesTable extends Migration
             $table -> float('abastecimiento_dia');
             $table -> text('motivo');
             $table -> string('comprobante');
-            $table -> unsignedBigInteger('numero_comprobante');
-            $table -> date('fecha_inicio');
-            $table -> date('fecha_fin');
+            $table -> string('numero_comprobante');
+            $table -> time('hora_inicio');
+            $table -> time('hora_fin');
             $table -> unsignedBigInteger('abastecimiento_id');
             $table -> unsignedBigInteger('tipocombustible_id');
             $table -> timestamps();

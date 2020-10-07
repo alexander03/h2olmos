@@ -29,11 +29,12 @@ class DatabaseSeeder extends Seeder
             AreaTableSeeder::class,
             TrabajoTableSeeder::class,
             TipohoraTableSeeder::class,
-            GrifoTableSeeder::class,
             UaTableSeeder::class,
+            GrifoTableSeeder::class,
+            KilometrajeSeeder::class,
             EquipoTableSeeder::class,
             VehiculoTableSeeder::class,
-            ControlDiarioTableSeeder::class,
+            // ControlDiarioTableSeeder::class, //FALTA CAMPOS ??? NO FUNCA
             AccesoTableSeeder::class,
             VehiculoDocumentTableSeeder::class,
             ChecklistvehicularTableSeeder::class,
@@ -41,7 +42,6 @@ class DatabaseSeeder extends Seeder
             UserConcesionariaSeeder::class,
             RegRepVehSeeder::class,
             RegManVehSeeder::class,
-            KilometrajeSeeder::class,
             TipoCombustibleTableSeeder::class
         ]);
     }

@@ -39,6 +39,10 @@
                       <a href="{{ route('abastecimiento.excel.export') }}" class="btn btn-sm btn-dark">
                           <i class="material-icons">cloud_download</i> Exportar
                       </a>
+
+                      <a href="{{ route('abastecimiento.excel.export') }}" class="btn btn-sm btn-dark" data-toggle="modal" data-target="#formExContrDia">
+                          <i class="material-icons">cloud_download</i> Exportar Control Diario
+                      </a>
                   </div>
                   {!! Form::close() !!}
                   <div class="table-responsive" id="listado{{ $entidad }}">
@@ -46,6 +50,54 @@
           </div>
       </div>
   </div>
+
+
+  <div class="modal fade" id="formExContrDia" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Datos para Control Diario</h5>
+        </div>
+        <div class="modal-body">
+          {!! Form::open(['route' => 'abastecimiento.controldiario', 'method' => 'POST' , 'class' => 'row', 'role' => 'form', 'autocomplete' => 'off', 'id' => 'GReportControlDiarioCombustible']) !!}
+             <div class="col-12 col-sm-12">
+                <label >Fecha de abast.</label>
+                <input type="date" name="fecha" class="form-control" value="{{ date('Y-m-d') }}" >
+              </div>
+              <div class="col-12 col-sm-12">
+                <label>Grifo</label>
+                <select name='grifo' class="form-control js-select">
+                  <option selected value="">Seleccione grifo</option>
+                  @foreach($cboGrifos as $value)
+                    <option value="{{$value->id}}">{{ $value->descripcion }}</option>
+                  @endforeach
+                </select>
+              </div>
+              <div class="form-check col-12 col-sm-12 pl-4 mt-2">
+                <input id="ck-excel" type="radio" name="tipo" value="1" checked>
+                <label class="form-check-label" for="ck-excel">
+                  EXCEL
+                </label>
+              </div>
+              <div class="form-check col-12 col-sm-12 pl-4">
+                <input id="ck-pdf" type="radio" name="tipo" value="2">
+                <label class="form-check-label" for="ck-pdf">
+                  PDF
+                </label>
+              </div>
+              <div class="form-group">
+                <div class="col-lg-12 col-md-12 col-sm-12 text-right">
+                  <button type="submit" class="btn btn-sm btn-success js-generate" disabled>Generar</button>
+                  <button type="button" class="btn btn-sm btn-warning" data-dismiss="modal">Cerrar</button>
+                </div>
+              </div> 
+          
+          {!! Form::close() !!}
+        </div>
+      </div>
+    </div>
+  </div>
+
   
   <script>
       $(document).ready(function () {
@@ -56,6 +108,10 @@
               if (key == '13') {
                   buscar('{{ $entidad }}');
               }
+          });
+          document.querySelector('.js-select').addEventListener('change', ({ target }) => {
+            if(target.value === '') document.querySelector('.js-generate').setAttribute('disabled', 'disabled');
+            else document.querySelector('.js-generate').removeAttribute('disabled');
           });
       });
   </script>

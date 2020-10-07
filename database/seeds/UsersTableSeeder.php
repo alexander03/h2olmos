@@ -36,7 +36,7 @@ class UsersTableSeeder extends Seeder
             'username' => 'marta',
             'email_verified_at' => now(),
             'password' => Hash::make('marta'),
-            'tipouser_id' => 2,
+            'tipouser_id' => 7,
             'created_at' => now(),
             'updated_at' => now()
         ]);
@@ -45,7 +45,7 @@ class UsersTableSeeder extends Seeder
             'username' => 'alfonso',
             'email_verified_at' => now(),
             'password' => Hash::make('alfonso'),
-            'tipouser_id' => 2,
+            'tipouser_id' => 8,
             'created_at' => now(),
             'updated_at' => now()
         ]);

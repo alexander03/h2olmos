@@ -8,6 +8,7 @@ use App\Concesionaria;
 use App\Conductor;
 use App\Equipo;
 use App\Exports\AbastecimientoCombustibleExport;
+use App\Exports\ReporteDiariodeCombustible;
 use App\Librerias\Libreria;
 use App\Rules\SearchUaPadre;
 use App\Rules\SelectDifZero;
@@ -20,12 +21,16 @@ use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\UaExport;
 use App\Grifo;
 use App\Imports\UaImport;
+use App\Rules\AuthenticateUser;
 use App\Rules\SearchConductorRule;
 use App\Rules\SearchEquipo;
 use App\Rules\SearchGrifoRule;
 use App\Tipocombustible;
+use App\User;
 use App\Vehiculo;
 use Exception;
+use Illuminate\Support\Facades\Hash;
+use Mpdf\Mpdf;
 
 use function PHPSTORM_META\map;
 
@@ -108,7 +113,7 @@ class AbastecimientoCombustibleController extends Controller{
         $cabecera[]       = array('valor' => 'Fecha de abastecimiento', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Grifo', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Tipo de combustible', 'numero' => '1');
-        $cabecera[]       = array('valor' => 'Conductor', 'numero' => '1');
+        $cabecera[]       = array('valor' => 'Conductor - Responsable', 'numero' => '1');
         $cabecera[]       = array('valor' => 'DNI', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Codigo UA', 'numero' => '1');
         $cabecera[]       = array('valor' => 'UA', 'numero' => '1');
@@ -153,7 +158,8 @@ class AbastecimientoCombustibleController extends Controller{
         $title            = $this->tituloAdmin;
         $titulo_registrar = $this->tituloRegistrar;
         $ruta             = $this->rutas;
-        return view($this->folderview.'.admin')->with(compact('entidad', 'title', 'titulo_registrar', 'ruta'));
+        $cboGrifos = Grifo::select('id','descripcion')->get();
+        return view($this->folderview.'.admin')->with(compact('entidad', 'cboGrifos' ,'title', 'titulo_registrar', 'ruta'));
     }
 
     public function create(Request $request){
@@ -175,7 +181,8 @@ class AbastecimientoCombustibleController extends Controller{
         $reglas = [
             'fecha_abastecimiento' => 'required',
             'grifo_id' => ['required', new SearchGrifoRule()],
-            'conductor_id' => ['required'],
+            'usuario' => ['required'],
+            'password' => ['required', new AuthenticateUser($request->input('usuario'))],
             'ua_id' => ['required', new SearchUaPadre()],
             'equipo_id' => ['nullable', new SearchEquipo()],
             'qtdgl' => 'required',
@@ -193,7 +200,8 @@ class AbastecimientoCombustibleController extends Controller{
         $mensajes = [
             'fecha_abastecimiento.required' => 'Su fecha de abastecimiento es requerida',
             'grifo_id.required' => 'El grifo es requerido',
-            'conductor_id.required' => 'El conductor es requerido',
+            'usuario.required' => 'El usuario es requerido',
+            'password.required' => 'El password es requerido',
             'ua_id.required' => 'Su ua es requerida',
             'equipo_id.required' => 'El equipo o vehículo es requerido',
             'qtdgl.required' => 'Su QTD(GL) es requerido',
@@ -214,7 +222,7 @@ class AbastecimientoCombustibleController extends Controller{
         if ($validacion->fails()) {
             return $validacion->messages()->toJson();
         }
-
+        
         $listar     = Libreria::getParam($request->input('listar'), 'NO');
         
         $error = DB::transaction(function() use($request){
@@ -225,12 +233,10 @@ class AbastecimientoCombustibleController extends Controller{
                 $grifoDB =  Grifo::where('descripcion', $request -> input('grifo_id')) -> get();
                 $abastecimiento -> grifo_id = (!($grifoDB -> isEmpty())) ? $grifoDB[0] -> id : null;
             }
-            //BUSCAR CONDUCTOR
-            if($request -> input('conductor_id')){
-                $conductorDB =  Conductor::where('dni', $request -> input('conductor_id')) -> get();
-                $abastecimiento -> conductor_id = (!($conductorDB -> isEmpty())) ? $conductorDB[0] -> id : null;
-                if($abastecimiento -> conductor_id === null) $abastecimiento -> conductor_fake = strtoupper($request -> input('conductor_id'));
-            }
+            //BUSCAR USUARIO
+            $usuarioDB = User::where('username', $request -> input('usuario')) -> get();
+            $abastecimiento -> user_id = $usuarioDB[0] -> id;
+            
             //BUSCAR UA
             if($request -> input('ua_id')){
                 $uaDB =  Ua::where('codigo', $request -> input('ua_id')) -> get();
@@ -289,7 +295,8 @@ class AbastecimientoCombustibleController extends Controller{
         $reglas = [
             'fecha_abastecimiento' => 'required',
             'grifo_id' => ['required', new SearchGrifoRule()],
-            'conductor_id' => ['required'],
+            'usuario' => ['required'],
+            'password' => ['required'],
             'ua_id' => ['required', new SearchUaPadre()],
             'equipo_id' => ['nullable', new SearchEquipo()],
             'qtdgl' => 'required',
@@ -308,7 +315,8 @@ class AbastecimientoCombustibleController extends Controller{
         $mensajes = [
             'fecha_abastecimiento.required' => 'Su fecha de abastecimiento es requerida',
             'grifo_id.required' => 'El grifo es requerido',
-            'conductor_id.required' => 'El conductor es requerido',
+            'usuario.required' => 'El usuario es requerido',
+            'password.required' => 'El password es requerido',
             'ua_id.required' => 'Su ua es requerida',
             'equipo_id.required' => 'El equipo o vehículo es requerido',
             'qtdgl.required' => 'Su QTD(GL) es requerido',
@@ -455,8 +463,102 @@ class AbastecimientoCombustibleController extends Controller{
 
     //EXPORT EXCEL
     public function exportExcel(){
-
+        
         return Excel::download(new AbastecimientoCombustibleExport, 'abast-combustible-list.xlsx');
+    }
+
+    //EXPORT EXCEL AND PDF
+    public function exportControlDiario(Request $request){
+
+        if($request->tipo == 1){
+            return Excel::download(new ReporteDiariodeCombustible($request->fecha,$request->grifo), 'abast-combustible-diario.xlsx');
+        }else{
+
+            $namefile = 'abast-combustible-diario-' . $request->fecha . '.pdf';
+
+            $fechaAbast = $request->fecha;
+            $idGrifo = $request->grifo;
+            
+            $queryVehiculo = AbastecimientoCombustible::select(
+                'abastecimiento_combustible.id as id',
+                DB::raw('(CASE WHEN c.user_id IS NULL THEN us.name ELSE CONCAT(c.apellidos, " ", c.nombres) END) AS res'), 
+                'c.dni as dni',
+                'ua.codigo as code',
+                DB::raw('(CASE WHEN vh.modelo IS NULL THEN "-" ELSE vh.modelo END) AS desceq'), 
+                'mc.descripcion as descmc', 
+                DB::raw('(CASE WHEN vh.placa IS NULL THEN "-" ELSE vh.placa END) AS eqpl'),
+                'km', 'qtdgl', 'abastecimiento_combustible.hora_inicio', 'abastecimiento_combustible.hora_fin',
+                DB::raw('(CASE WHEN ct.razonsocial IS NULL THEN "-" ELSE ct.razonsocial END) AS crza') )
+                -> leftJoin('grifo as g', 'g.id', '=', 'grifo_id')
+                -> leftJoin('users as us', 'us.id', '=', 'abastecimiento_combustible.user_id')
+                -> leftJoin('conductor as c', 'c.user_id', '=', 'abastecimiento_combustible.user_id')
+                -> leftjoin('ua', 'ua.id', '=', 'ua_id')
+                -> leftJoin('vehiculo as vh', 'vh.id', '=', 'vehiculo_id')
+                -> leftJoin('marca as mc', 'mc.id', '=', 'vh.marca_id')
+                -> leftJoin('contratista as ct', 'ct.id', '=', 'vh.contratista_id')
+                -> leftJoin('tipocombustible as tcom', 'tcom.id', '=', 'abastecimiento_combustible.tipocombustible_id')
+                -> leftJoin('abastecimiento as abast', 'abast.id', '=', 'abastecimiento_combustible.abastecimiento_id')
+                -> whereNull('abastecimiento_combustible.deleted_at')
+                -> where([
+                    [ 'abastecimiento_combustible.fecha_abastecimiento', '=', $fechaAbast ],
+                    [ 'abastecimiento_combustible.grifo_id', '=', $idGrifo ]
+                ]);
+
+            $resultQuery = AbastecimientoCombustible::select(
+                'abastecimiento_combustible.id as id',
+                DB::raw('(CASE WHEN c.user_id IS NULL THEN us.name ELSE CONCAT(c.apellidos, " ", c.nombres) END) AS res'),
+                'c.dni as dni',
+                'ua.codigo as code',
+                DB::raw('(CASE WHEN eq.descripcion IS NULL THEN "-" ELSE eq.descripcion END) AS desceq'),
+                'mc.descripcion as descmc', 
+                DB::raw('(CASE WHEN eq.placa IS NULL THEN "-" ELSE eq.placa END) AS eqpl'), 
+                'km', 'qtdgl', 'abastecimiento_combustible.hora_inicio', 'abastecimiento_combustible.hora_fin',
+                DB::raw('(CASE WHEN ct.razonsocial IS NULL THEN "-" ELSE ct.razonsocial END) AS crza') )
+                -> leftJoin('grifo as g', 'g.id', '=', 'grifo_id')
+                -> leftJoin('users as us', 'us.id', '=', 'abastecimiento_combustible.user_id')
+                -> leftJoin('conductor as c', 'c.user_id', '=', 'abastecimiento_combustible.user_id')
+                -> leftjoin('ua', 'ua.id', '=', 'ua_id')
+                -> leftJoin('equipo as eq', 'eq.id', '=', 'equipo_id')
+                -> leftJoin('marca as mc', 'mc.id', '=', 'eq.marca_id')
+                -> leftJoin('contratista as ct', 'ct.id', '=', 'eq.contratista_id')
+                -> leftJoin('tipocombustible as tcom', 'tcom.id', '=', 'abastecimiento_combustible.tipocombustible_id')
+                -> leftJoin('abastecimiento as abast', 'abast.id', '=', 'abastecimiento_combustible.abastecimiento_id')
+                -> whereNull('abastecimiento_combustible.deleted_at')
+                -> unionAll($queryVehiculo)
+                -> where([
+                    [ 'abastecimiento_combustible.fecha_abastecimiento', '=', $fechaAbast ],
+                    [ 'abastecimiento_combustible.grifo_id', '=', $idGrifo ]
+                ])
+                -> get();
+            
+            $newResult = [];
+            $arrId = [];
+        
+            for($i = 0; $i < count($resultQuery); $i++) { 
+
+                if(isset($arrId[0])){
+                    $isRepeat = false;
+                    foreach($arrId as $id){
+                        if($resultQuery[$i] -> id === $id) $isRepeat = true;
+                    }
+                    if(!$isRepeat) array_push($newResult, $resultQuery[$i]);
+                    array_push($arrId, $resultQuery[$i] -> id);
+                }else{
+                    $arrId = [ $resultQuery[0] -> id ];
+                    $newResult = [ $resultQuery[0] ];
+                }
+            }
+
+            for($i = 0; $i < count($newResult); $i++) unset($newResult[$i] -> id);
+            $collectionResult = collect($newResult);
+
+            $data['data'] = $collectionResult;
+            $html = view('app.abast-combustible.pdf.control_diario_combustible', $data)->render();
+            $mpdf = new Mpdf(['orientation' => 'L']);
+            $mpdf->SetDisplayMode('fullpage');
+            $mpdf->WriteHTML($html);
+            $mpdf->Output($namefile, "I");
+        }
     }
 
     private function getConsecionariaActual(){
