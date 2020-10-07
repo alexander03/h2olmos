@@ -233,11 +233,6 @@ class RegManVehController extends Controller
             $regmanv -> tipomantenimiento = $request -> input('tipomantenimiento');
             $regmanv -> telefono = $request -> input('telefono');
             $regmanv -> save();
-
-            //ACTUALIZO K. RECORRIDO DEL VEHICULO
-            $vehiculo = Vehiculo::where('ua_id', $request->input('ua_id'))->first();
-            $vehiculo->kilometraje_rec =  $request->input('kmfinal') - $vehiculo->kilometraje_act;
-            $vehiculo->save();
         });
 
 
@@ -404,11 +399,6 @@ class RegManVehController extends Controller
             $regmanv -> tipomantenimiento = $request -> input('tipomantenimiento');
             $regmanv -> telefono = $request -> input('telefono');
             $regmanv -> save();
-
-            //ACTUALIZO K. RECORRIDO DEL VEHICULO
-            $vehiculo = Vehiculo::where('ua_id', $request->input('ua_id'))->first();
-            $vehiculo->kilometraje_rec =  $request->input('kmfinal') - $vehiculo->kilometraje_act;
-            $vehiculo->save();
 
         });
         $ids=$request->idobservacion;
