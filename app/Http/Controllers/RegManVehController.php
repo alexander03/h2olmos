@@ -409,6 +409,7 @@ class RegManVehController extends Controller
             $vehiculo = Vehiculo::where('ua_id', $request->input('ua_id'))->first();
             $vehiculo->kilometraje_rec =  $request->input('kmfinal') - $vehiculo->kilometraje_act;
             $vehiculo->save();
+
         });
         $ids=$request->idobservacion;
         $montos=$request->monto;

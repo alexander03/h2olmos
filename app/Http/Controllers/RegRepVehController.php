@@ -388,8 +388,6 @@ class RegRepVehController extends Controller
             return $validacion->messages()->toJson();
         } 
 
-
-
         $error = DB::transaction(function() use($request, $id){
             $regrepv = RegRepVeh::find($id);
             $regrepv -> cliente  = $request -> input('cliente');
@@ -403,6 +401,7 @@ class RegRepVehController extends Controller
             $regrepv -> fechasalida = $request -> input('fechasalida');
             $regrepv -> tipomantenimiento = $request -> input('tipomantenimiento');
             $regrepv -> telefono = $request -> input('telefono');
+            
             $regrepv -> save();
 
             //ACTUALIZO K. RECORRIDO DEL VEHICULO
