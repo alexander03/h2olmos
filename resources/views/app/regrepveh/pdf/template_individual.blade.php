@@ -166,7 +166,7 @@
                     </tr>
                     
                     <tr>
-                        <td width="30%" class="text-bold">UNIDAD:&nbsp;<span></span></td>
+                        <td width="30%" class="text-bold">UNIDAD:&nbsp;<span>{{ $unidad }}</span></td>
                         <td width="35%" class="text-bold">MARCA:&nbsp;<span>{{ $marca }}</span></td>
                         <td colspan="2" class="text-bold table-borderless">TIPO DE MANTENIMIENTO:</td>
                     </tr><span>

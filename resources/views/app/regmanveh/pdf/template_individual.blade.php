@@ -166,12 +166,12 @@
                     </tr>
                     
                     <tr>
-                        <td width="30%" class="text-bold">UNIDAD:&nbsp;<span></span></td>
-                        <td width="35%" class="text-bold">MARCA:&nbsp;{{ $marca }}<span></span></td>
+                        <td width="30%" class="text-bold">UNIDAD:&nbsp;<span>{{ $unidad }}</span></td>
+                        <td width="35%" class="text-bold">MARCA:&nbsp;<span>{{ $marca }}</span></td>
                     </tr>
                     <tr>
-                        <td class="text-bold">PLACA:&nbsp;{{ $placa }}</td>
-                        <td class="text-bold">MODELO:&nbsp;{{ $modelo }}</td>
+                        <td class="text-bold">PLACA:&nbsp;<span>{{ $placa }}</span></td>
+                        <td class="text-bold">MODELO:&nbsp;<span>{{ $modelo }}</span></td>
                         <?php $pr=" " ?>
                         <?php $co=" " ?>
                         <?php if($tipomantenimiento=="PREVENTIVO"){

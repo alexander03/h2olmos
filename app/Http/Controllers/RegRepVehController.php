@@ -490,7 +490,7 @@ public function generatePDF(Request $request) {
 
         $posibleequipo=Equipo::join('ua','equipo.ua_id','=','ua.id')
         ->join('marca','equipo.marca_id','=','marca.id')->where('ua.codigo','=',$regrepveh->ua_id)
-        ->select('equipo.placa as placa','equipo.modelo as modelo','marca.descripcion as marca')->get();
+        ->select('equipo.descripcion as unidad','equipo.placa as placa','equipo.modelo as modelo','marca.descripcion as marca')->get();
         $posiblevehiculo=Vehiculo::join('ua','vehiculo.ua_id','=','ua.id')
         ->join('marca','vehiculo.marca_id','=','marca.id')->where('ua.codigo','=',$regrepveh->ua_id)
         ->select('vehiculo.placa as placa','vehiculo.modelo as modelo','marca.descripcion as marca')->get();
@@ -498,15 +498,18 @@ public function generatePDF(Request $request) {
 
         if(count($posibleequipo)>0||count($posiblevehiculo)>0){
                 if(count($posibleequipo)>0){
+                    $data['unidad'] = $posibleequipo[0]->unidad;
                     $data['placa'] = $posibleequipo[0]->placa;
                     $data['modelo'] = $posibleequipo[0]->modelo;
                     $data['marca'] = $posibleequipo[0]->marca;
                 }else{
+                    $data['unidad'] = '--';
                     $data['placa'] = $posiblevehiculo[0]->placa;
                     $data['modelo'] = $posiblevehiculo[0]->modelo;
                     $data['marca'] = $posiblevehiculo[0]->marca;
                 }
         }else{
+            $data['unidad'] = '--';
             $data['placa'] = '--';
             $data['modelo'] = '--';
             $data['marca'] = '--';
