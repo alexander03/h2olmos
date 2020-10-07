@@ -233,6 +233,11 @@ class RegRepVehController extends Controller
             $regrepv -> tipomantenimiento = $request -> input('tipomantenimiento');
             $regrepv -> telefono = $request -> input('telefono');
             $regrepv -> save();
+
+            //ACTUALIZO H. ACTUAL DEL VEHICULO
+            $vehiculo = Vehiculo::where('ua_id', $request->input('ua_id'))->first();
+            $vehiculo->kilometraje_rec =  $request->input('kmfinal') - $vehiculo->kilometraje_act;
+            $vehiculo->save();
         });
 
 
@@ -400,6 +405,10 @@ class RegRepVehController extends Controller
             $regrepv -> telefono = $request -> input('telefono');
             $regrepv -> save();
 
+            //ACTUALIZO K. RECORRIDO DEL VEHICULO
+            $vehiculo = Vehiculo::where('ua_id', $request->input('ua_id'))->first();
+            $vehiculo->kilometraje_rec =  $request->input('kmfinal') - $vehiculo->kilometraje_act;
+            $vehiculo->save();
         });
         $ids=$request->idobservacion;
         $montos=$request->monto;
