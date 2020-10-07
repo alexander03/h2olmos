@@ -16,7 +16,7 @@
 <div class="form-group">
 	{!! Form::label('abreviatura', 'Nombre Corto:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
 	<div class="col-lg-12 col-md-12 col-sm-12">
-		{!! Form::text('abreviatura', null, array('class' => 'form-control input-xs', 'id' => 'abreviatura')) !!}
+		{!! Form::text('abreviatura', null, array('class' => 'form-control input-xs', 'id' => 'abreviatura', 'maxlength' => '15')) !!}
 	</div>
 </div>
 <div class="form-group">
