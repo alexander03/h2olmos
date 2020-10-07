@@ -323,6 +323,41 @@ class ExcelReport_HorasTrabajadas implements FromView
         }
     }
 
+    private function applyFunction(array $table, int $sRow, int $sCol): array
+    {
+        // FIRST: defino las nuevas longitudes del arreglo
+        $nRows = count($table); // La cantidad de filas de la tabla
+        $nCols = count($table[0]); // La cantidad de columnas de la tabla
+
+        // SECOND: se crea la nueva fila, mientras se busca la posicion inicial
+        $newRow = [];
+        for ($i = 0; $i < $nCols; $i++) { 
+            // IF: esta columna esta dentro del cuadro de la formula entonces se calcula el total
+            if ( $i >= $sCol ) {
+                $total = 0;
+                for ($j = 0; $j < $nRows; $j++) {
+                    // IF: esta fila esta dentro del cuadro de la formula entonces se calcula el total
+                    if ( $j >= $sRow ) {
+                        if ( $table[$j][$i] != '' ) $total += floatval($table[$j][$i]);
+                    }
+                } unset($j);
+                $newRow[] = number_format($total, 2);
+                unset($total);
+            }
+            // ELSE: se encuentra dentro del cuadro de la formula entonces solo se crea un espacio vacio
+            else {
+                if ( $i == 0 ) $newRow[] = 'Total general';
+                else $newRow[] = '';
+            }
+        } unset($i);
+
+        // THIRD: Se agrega la nueva columna a la tabla
+        $table[] = $newRow;
+
+        // FOURTH
+        return $table;
+    }
+
     private function loadData()
     {
         // Row 1
@@ -359,6 +394,7 @@ class ExcelReport_HorasTrabajadas implements FromView
         ];
         // dd($table);
         $table = $this->formatTable($table['value'], ['subData' => $table['subData']]);
+        $table = $this->applyFunction($table, 0, 4);
 
         $this->add($table); 
     }

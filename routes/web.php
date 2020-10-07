@@ -248,7 +248,7 @@ Route::group(['middleware' => 'auth'], function () {
 
 
 	Route::get('controldiario/exportExcelReport', 'ControldiarioController@exportExcelReport')->name('controldiario.exportExcelReport');
-
+	Route::get('controldiario/generateReport', 'ControldiarioController@generateReport')->name('controldiario.generateReport');
 });
 
 
