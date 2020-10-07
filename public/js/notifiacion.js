@@ -94,7 +94,9 @@ const pressExelVencimiento = ()=>{
 }
 
 
-	window.ready = () =>{
+	window.onload = () =>{
+
+	
 	const headers = new Headers();
     headers.append('X-CSRF-TOKEN', document.querySelector('meta[name="csrf-token"]').content);
     const config = {
