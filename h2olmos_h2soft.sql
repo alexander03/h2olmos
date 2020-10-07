@@ -759,7 +759,7 @@ CREATE TABLE `regmanveh` (
   `concesionaria_id` int(11) NOT NULL,
   `cliente` varchar(250) COLLATE utf8mb4_unicode_ci NOT NULL,
   `ordencompra` text COLLATE utf8mb4_unicode_ci NOT NULL,
-  `ua_id` int(11) NOT NULL,
+  `ua_id` varchar(30) COLLATE utf8mb4_unicode_ci NOT NULL,
   `kmman` int(11) NOT NULL,
   `kminicial` int(11) NOT NULL,
   `kmfinal` int(11) NOT NULL,
@@ -783,7 +783,7 @@ CREATE TABLE `regrepveh` (
   `concesionaria_id` int(11) NOT NULL,
   `cliente` varchar(250) COLLATE utf8mb4_unicode_ci NOT NULL,
   `ordencompra` text COLLATE utf8mb4_unicode_ci NOT NULL,
-  `ua_id` int(11) NOT NULL,
+  `ua_id` varchar(30) COLLATE utf8mb4_unicode_ci NOT NULL,
   `kmman` int(11) NOT NULL,
   `kminicial` int(11) NOT NULL,
   `kmfinal` int(11) NOT NULL,
@@ -1550,10 +1550,16 @@ ALTER TABLE `contratista`
 ALTER TABLE `controldiario`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
+
 --
 -- AUTO_INCREMENT de la tabla `descripcionregrepveh`
 --
 ALTER TABLE `descripcionregrepveh`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT de la tabla `descripcionregrepveh`
+--
+ALTER TABLE `descripcionregmanveh`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --

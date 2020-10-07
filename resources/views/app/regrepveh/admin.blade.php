@@ -20,7 +20,7 @@
 						<span class="material-icons outlined">close</span>
 					</button>
 				</tr>
-				<input class="form-control input-xs" id="fechainicio" name="fechainicio" type="date" value="">
+				<input class="form-control input-xs" id="fechainicio" name="fechainicio" type="date" value="<?php  echo date('Y');echo'-';echo date('m');echo'-';echo'01'?>">
 			</div>
 			<div colspan='2' class="col-8 col-sm-9 col-md-3 col-lg-3">
 				<tr>{!! Form::label('filter', 'Registros hasta...') !!}

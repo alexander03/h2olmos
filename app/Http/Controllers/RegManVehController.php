@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Trabajo;
 use App\Unidad;
 use App\Equipo;
+use App\Vehiculo;
 use App\RegManVeh;
 use App\Ua;
 use App\Rules\SearchUaPadre;
@@ -76,7 +77,7 @@ class RegManVehController extends Controller
         $cabecera         = array();
         $cabecera[]       = array('valor' => '#', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Cliente', 'numero' => '1');
-        $cabecera[]       = array('valor' => 'Orden de Compra', 'numero' => '1');
+        $cabecera[]       = array('valor' => 'DOCMAT', 'numero' => '1');
         $cabecera[]       = array('valor' => 'UA', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Km Inicial', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Km Mant.', 'numero' => '1');
@@ -191,9 +192,9 @@ class RegManVehController extends Controller
 
         $mensajes = [
             'cliente.required' => 'Cliente Campo Vacío',
-            'ordencompra.required' => 'Orden compra Campo Vacío',
+            'ordencompra.required' => 'DOCMAT Campo Vacío',
             'cliente.max' => 'Nombre de Cliente muy extenso, máximo 250 caracteres',
-            'ordencompra.max' => 'Orden de Compra muy extensa, máximo 250 caracteres',
+            'ordencompra.max' => 'DOCMAT muy extensa, máximo 250 caracteres',
             'ua_id.required' => 'UA Campo Vacío',
             'fechaentrada.required' => 'Fecha Entrada Campo Vacío',
             'fechasalida.required' => 'Fecha Salida Campo Vacío',
@@ -344,9 +345,9 @@ class RegManVehController extends Controller
 
         $mensajes = [
             'cliente.required' => 'Cliente Campo Vacío',
-            'ordencompra.required' => 'Orden compra Campo Vacío',
+            'ordencompra.required' => 'DOCMAT Campo Vacío',
             'cliente.max' => 'Nombre de Cliente muy extenso, máximo 250 caracteres',
-            'ordencompra.max' => 'Orden de Compra muy extensa, máximo 250 caracteres',
+            'ordencompra.max' => 'DOCMAT muy extensa, máximo 250 caracteres',
             'ua_id.required' => 'UA Campo Vacío',
             'fechaentrada.required' => 'Fecha Entrada Campo Vacío',
             'fechasalida.required' => 'Fecha Salida Campo Vacío',
@@ -452,7 +453,7 @@ public function searchAutocompleteTrabajo($query){
 	    $id=$request->id;
         if ( $request->id == null || !is_numeric($request->id) ) return;
 
-        $namefile = 'RegistroDeRepuestoVehicular - '.time().'.pdf';  
+        $namefile = 'RegistroDeMantenimientoVehicular - '.time().'.pdf'; 
         
         $ConcesionariaActual = Concesionaria::join('userconcesionaria','userconcesionaria.concesionaria_id','=','concesionaria.id')
         ->join('users','users.id','=','userconcesionaria.user_id')
@@ -479,6 +480,35 @@ public function searchAutocompleteTrabajo($query){
         $data['regmanveh'] = $regmanveh;
         $data['observaciones'] = $oObservaciones;
         $data['namefile'] = $namefile;
+
+        $posibleequipo=Equipo::join('ua','equipo.ua_id','=','ua.id')
+        ->join('marca','equipo.marca_id','=','marca.id')->where('ua.codigo','=',$regmanveh->ua_id)
+        ->select('equipo.descripcion as unidad','equipo.placa as placa','equipo.modelo as modelo','marca.descripcion as marca')->get();
+        $posiblevehiculo=Vehiculo::join('ua','vehiculo.ua_id','=','ua.id')
+        ->join('marca','vehiculo.marca_id','=','marca.id')->where('ua.codigo','=',$regmanveh->ua_id)
+        ->select('vehiculo.placa as placa','vehiculo.modelo as modelo','marca.descripcion as marca')->get();
+        
+
+        if(count($posibleequipo)>0||count($posiblevehiculo)>0){
+                if(count($posibleequipo)>0){
+                    $data['unidad'] = $posibleequipo[0]->unidad;
+                    $data['placa'] = $posibleequipo[0]->placa;
+                    $data['modelo'] = $posibleequipo[0]->modelo;
+                    $data['marca'] = $posibleequipo[0]->marca;
+                }else{
+                    $data['unidad'] = '--';
+                    $data['placa'] = $posiblevehiculo[0]->placa;
+                    $data['modelo'] = $posiblevehiculo[0]->modelo;
+                    $data['marca'] = $posiblevehiculo[0]->marca;
+                }
+        }else{
+            $data['unidad'] = '--';
+            $data['placa'] = '--';
+            $data['modelo'] = '--';
+            $data['marca'] = '--';
+        }
+
+
         // dd($data);
         $html = view('app.regmanveh.pdf.template_individual', $data)->render();
 

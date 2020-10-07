@@ -14,7 +14,7 @@
 		</div>
 	</div>
 	<div class="form-group col-lg-5 col-md-5 col-sm-5">
-		{!! Form::label('ordencompra', 'Orden de Compra:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
+		{!! Form::label('ordencompra', 'DOCMAT:', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
 		<div class="col-lg-12 col-md-12 col-sm-12">
 			{!! Form::text('ordencompra', null, array('class' => 'form-control input-xs', 'id' => 'ordencompra', 'maxlength' => '100')) !!}
 		</div>
@@ -105,7 +105,8 @@
 					<th colspan="1"  class="text-center" style="width:80px;">Cantidad</th>
 					<th colspan="1"  class="text-center">Descripción</th>
 					<th colspan="1"  class="text-center" style="width:80px;">Monto</th>
-					<th colspan="1"  class="text-center" style="width:100px;">Eliminar</th>
+					<th colspan="1"  class="text-center" style="width:80px;">Subtotal</th>
+					<th colspan="1"  class="text-center" style="width:60px;">Elim.</th>
 				</tr>
 			</thead>
 			<tbody id="tbody">
@@ -117,9 +118,10 @@
 				<tr>
 					
 					<td name="nnn" style="text-align:center;">{{ $contador }}</td>
-					<td><input name="cantidad[]" class='form-control' type="number" value="{{ $value->cantidad }}" style="text-align:right;width:100px;"></td>
+					<td><input name="cantidad[]" onkeyup="evaluartotal();" class='form-control' type="number" value="{{ $value->cantidad }}" style="text-align:right;width:100px;"></td>
 					<td><input disabled name="descripcion[]" class="form-control" type="text" value="{{ $value->descripcion }}"></td>
 					<td><input  name="monto[]" onkeyup="evaluartotal();" class='form-control' type="number" value="{{ $value->monto }}" style="-webkit-appearance: none;text-align:right;width:100px;"></td>
+					<td><input disabled name="monto2[]" class='form-control' type="number" value="{{ $value->monto*$value->cantidad }}" style="text-align:right;width:100px;"></td>
 					<td onclick="if(confirm('¿Desea Eliminar la Observación?')){borrarfila({{ $value->id }});deleteRow(this);}" style="color:#ff0000;text-align:center;width:50px;"><i class="material-icons text-center">close</i></td>
 					<p name="datos{{$value->id}}" type="hidden"><input type="hidden" name="idobservacion[]" id="ididid" value="{{ $value->id }}">
 					<input type="hidden" name="trabajoid[]" id="rep" value="{{ $value->trabajo_id }}"></p>
@@ -128,13 +130,16 @@
 				<?php
 				$contador = $contador + 1;
 				?>
+				@else
+				<?php
+				if(count($oObservaciones)<=1)$oObservaciones=array();?>
 				@endif
 				@endforeach
 			</tbody>
 		</table>
 		<input  name="montofinal" disabled id="totalponer" class='form-control' type="number" value="" style="float:right; text-align:right;width:100px;">
 		<div  class='control-label' type="label" style="float:right; text-align:right;width:50px;padding:10px">Total</div>
-		<?php $items=''; if(count($oObservaciones)>1){ $items='1';}?>
+		<?php $items=''; if(count($oObservaciones)>=1){ $items='1';}?>
 		<input type="hidden" name="cuantasdescripciones" id="cuantasdescripciones" value="{{ $items }}"></p>
 	</div>
 	<div class="form-group">
@@ -186,12 +191,17 @@
 	}
 
 	function evaluartotal(){
-
-		var fff=document.getElementsByName('monto[]');
+		var monto=document.getElementsByName('monto[]');
+		var subtotal=document.getElementsByName('monto2[]');
+		var cantidad=document.getElementsByName('cantidad[]');
 		var total=0;
-		for (var i = 0; i < fff.length; i++) {
-			if(fff[i].value.length>0){
-			total+=parseFloat(fff[i].value);}
+		for (var i = 0; i < monto.length; i++) {
+			if(monto[i].value.length>0 && cantidad[i].value.length>0){
+				subtotal[i].value=monto[i].value*cantidad[i].value;
+			total+=parseFloat(monto[i].value*cantidad[i].value);}
+			else{
+				subtotal[i].value="";
+			}
 		}
 		//alert(total);
 		document.getElementById('totalponer').value=total;
@@ -209,9 +219,10 @@
 		tr.innerHTML = `
 			<tr>
 				<td name="nnn" style="text-align:center;">${a}</td>
-				<td><input name="cantidad[]" class='form-control' type="number" value="" style="text-align:right;width:100px;"></td>
+				<td><input onkeyup="evaluartotal();" name="cantidad[]" class='form-control' type="number" value="" style="text-align:right;width:100px;"></td>
 				<td><input disabled name="descripcion[]" class="form-control" type="text" value="${descripcion}"></td>
 				<td><input onkeyup="evaluartotal();" name="monto[]"class='form-control' type="number" value="" style="text-align:right;width:100px;"></td>
+				<td><input disabled name="monto2[]"class='form-control' type="number" value="" style="text-align:right;width:100px;"></td>
 				<td onclick="if(confirm('¿Desea Eliminar la Observación?')){deleteRow(this);}" style="color:#ff0000;text-align:center;width:50px;"><i class="material-icons text-center">close</i></td>
 				<p><input type="hidden" name="idobservacion[]" id="ididid" value="-1"></p>
 				<p><input type="hidden" name="trabajoid[]" id="rep" value="${idtrabajo}"></p>

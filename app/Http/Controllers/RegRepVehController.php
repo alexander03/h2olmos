@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Repuesto;
 use App\Unidad;
 use App\Equipo;
+use App\Vehiculo;
 use App\RegRepVeh;
 use App\Checklistvehicular;
 use App\Ua;
@@ -470,6 +471,7 @@ public function generatePDF(Request $request) {
             ->select('descripcionregrepveh.id as id','descripcionregrepveh.monto as monto','descripcionregrepveh.cantidad as cantidad','repuesto.codigo as codigo','repuesto.id as repuesto_id','repuesto.descripcion as descripcion','unidad.descripcion as unidad')
         ->get();
         
+
         $data=[];
         $data['concesionaria'] = $ConcAct;
         $data['cliente'] = $regrepveh->cliente;
@@ -485,6 +487,34 @@ public function generatePDF(Request $request) {
         $data['regrepveh'] = $regrepveh;
         $data['observaciones'] = $oObservaciones;
         $data['namefile'] = $namefile;
+
+        $posibleequipo=Equipo::join('ua','equipo.ua_id','=','ua.id')
+        ->join('marca','equipo.marca_id','=','marca.id')->where('ua.codigo','=',$regrepveh->ua_id)
+        ->select('equipo.descripcion as unidad','equipo.placa as placa','equipo.modelo as modelo','marca.descripcion as marca')->get();
+        $posiblevehiculo=Vehiculo::join('ua','vehiculo.ua_id','=','ua.id')
+        ->join('marca','vehiculo.marca_id','=','marca.id')->where('ua.codigo','=',$regrepveh->ua_id)
+        ->select('vehiculo.placa as placa','vehiculo.modelo as modelo','marca.descripcion as marca')->get();
+        
+
+        if(count($posibleequipo)>0||count($posiblevehiculo)>0){
+                if(count($posibleequipo)>0){
+                    $data['unidad'] = $posibleequipo[0]->unidad;
+                    $data['placa'] = $posibleequipo[0]->placa;
+                    $data['modelo'] = $posibleequipo[0]->modelo;
+                    $data['marca'] = $posibleequipo[0]->marca;
+                }else{
+                    $data['unidad'] = '--';
+                    $data['placa'] = $posiblevehiculo[0]->placa;
+                    $data['modelo'] = $posiblevehiculo[0]->modelo;
+                    $data['marca'] = $posiblevehiculo[0]->marca;
+                }
+        }else{
+            $data['unidad'] = '--';
+            $data['placa'] = '--';
+            $data['modelo'] = '--';
+            $data['marca'] = '--';
+        }
+
         // dd($data);
         $html = view('app.regrepveh.pdf.template_individual', $data)->render();
 
