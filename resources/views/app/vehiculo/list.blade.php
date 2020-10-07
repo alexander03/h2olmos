@@ -49,7 +49,7 @@
 			<td>{{ $value->color }}</td>
 			<td>
 				@if($value->kilometraje_id>0)
-					{{ $value->kilometraje2->descripcion }}
+					{{ $value->kilometraje->descripcion }}
 				@endif
 			</td>
 			<td>{!! Form::button('<i class="material-icons">info</i>', array('onclick' => 'modal (\''.URL::route('vehiculodocument.index', array('vehiculo_id' =>$value->id, 'listar'=>'NO')).'\',  \'Registros: Documentos de vehiculo\' , this);', 'class' => 'btn btn-info btn-link btn-sm','rel'=>'tooltip','title'=>'Registros')) !!}</td>

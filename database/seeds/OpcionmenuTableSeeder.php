@@ -154,6 +154,14 @@ class OpcionmenuTableSeeder extends Seeder
         ]);
 
         DB::table('opcionmenu')->insert([
+            'descripcion' => 'Report Kilometraje',
+            'link' => 'reportkilometraje',
+            'icono' => 'directions_car',
+            'orden' => 6,
+            'grupomenu_id' => 1
+        ]);
+
+        DB::table('opcionmenu')->insert([
             'descripcion' => 'Kilometrajes',
             'link' => 'kilometrajes',
             'icono' => 'directions_car',

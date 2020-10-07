@@ -33,6 +33,7 @@ class CreateChecklistvehicularTable extends Migration
             $table->longText('accesorios')->nullable();
             $table->longText('documentos')->nullable();
 
+            $table->boolean('especial')->default(0);
             $table->string('observaciones')->nullable();
 
             $table->timestamps();
