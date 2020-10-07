@@ -469,7 +469,7 @@ class ExcelReport_HorasTrabajadas implements FromView
         // dd($dbTipoHora);
         for ($i = 0; $i < count($dbTipoHora); $i++) { 
             $tipohora_id = $dbTipoHora[$i]['id'];
-            $descripcion = $dbTipoHora[$i]['descripcion'];
+            $descripcion = mb_strtoupper($dbTipoHora[$i]['descripcion'], 'utf-8');
 
             $array[] = [
                 'value' => is_null($descripcion) ? 'Horas trabajadas' : $descripcion,
