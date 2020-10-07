@@ -94,9 +94,9 @@ if ($vehiculo !== NULL) {
 		</div>
 	</div>
 	<div class="form-group col-md-6">
-		{!! Form::label('kilometraje_ref', 'Kilometraje: referencial', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
+		{!! Form::label('kilometraje_ini', 'Kilometraje: inicial', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
 		<div class="col-lg-12 col-md-12 col-sm-12">
-			{!! Form::text('kilometraje_ref', null, array('class' => 'form-control input-xs', 'id' => 'kilometraje_ref')) !!}
+			{!! Form::text('kilometraje_ini', null, array('class' => 'form-control input-xs', 'id' => 'kilometraje_ini')) !!}
 		</div>
 	</div>
 </div>
