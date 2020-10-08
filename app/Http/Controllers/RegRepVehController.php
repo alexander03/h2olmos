@@ -128,7 +128,9 @@ class RegRepVehController extends Controller
        	->select('concesionaria.id','concesionaria.razonsocial')->get();
         $oObservaciones=array(new DescripcionRegRepVeh());
         $oObservaciones[0]->id=-1 ; 
-        $ua="";
+        $uades="";
+        $placa="";
+        $vehiculo_id="";
         $idconc=$arrConcesionarias[0]->id;
         $oConcesionaria=$arrConcesionarias[0]->razonsocial;
         //$oTipos=array('' => 'Seleccione Tipo');
@@ -138,7 +140,7 @@ class RegRepVehController extends Controller
         $formData = array('regrepveh.createregrepveh');
         $formData = array('route' => $formData, 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
         $boton    = 'Registrar'; 
-        return view($this->folderview.'.mant2')->with(compact('regrepveh', 'oTipos','formData', 'entidad','oConcesionaria','idconc','ua','oObservaciones', 'boton', 'listar'));
+        return view($this->folderview.'.mant2')->with(compact('regrepveh', 'oTipos','formData', 'entidad','oConcesionaria','idconc','uades','placa','vehiculo_id','oObservaciones', 'boton', 'listar'));
     }
 
     public function buscarporua(Request $request){
@@ -177,7 +179,7 @@ class RegRepVehController extends Controller
             'concesionaria_id' => 'required',
             'cliente' => 'required|max:250',
             'ordencompra' => 'required|max:250',
-            'ua_id' => ['required', new SearchUaPadre()],
+            'vehiculo_id' => 'required',
             'fechaentrada' => 'required',
             'fechasalida' => 'required',
             'kmman' => 'required',
@@ -195,7 +197,7 @@ class RegRepVehController extends Controller
             'ordencompra.required' => 'Orden compra Campo Vacío',
             'cliente.max' => 'Nombre de Cliente muy extenso, máximo 250 caracteres',
             'ordencompra.max' => 'Orden de Compra muy extensa, máximo 250 caracteres',
-            'ua_id.required' => 'UA Campo Vacío',
+            'vehiculo_id.required' => 'Seleccione un vehículo válido',
             'fechaentrada.required' => 'Fecha Entrada Campo Vacío',
             'fechasalida.required' => 'Fecha Salida Campo Vacío',
             'kmman.required' => 'Km de Mantenimiento Campo Vacío',
@@ -224,7 +226,7 @@ class RegRepVehController extends Controller
             $regrepv -> cliente  = $request -> input('cliente');
             $regrepv -> ordencompra  = $request -> input('ordencompra');
             $regrepv -> concesionaria_id  = $request -> input('concesionaria_id');
-            $regrepv -> ua_id = $request -> input('ua_id');
+            $regrepv -> ua_id = $request -> input('vehiculo_id');
             $regrepv -> kminicial = $request -> input('kminicial');
             $regrepv -> kmman = $request -> input('kmman');
             $regrepv -> kmfinal = $request -> input('kmfinal');
@@ -235,6 +237,9 @@ class RegRepVehController extends Controller
             $regrepv -> save();
         });
 
+        $vehiculo=Vehiculo::find($request -> input('vehiculo_id'));
+        $vehiculo->kilometraje_rec=$request -> input('kmfinal')-$vehiculo->kilometraje_act;
+        $vehiculo->save();
 
         $cantidades=$request->cantidad;
         $repuestosid=$request->repuestoid;
@@ -313,14 +318,17 @@ class RegRepVehController extends Controller
             ->select('descripcionregrepveh.id as id','descripcionregrepveh.monto as monto','descripcionregrepveh.cantidad as cantidad','repuesto.codigo as codigo','repuesto.id as repuesto_id','repuesto.descripcion as descripcion','unidad.descripcion as unidad')
         ->get();
 
-        $oua = Ua::where('codigo','=',$regrepveh->ua_id)->get();
-        $ua= $oua[0]->descripcion;
-        
+        $oua = Vehiculo::where('id','=',$regrepveh->ua_id)->get();
+        $placa= $oua[0]->placa;
+        $oua2 = Ua::where('id','=',$oua[0]->ua_id)->get();
+        $uades= $oua2[0]->codigo;
+        $uades=$uades;
+        $vehiculo_id=$regrepveh->ua_id;
         $entidad  = 'RegRepVeh';
         $formData = array('regrepveh.update', $id);
         $formData = array('route' => $formData, 'method' => 'PUT', 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
         $boton    = 'Modificar';
-        return view($this->folderview.'.mant2')->with(compact('regrepveh','oConcesionaria','idconc','ua','oObservaciones', 'formData', 'entidad', 'boton', 'listar'));
+        return view($this->folderview.'.mant2')->with(compact('regrepveh','oConcesionaria','idconc','placa','uades','vehiculo_id','oObservaciones', 'formData', 'entidad', 'boton', 'listar'));
     }
 
     public function update(Request $request, $id)
@@ -330,7 +338,7 @@ class RegRepVehController extends Controller
             'concesionaria_id' => 'required',
             'cliente' => 'required|max:250',
             'ordencompra' => 'required|max:250',
-            'ua_id' => ['required', new SearchUaPadre()],
+            'vehiculo_id' => 'required',
             'fechaentrada' => 'required',
             'fechasalida' => 'required',
             'kmman' => 'required',
@@ -348,7 +356,7 @@ class RegRepVehController extends Controller
             'ordencompra.required' => 'Orden compra Campo Vacío',
             'cliente.max' => 'Nombre de Cliente muy extenso, máximo 250 caracteres',
             'ordencompra.max' => 'Orden de Compra muy extensa, máximo 250 caracteres',
-            'ua_id.required' => 'UA Campo Vacío',
+            'vehiculo_id.required' => 'Seleccione un vehículo válido',
             'fechaentrada.required' => 'Fecha Entrada Campo Vacío',
             'fechasalida.required' => 'Fecha Salida Campo Vacío',
             'kmman.required' => 'Km de Mantenimiento Campo Vacío',
@@ -388,7 +396,7 @@ class RegRepVehController extends Controller
             $regrepv -> cliente  = $request -> input('cliente');
             $regrepv -> ordencompra  = $request -> input('ordencompra');
             $regrepv -> concesionaria_id  = $request -> input('concesionaria_id');
-            $regrepv -> ua_id = $request -> input('ua_id');
+            $regrepv -> ua_id = $request -> input('vehiculo_id');
             $regrepv -> kmman = $request -> input('kmman');
             $regrepv -> kminicial = $request -> input('kminicial');
             $regrepv -> kmfinal = $request -> input('kmfinal');
@@ -399,6 +407,13 @@ class RegRepVehController extends Controller
             
             $regrepv -> save();
         });
+
+
+        $vehiculo=Vehiculo::find($regrepv -> ua_id);
+        $vehiculo->kilometraje_rec=$regrepv -> kmfinal-$vehiculo->kilometraje_act;
+        $vehiculo->save();
+
+        
         $ids=$request->idobservacion;
         $montos=$request->monto;
         $cantidades=$request->cantidad;
@@ -431,11 +446,6 @@ class RegRepVehController extends Controller
             }
         }   
 
-
-
-
-
-
         return is_null($error) ? "OK" : $error;
     }
 
@@ -450,6 +460,19 @@ public function searchAutocompleteRepuesto($query){
         
         return response() -> json($res);
     }
+public function searchAutocompleteVehiculo($query){
+
+        $consulta = "select vehiculo.id as id, vehiculo.placa as placa,ua.codigo  as codigoua, ua.descripcion as ua,
+            CONCAT(vehiculo.placa,' - ', ua.codigo, ' - ', ua.descripcion) as 'search'
+            from vehiculo inner join ua on vehiculo.ua_id = ua.id
+            where vehiculo.deleted_at IS NULL AND 
+            ua.concesionaria_id = {$this -> getConsecionariaActual()} AND
+            (ua.codigo LIKE '%".$query."%' OR vehiculo.placa LIKE '%".$query."%')";
+        $res = DB::select($consulta);
+        
+        return response() -> json($res);
+    }
+
 
 public function generatePDF(Request $request) {
     $id=$request->id;
@@ -486,15 +509,26 @@ public function generatePDF(Request $request) {
         $data['observaciones'] = $oObservaciones;
         $data['namefile'] = $namefile;
 
-        $posibleequipo=Equipo::join('ua','equipo.ua_id','=','ua.id')
+        $posiblevehiculo=Vehiculo::join('ua','vehiculo.ua_id','=','ua.id')
+        ->join('marca','vehiculo.marca_id','=','marca.id')->where('vehiculo.id','=',$regrepveh->ua_id)
+        ->select('vehiculo.placa as placa','vehiculo.modelo as modelo','marca.descripcion as marca','ua.codigo as uacodigo')->get();
+
+        $data['unidad'] = '--';
+        $data['placa'] = $posiblevehiculo[0]->placa;
+        $data['modelo'] = $posiblevehiculo[0]->modelo;
+        $data['marca'] = $posiblevehiculo[0]->marca;
+        $data['uacodigo'] = $posiblevehiculo[0]->uacodigo;
+        /*$posibleequipo=Equipo::join('ua','equipo.ua_id','=','ua.id')
         ->join('marca','equipo.marca_id','=','marca.id')->where('ua.codigo','=',$regrepveh->ua_id)
         ->select('equipo.descripcion as unidad','equipo.placa as placa','equipo.modelo as modelo','marca.descripcion as marca')->get();
         $posiblevehiculo=Vehiculo::join('ua','vehiculo.ua_id','=','ua.id')
         ->join('marca','vehiculo.marca_id','=','marca.id')->where('ua.codigo','=',$regrepveh->ua_id)
-        ->select('vehiculo.placa as placa','vehiculo.modelo as modelo','marca.descripcion as marca')->get();
+        ->select('vehiculo.placa as placa','vehiculo.modelo as modelo','marca.descripcion as marca')->get();*/
         
 
-        if(count($posibleequipo)>0||count($posiblevehiculo)>0){
+
+        
+        /*if(count($posibleequipo)>0||count($posiblevehiculo)>0){
                 if(count($posibleequipo)>0){
                     $data['unidad'] = $posibleequipo[0]->unidad;
                     $data['placa'] = $posibleequipo[0]->placa;
@@ -511,7 +545,7 @@ public function generatePDF(Request $request) {
             $data['placa'] = '--';
             $data['modelo'] = '--';
             $data['marca'] = '--';
-        }
+        }*/
 
         // dd($data);
         $html = view('app.regrepveh.pdf.template_individual', $data)->render();
@@ -521,6 +555,16 @@ public function generatePDF(Request $request) {
         $mpdf->WriteHTML($html);
 
         $mpdf->Output($namefile, "I");
+    }
+    private function getConsecionariaActual(){
+
+        $ConcesionariaActual = Concesionaria::join('userconcesionaria','userconcesionaria.concesionaria_id','=','concesionaria.id')
+            ->join('users','users.id','=','userconcesionaria.user_id')
+            ->where('userconcesionaria.estado','=',true)->where('userconcesionaria.user_id','=',auth()->user()->id)
+            ->select('concesionaria.id','concesionaria.razonsocial')->get();
+        $idConcAct=$ConcesionariaActual[0]->id;
+
+        return $idConcAct;
     }
 
 }

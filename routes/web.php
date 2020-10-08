@@ -227,6 +227,7 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::post('regrepveh/store', 'RegRepVehController@store')->name('regrepveh.createregrepveh');
 	Route::get('userconcesionaria/concesionaria/{id}', 'UserConcesionariaController@concesionaria')->name('userconcesionaria.concesionaria');
 	Route::get('regrepveh/search/repuesto/{query}', 'RegRepVehController@searchAutocompleteRepuesto')->name('regrepveh.search.repuesto');
+	Route::get('regrepveh/search/vehiculo/{query}', 'RegRepVehController@searchAutocompleteVehiculo')->name('regrepveh.search.vehiculo');
 	Route::get('regrepveh/pdf/generar','RegRepVehController@generatePDF')->name('regrepveh.pdf.export');
 	Route::resource('regrepveh', 'RegRepVehController');
 

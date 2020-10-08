@@ -185,7 +185,7 @@
                         </td>'?>
                     </tr>
                     <tr>
-                        <td class="text-bold">UA:&nbsp;<span>{{ $ua_id }}</span></td>
+                        <td class="text-bold">UA:&nbsp;<span>{{ $uacodigo }}</span></td>
                         <td class="text-bold">KM DE MANTENIMIENTO:&nbsp;<span>{{ $kmman }}</span></td>
                     </tr>
                     <tr>
