@@ -49,4 +49,9 @@ class Conductor extends Model
         return $this->belongsTo('App\User', 'user_id');
     }
 
+    public function documents()
+    {
+        return $this->hasMany('App\Conductordocument');
+    }
+
 }

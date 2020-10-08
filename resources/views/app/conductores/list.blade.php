@@ -25,6 +25,9 @@
 			<td>{{date('d/m/Y', strtotime($value->fechavencimiento))}}</td>
 			<td>{{$value->contratista_razonsocial}}</td>
 			<td>{!! Form::button('<i class="material-icons">edit</i>', array('onclick' => 'modal (\''.URL::route($ruta["edit"], array($value->id, 'listar'=>'SI')).'\', \''.$titulo_modificar.'\', this);', 'class' => 'btn btn-primary btn-link btn-sm','rel'=>'tooltip','title'=>'Editar')) !!}</td>
+
+			<td>{!! Form::button('<i class="material-icons">assignment</i>', array('onclick' => 'modal (\''.URL::route($ruta["documentos_index"], array('conductor_id' => $value->id, 'listar'=>'SI')).'\', \''.$titulo_documentos.'\', this);', 'class' => 'btn btn-primary btn-link btn-sm','rel'=>'tooltip','title'=>'Documentos')) !!}</td>
+
 			@if ($value->conductor_estado == true)
 			<td>{!! Form::button('<i class="material-icons">close</i>', array('onclick' => 'modal (\''.URL::route($ruta["delete"], array($value->id, 'SI')).'\', \''.$titulo_eliminar.'\', this);', 'class' => 'btn btn-danger btn-link btn-sm','rel'=>'tooltip','title'=>'Eliminar')) !!}</td>
 			@else

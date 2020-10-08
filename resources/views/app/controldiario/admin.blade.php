@@ -45,9 +45,8 @@
 					<i class="material-icons">cloud_download</i> Report H.ExU
 				</a>
 
-				<a href="{{ route('controldiario.exportExcelReport') }}" target="_blank" class="btn btn-sm btn-primary" title="Exportar">
-					<i class="material-icons">cloud_download</i> Exportar
-				</a>
+				{!! Form::button('<i class="material-icons">cloud_download</i> Reporte H. Trabs', array('class' => 'btn btn-primary btn-sm', 'id' => 'btnNuevo', 'onclick' => 'modal (\''.URL::route($ruta["generateReport"], array('listar'=>'NO')).'\', \''.$titulo_generar.'\', this);')) !!}
+
 
 			</div>	
 			{!! Form::close() !!}	

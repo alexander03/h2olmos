@@ -183,6 +183,11 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('existeconductor', 'ConductorController@existeConductor')->name('conductores.existeconductor');
 	Route::get('conductores/activar/{id}/{listarluego}', 'ConductorController@activar')->name('conductores.activar');
 	Route::get('conductores/reactivar/{id}', 'ConductorController@reactivar')->name('conductores.reactivar');
+
+	//Rutas para Conductordocumentos
+	Route::resource('conductordocument', 'ConductordocumentController', array('except' => array('show')));
+	Route::post('conductordocument/buscar', 'ConductordocumentController@buscar')->name('conductordocument.buscar');
+	Route::get('conductordocument/eliminar/{id}/{listarluego}', 'ConductordocumentController@eliminar')->name('conductordocument.eliminar');
 	
 	//Rutas para las kilometrajes (Kilometrajes)
 	Route::post('kilometrajes/buscar', 'KilometrajeController@buscar')->name('kilometrajes.buscar');
@@ -227,6 +232,7 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::post('regrepveh/store', 'RegRepVehController@store')->name('regrepveh.createregrepveh');
 	Route::get('userconcesionaria/concesionaria/{id}', 'UserConcesionariaController@concesionaria')->name('userconcesionaria.concesionaria');
 	Route::get('regrepveh/search/repuesto/{query}', 'RegRepVehController@searchAutocompleteRepuesto')->name('regrepveh.search.repuesto');
+	Route::get('regrepveh/search/vehiculo/{query}', 'RegRepVehController@searchAutocompleteVehiculo')->name('regrepveh.search.vehiculo');
 	Route::get('regrepveh/pdf/generar','RegRepVehController@generatePDF')->name('regrepveh.pdf.export');
 	Route::resource('regrepveh', 'RegRepVehController');
 
@@ -249,7 +255,7 @@ Route::group(['middleware' => 'auth'], function () {
 
 
 	Route::get('controldiario/exportExcelReport', 'ControldiarioController@exportExcelReport')->name('controldiario.exportExcelReport');
-
+	Route::get('controldiario/generateReport', 'ControldiarioController@generateReport')->name('controldiario.generateReport');
 });
 
 
