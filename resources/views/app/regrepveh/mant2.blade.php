@@ -24,12 +24,13 @@
 	</div>
 	<div class="form-group col-4 col-md-4 p-3 u-search-ua">
 		<label for="ua" class="pl-3">Código Ua</label>
-		<div class="u-ua-style js-ua-desc">
-			{{$ua}}
+		<div class="u-ua-style js-vehiculo-desc">
+			{{$placa}}
 		</div>
-		{!! Form::text('ua_id', null, array('class' => 'form-control input-xs js-ua-id', 'id' => 'ua_id', 'maxlength' => '15')) !!}
+		<input class="js-vehiculo-hiddenid" id="vehiculo_id" name="vehiculo_id" type="hidden" value="{{$vehiculo_id}}">
+		<input class="form-control input-xs js-vehiculo-id" id="uades" name="uades" type="text" value="{{$uades}}">
 		
-		<small id="autoComplete_list1" class="text-danger"></small>
+		<small id="autoComplete_listve" class="text-danger"></small>
 	</div>
 	
 	<div class="form-group col-lg-4 col-md-4 col-sm-4">
@@ -174,8 +175,8 @@
 	$(document).ready(function() {
 		configurarAnchoModal('900');
 		init(IDFORMMANTENIMIENTO+'{!! $entidad !!}', 'M', '{!! $entidad !!}');
-		doSearchUA();
 		doSearchRepuesto();
+		doSearchVehiculo();
 		evaluartotal();
 		const inputCode = document.getElementById('codigo');
 		inputCode.addEventListener('change', e => {
@@ -267,6 +268,7 @@
 	}
 
 		function borrarfila(iddd){
+
 	   		var input = document.createElement("input");
 
 			input.setAttribute("type", "hidden");

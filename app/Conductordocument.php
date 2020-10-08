@@ -13,4 +13,12 @@ class Conductordocument extends Model
     public function conductor() {
         return $this->belongsTo('App\Conductor');
     }
+
+    public function scopegetlist($query, $conductor_id, $tipo) {
+        return $query->where('conductor_id', $conductor_id)
+            ->where(function($subquery) use ($tipo) {
+                if($tipo !== 'all') $subquery->where('tipo', $tipo);
+            })
+            ->orderBy('tipo', 'DESC');
+    }
 }

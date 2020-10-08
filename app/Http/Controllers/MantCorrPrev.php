@@ -132,7 +132,7 @@ class MantCorrPrev extends Controller
             'fecha_registro' => 'required|date|after_or_equal:' . $today,
             'unidad_placa' => (new RulePlacaExist()),
             'k_inicial' => 'required|numeric|min:0',
-            'k_final' => 'required|numeric|min:' . $min,
+            'k_final' => 'required|numeric|min:' . ($min + 1),
             'lider_area' => 'required|max:300',
             'conductor_id' => 'exists:App\Conductor,id'
         );
@@ -170,6 +170,10 @@ class MantCorrPrev extends Controller
             }else {
                 $vehiculo = Vehiculo::where('placa', $placa)->first();
                 $checklistvehicular->vehiculo_id= $vehiculo->id;
+
+                //ACTUALIZO K. RECORRIDO DEL VEHICULO
+                $vehiculo->kilometraje_rec =  $request->input('k_final') - $vehiculo->kilometraje_act;
+                $vehiculo->save();
             }
 
             $checklistvehicular->k_inicial = $request->input('k_inicial');
@@ -182,8 +186,9 @@ class MantCorrPrev extends Controller
             $checklistvehicular->accesorios = json_decode($request->input('accesorios'));
             $checklistvehicular->documentos = json_decode($request->input('documentos'));
             $checklistvehicular->concesionaria_id = Concesionaria::getConcesionariaActual()->id;
-            
             $checklistvehicular->save();
+
+
 
         });
         return is_null($error) ? "OK" : $error;
@@ -206,6 +211,10 @@ class MantCorrPrev extends Controller
             $vehiculo = Vehiculo::find($checklistvehicular->vehiculo_id);
             $unidad_placa = $vehiculo->placa;
             $unidad_descripcion = $vehiculo->modelo;
+
+            //ACTUALIZO H. ACTUAL DEL VEHICULO
+            $vehiculo->kilometraje_rec =  $request->input('k_final') - $vehiculo->kilometraje_act;
+            $vehiculo->save();
         }
 
         $entidad  = 'Checklistvehicular';

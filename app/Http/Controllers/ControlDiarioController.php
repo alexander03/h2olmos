@@ -28,11 +28,13 @@ class ControlDiarioController extends Controller
     protected $tituloRegistrar = 'Registrar control diario de equipos';
     protected $tituloModificar = 'Modificar control diario de equipos';
     protected $tituloEliminar  = 'Eliminar control diario de equipos';
+    protected $tituloGenerar  = 'Generar reporte de control diario';
     protected $rutas           = array('create' => 'controldiario.create', 
-            'edit'   => 'controldiario.edit', 
-            'delete' => 'controldiario.eliminar',
-            'search' => 'controldiario.buscar',
-            'index'  => 'controldiario.index',
+            'edit'           => 'controldiario.edit', 
+            'delete'         => 'controldiario.eliminar',
+            'search'         => 'controldiario.buscar',
+            'index'          => 'controldiario.index',
+            'generateReport' => 'controldiario.generateReport'
         );
 
        /**
@@ -148,11 +150,12 @@ class ControlDiarioController extends Controller
         $entidad          = 'Controldiario';
         $title            = $this->tituloAdmin;
         $titulo_registrar = $this->tituloRegistrar;
+        $titulo_generar   = $this->tituloGenerar;
         $ruta             = $this->rutas;
 
         
 
-        return view($this->folderview.'.admin')->with(compact('entidad', 'title', 'titulo_registrar', 'ruta'));
+        return view($this->folderview.'.admin')->with(compact('entidad', 'title', 'titulo_registrar', 'titulo_generar', 'ruta'));
     }
 
     /**
@@ -486,11 +489,23 @@ class ControlDiarioController extends Controller
         return $idConcAct;
     }
 
+    public function generateReport(Request $request)
+    {
+        $listar   = Libreria::getParam($request->input('listar'), 'NO');
+        $entidad  = 'Controldiario';
+        $controldiario = null;
+
+        $formData = array('controldiario.exportExcelReport');
+        $formData = array('route' => $formData, 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
+        $boton    = 'Generar Reporte'; 
+        return view($this->folderview.'.generate')->with(compact('controldiario' ,'formData', 'entidad', 'boton', 'listar'));
+    }
+
     public function exportExcelReport(Request $request)
     {
         $dates = [
-            'start_date' => '2020-06-01',
-            'end_date' => '2020-08-20'
+            'start_date' => $request->input('start_date'),
+            'end_date' => $request->input('end_date')
         ];
         
         return (new ExcelReport_HorasTrabajadas($dates))->download('excel.xlsx');

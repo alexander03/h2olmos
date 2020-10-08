@@ -251,6 +251,11 @@ class AbastecimientoCombustibleController extends Controller{
                 if($request -> input('equipo_tipo') === 'v'){
                     $vehiculoDB =  Vehiculo::where('id', $request -> input('equipo_id')) -> get();
                     $abastecimiento -> vehiculo_id = (!($vehiculoDB -> isEmpty())) ? $vehiculoDB[0] -> id : null;
+
+                    //ACTUALIZO H. ACTUAL DEL VEHICULO
+                    $vehiculo = $vehiculoDB[0];
+                    $vehiculo->kilometraje_rec =  $request->input('km') - $vehiculo->kilometraje_act;
+                    $vehiculo->save();
                 }   
             }
             $abastecimiento -> qtdgl = $request -> input('qtdgl');
@@ -374,6 +379,11 @@ class AbastecimientoCombustibleController extends Controller{
                     $abastecimiento -> equipo_id = null;
                     $vehiculoDB =  Vehiculo::where('id', $request -> input('equipo_id')) -> get();
                     $abastecimiento -> vehiculo_id = (!($vehiculoDB -> isEmpty())) ? $vehiculoDB[0] -> id : null;
+
+                    //ACTUALIZO K. RECORRIDO DEL VEHICULO
+                    $vehiculo = $vehiculoDB[0];
+                    $vehiculo->kilometraje_rec =  $request->input('km') - $vehiculo->kilometraje_act;
+                    $vehiculo->save();
                 }   
             }
             $abastecimiento -> qtdgl = $request -> input('qtdgl');
