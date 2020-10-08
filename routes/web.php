@@ -153,6 +153,11 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('vehiculodocument/exel/{id}', 'VehiculoDocumentController@notificacionExel');
 	Route::resource('vehiculodocument', 'VehiculoDocumentController', array('except' => array('show')));
 
+	//Rutas kilometraje
+	Route::post('reportkilometraje/buscar', 'ReportKilometrajeController@buscar')->name('reportkilometraje.buscar');
+	Route::resource('reportkilometraje', 'ReportKilometrajeController', array('except' => array('show','store','delete')));
+
+
 	//tipo user
 	Route::post('tipouser/buscar', 'TipoUserController@buscar')->name('tipouser.buscar');
 	Route::get('tipouser/eliminar/{id}/{listarluego}', 'TipoUserController@eliminar')->name('tipouser.eliminar');

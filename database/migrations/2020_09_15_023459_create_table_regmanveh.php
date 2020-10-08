@@ -26,6 +26,7 @@ class CreateTableRegmanveh extends Migration
             $table->date('fechasalida')->nullable();  
             $table->integer('tipomantenimiento');
             $table->integer('telefono');
+            $table->boolean('especial')->default(0);
             $table->timestamps();
             $table->softDeletes();
         });
