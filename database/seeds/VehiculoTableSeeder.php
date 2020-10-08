@@ -26,7 +26,8 @@ class VehiculoTableSeeder extends Seeder
             'carroceria_id' => 1,
             'contratista_id' => 1,
             'concesionaria_id' => 1,
-            'kilometraje_ref' => 1000,
+            'kilometraje_ini' => 1000,
+            'kilometraje_act' => 1000,
             'kilometraje_id' => 1,
             'created_at' => now(),
             'updated_at' => now()
@@ -47,7 +48,8 @@ class VehiculoTableSeeder extends Seeder
             'carroceria_id' => 1,
             'contratista_id' => 1,
             'concesionaria_id' => 2,
-            'kilometraje_ref' => 1000,
+            'kilometraje_ini' => 1000,
+            'kilometraje_act' => 1000,
             'kilometraje_id' => 1,
             'created_at' => now(),
             'updated_at' => now()

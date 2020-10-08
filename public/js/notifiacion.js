@@ -94,7 +94,7 @@ const pressExelVencimiento = ()=>{
 }
 
 
-	window.onload = () =>{
+	const countNotify = () =>{
 
 	
 	const headers = new Headers();
@@ -133,3 +133,4 @@ const editButonNotify = (numero) =>{
 		span.innerText = numero;
 	}
 }
+
