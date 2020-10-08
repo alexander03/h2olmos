@@ -69,6 +69,7 @@ CREATE TABLE `abastecimiento_combustible` (
   `hora_fin` time NOT NULL,
   `abastecimiento_id` int(11) NOT NULL,
   `tipocombustible_id` int(11) NOT NULL,
+  `especial` tinyint NOT NULL DEFAULT 0,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
@@ -237,6 +238,7 @@ CREATE TABLE `checklistvehicular` (
   `accesorios` longtext COLLATE utf8mb4_unicode_ci,
   `documentos` longtext COLLATE utf8mb4_unicode_ci,
   `observaciones` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `especial` tinyint NOT NULL DEFAULT 0,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
@@ -767,6 +769,7 @@ CREATE TABLE `regmanveh` (
   `fechasalida` date DEFAULT NULL,
   `tipomantenimiento` int(11) NOT NULL,
   `telefono` int(11) NOT NULL,
+  `especial` tinyint NOT NULL DEFAULT 0,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
@@ -791,6 +794,7 @@ CREATE TABLE `regrepveh` (
   `fechasalida` date DEFAULT NULL,
   `tipomantenimiento` int(11) NOT NULL,
   `telefono` int(11) NOT NULL,
+  `especial` tinyint NOT NULL DEFAULT 0,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
@@ -1134,8 +1138,9 @@ CREATE TABLE `vehiculo` (
   `color` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
   `concesionaria_id` bigint(20) UNSIGNED NOT NULL,
   `carroceria_id` int(11) NOT NULL,
-  `kilometraje_ref` decimal(18,2) NOT NULL,
-  `kilometraje_id` int(11) NOT NULL,
+  `kilometraje_ini` decimal(18,2) NOT NULL,
+  `kilometraje_act` decimal(18,2) NOT NULL,
+  `kilometraje_rec` decimal(18,2) NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
@@ -1145,8 +1150,8 @@ CREATE TABLE `vehiculo` (
 -- Volcado de datos para la tabla `vehiculo`
 --
 
-INSERT INTO `vehiculo` (`id`, `placa`, `motor`, `modelo`, `asientos`, `anio`, `marca_id`, `ua_id`, `area_id`, `contratista_id`, `chasis`, `color`, `concesionaria_id`, `carroceria_id`, `kilometraje_ref`, `kilometraje_id`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(1, 'AXF-554', 'DIESEL', 'AX-SDAS', 4, 2019, 1, 28, 2, 3, 'JASKFJA', 'ROJO', 1, 4, 3000.00, 5, '2020-09-29 10:06:29', '2020-09-29 10:06:29', NULL);
+INSERT INTO `vehiculo` (`id`, `placa`, `motor`, `modelo`, `asientos`, `anio`, `marca_id`, `ua_id`, `area_id`, `contratista_id`, `chasis`, `color`, `concesionaria_id`, `carroceria_id`, `kilometraje_ini`, `kilometraje_act`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(1, 'AXF-554', 'DIESEL', 'AX-SDAS', 4, 2019, 1, 28, 2, 3, 'JASKFJA', 'ROJO', 1, 4, 500.00, 500.00, '2020-09-29 10:06:29', '2020-09-29 10:06:29', NULL);
 
 -- --------------------------------------------------------
 
