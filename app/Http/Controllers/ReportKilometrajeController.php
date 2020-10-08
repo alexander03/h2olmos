@@ -8,6 +8,7 @@ use App\Checklistvehicular;
 use App\AbastecimientoCombustible;
 use App\RegManVeh;
 use App\RegRepVeh;
+use App\Concesionaria;
 use App\Librerias\Libreria;
 use Validator;
 use Illuminate\Support\Facades\DB;
@@ -17,10 +18,7 @@ class ReportKilometrajeController extends Controller
 {
     protected $folderview      = 'app.reportkilometraje';
     protected $tituloAdmin     = 'Reporte de kilometraje';
-    protected $tituloRegistrar = 'Registrar repuesto';
-    protected $tituloModificar = 'Modificar repuesto';
-    protected $tituloEliminar  = 'Eliminar repuesto';
-    protected $tituloActivar  = 'Activar repuesto';
+    protected $tituloModificar = 'Modificar mantenimientos';
     protected $rutas           = array('create' => 'reportkilometraje.create', 
             'edit'   => 'reportkilometraje.edit', 
             'search' => 'reportkilometraje.buscar',
@@ -105,8 +103,7 @@ class ReportKilometrajeController extends Controller
         $listar   = Libreria::getParam($request->input('listar'), 'NO');
 
         $entidad  = 'Reportkilometraje';
-        $formData = array('repuestos.update', $id);
-        $formData = array('route' => $formData, 'method' => 'PUT', 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
+
         $boton    = 'Modificar';
 
         $UltimosMant = collect([]);
@@ -123,13 +120,13 @@ class ReportKilometrajeController extends Controller
         if($UltimoControlCombustible){
         	$UltimosMant->offsetSet(2,$UltimoControlCombustible);
         }
-        $UltimoRegRepVeh = RegRepVeh::where('especial',true)->where('vehiculo_id',$id)
-        						->select('id','fechasalida as fecha','vehiculo_id')->get()->first();
+        $UltimoRegRepVeh = RegRepVeh::where('especial',true)->where('ua_id',$id)
+        						->select('id','fechasalida as fecha','ua_id')->get()->first();
         if($UltimoRegRepVeh){
         	$UltimosMant->offsetSet(3,$UltimoRegRepVeh);
         }
-        $UltimoRegManVeh = RegManVeh::where('especial',true)->where('vehiculo_id',$id)
-        						->select('id','fechasalida as fecha','vehiculo_id')->get()->first();
+        $UltimoRegManVeh = RegManVeh::where('especial',true)->where('ua_id',$id)
+        						->select('id','fechasalida as fecha','ua_id')->get()->first();
         if($UltimoRegManVeh){
         	$UltimosMant->offsetSet(4,$UltimoRegManVeh);
         }
@@ -152,9 +149,11 @@ class ReportKilometrajeController extends Controller
         								}
         							})->select('id','k_final as kmfinal')->get()->slice(0, 4);
 
-        $listaChecklistvehicular = $listaChecklistvehicular.map(function ($item, $key) {
-									    return $item->put('tipo', 1 );;
+        $listaChecklistvehicular = $listaChecklistvehicular->map(function ($item, $key) {
+                                        $item->tipo = 1 ;
+                                        return  $item;
 									});
+
 
         $listaAbastecimientoCombustible = AbastecimientoCombustible::where('vehiculo_id', $id)
         									->where(function($q) use ($FechaUltimoMantEspecial){
@@ -163,30 +162,33 @@ class ReportKilometrajeController extends Controller
 		        								}
 		        							})->select('id','km as kmfinal')->get()->slice(0, 4);
 
-		$listaAbastecimientoCombustible = $listaAbastecimientoCombustible.map(function ($item, $key) {
-										    return $item->put('tipo', 2);;
+		$listaAbastecimientoCombustible = $listaAbastecimientoCombustible->map(function ($item, $key) {
+										$item->tipo = 2 ;
+                                        return  $item;
 										});
 
-		$listaRegRepVeh = RegRepVeh::where('vehiculo_id', $id)
+		$listaRegRepVeh = RegRepVeh::where('ua_id', $id)
         									->where(function($q) use ($FechaUltimoMantEspecial){
 		        								if($FechaUltimoMantEspecial){
 		        									$q->where('fechasalida','>=',$FechaUltimoMantEspecial);
 		        								}
 		        							})->select('id','kmfinal')->get()->slice(0, 4);
 
-		$listaRegRepVeh = $RegRepVeh.map(function ($item, $key) {
-						    	return $item->put('tipo', 3);;
+		$listaRegRepVeh = $listaRegRepVeh->map(function ($item, $key) {
+                                $item->tipo = 3 ;
+						    	return $item;
 							});
 
-		$listaRegManVeh = RegManVeh::where('vehiculo_id', $id)
+		$listaRegManVeh = RegManVeh::where('ua_id', $id)
         									->where(function($q) use ($FechaUltimoMantEspecial){
 		        								if($FechaUltimoMantEspecial){
 		        									$q->where('fechasalida','>=',$FechaUltimoMantEspecial);
 		        								}
 		        							})->select('id','kmfinal')->get()->slice(0, 4);
 
-		$listaRegManVeh = $RegManVeh.map(function ($item, $key) {
-						  		 return $item->put('tipo', 4);;
+		$listaRegManVeh = $listaRegManVeh->map(function ($item, $key) {
+						  		$item->tipo = 4 ;
+                                return $item;
 							});
 		       
        // 
@@ -197,14 +199,14 @@ class ReportKilometrajeController extends Controller
 
 		$ListaFinal = $ListaFinal->merge($listaRegManVeh);
 
-		$ListaFinal->sortDesc('kmfinal');
+		$ListaFinal->sortByDesc('kmfinal');
         
 
-        $vehiculo = Vehiculo::find($id)->get();
-        
+        $vehiculo = Vehiculo::find($id);
 
 
-        return view($this->folderview.'.mant')->with(compact('repuesto','ListaFinal', 'vehiculo' ,'formData', 'entidad', 'boton', 'cboUnidades', 'listar'));
+
+        return view($this->folderview.'.mant')->with(compact('repuesto','ListaFinal', 'vehiculo' , 'entidad', 'listar'));
     }
 
     public function updateMantenimiento(Request $request)

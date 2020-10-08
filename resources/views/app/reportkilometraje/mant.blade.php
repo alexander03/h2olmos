@@ -1,7 +1,7 @@
 
 
 
-<table>
+<table class="table table-bordered table-striped table-condensed table-hover">
 	<tr>
 		<th>Mantenimiento</th>
 		<th>Km final</th>
@@ -23,13 +23,13 @@
 				@endif
 			</td>
 			<td>
-				{{ $valie->kmfinal }}
+				{{ $value->kmfinal }}
 			</td>
 			<td>
 				{{ $vehiculo->kilometraje_act }}
 			</td>
 			<td>
-				{{ $valie->kmfinal - $vehiculo->kilometraje_act }}
+				{{ $value->kmfinal - $vehiculo->kilometraje_act }}
 			</td>
 			<td>
 				<button class="btn btn-success btn-sm" >
@@ -49,7 +49,7 @@
 
 <script type="text/javascript">
 	$(document).ready(function() {
-		configurarAnchoModal('350');
+		configurarAnchoModal('600');
 		init(IDFORMMANTENIMIENTO+'{!! $entidad !!}', 'M', '{!! $entidad !!}');
 	}); 
 </script>
