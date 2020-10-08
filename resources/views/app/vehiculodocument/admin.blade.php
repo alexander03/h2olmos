@@ -24,7 +24,7 @@
 				<div class="form-row col-12">
 					<label class="my-1 mr-2" for="fecha">Fecha</label>
 					<input type="date" name="fecha" class="form-control input-xs my-1 mr-sm-2" id='fecha'>
-				
+					<input type="hidden" name="_method" id='methodOculto'>
 					{!! Form::label('tipo', 'Tipo:') !!}
 					{!! Form::select('tipo',['SOAT'=>'SOAT', 'GPS' => 'GPS' , 'RTV' => 'RTV'] ,'', array('class' => 'form-control mr-4', 'id' => 'tipo')) !!}
 					<input type="file" name="archivo" class="form-control input-xs my-1 mr-sm-2" id='archivo'>
@@ -64,6 +64,7 @@
 		document.getElementById('form-document').querySelector('#tipo').value = document.getElementById('formBusqueda{{ $entidad }}').querySelector('#tipo').value;
 		document.getElementById('form-document').setAttribute('action','{{ URL::route("vehiculodocument.store") }}');
 		//document.getElementById('form-document').setAttribute('method','POST');
+		document.getElementById('methodOculto').value = 'POST';
 		document.getElementById('content-form-document').classList.remove('d-none');
 	});
 	document.getElementById('document-cancelar').addEventListener('click',function(e){
@@ -78,6 +79,7 @@
 		const formulario = document.getElementById('form-document');
 		formulario.setAttribute('action','{{ URL::route("vehiculodocument.store") }}' +'/'+ document_id);
 		//formulario.setAttribute('method','PUT');
+		document.getElementById('methodOculto').value = 'PUT';
 		const fila = btn.parentElement.parentElement;
 		formulario.querySelector('#fecha').value = fila.children[1].textContent;
 		formulario.querySelector('#tipo').value = fila.children[2].textContent;

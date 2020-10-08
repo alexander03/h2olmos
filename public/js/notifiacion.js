@@ -93,7 +93,7 @@ const pressExelVencimiento = ()=>{
 	},2000);
 }
 
-	
+/*	
 	document.addEventListener("readystatechange", () =>{
 
 		if(document.readyState == 'complete'){
@@ -114,7 +114,7 @@ const pressExelVencimiento = ()=>{
 		}
 		
 	});
-
+*/
 
 const editButonNotify = (numero) =>{
 	const button = document.getElementById('buttonNotify');

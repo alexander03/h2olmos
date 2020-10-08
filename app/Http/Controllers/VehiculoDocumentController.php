@@ -133,12 +133,11 @@ class VehiculoDocumentController extends Controller
             return $existe;
         }
     	$reglas     = array(
-    						'fecha' 				=> 'required',
-                            'archivo'               => 'required'
+    						'fecha' 				=> 'required'
+                            
                         );
         $mensajes = array(
-        	'fecha.required'         		  => 'Debe ingresar una fecha',  
-            'archivo.required'                => 'Debe ingresar archivo'
+        	'fecha.required'         		  => 'Debe ingresar una fecha' 
             );
 
         $validacion = Validator::make($request->all(), $reglas, $mensajes);

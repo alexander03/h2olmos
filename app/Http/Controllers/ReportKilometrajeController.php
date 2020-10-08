@@ -89,9 +89,8 @@ class ReportKilometrajeController extends Controller
     {
         $entidad          = 'Reportkilometraje';
         $title            = $this->tituloAdmin;
-        $titulo_registrar = $this->tituloRegistrar;
         $ruta             = $this->rutas;
-        return view($this->folderview.'.admin')->with(compact('entidad', 'title', 'titulo_registrar', 'ruta'));
+        return view($this->folderview.'.admin')->with(compact('entidad', 'title', 'ruta'));
     }
 
     public function edit($id, Request $request)
@@ -121,12 +120,12 @@ class ReportKilometrajeController extends Controller
         	$UltimosMant->offsetSet(2,$UltimoControlCombustible);
         }
         $UltimoRegRepVeh = RegRepVeh::where('especial',true)->where('ua_id',$id)
-        						->select('id','fechasalida as fecha','ua_id')->get()->first();
+        						->select('id','fechasalida as fecha','ua_id as vehiculo_id')->get()->first();
         if($UltimoRegRepVeh){
         	$UltimosMant->offsetSet(3,$UltimoRegRepVeh);
         }
         $UltimoRegManVeh = RegManVeh::where('especial',true)->where('ua_id',$id)
-        						->select('id','fechasalida as fecha','ua_id')->get()->first();
+        						->select('id','fechasalida as fecha','ua_id as vehiculo_id')->get()->first();
         if($UltimoRegManVeh){
         	$UltimosMant->offsetSet(4,$UltimoRegManVeh);
         }
@@ -209,22 +208,21 @@ class ReportKilometrajeController extends Controller
         return view($this->folderview.'.mant')->with(compact('repuesto','ListaFinal', 'vehiculo' , 'entidad', 'listar'));
     }
 
-    public function updateMantenimiento(Request $request)
-    {
-
+    public function update(Request $request)
+    {   
         $error = DB::transaction(function() use($request){
 
-        	$tipo = $request->tipo;
-	        $Mant_id   = $request->mant_id;
-	        $vehiculo_id  = $request->vehiculo_id;
+        	$tipo = $request->input('tipo');
+	        $Mant_id   = $request->input('Mant_id');
+	        $vehiculo_id  = $request->input('vehiculo_id');
 
 
-	        $vehiculo = Vehiculo::find($vehiculo_id);
+	        $vehiculo = Vehiculo::find( intval($vehiculo_id));
 	        $vehiculo->kilometraje_rec = 0;
 
-	        switch ($tipo) {
+	        switch (strval($tipo) ) {
 	        	case '1':
-	        		$Mantantenimiento = Checklistvehicular::find($Mant_id);
+	        		$Mantantenimiento = Checklistvehicular::find( $Mant_id );
 	        		$vehiculo->kilometraje_act = $Mantantenimiento->k_final;
 
 	        		break;

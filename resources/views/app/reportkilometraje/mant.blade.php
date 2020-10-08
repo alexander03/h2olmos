@@ -32,8 +32,9 @@
 				{{ $value->kmfinal - $vehiculo->kilometraje_act }}
 			</td>
 			<td>
-				<button class="btn btn-success btn-sm" >
-					<i class="fa fa-check fa-lg"></i>
+				<button class="btn btn-success btn-sm"  
+					onclick="actualizarMantenimiento({{$value->id}},{{$vehiculo->id}},{{$value->tipo }});">
+					<i class="fa fa-check fa-lg"></i>Seleccionar
 				</button>
 			</td>
 		</tr>
@@ -52,4 +53,47 @@
 		configurarAnchoModal('600');
 		init(IDFORMMANTENIMIENTO+'{!! $entidad !!}', 'M', '{!! $entidad !!}');
 	}); 
+
+
+
+
+	function actualizarMantenimiento(mante_id,vehiculo_id,tipo){
+
+		let formData = new FormData();
+
+		formData.append('tipo',tipo);
+		formData.append('Mant_id',mante_id);
+		formData.append('vehiculo_id',vehiculo_id);
+		formData.append('_method','PUT');
+
+		let data = $.ajax({	
+							headers: {
+							    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+							  },
+							url : 'reportkilometraje/update',
+							type: 'POST',
+							data: formData,
+							processData: false,
+							contentType: false,
+						});
+		data.done(function(msg) {
+			respuesta = msg;
+		}).fail(function(xhr, textStatus, errorThrown) {
+			respuesta = 'ERROR';
+		}).always(function() {
+			if(respuesta === 'ERROR'){
+			}else{
+				if (respuesta === 'OK') {
+					md.showNotification('top','right','Guardado correctamente','info');
+					buscarCompaginado('', 'Accion realizada correctamente', '{{ $entidad }}', 'OK');
+				} else {
+					mostrarErrores(respuesta, '#form-document', '{{ $entidad }}');
+
+				}
+			}
+		});
+
+	    
+	}
+
 </script>
