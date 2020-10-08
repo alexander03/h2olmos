@@ -123,13 +123,13 @@ class ReportKilometrajeController extends Controller
         if($UltimoControlCombustible){
         	$UltimosMant->offsetSet(2,$UltimoControlCombustible);
         }
-        $UltimoRegRepVeh = RegRepVeh::where('especial',true)->where('vehiculo_id',$id)
-        						->select('id','fechasalida as fecha','vehiculo_id')->get()->first();
+        $UltimoRegRepVeh = RegRepVeh::where('especial',true)->where('ua_id',$id)
+        						->select('id','fechasalida as fecha','ua_id as vehiculo_id')->get()->first();
         if($UltimoRegRepVeh){
         	$UltimosMant->offsetSet(3,$UltimoRegRepVeh);
         }
-        $UltimoRegManVeh = RegManVeh::where('especial',true)->where('vehiculo_id',$id)
-        						->select('id','fechasalida as fecha','vehiculo_id')->get()->first();
+        $UltimoRegManVeh = RegManVeh::where('especial',true)->where('ua_id',$id)
+        						->select('id','fechasalida as fecha','ua_id as vehiculo_id')->get()->first();
         if($UltimoRegManVeh){
         	$UltimosMant->offsetSet(4,$UltimoRegManVeh);
         }
@@ -167,7 +167,7 @@ class ReportKilometrajeController extends Controller
 										    return $item->put('tipo', 2);;
 										});
 
-		$listaRegRepVeh = RegRepVeh::where('vehiculo_id', $id)
+		$listaRegRepVeh = RegRepVeh::where('ua_id', $id)
         									->where(function($q) use ($FechaUltimoMantEspecial){
 		        								if($FechaUltimoMantEspecial){
 		        									$q->where('fechasalida','>=',$FechaUltimoMantEspecial);
@@ -178,7 +178,7 @@ class ReportKilometrajeController extends Controller
 						    	return $item->put('tipo', 3);;
 							});
 
-		$listaRegManVeh = RegManVeh::where('vehiculo_id', $id)
+		$listaRegManVeh = RegManVeh::where('ua_id', $id)
         									->where(function($q) use ($FechaUltimoMantEspecial){
 		        								if($FechaUltimoMantEspecial){
 		        									$q->where('fechasalida','>=',$FechaUltimoMantEspecial);
