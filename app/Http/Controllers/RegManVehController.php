@@ -237,6 +237,10 @@ class RegManVehController extends Controller
             $regmanv -> save();
         });
 
+        $vehiculo=Vehiculo::find($request -> input('vehiculo_id'));
+        $vehiculo->kilometraje_rec=$request -> input('kmfinal')-$vehiculo->kilometraje_act;
+        $vehiculo->save();
+
 
         $cantidades=$request->cantidad;
         $mantenimientosid=$request->trabajoid;
@@ -404,8 +408,14 @@ class RegManVehController extends Controller
             $regmanv -> tipomantenimiento = $request -> input('tipomantenimiento');
             $regmanv -> telefono = $request -> input('telefono');
             $regmanv -> save();
-
         });
+
+
+        $vehiculo=Vehiculo::find($request -> input('vehiculo_id'));
+        $vehiculo->kilometraje_rec=$request -> input('kmfinal')-$vehiculo->kilometraje_act;
+        $vehiculo->save();
+
+
         $ids=$request->idobservacion;
         $montos=$request->monto;
         $cantidades=$request->cantidad;
