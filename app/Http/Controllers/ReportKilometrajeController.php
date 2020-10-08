@@ -207,7 +207,7 @@ class ReportKilometrajeController extends Controller
         return view($this->folderview.'.mant')->with(compact('repuesto','ListaFinal', 'vehiculo' ,'formData', 'entidad', 'boton', 'cboUnidades', 'listar'));
     }
 
-    public function updateMantenimiento(Request $request)
+    public function update(Request $request)
     {
 
         $error = DB::transaction(function() use($request){
@@ -220,7 +220,7 @@ class ReportKilometrajeController extends Controller
 	        $vehiculo = Vehiculo::find($vehiculo_id);
 	        $vehiculo->kilometraje_rec = 0;
 
-	        switch ($tipo) {
+	        switch (strval($tipo) ) {
 	        	case '1':
 	        		$Mantantenimiento = Checklistvehicular::find($Mant_id);
 	        		$vehiculo->kilometraje_act = $Mantantenimiento->k_final;
