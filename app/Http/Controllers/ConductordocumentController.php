@@ -9,6 +9,8 @@ use App\Conductor;
 use App\Conductordocument;
 use Illuminate\Support\Facades\DB;
 
+use App\Rules\RuleImgFirmaExist;
+
 class ConductordocumentController extends Controller
 {
     protected $folderview      = 'app.conductordocument';
@@ -80,10 +82,20 @@ class ConductordocumentController extends Controller
 
     public function store(Request $request){
         $reglas = array(
-            'archivo' => 'required'
+            'archivo' => 'required',
+            'tipo' => [
+                'required',
+                function ($attribute, $value, $fail) use($request){
+                    $conductor_id = $request->input('conductor_id');
+
+                    $conductordocument = Conductordocument::where('conductor_id', $conductor_id)->where('tipo', $value)->first();
+                    if($conductordocument != null) $fail('Este tipo de documento ya está registrado');
+                },
+            ]
         );
         $mensajes = array(
-            'archivo.required' => 'Debe ingresar archivo'
+            'archivo.required' => 'Debe ingresar archivo',
+            'tipo.required' => 'Debe elegir un tipo de archivo'
         );
 
         $validacion = Validator::make($request->all(), $reglas, $mensajes);
