@@ -72,7 +72,7 @@
                 <table width="100%">
                     <tr>
                         <td rowspan="4" width="20%" class="text-center">
-                            LOGO
+                            <img src="{{ asset('/assets/img/logo.jpg') }}" width="130" height="70">
                         </td>
                         <td rowspan="2" width="50%" class="text-center text-white bg-blue text-bold">
                             CHECK LIST VEHICULAR
@@ -149,7 +149,10 @@
                     </tr>
                     <tr>
                         <td rowspan="2" colspan="2" class="text-bold text-top">CATEGORIA Y N° DE LICENCIA:&nbsp;<span>{{ $licencia }}</span></td>
-                        <td rowspan="2" class="text-bold text-top">VENCIMIENTO DEL SOAT:&nbsp;<span>{{ $fecha_soat }}</span></td>
+                        <td rowspan="2" class="text-bold text-top">
+                            <p class="text-bold">VENCIMIENTO DEL SOAT:</p>
+                            <span class="text-normal">{{ $fecha_soat }}</span>
+                        </td>
                         <td colspan="2" class="text-bold">KILOMETRAJE:</td>
                     </tr>
                     <tr>
@@ -245,11 +248,6 @@
                         <td>
 
                             <table width="100%" class="table-borderless">
-                                {{-- <tr class="table-borderless">
-                                    <td class="table-borderless"></td>
-                                    <td class="table-borderless"></td>
-                                    <td class="table-borderless"></td>
-                                </tr> --}}
                                 <tr class="table-borderless">
                                     <td class="text-bold text-center text-normal table-borderless" style="vertical-align: bottom; height: 40px;">_______________________________</td>
                                     <td class="text-bold text-center text-normal table-borderless" style="vertical-align: bottom;">_______________________________</td>

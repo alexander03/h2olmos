@@ -339,25 +339,30 @@ class MantCorrPrev extends Controller
         $namefile = 'Check List Vehicular - '.time().'.pdf';  
         
         $checklistvehicular = Checklistvehicular::leftJoin('equipo', 'equipo.id', '=', 'checklistvehicular.equipo_id')
-                                                ->leftJoin('vehiculo', 'vehiculo.id', 'checklistvehicular.vehiculo_id')
+                                                ->leftJoin('vehiculo', 'vehiculo.id', '=', 'checklistvehicular.vehiculo_id')
                                                 ->join('conductor', 'conductor.id', 'checklistvehicular.conductor_id')
                                                 ->leftJoin('marca AS marca_equipo', 'marca_equipo.id', 'equipo.marca_id')
                                                 ->leftJoin('marca AS marca_vehiculo', 'marca_vehiculo.id', 'vehiculo.marca_id')
                                                 ->leftJoin('contratista AS contratista_vehiculo', 'contratista_vehiculo.id', 'vehiculo.contratista_id')
                                                 ->leftJoin('contratista AS contratista_equipo', 'contratista_equipo.id', 'equipo.contratista_id')
+                                                ->leftJoin('ua AS ua_vehiculo', 'ua_vehiculo.id', '=', 'vehiculo.ua_id')
+                                                ->leftJoin('ua AS ua_equipo', 'ua_equipo.id', 'equipo.ua_id')
                                                 ->select('checklistvehicular.fecha_registro', 'checklistvehicular.k_inicial', 'checklistvehicular.k_final', 'checklistvehicular.lider_area', 'checklistvehicular.observaciones', 'checklistvehicular.incidentes', 
                                                         'checklistvehicular.sistema_electrico', 'checklistvehicular.sistema_mecanico', 'checklistvehicular.accesorios', 'checklistvehicular.documentos',
-                                                        'equipo.placa as equipo_placa', 'marca_equipo.descripcion AS equipo_marca', 'equipo.modelo AS equipo_modelo', 'contratista_equipo.razonsocial AS equipo_contratista', 'contratista_equipo.id AS equipo_contratista_id', 'equipo.descripcion as equipo_descripcion',
-                                                        'vehiculo.placa AS vehiculo_placa', 'marca_vehiculo.descripcion AS vehiculo_marca', 'vehiculo.modelo AS vehiculo_modelo', 'contratista_vehiculo.razonsocial AS vehiculo_contratista', 'contratista_vehiculo.id AS vehiculo_contratista_id', 'vehiculo.color AS vehiculo_color', 'vehiculo.motor AS vehiculo_combustible', 'vehiculo.id AS vehiculo_id',
+                                                        'equipo.placa as equipo_placa', 'equipo.modelo AS equipo_modelo', 'equipo.descripcion as equipo_descripcion',
+                                                        'marca_equipo.descripcion AS equipo_marca', 'ua_equipo.codigo AS equipo_ua',
+                                                        'contratista_equipo.razonsocial AS equipo_contratista', 'contratista_equipo.id AS equipo_contratista_id',
+                                                        'vehiculo.placa AS vehiculo_placa', 'vehiculo.modelo AS vehiculo_modelo', 'vehiculo.color AS vehiculo_color', 'vehiculo.motor AS vehiculo_combustible', 'vehiculo.id AS vehiculo_id',
+                                                        'marca_vehiculo.descripcion AS vehiculo_marca', 'ua_vehiculo.codigo AS vehiculo_ua',
+                                                        'contratista_vehiculo.razonsocial AS vehiculo_contratista', 'contratista_vehiculo.id AS vehiculo_contratista_id', 
                                                         'conductor.nombres as conductor_nombres', 'conductor.apellidos as conductor_apellidos', 'conductor.licencia')
-                                                // ->select('checklistvehicular.fecha_registro')
                                                 ->where('checklistvehicular.id', '=', $request->checklistvehicular_id)->withTrashed()->first();
-
+        
         if ( $checklistvehicular == NULL ) return redirect('/home');
 
         $data = [];
 
-        $is_v = $checklistvehicular->vehiculo_placa != NULL ? true : false;
+        $is_v = !is_null($checklistvehicular->vehiculo_placa) ? true : false;
         
         // datos que puede ser de vehiculo o equipo
         $data['placa'] = $is_v ? $checklistvehicular->vehiculo_placa : $checklistvehicular->equipo_placa;
@@ -369,14 +374,15 @@ class MantCorrPrev extends Controller
                                 ->select('contratista.ruc')->where('contratista.id', '=', $contratista)->first();
         $data['directo'] = is_null($contratista) ? 0 : 1;
         
+        $data['ua'] = $is_v ? $checklistvehicular->vehiculo_ua : $checklistvehicular->equipo_ua;
+        // dd($checklistvehicular->vehiculo_ua, $checklistvehicular->equipo_ua, $is_v);
         // datos que es de vehiculo
-        $data['ua'] = $checklistvehicular->vehiculo_ua;
         $data['color'] = $checklistvehicular->vehiculo_color;
         $data['combustible'] = $checklistvehicular->vehiculo_combustible;
-        $data['fecha_soat'] = Vehiculodocument::select('fecha')
+        $fecha_soat = Vehiculodocument::select('fecha')
                                             ->where('vehiculo_id', '=', $checklistvehicular->vehiculo_id)
                                             ->where('tipo', '=', 'SOAT')->first()['fecha'];
-        
+        $data['fecha_soat'] = is_null($fecha_soat) ? ($is_v ? 'Sin SOAT' : '----') : $fecha_soat;        
         // datos que es de equipo
         $data['descripcion'] = $checklistvehicular->equipo_descripcion;
 
