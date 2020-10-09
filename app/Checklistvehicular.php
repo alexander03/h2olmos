@@ -41,7 +41,7 @@ class Checklistvehicular extends Model
                 $subquery->where('checklistvehicular.concesionaria_id', $idConcAct);
             })
             ->orderBy('checklistvehicular.id', 'DESC')
-            ->select('checklistvehicular.id', 'checklistvehicular.fecha_registro', 'equipo.placa as equipo_placa', 'equipo.descripcion as equipo_descripcion', 'vehiculo.placa as vehiculo_placa', 'checklistvehicular.k_inicial', 'checklistvehicular.k_final', 'checklistvehicular.lider_area', 'conductor.nombres as conductor_nombres', 'conductor.apellidos as conductor_apellidos', 'checklistvehicular.sistema_electrico');
+            ->select('checklistvehicular.id', 'checklistvehicular.fecha_registro', 'equipo.placa as equipo_placa', 'equipo.descripcion as equipo_descripcion', 'vehiculo.placa as vehiculo_placa', 'vehiculo.modelo as vehiculo_modelo', 'checklistvehicular.k_inicial', 'checklistvehicular.k_final', 'checklistvehicular.lider_area', 'conductor.nombres as conductor_nombres', 'conductor.apellidos as conductor_apellidos', 'checklistvehicular.sistema_electrico');
     }
 
 }

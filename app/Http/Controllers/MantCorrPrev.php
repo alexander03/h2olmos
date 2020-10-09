@@ -15,6 +15,8 @@ use App\Librerias\Libreria;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 use Mpdf\Mpdf;
+use App\Contratista;
+use App\Vehiculodocument;
 
 
 // INICIO DE MODIFICACION
@@ -181,6 +183,7 @@ class MantCorrPrev extends Controller
             $checklistvehicular->lider_area = mb_strtoupper($request->input('lider_area'), 'utf-8');
             $checklistvehicular->conductor_id= $request->input('conductor_id');
             $checklistvehicular->observaciones = $request->input('observaciones');
+            $checklistvehicular->incidentes = $request->input('incidentes');
             $checklistvehicular->sistema_electrico = json_decode($request->input('sistema_electrico'));
             $checklistvehicular->sistema_mecanico = json_decode($request->input('sistema_mecanico'));
             $checklistvehicular->accesorios = json_decode($request->input('accesorios'));
@@ -294,6 +297,7 @@ class MantCorrPrev extends Controller
             $checklistvehicular->lider_area = mb_strtoupper($request->input('lider_area'), 'utf-8');
             $checklistvehicular->conductor_id= $request->input('conductor_id');
             $checklistvehicular->observaciones = $request->input('observaciones');
+            $checklistvehicular->incidentes = $request->input('incidentes');
 
             if($request->input('sistema_electrico') != null) $checklistvehicular->sistema_electrico = json_decode($request->input('sistema_electrico'));
             if($request->input('sistema_mecanico') != null) $checklistvehicular->sistema_mecanico = json_decode($request->input('sistema_mecanico'));
@@ -341,10 +345,10 @@ class MantCorrPrev extends Controller
                                                 ->leftJoin('marca AS marca_vehiculo', 'marca_vehiculo.id', 'vehiculo.marca_id')
                                                 ->leftJoin('contratista AS contratista_vehiculo', 'contratista_vehiculo.id', 'vehiculo.contratista_id')
                                                 ->leftJoin('contratista AS contratista_equipo', 'contratista_equipo.id', 'equipo.contratista_id')
-                                                ->select('checklistvehicular.fecha_registro', 'checklistvehicular.k_inicial', 'checklistvehicular.k_final', 'checklistvehicular.lider_area', 'checklistvehicular.observaciones', 
+                                                ->select('checklistvehicular.fecha_registro', 'checklistvehicular.k_inicial', 'checklistvehicular.k_final', 'checklistvehicular.lider_area', 'checklistvehicular.observaciones', 'checklistvehicular.incidentes', 
                                                         'checklistvehicular.sistema_electrico', 'checklistvehicular.sistema_mecanico', 'checklistvehicular.accesorios', 'checklistvehicular.documentos',
-                                                        'equipo.placa as equipo_placa', 'marca_equipo.descripcion AS equipo_marca', 'equipo.modelo AS equipo_modelo', 'contratista_equipo.razonsocial AS equipo_contratista', 'equipo.descripcion as equipo_descripcion',
-                                                        'vehiculo.placa AS vehiculo_placa', 'marca_vehiculo.descripcion AS vehiculo_marca', 'vehiculo.modelo AS vehiculo_modelo', 'contratista_vehiculo.razonsocial AS vehiculo_contratista', 'vehiculo.color AS vehiculo_color',
+                                                        'equipo.placa as equipo_placa', 'marca_equipo.descripcion AS equipo_marca', 'equipo.modelo AS equipo_modelo', 'contratista_equipo.razonsocial AS equipo_contratista', 'contratista_equipo.id AS equipo_contratista_id', 'equipo.descripcion as equipo_descripcion',
+                                                        'vehiculo.placa AS vehiculo_placa', 'marca_vehiculo.descripcion AS vehiculo_marca', 'vehiculo.modelo AS vehiculo_modelo', 'contratista_vehiculo.razonsocial AS vehiculo_contratista', 'contratista_vehiculo.id AS vehiculo_contratista_id', 'vehiculo.color AS vehiculo_color', 'vehiculo.motor AS vehiculo_combustible', 'vehiculo.id AS vehiculo_id',
                                                         'conductor.nombres as conductor_nombres', 'conductor.apellidos as conductor_apellidos', 'conductor.licencia')
                                                 // ->select('checklistvehicular.fecha_registro')
                                                 ->where('checklistvehicular.id', '=', $request->checklistvehicular_id)->withTrashed()->first();
@@ -354,24 +358,37 @@ class MantCorrPrev extends Controller
         $data = [];
 
         $is_v = $checklistvehicular->vehiculo_placa != NULL ? true : false;
-
+        
+        // datos que puede ser de vehiculo o equipo
         $data['placa'] = $is_v ? $checklistvehicular->vehiculo_placa : $checklistvehicular->equipo_placa;
         $data['marca'] = $is_v ? $checklistvehicular->vehiculo_marca : $checklistvehicular->equipo_marca;
         $data['modelo'] = $is_v ? $checklistvehicular->vehiculo_modelo : $checklistvehicular->equipo_modelo;
         $data['contratista'] = $is_v ? $checklistvehicular->vehiculo_contratista : $checklistvehicular->equipo_contratista;
+        $contratista = $is_v ? $checklistvehicular->vehiculo_contratista_id : $checklistvehicular->equipo_contratista_id;
+        $contratista = Contratista::join('concesionaria', 'concesionaria.ruc', '=', 'contratista.ruc')
+                                ->select('contratista.ruc')->where('contratista.id', '=', $contratista)->first();
+        $data['directo'] = is_null($contratista) ? 0 : 1;
         
-        
+        // datos que es de vehiculo
         $data['ua'] = $checklistvehicular->vehiculo_ua;
-
-        $data['equipo_descripcion'] = $checklistvehicular->equipo_descripcion;
         $data['color'] = $checklistvehicular->vehiculo_color;
+        $data['combustible'] = $checklistvehicular->vehiculo_combustible;
+        $data['fecha_soat'] = Vehiculodocument::select('fecha')
+                                            ->where('vehiculo_id', '=', $checklistvehicular->vehiculo_id)
+                                            ->where('tipo', '=', 'SOAT')->first()['fecha'];
+        
+        // datos que es de equipo
+        $data['descripcion'] = $checklistvehicular->equipo_descripcion;
 
+        // datos del checklistvehicular
         $data['fecha_registro'] = $checklistvehicular->fecha_registro;
         $data['k_inicial'] = $checklistvehicular->k_inicial;
         $data['k_final'] = $checklistvehicular->k_final;
         $data['lider_area'] = $checklistvehicular->lider_area;
         $data['observaciones'] = strtoupper($checklistvehicular->observaciones);
+        $data['incidentes'] = strtoupper($checklistvehicular->incidentes);
 
+        // datos del conductor
         $data['conductor'] = $checklistvehicular->conductor_nombres . ' ' . $checklistvehicular->conductor_apellidos;
         $data['licencia'] = $checklistvehicular->licencia;
         

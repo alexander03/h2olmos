@@ -19,7 +19,11 @@
 		<tr>
 			<td>{{ $contador }}</td>
 			<td>{{ date('d/m/Y', strtotime($value->fecha_registro)) }}</td>
-			<td>{{ $value->equipo_descripcion }}</td>
+			@if ($value->equipo_descripcion == null)
+				<td>{{ $value->vehiculo_modelo }}</td>
+			@else
+				<td>{{ $value->equipo_descripcion }}</td>
+			@endif
 			<td>{{ $value->k_inicial }}</td>
 			<td>{{ $value->k_final }}</td>
 			<td>{{ $value->lider_area }}</td>

@@ -69,7 +69,6 @@
 	</div>
 
 
-	{{-- INICIO DE MODIFICACION --}}
 	<div class="col-8 p-0 m-0">
 		<div class="col-12 p-0 m-0 input-group">
 			<div class="form-group col-3">
@@ -102,7 +101,6 @@
 			</table>
 		</div>
 	</div>
-	{{-- FIN DE MODIFICACION --}}
 
 	
 </div>
@@ -274,8 +272,10 @@
 				</table>
 			</div>
 			<div class="col-4">
-				<h5>Observaciones e incidentes</h5>
-				{!! Form::textarea('observaciones', null, ['class' => 'form-control solo-lectura', 'rows' => '9', 'cols' => '26', 'readonly' => !$modalNuevo]) !!}
+				<h5 class="mb-0">Observaciones:</h5>
+				{!! Form::textarea('observaciones', null, ['class' => 'form-control solo-lectura', 'rows' => '5', 'cols' => '26', 'readonly' => !$modalNuevo]) !!}
+				<h5 class="mb-0 mt-4">Incidentes:</h5>
+				{!! Form::textarea('incidentes', null, ['class' => 'form-control solo-lectura', 'rows' => '5', 'cols' => '26', 'readonly' => !$modalNuevo]) !!}
 			</div>
 		</div>
 	</div>

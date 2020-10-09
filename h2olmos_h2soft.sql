@@ -238,6 +238,7 @@ CREATE TABLE `checklistvehicular` (
   `accesorios` longtext COLLATE utf8mb4_unicode_ci,
   `documentos` longtext COLLATE utf8mb4_unicode_ci,
   `observaciones` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `incidentes` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `especial` tinyint NOT NULL DEFAULT 0,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,

@@ -21,7 +21,7 @@
         td{
             border-collapse: collapse;
             border: 2px solid;
-            height: 20px;
+            height: 19px;
         }
         span{
             font-weight: normal;
@@ -96,11 +96,11 @@
                                     </td>
                                     <td width="30%" class="text-center text-bold table-borderless">
                                         <h3>DIRECTO</h3>&nbsp;&nbsp;
-                                        <input type="checkbox" value="1">
+                                        <input type="checkbox" id="directo" @if ( $directo == 1 ) checked="true" @endif>
                                     </td>
                                     <td width="30%" class="text-center text-bold table-borderless">
                                         <h3>CONTRATISTA</h3>&nbsp;&nbsp;
-                                        <input type="checkbox" value="0">
+                                        <input type="checkbox" id="contratista" @if ( $directo == 0 ) checked="true" @endif>
                                     </td>
                                 </tr>
                             </table>
@@ -141,7 +141,7 @@
                         <td width="16%" class="text-bold">MARCA:&nbsp;<span>{{ $marca }}</span></td>
                         <td width="17%" class="text-bold">MODELO:&nbsp;<span>{{ $modelo }}</span></td>
                         <td width="25%" class="text-bold">COLOR:&nbsp;<span>{{ $color }}</span></td>
-                        <td width="25%" class="text-bold">COMBUSTIBLE:</td>
+                        <td width="25%" class="text-bold">COMBUSTIBLE:&nbsp;<span>{{ $combustible }}</span></td>
                     </tr>
                     <tr>
                         <td colspan="3" class="text-bold">EMP. CONTRATISTA:&nbsp;<span>{{ $contratista }}</span></td>
@@ -149,7 +149,7 @@
                     </tr>
                     <tr>
                         <td rowspan="2" colspan="2" class="text-bold text-top">CATEGORIA Y N° DE LICENCIA:&nbsp;<span>{{ $licencia }}</span></td>
-                        <td rowspan="2" class="text-bold text-top">VENCIMIENTO DEL SOAT:</td>
+                        <td rowspan="2" class="text-bold text-top">VENCIMIENTO DEL SOAT:&nbsp;<span>{{ $fecha_soat }}</span></td>
                         <td colspan="2" class="text-bold">KILOMETRAJE:</td>
                     </tr>
                     <tr>
@@ -210,11 +210,27 @@
 
                 <table width="100%">
                     <tr>
-                        <td class="text-bold"><h2>OBSERVACIONES E INCIDENTES:</h2></td>
+                        <td class="text-bold"><h2>OBSERVACIONES:</h2></td>
                     </tr>
                     <tr>
-                        <td class="text-top text-normal" style="height: 180px; padding: 10px">
+                        <td class="text-top text-normal" style="height: 110px; padding: 10px">
                             {{ $observaciones }}
+                        </td>
+                    </tr>
+                </table>
+
+            </td>
+        </tr>
+        <tr class="table-borderless">
+            <td class="table-borderless">
+
+                <table width="100%">
+                    <tr>
+                        <td class="text-bold"><h2>INCIDENTES:</h2></td>
+                    </tr>
+                    <tr>
+                        <td class="text-top text-normal" style="height: 110px; padding: 10px">
+                            {{ $incidentes }}
                         </td>
                     </tr>
                 </table>
@@ -229,21 +245,18 @@
                         <td>
 
                             <table width="100%" class="table-borderless">
+                                {{-- <tr class="table-borderless">
+                                    <td class="table-borderless"></td>
+                                    <td class="table-borderless"></td>
+                                    <td class="table-borderless"></td>
+                                </tr> --}}
                                 <tr class="table-borderless">
-                                    <td class="table-borderless"></td>
-                                    <td class="table-borderless"></td>
-                                    <td class="table-borderless"></td>
-                                    <td class="table-borderless"></td>
-                                </tr>
-                                <tr class="table-borderless">
-                                    <td class="text-bold text-center text-normal table-borderless">_______________________________</td>
-                                    <td class="text-bold text-center text-normal table-borderless">_______________________________</td>
-                                    <td class="text-bold text-center text-normal table-borderless">_______________________________</td>
-                                    <td class="text-bold text-center text-normal table-borderless">_______________________________</td>
+                                    <td class="text-bold text-center text-normal table-borderless" style="vertical-align: bottom; height: 40px;">_______________________________</td>
+                                    <td class="text-bold text-center text-normal table-borderless" style="vertical-align: bottom;">_______________________________</td>
+                                    <td class="text-bold text-center text-normal table-borderless" style="vertical-align: bottom;">_______________________________</td>
                                 </tr>
                                 <tr class="table-borderless">
                                     <td class="text-center h2 text-normal table-borderless">CONDUCTOR</td>
-                                    <td class="text-center h2 text-normal table-borderless">LÍDER ÁREA</td>
                                     <td class="text-center h2 text-normal table-borderless">SUP. SSTMA</td>
                                     <td class="text-center h2 text-normal table-borderless">ADMINISTRACION</td>
                                 </tr>
