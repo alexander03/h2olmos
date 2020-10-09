@@ -189,6 +189,7 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::post('conductordocument/buscar', 'ConductordocumentController@buscar')->name('conductordocument.buscar');
 	Route::get('conductordocument/eliminar/{id}/{listarluego}', 'ConductordocumentController@eliminar')->name('conductordocument.eliminar');
 	
+	
 	//Rutas para las kilometrajes (Kilometrajes)
 	Route::post('kilometrajes/buscar', 'KilometrajeController@buscar')->name('kilometrajes.buscar');
 	Route::get('kilometrajes/eliminar/{id}/{listarluego}', 'KilometrajeController@eliminar')->name('kilometrajes.eliminar');
