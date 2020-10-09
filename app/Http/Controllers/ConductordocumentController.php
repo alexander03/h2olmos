@@ -51,7 +51,7 @@ class ConductordocumentController extends Controller
         $cabecera[]       = array('valor' => 'F. Registro', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Tipo', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Archivo', 'numero' => '1');
-        $cabecera[]       = array('valor' => 'Opciones', 'numero' => '2');
+        $cabecera[]       = array('valor' => 'Opciones', 'numero' => '1');
         
         $titulo_modificar = $this->tituloModificar;
         $titulo_eliminar  = $this->tituloEliminar;

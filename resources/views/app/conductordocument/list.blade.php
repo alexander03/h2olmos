@@ -32,7 +32,7 @@
 						<td>Otro doc.</td>			
 			@endswitch
 			
-			<td>{!! Form::button('<i class="material-icons">edit</i>', array('onclick' => 'editar_document (\''.$value->id.'\', this);', 'class' => 'btn btn-primary btn-link btn-sm','rel'=>'tooltip','title'=>'Editar')) !!}</td>
+			{{-- <td>{!! Form::button('<i class="material-icons">edit</i>', array('onclick' => 'editar_document (\''.$value->id.'\', this);', 'class' => 'btn btn-primary btn-link btn-sm','rel'=>'tooltip','title'=>'Editar')) !!}</td> --}}
 			<td>{!! Form::button('<i class="material-icons">close</i>', array('onclick' => 'modal (\''.URL::route($ruta["delete"], array($value->id, 'SI')).'\', \''.$titulo_eliminar.'\', this);', 'class' => 'btn btn-danger btn-link btn-sm','rel'=>'tooltip','title'=>'Eliminar')) !!}</td>
 		</tr>
 		<?php
