@@ -22,10 +22,10 @@
 
 	<div class="mt-2 p-2 rounded border border-info d-none" id='content-form-document'>
 		<div id='divMensajeError{{ $entidad }}'></div>
-		{!! Form::open([ 'route' => 'vehiculodocument.store' ,'method' => 'POST' ,'onsubmit' => 'return false;', 'class' => 'form-inline', 'role' => 'form', 'autocomplete' => 'off', 'id' => 'form-document', 'enctype' => 'multipart/form-data']) !!}
+		{!! Form::open([ 'route' => 'conductordocument.store' ,'method' => 'POST' ,'onsubmit' => 'return false;', 'class' => 'form-inline', 'role' => 'form', 'autocomplete' => 'off', 'id' => 'form-document', 'enctype' => 'multipart/form-data']) !!}
 		<div class="row container mb-3">
 			{!! Form::label('tipo', 'Tipo:', ['class' => 'col-4 justify-content-start']) !!}
-			{!! Form::select('tipo',['imagen-firma'=>'Imagen de firma', 'conformidad-firma' => 'Doc. conformidad'] ,'', array('class' => 'form-control col-8', 'id' => 'tipo')) !!}
+			{!! Form::select('tipo',['' => 'Seleccione', 'imagen-firma'=>'Imagen de firma', 'conformidad-firma' => 'Doc. conformidad'] ,'', array('class' => 'form-control col-8', 'id' => 'tipo')) !!}
 			{!! Form::label('archivo', 'Archivo:', ['class' => 'col-4 justify-content-start']) !!}
 			{!! Form::file('archivo', ['class' => 'form-control input-xs mt-2', 'id' => 'archivo']) !!}
 
@@ -61,7 +61,7 @@
 	document.getElementById('document-nuevo').addEventListener('click',function(e){
 		e.preventDefault();
 		document.getElementById('form-document').querySelector('#tipo').value = document.getElementById('formBusqueda{{ $entidad }}').querySelector('#tipo').value;
-		document.getElementById('form-document').setAttribute('action','{{ URL::route("vehiculodocument.store") }}');
+		document.getElementById('form-document').setAttribute('action','{{ URL::route("conductordocument.store") }}');
 		//document.getElementById('form-document').setAttribute('method','POST');
 		document.getElementById('content-form-document').classList.remove('d-none');
 	});
@@ -70,8 +70,8 @@
 		document.getElementById('content-form-document').classList.add('d-none');
 		let formulario = document.getElementById('form-document')
 		formulario.reset();
-		formulario.getElementById('vehiculo_id').value ='';
-		formulario.getElementById('vehiculodocumentid').value ='';
+		formulario.getElementById('conductor_id').value ='';
+		formulario.getElementById('conductordocument_id').value ='';
 	});
 	function editar_document(document_id,btn){
 		const formulario = document.getElementById('form-document');
@@ -88,15 +88,15 @@
 		const formulario = document.getElementById('form-document');
 		let formData = new FormData(formulario);
 		let data = $.ajax({	
-							headers: {
-							    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-							  },
-							url : formulario.getAttribute('action'),
-							type: formulario.getAttribute('method'),
-							data: formData,
-							processData: false,
-							contentType: false,
-						});
+			headers: {
+					'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+				},
+			url : formulario.getAttribute('action'),
+			type: formulario.getAttribute('method'),
+			data: formData,
+			processData: false,
+			contentType: false,
+		});
 		data.done(function(msg) {
 			respuesta = msg;
 		}).fail(function(xhr, textStatus, errorThrown) {
@@ -109,8 +109,8 @@
 					md.showNotification('top','right','Guardado correctamente','info');
 					buscarCompaginado('', 'Accion realizada correctamente', '{{ $entidad }}', 'OK');
 					formulario.reset();
-					formulario.getElementById('vehiculo_id').value ='';
-					formulario.getElementById('vehiculodocumentid').value ='';
+					formulario.getElementById('conductor_id').value ='';
+					formulario.getElementById('conductordocument_id').value ='';
 				} else {
 					mostrarErrores(respuesta, '#form-document', '{{ $entidad }}');
 

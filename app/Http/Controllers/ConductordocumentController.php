@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Validator;
 use Illuminate\Http\Request;
 use App\Librerias\Libreria;
 use App\Conductor;
@@ -79,11 +80,9 @@ class ConductordocumentController extends Controller
 
     public function store(Request $request){
         $reglas = array(
-    		'fecha'   => 'required',
             'archivo' => 'required'
         );
         $mensajes = array(
-        	'fecha.required'   => 'Debe ingresar una fecha',  
             'archivo.required' => 'Debe ingresar archivo'
         );
 
@@ -94,18 +93,26 @@ class ConductordocumentController extends Controller
         $error = DB::transaction(function() use($request){
 
      		$conductordocument = new Conductordocument();
+            $conductordocument->tipo =  $request->input('tipo');
 
-     		$conductordocument->tipo =  $request->input('tipo');
 
+            $conductor = Conductor::find($request->input('conductor_id'));
+             
             $archivo  = $request->file('archivo');
-            $fileName =   date("Y_m_d") . '_'. $archivo->getClientOriginalName();
-            $vehiculodocument->archivo =  $fileName;
-            $archivo->move(public_path('files/documento_vehiculo/'), $fileName);       
-            
+            $nameArchivo = 'dni_' . $conductor->dni . '_' . $archivo->getClientOriginalName();
+            $conductordocument->archivo =  $nameArchivo;
 
-     		$vehiculodocument->vehiculo_id = $request->input('vehiculo_id');
+            switch ($request->input('tipo')) {
+                case 'imagen-firma':
+                    $archivo->move(public_path('files/documento_conductor/imagenes_firmas'), $nameArchivo);       
+                    break;
+                case 'conformidad-firma':
+                    $archivo->move(public_path('files/documento_conductor/documentos_conformidad_firmas'), $nameArchivo);       
+                    break;
+            }
 
-            $vehiculodocument->save();
+     		$conductordocument->conductor_id = $request->input('conductor_id');
+            $conductordocument->save();
         });
         return is_null($error) ? "OK" : $error;
     }
