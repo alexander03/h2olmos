@@ -21,6 +21,8 @@ use App\Imports\UaImport;
 use App\Vehiculo;
 use DateTime;
 use Exception;
+use App\Events\UserHasCreatedOrDeleted;
+use Illuminate\Support\Facades\Auth;
 
 class UaController extends Controller{
     protected $folderview      = 'app.ua';
@@ -167,6 +169,7 @@ class UaController extends Controller{
                 $ua -> ua_padre_id = (!( $uaDB -> isEmpty() )) ? $uaDB[0] -> id : null;
             }
             $ua -> save();
+            event( new UserHasCreatedOrDeleted($ua->id,'ua', Auth::user()->id,'crear'));
         });
         return is_null($error) ? "OK" : $error;
     }
@@ -371,6 +374,7 @@ class UaController extends Controller{
         }
         $error = DB::transaction(function() use($id){
             $ua = Ua::find($id);
+            event( new UserHasCreatedOrDeleted($ua->id,'ua', Auth::user()->id,'eliminar'));
             $ua->delete();
         });
         return is_null($error) ? "OK" : $error;

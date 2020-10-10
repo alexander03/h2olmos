@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Area;
 use App\Librerias\Libreria;
 use Illuminate\Support\Facades\DB;
+use App\Events\UserHasCreatedOrDeleted;
+use Illuminate\Support\Facades\Auth;
 
 class AreaController extends Controller
 {
@@ -128,6 +130,7 @@ class AreaController extends Controller
                 $area->nivel=1;
             }
             $area->save();
+            event( new UserHasCreatedOrDeleted($area->id,'area', Auth::user()->id,'crear'));
         });
         return is_null($error) ? "OK" : $error;
     }
@@ -193,6 +196,7 @@ class AreaController extends Controller
         }
         $error = DB::transaction(function() use($id){
             $area = Area::find($id);
+            event( new UserHasCreatedOrDeleted($area->id,'area', Auth::user()->id,'eliminar'));
             $area->delete();
         });
         return is_null($error) ? "OK" : $error;

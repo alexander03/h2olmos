@@ -18,8 +18,8 @@ class CreateBitacoraTable extends Migration
             $table->string('accion'); //CREATED | UPDATED | DELETED | RESTORED
             $table->string('tabla');
             $table->string('registro_id');
-            $table->string('valor_anterior');
-            $table->string('valor_posterior');
+            $table->string('valor_anterior') -> nullable();
+            $table->string('valor_posterior') -> nullable();
 
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users');

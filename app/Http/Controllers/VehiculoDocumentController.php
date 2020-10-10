@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\VencimientoDucumentVehiculo;
 use App\Http\Controllers\Controller;
+use App\Events\UserHasCreatedOrDeleted;
+use Illuminate\Support\Facades\Auth;
 
 class VehiculoDocumentController extends Controller
 {
@@ -121,6 +123,7 @@ class VehiculoDocumentController extends Controller
      		$vehiculodocument->vehiculo_id = $request->input('vehiculo_id');
 
             $vehiculodocument->save();
+            event( new UserHasCreatedOrDeleted($vehiculodocument->id,'vehiculodocument', Auth::user()->id,'crear'));
         });
         return is_null($error) ? "OK" : $error;
     }
@@ -172,6 +175,7 @@ class VehiculoDocumentController extends Controller
         }
         $error = DB::transaction(function() use($id){
             $vehiculo = Vehiculodocument::find($id);
+            event( new UserHasCreatedOrDeleted($vehiculodocument->id,'vehiculodocument', Auth::user()->id),'eliminar'));
             $vehiculo->delete();
         });
         return is_null($error) ? "OK" : $error;

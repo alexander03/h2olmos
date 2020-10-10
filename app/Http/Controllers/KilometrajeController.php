@@ -8,6 +8,8 @@ use App\Kilometraje;
 use App\Librerias\Libreria;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
+use App\Events\UserHasCreatedOrDeleted;
+use Illuminate\Support\Facades\Auth;
 
 class KilometrajeController extends Controller
 {
@@ -109,6 +111,7 @@ class KilometrajeController extends Controller
             $kilometraje->limite_inf = $request->input('limite_inf');
             $kilometraje->limite_sup = $request->input('limite_sup');
             $kilometraje->save();
+            event( new UserHasCreatedOrDeleted($kilometraje->id,'kilometraje', Auth::user()->id,'crear'));
         });
         return is_null($error) ? "OK" : $error;
     }
@@ -181,6 +184,7 @@ class KilometrajeController extends Controller
 
         $error = DB::transaction(function() use($id){
             $kilometraje = Kilometraje::find($id);
+            event( new UserHasCreatedOrDeleted($kilometraje->id,'kilometraje', Auth::user()->id,'eliminar'));
             $kilometraje->delete();
         });
         return is_null($error) ? "OK" : $error;

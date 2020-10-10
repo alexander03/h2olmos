@@ -7,6 +7,8 @@ use App\Unidad;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use App\Events\UserHasCreatedOrDeleted;
+use Illuminate\Support\Facades\Auth;
 
 class UnidadController extends Controller
 {
@@ -93,6 +95,7 @@ class UnidadController extends Controller
             $unidad = new Unidad();
             $unidad -> descripcion = strtoupper($request->input('descripcion'));
             $unidad -> save();
+            event( new UserHasCreatedOrDeleted($unidad->id,'equipo', Auth::user()->id,'crear'));
         });
         return is_null($error) ? "OK" : $error;
     }
@@ -167,8 +170,9 @@ class UnidadController extends Controller
             return $existe;
         }
         $error = DB::transaction(function() use($id){
-            $tipohora = Unidad::find($id);
-            $tipohora->delete();
+            $unidad = Unidad::find($id);
+            event( new UserHasCreatedOrDeleted($unidad->id,'unidad', Auth::user()->id,'eliminar'));
+            $unidad->delete();
         });
         return is_null($error) ? "OK" : $error;
     }

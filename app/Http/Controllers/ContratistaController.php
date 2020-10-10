@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Contratista;
 use App\Librerias\Libreria;
 use Illuminate\Support\Facades\DB;
+use App\Events\UserHasCreatedOrDeleted;
+use Illuminate\Support\Facades\Auth;
 
 class ContratistaController extends Controller
 {
@@ -110,6 +112,7 @@ class ContratistaController extends Controller
             $contratista->email= strtoupper($request->input('email'));
             $contratista->telefono= strtoupper($request->input('telefono'));
             $contratista->save();
+            event( new UserHasCreatedOrDeleted($contratista->id,'contratista', Auth::user()->id,'crear'));
         });
         return is_null($error) ? "OK" : $error;
     }
@@ -164,6 +167,7 @@ class ContratistaController extends Controller
         }
         $error = DB::transaction(function() use($id){
             $contratista = Contratista::find($id);
+            event( new UserHasCreatedOrDeleted($contratista->id,'contratista', Auth::user()->id,'eliminar'));
             $contratista->delete();
         });
         return is_null($error) ? "OK" : $error;

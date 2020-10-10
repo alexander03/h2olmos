@@ -9,6 +9,8 @@ use Illuminate\Http\Request;
 use App\Librerias\Libreria;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
+use App\Events\UserHasCreatedOrDeleted;
+use Illuminate\Support\Facades\Auth;
 
 class GrifoController extends Controller
 {
@@ -158,6 +160,7 @@ class GrifoController extends Controller
             $grifo->telefono = $request->input('telefono');
             $grifo->correo = $request->input('correo');
             $grifo->save();
+            event( new UserHasCreatedOrDeleted($grifo->id,'grifo', Auth::user()->id,'crear'));
         });
         return is_null($error) ? "OK" : $error;
     }
@@ -268,6 +271,7 @@ class GrifoController extends Controller
         }
         $error = DB::transaction(function() use($id){
             $grifo = Grifo::find($id);
+            event( new UserHasCreatedOrDeleted($grifo->id,'grifo', Auth::user()->id,'eliminar'));
             $grifo->delete();
         });
         return is_null($error) ? "OK" : $error;

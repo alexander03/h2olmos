@@ -14,6 +14,9 @@ use App\Librerias\Libreria;
 use App\Rules\SearchUaPadre;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
+use App\Events\UserHasCreatedOrDeleted;
+use Illuminate\Support\Facades\Auth;
+
 class EquipoController extends Controller
 {
     protected $folderview      = 'app.equipo';
@@ -224,6 +227,7 @@ class EquipoController extends Controller
 
 
             $equipo->save();
+            event( new UserHasCreatedOrDeleted($equipo->id,'equipo', Auth::user()->id,'crear'));
         });
         return is_null($error) ? "OK" : $error;
     }
@@ -373,6 +377,7 @@ class EquipoController extends Controller
         }
         $error = DB::transaction(function() use($id){
             $equipo = Equipo::find($id);
+            event( new UserHasCreatedOrDeleted($equipo->id,'equipo', Auth::user()->id,'eliminar'));
             $equipo->delete();
         });
         return is_null($error) ? "OK" : $error;

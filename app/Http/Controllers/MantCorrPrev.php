@@ -17,6 +17,8 @@ use Illuminate\Validation\Rule;
 use Mpdf\Mpdf;
 use App\Contratista;
 use App\Vehiculodocument;
+use App\Events\UserHasCreatedOrDeleted;
+use Illuminate\Support\Facades\Auth;
 
 
 // INICIO DE MODIFICACION
@@ -191,7 +193,7 @@ class MantCorrPrev extends Controller
             $checklistvehicular->concesionaria_id = Concesionaria::getConcesionariaActual()->id;
             $checklistvehicular->save();
 
-
+            event( new UserHasCreatedOrDeleted($checklistvehicular->id,'checklistvehicular', Auth::user()->id,'crear'));
 
         });
         return is_null($error) ? "OK" : $error;
