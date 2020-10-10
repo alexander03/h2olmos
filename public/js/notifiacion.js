@@ -22,7 +22,7 @@ const ActivarNotificaciones = (button,event)=>{
 		 })
 		.then( data => {
 			let Coleccion = '';			
-			console.log(data);
+			
 			for(let k in data.notfy_new){
 				const item = `
 					<a class="dropdown-item p-0" href='vehiculodocument/exel/${data.notfy_new[k].id}' onclick='pressExelVencimiento()'>
@@ -68,7 +68,7 @@ const ActivarNotificaciones = (button,event)=>{
 			if(Coleccion == '<br>'){
 				Coleccion = '<a class="dropdown-item">Sin notifiaciones</a>';
 			}
-			console.log(Coleccion);
+			
 			lista.innerHTML = Coleccion;
 		}) 
 		.catch( error => console.log(error) );
@@ -90,7 +90,7 @@ const pressExelVencimiento = ()=>{
 				editButonNotify(data.numero);
 			}) 
 			.catch( error => console.log(error) );
-	},2000);
+	},1000);
 }
 
 /*	

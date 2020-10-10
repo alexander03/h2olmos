@@ -200,11 +200,17 @@ class VehiculoDocumentController extends Controller
     }
 
     public function notifiacionList(){
-        
+
+
+        $concesionariaActual = $this->concesionariaActual();
         $fecha_actual = date("Y-m-d");
         $fecha_limite =  date("Y-m-d",strtotime($fecha_actual."+ 1 week"));
 
-        $resultado = Vehiculodocument::whereBetween('fecha',[$fecha_actual,$fecha_limite])
+        $resultado = Vehiculodocument::whereHas('vehiculo',function($query) 
+                        use($concesionariaActual){
+                            $query->where('concesionaria_id',  $concesionariaActual);
+                        })
+                     ->whereBetween('fecha',[$fecha_actual,$fecha_limite])
                      ->where('notificacion','=',false)
                      ->select('id','fecha','tipo','vehiculo_id')
                      ->with(['vehiculo' => function($q){
