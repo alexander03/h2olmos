@@ -14,10 +14,6 @@ use App\Librerias\Libreria;
 use App\Rules\SearchUaPadre;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
-use App\Events\UserHasCreatedOrDeleted;
-use App\Events\UserHasEdited;
-use Illuminate\Support\Facades\Auth;
-
 class EquipoController extends Controller
 {
     protected $folderview      = 'app.equipo';
@@ -228,7 +224,6 @@ class EquipoController extends Controller
 
 
             $equipo->save();
-            event( new UserHasCreatedOrDeleted($equipo->id,'equipo', Auth::user()->id,'crear'));
         });
         return is_null($error) ? "OK" : $error;
     }
@@ -347,9 +342,6 @@ class EquipoController extends Controller
         } 
         $error = DB::transaction(function() use($request, $id){
             $equipo = Equipo::find($id);
-            
-            //copia para bitacora
-            $equipoOrg = $equipo;
 //            $equipo->codigo 	 		  = strtoupper($request->input('codigo'));
             $equipo->ua_id                = Ua::where('codigo',$request->input('ua_id'))->get()[0]->id;
             $equipo->descripcion 		  = strtoupper($request->input('descripcion'));
@@ -359,13 +351,10 @@ class EquipoController extends Controller
             $equipo->capacidad_carga      = $request->input('capacidad_carga');
             $equipo->placa 				  = $request->input('placa');
             $equipo->contratista_id 	  = $request->input('contratista_id');
-
             if($request->input('area_id') != 0){
             	$equipo->area_id 				  = $request->input('area_id');
             }
             $equipo->save();
-
-            event( new UserHasEdited($equipoOrg,$equipo,'equipo', auth()->user()->id));
         });
         return is_null($error) ? "OK" : $error;
     }
@@ -384,7 +373,6 @@ class EquipoController extends Controller
         }
         $error = DB::transaction(function() use($id){
             $equipo = Equipo::find($id);
-            event( new UserHasCreatedOrDeleted($equipo->id,'equipo', Auth::user()->id,'eliminar'));
             $equipo->delete();
         });
         return is_null($error) ? "OK" : $error;

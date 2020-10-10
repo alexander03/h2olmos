@@ -12,8 +12,6 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 use App\Librerias\Libreria;
 use Illuminate\Support\Facades\DB;
-use App\Events\UserHasCreatedOrDeleted;
-use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
@@ -153,7 +151,7 @@ class UserController extends Controller
                 $userconcesionaria2->concesionaria_id = $request->input('20509093521');
                 $userconcesionaria2->save();
             }
-            event( new UserHasCreatedOrDeleted($user->id,'user', Auth::user()->id,'crear'));
+
         });
         return is_null($error) ? "OK" : $error;
 
@@ -287,7 +285,6 @@ class UserController extends Controller
         }
         $error = DB::transaction(function() use($id){
             $user = User::find($id);
-            event( new UserHasCreatedOrDeleted($user->id,'user', Auth::user()->id,'eliminar'));
             $user->delete();
         });
         return is_null($error) ? "OK" : $error;

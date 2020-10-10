@@ -7,8 +7,6 @@ use App\Tipocombustible;
 use Illuminate\Http\Request;
 use App\Librerias\Libreria;
 use Illuminate\Support\Facades\DB;
-use App\Events\UserHasCreatedOrDeleted;
-use Illuminate\Support\Facades\Auth;
 
 class TipocombustibleController extends Controller
 {
@@ -100,7 +98,6 @@ class TipocombustibleController extends Controller
             $tipocombustible = new Tipocombustible();
             $tipocombustible->descripcion = strtoupper($request->input('descripcion'));
             $tipocombustible->save();
-            event( new UserHasCreatedOrDeleted($tipocombustible->id,'tipocombustible', Auth::user()->id,'crear'));
         });
         return is_null($error) ? "OK" : $error;
     }
@@ -160,7 +157,6 @@ class TipocombustibleController extends Controller
         $error = DB::transaction(function() use($id){
             $tipocombustible = Tipocombustible::find($id);
             $tipocombustible->delete();
-            event( new UserHasCreatedOrDeleted($tipocombustible->id,'tipocombustible', Auth::user()->id,'eliminar'));
         });
         return is_null($error) ? "OK" : $error;
     }

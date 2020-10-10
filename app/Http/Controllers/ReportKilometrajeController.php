@@ -66,6 +66,7 @@ class ReportKilometrajeController extends Controller
         $cabecera[]       = array('valor' => 'Placa', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Kilometraje inicial', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Kilometraje recorrido', 'numero' => '1');
+        $cabecera[]       = array('valor' => 'Kilometraje actual', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Estado', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Opciones', 'numero' => '1');
         $titulo_modificar = $this->tituloModificar;
@@ -205,7 +206,7 @@ class ReportKilometrajeController extends Controller
 
 
 
-        return view($this->folderview.'.mant')->with(compact('repuesto','ListaFinal', 'vehiculo' , 'entidad', 'listar'));
+        return view($this->folderview.'.mant')->with(compact('entidad','ListaFinal', 'vehiculo' , 'entidad', 'listar'));
     }
 
     public function update(Request $request)

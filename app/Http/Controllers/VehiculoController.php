@@ -15,8 +15,6 @@ use Illuminate\Http\Request;
 use App\Librerias\Libreria;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
-use App\Events\UserHasCreatedOrDeleted;
-use Illuminate\Support\Facades\Auth;
 
 class VehiculoController extends Controller
 {
@@ -282,7 +280,6 @@ class VehiculoController extends Controller
             
 
             $vehiculo->save();
-            event( new UserHasCreatedOrDeleted($vehiculo->id,'vehiculo', Auth::user()->id,'crear'));
         });
         return is_null($error) ? "OK" : $error;
     }
@@ -483,7 +480,6 @@ class VehiculoController extends Controller
         }
         $error = DB::transaction(function() use($id){
             $vehiculo = Vehiculo::find($id);
-            event( new UserHasCreatedOrDeleted($vehiculo->id,'vehiculo', Auth::user()->id,'eliminar'));
             $vehiculo->delete();
         });
         return is_null($error) ? "OK" : $error;

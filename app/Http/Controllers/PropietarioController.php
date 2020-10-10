@@ -148,7 +148,6 @@ class PropietarioController extends Controller
             $propietario -> status = $request -> input('status');
             $propietario -> ubicacion = $request -> input('ubicacion');
             $propietario -> save();
-            event( new UserHasCreatedOrDeleted($propietario->id,'propietarios', Auth::user()->id,'crear'));
         });
         return is_null($error) ? "OK" : $error;
     }
@@ -263,7 +262,6 @@ class PropietarioController extends Controller
         $error = DB::transaction(function() use($id){
             $tipohora = Propietario::find($id);
             $tipohora->delete();
-            event( new UserHasCreatedOrDeleted($tipohora->id,'tipohora', Auth::user()->id,'eliminar'));
         });
         return is_null($error) ? "OK" : $error;
     }

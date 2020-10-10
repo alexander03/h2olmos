@@ -7,8 +7,6 @@ use Illuminate\Http\Request;
 use App\Trabajo;
 use App\Librerias\Libreria;
 use Illuminate\Support\Facades\DB;
-use App\Events\UserHasCreatedOrDeleted;
-use Illuminate\Support\Facades\Auth;
 
 class TrabajoController extends Controller
 {
@@ -100,7 +98,6 @@ class TrabajoController extends Controller
             $trabajo = new Trabajo();
             $trabajo->descripcion= strtoupper($request->input('descripcion'));
             $trabajo->save();
-            event( new UserHasCreatedOrDeleted($trabajo->id,'trabajo', Auth::user()->id,'crear'));
         });
         return is_null($error) ? "OK" : $error;
     }
@@ -152,7 +149,6 @@ class TrabajoController extends Controller
         $error = DB::transaction(function() use($id){
             $trabajo = Trabajo::find($id);
             $trabajo->delete();
-            event( new UserHasCreatedOrDeleted($trabajo->id,'trabajo', Auth::user()->id,'eliminar'));
         });
         return is_null($error) ? "OK" : $error;
     }

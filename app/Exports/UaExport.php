@@ -27,7 +27,11 @@ class UaExport implements FromCollection, WithHeadings
            if(!$ua->getOriginal('padreCodigo')) $ua->padreCodigo = 'SIN PADRE';
            if(!$ua->getOriginal('padreDesc')) $ua->padreDesc = 'SIN PADRE';
            ($ua->getOriginal('habilitada') == 0) ? $ua->habilitada = 'INHABILITADA' : $ua->habilitada = 'HABILITADA';
-           if(!$ua->getOriginal('fecha_fin')) $ua->fecha_fin = 'ILIMITADA';
+           if(!$ua->getOriginal('fecha_fin')){
+               $ua->fecha_fin = 'ILIMITADA';
+           }else{
+               $ua->fecha_fin = date("d/m/Y",strtotime($ua->fecha_fin)); 
+           }
            $ua->fecha_inicio = date("d/m/Y",strtotime($ua->fecha_inicio));
         }
 

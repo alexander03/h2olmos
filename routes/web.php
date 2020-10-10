@@ -255,8 +255,8 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::resource('grupomenu', 'GrupomenuController', array('except' => array('show')));
 
 
-	Route::get('controldiario/exportExcelReport', 'ControldiarioController@exportExcelReport')->name('controldiario.exportExcelReport');
-	Route::get('controldiario/generateReport', 'ControldiarioController@generateReport')->name('controldiario.generateReport');
+	Route::get('controldiario/exportExcelReport', 'ControlDiarioController@exportExcelReport')->name('controldiario.exportExcelReport');
+	Route::get('controldiario/generateReport', 'ControlDiarioController@generateReport')->name('controldiario.generateReport');
 });
 
 

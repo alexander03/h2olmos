@@ -11,8 +11,6 @@ use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\VencimientoDucumentVehiculo;
 use App\Http\Controllers\Controller;
-use App\Events\UserHasCreatedOrDeleted;
-use Illuminate\Support\Facades\Auth;
 
 class VehiculoDocumentController extends Controller
 {
@@ -123,7 +121,6 @@ class VehiculoDocumentController extends Controller
      		$vehiculodocument->vehiculo_id = $request->input('vehiculo_id');
 
             $vehiculodocument->save();
-            event( new UserHasCreatedOrDeleted($vehiculodocument->id,'vehiculodocument', Auth::user()->id,'crear'));
         });
         return is_null($error) ? "OK" : $error;
     }
@@ -176,7 +173,6 @@ class VehiculoDocumentController extends Controller
         $error = DB::transaction(function() use($id){
             $vehiculo = Vehiculodocument::find($id);
             $vehiculo->delete();
-            event( new UserHasCreatedOrDeleted($vehiculo->id,'vehiculo', Auth::user()->id,'crear'));
         });
         return is_null($error) ? "OK" : $error;
     }
@@ -200,17 +196,14 @@ class VehiculoDocumentController extends Controller
     }
 
     public function notifiacionList(){
-
-
-        $concesionariaActual = $this->concesionariaActual();
+        
         $fecha_actual = date("Y-m-d");
         $fecha_limite =  date("Y-m-d",strtotime($fecha_actual."+ 1 week"));
 
-        $resultado = Vehiculodocument::whereHas('vehiculo',function($query) 
-                        use($concesionariaActual){
-                            $query->where('concesionaria_id',  $concesionariaActual);
-                        })
-                     ->whereBetween('fecha',[$fecha_actual,$fecha_limite])
+        $resultado = Vehiculodocument::where(function ($sql) use($fecha_actual,$fecha_limite){
+                        $sql->whereBetween('fecha',[$fecha_actual,$fecha_limite])
+                            ->orWhere('fecha','<=',$fecha_actual);
+                    })
                      ->where('notificacion','=',false)
                      ->select('id','fecha','tipo','vehiculo_id')
                      ->with(['vehiculo' => function($q){
@@ -219,7 +212,10 @@ class VehiculoDocumentController extends Controller
                      ->orderBy('fecha')->get();
 
 
-        $vistos = Vehiculodocument::whereBetween('fecha',[$fecha_actual,$fecha_limite])
+        $vistos = Vehiculodocument::where(function ($sql) use($fecha_actual,$fecha_limite){
+                        $sql->whereBetween('fecha',[$fecha_actual,$fecha_limite])
+                            ->orWhere('fecha','<=',$fecha_actual);
+                    })
                   ->where('notificacion','=',true)
                   ->select('id','fecha','tipo','vehiculo_id')
                   ->with(['vehiculo' => function($q){
@@ -240,7 +236,10 @@ class VehiculoDocumentController extends Controller
 
         $concesionariaActual = $this->concesionariaActual();
 
-        $resultado = Vehiculodocument::whereBetween('fecha',[$fecha_actual,$fecha_limite])
+        $resultado = Vehiculodocument::where(function ($sql) use($fecha_actual,$fecha_limite){
+                        $sql->whereBetween('fecha',[$fecha_actual,$fecha_limite])
+                            ->orWhere('fecha','<=',$fecha_actual);
+                    })
                     ->where('notificacion','=',false)
                     ->whereHas('vehiculo',function($query) use($concesionariaActual){
                                 $query->where('concesionaria_id',  $concesionariaActual);

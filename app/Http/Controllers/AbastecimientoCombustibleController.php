@@ -32,9 +32,6 @@ use Exception;
 use Illuminate\Support\Facades\Hash;
 use Mpdf\Mpdf;
 
-use App\Events\UserHasCreatedOrDeleted;
-use Illuminate\Support\Facades\Auth;
-
 use function PHPSTORM_META\map;
 
 class AbastecimientoCombustibleController extends Controller{
@@ -259,7 +256,6 @@ class AbastecimientoCombustibleController extends Controller{
                     $vehiculo = $vehiculoDB[0];
                     $vehiculo->kilometraje_rec =  $request->input('km') - $vehiculo->kilometraje_act;
                     $vehiculo->save();
-                    event( new UserHasCreatedOrDeleted($vehiculo->id ,'vehiculo', Auth::user()->id , 'crear'));
                 }   
             }
             $abastecimiento -> qtdgl = $request -> input('qtdgl');
@@ -275,8 +271,6 @@ class AbastecimientoCombustibleController extends Controller{
             $abastecimiento -> tipocombustible_id = $request -> input('tipocombustible_id');
 
             $abastecimiento -> save();
-
-            event( new UserHasCreatedOrDeleted($abastecimiento->id ,'abastecimiento_combustible', Auth::user()->id , 'crear'));
         });
         return is_null($error) ? "OK" : $error;
     }
@@ -436,8 +430,6 @@ class AbastecimientoCombustibleController extends Controller{
         $error = DB::transaction(function() use($id){
             $tipohora = AbastecimientoCombustible::find($id);
             $tipohora->delete();
-
-            event( new UserHasCreatedOrDeleted($tipohora->id,'abastecimiento_combustible', Auth::user()->id,'eliminar'));
         });
         return is_null($error) ? "OK" : $error;
     }

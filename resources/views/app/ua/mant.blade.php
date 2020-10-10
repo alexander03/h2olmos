@@ -29,7 +29,7 @@ if ($ua !== NULL) {
 		</section>	
 	</div>
 	<div class="form-group col-md-6 p-3">
-		<label class="pl-3">Pertenece a una UA</label>
+		<label class="pl-3">Pertenece a UA Padre</label>
 		<input type="text" class="form-control" style="display: none">
 		<section class="d-flex mt-1"> 
 			<select class="form-control" name="espadre" onchange="if(this.value=='N'){$('.u-search-ua').css('display','none');}else{$('.u-search-ua').css('display','');}">

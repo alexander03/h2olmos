@@ -9,8 +9,6 @@ use App\Grupomenu;
 use App\Librerias\Libreria;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
-use App\Events\UserHasCreatedOrDeleted;
-use Illuminate\Support\Facades\Auth;
 
 class OpcionmenuController extends Controller
 {
@@ -136,7 +134,6 @@ class OpcionmenuController extends Controller
             $opcionmenu->link = $request->input('link');
             $opcionmenu->grupomenu_id = $request->input('grupomenu_id');
             $opcionmenu->save();
-            event( new UserHasCreatedOrDeleted($opcionmenu->id,'opcionmenu', Auth::user()->id,'crear'));
         });
         return is_null($error) ? "OK" : $error;
     }
@@ -226,7 +223,6 @@ class OpcionmenuController extends Controller
         $error = DB::transaction(function() use($id){
             $opcionmenu = Opcionmenu::find($id);
             $opcionmenu->delete();
-            event( new UserHasCreatedOrDeleted($opcionmenu->id,'opcionmenu', Auth::user()->id,'eliminar'));
         });
         return is_null($error) ? "OK" : $error;
     }

@@ -8,9 +8,6 @@ use App\Brand;
 use App\Librerias\Libreria;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
-use App\Events\UserHasCreatedOrDeleted;
-use App\Events\UserHasEdited;
-use Illuminate\Support\Facades\Auth;
 
 class BrandController extends Controller
 {
@@ -107,8 +104,6 @@ class BrandController extends Controller
             $brand = new Brand();
             $brand->descripcion= mb_strtoupper($request->input('descripcion'), 'utf-8');
             $brand->save();
-
-            event( new UserHasCreatedOrDeleted($brand->id,'marca', auth()->user()->id, 'crear'));
         });
         return is_null($error) ? "OK" : $error;
     }
@@ -148,15 +143,8 @@ class BrandController extends Controller
         } 
         $error = DB::transaction(function() use($request, $id){
             $brand = Brand::find($id);
-
-            //copia para listener
-            $brandOrg = $brand;
-
             $brand->descripcion= mb_strtoupper($request->input('descripcion'), 'utf-8');
             $brand->save();
-
-            event( new UserHasEdited($brandOrg,$brand,'marca', auth()->user()->id));
-
         });
         return is_null($error) ? "OK" : $error;
     }
@@ -187,7 +175,6 @@ class BrandController extends Controller
         }
         $error = DB::transaction(function() use($id){
             $brand = Brand::find($id);
-            event( new UserHasCreatedOrDeleted($brand->id,'marca', auth()->user()->id, 'eliminar'));
             $brand->delete();
         });
         return is_null($error) ? "OK" : $error;

@@ -17,8 +17,6 @@ use Illuminate\Validation\Rule;
 use Mpdf\Mpdf;
 use App\Contratista;
 use App\Vehiculodocument;
-use App\Events\UserHasCreatedOrDeleted;
-use Illuminate\Support\Facades\Auth;
 
 
 // INICIO DE MODIFICACION
@@ -178,8 +176,6 @@ class MantCorrPrev extends Controller
                 //ACTUALIZO K. RECORRIDO DEL VEHICULO
                 $vehiculo->kilometraje_rec =  $request->input('k_final') - $vehiculo->kilometraje_act;
                 $vehiculo->save();
-
-                event( new UserHasCreatedOrDeleted($vehiculo->id,'vehiculo', Auth::user()->id,'crear'));
             }
 
             $checklistvehicular->k_inicial = $request->input('k_inicial');
@@ -195,7 +191,7 @@ class MantCorrPrev extends Controller
             $checklistvehicular->concesionaria_id = Concesionaria::getConcesionariaActual()->id;
             $checklistvehicular->save();
 
-            event( new UserHasCreatedOrDeleted($checklistvehicular->id,'checklistvehicular', Auth::user()->id,'crear'));
+
 
         });
         return is_null($error) ? "OK" : $error;

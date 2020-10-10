@@ -39,6 +39,7 @@ class UserConcesionariaController extends Controller
         return UserConcesionaria::join('users', 'userconcesionaria.user_id', '=', 'users.id')
         	->join('concesionaria', 'userconcesionaria.concesionaria_id', '=', 'concesionaria.id')
             ->where('users.id','=',auth()->user()->id)
+            ->where('userconcesionaria.estado','=',true)
             ->orderBy('concesionaria.id', 'ASC')
             ->select('concesionaria.id as id', 'concesionaria.razonsocial as razonsocial');
     }

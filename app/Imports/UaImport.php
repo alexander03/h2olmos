@@ -28,6 +28,15 @@ class UaImport implements ToModel
         //CONVERSIÓN EXPLICITA DE HABILITADO
         (strtolower($row[2]) == 'si' ) ? $row[2] = 1 : $row[2] = 0; 
         //CONVERSIÓN EXPLICITA DE DATOS US PADRE
+        if(isset($row[0])){
+            $ua_id = Ua::select('id')
+                -> where([
+                    [ 'codigo', 'LIKE', $row[0] ],
+                    [ 'concesionaria_id', $this -> getConsecionariaActual() ]
+                    ])
+                -> get();
+            if(count($ua_id) > 0) throw new Exception('UA ya existe '.$row[0]." ".$row[1]);
+        }
         if(isset($row[5])){
             $ua_padre_id = Ua::select('id')
                 -> where([
