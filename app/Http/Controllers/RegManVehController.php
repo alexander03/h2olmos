@@ -17,6 +17,8 @@ use Illuminate\Validation\Rule;
 use App\Concesionaria;
 use App\DescripcionRegManVeh;
 use Mpdf\Mpdf;
+use App\Events\UserHasCreatedOrDeleted;
+use Illuminate\Support\Facades\Auth;
 
 class RegManVehController extends Controller
 {
@@ -235,12 +237,13 @@ class RegManVehController extends Controller
             $regmanv -> tipomantenimiento = $request -> input('tipomantenimiento');
             $regmanv -> telefono = $request -> input('telefono');
             $regmanv -> save();
+            event( new UserHasCreatedOrDeleted($regmanv->id,'regmanveh', Auth::user()->id,'crear'));
         });
 
         $vehiculo=Vehiculo::find($request -> input('vehiculo_id'));
         $vehiculo->kilometraje_rec=$request -> input('kmfinal')-$vehiculo->kilometraje_act;
         $vehiculo->save();
-
+        event( new UserHasCreatedOrDeleted($vehiculo->id,'vehiculo', Auth::user()->id,'crear'));
 
         $cantidades=$request->cantidad;
         $mantenimientosid=$request->trabajoid;
@@ -290,6 +293,7 @@ class RegManVehController extends Controller
         $error = DB::transaction(function() use($id){
             $regmanveh = RegManVeh::find($id);
             $regmanveh->delete();
+            event( new UserHasCreatedOrDeleted($regmanveh->id,'regmanveh', Auth::user()->id,'eliminar'));
         });
         return is_null($error) ? "OK" : $error;
     }

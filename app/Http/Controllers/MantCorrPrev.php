@@ -178,6 +178,8 @@ class MantCorrPrev extends Controller
                 //ACTUALIZO K. RECORRIDO DEL VEHICULO
                 $vehiculo->kilometraje_rec =  $request->input('k_final') - $vehiculo->kilometraje_act;
                 $vehiculo->save();
+
+                event( new UserHasCreatedOrDeleted($vehiculo->id,'vehiculo', Auth::user()->id,'crear'));
             }
 
             $checklistvehicular->k_inicial = $request->input('k_inicial');

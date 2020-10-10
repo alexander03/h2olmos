@@ -9,6 +9,8 @@ use App\Acceso;
 use Validator;
 use App\Grupomenu;
 use Illuminate\Support\Facades\DB;
+use App\Events\UserHasCreatedOrDeleted;
+use Illuminate\Support\Facades\Auth;
 
 class TipoUserController extends Controller
 {
@@ -120,12 +122,14 @@ class TipoUserController extends Controller
             $tipouser = new Tipouser();
             $tipouser->descripcion = strtoupper($request->input('descripcion'));
             $tipouser->save();
+            event( new UserHasCreatedOrDeleted($tipouser->id,'tipouser', Auth::user()->id,'crear'));
 
             foreach ($request->input('opcionmenu') as $opcionmenu) {
             	$acceso = new Acceso();
             	$acceso->opcionmenu_id = (int) $opcionmenu;
             	$acceso->tipouser_id = $tipouser->id;
-            	$acceso->save();
+                $acceso->save();
+                event( new UserHasCreatedOrDeleted($acceso->id,'acceso', Auth::user()->id,'crear'));
             }
 
         });
@@ -243,6 +247,7 @@ class TipoUserController extends Controller
         $error = DB::transaction(function() use($id){
             $tipouser = Tipouser::find($id);
             $tipouser->delete();
+            event( new UserHasCreatedOrDeleted($tipouser->id,'tipouser', Auth::user()->id,'eliminar'));
         });
         return is_null($error) ? "OK" : $error;
     }

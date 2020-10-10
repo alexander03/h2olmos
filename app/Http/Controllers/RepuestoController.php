@@ -9,6 +9,8 @@ use App\Unidad;
 use App\Librerias\Libreria;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
+use App\Events\UserHasCreatedOrDeleted;
+use Illuminate\Support\Facades\Auth;
 
 class RepuestoController extends Controller
 {
@@ -127,6 +129,7 @@ class RepuestoController extends Controller
             $repuesto->descripcion= mb_strtoupper($request->input('descripcion'), 'utf-8');
             $repuesto->unidad_id= $request->input('unidad_id');
             $repuesto->save();
+            event( new UserHasCreatedOrDeleted($repuesto->id,'repuesto', Auth::user()->id,'crear'));
         });
         return is_null($error) ? "OK" : $error;
     }
@@ -210,8 +213,9 @@ class RepuestoController extends Controller
             return $existe;
         }
         $error = DB::transaction(function() use($id){
-            $brand = Repuesto::find($id);
-            $brand->delete();
+            $repuesto = Repuesto::find($id);
+            $repuesto->delete();
+            event( new UserHasCreatedOrDeleted($repuesto->id,'repuesto', Auth::user()->id,'eliminar'));
         });
         return is_null($error) ? "OK" : $error;
     }

@@ -18,6 +18,8 @@ use Illuminate\Validation\Rule;
 use App\Concesionaria;
 use App\DescripcionRegRepVeh;
 use Mpdf\Mpdf;
+use App\Events\UserHasCreatedOrDeleted;
+use Illuminate\Support\Facades\Auth;
 
 class RegRepVehController extends Controller
 {
@@ -235,11 +237,13 @@ class RegRepVehController extends Controller
             $regrepv -> tipomantenimiento = $request -> input('tipomantenimiento');
             $regrepv -> telefono = $request -> input('telefono');
             $regrepv -> save();
+            event( new UserHasCreatedOrDeleted($regrepv->id,'regrepveh', Auth::user()->id,'crear'));
         });
 
         $vehiculo=Vehiculo::find($request -> input('vehiculo_id'));
         $vehiculo->kilometraje_rec=$request -> input('kmfinal')-$vehiculo->kilometraje_act;
         $vehiculo->save();
+        event( new UserHasCreatedOrDeleted($vehiculo->id,'vehiculo', Auth::user()->id,'crear'));
 
         $cantidades=$request->cantidad;
         $repuestosid=$request->repuestoid;
@@ -252,6 +256,7 @@ class RegRepVehController extends Controller
             $descripcionregrepv -> repuesto_id  = intval($repuestosid[$i]);
             $descripcionregrepv -> monto = $montos[$i];;
             $descripcionregrepv -> save();
+            event( new UserHasCreatedOrDeleted($descripcionregrepv->id,'descripcionregrepveh', Auth::user()->id,'crear'));
         }); 
         }
 
@@ -289,6 +294,7 @@ class RegRepVehController extends Controller
         $error = DB::transaction(function() use($id){
             $regrepveh = RegRepVeh::find($id);
             $regrepveh->delete();
+            event( new UserHasCreatedOrDeleted($regrepveh->id,'regrepveh', Auth::user()->id,'eliminar'));
         });
         return is_null($error) ? "OK" : $error;
     }

@@ -8,6 +8,8 @@ use App\Grupomenu;
 use App\Librerias\Libreria;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
+use App\Events\UserHasCreatedOrDeleted;
+use Illuminate\Support\Facades\Auth;
 
 class GrupomenuController extends Controller
 {
@@ -124,6 +126,7 @@ class GrupomenuController extends Controller
             $grupomenu->icono = $request->input('icono');
             $grupomenu->orden = $request->input('orden');
             $grupomenu->save();
+            event( new UserHasCreatedOrDeleted($grupomenu->id,'grupomenu', Auth::user()->id,'crear'));
         });
         return is_null($error) ? "OK" : $error;
     }
@@ -206,6 +209,7 @@ class GrupomenuController extends Controller
         $error = DB::transaction(function() use($id){
             $grupomenu = Grupomenu::find($id);
             $grupomenu->delete();
+            event( new UserHasCreatedOrDeleted($grupomenu->id,'grupomenu', Auth::user()->id,'eliminar'));
         });
         return is_null($error) ? "OK" : $error;
     }
