@@ -25,6 +25,24 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `bitacora`
+--
+
+CREATE TABLE `bitacora` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `accion` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `tabla` varchar(35) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `registro_id` bigint(20) UNSIGNED DEFAULT NULL,
+  `valor_anterior` json DEFAULT NULL,
+  `valor_posterior` json DEFAULT NULL,
+  `user_id` bigint(20) UNSIGNED NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
+
+--
 -- Estructura de tabla para la tabla `abastecimiento`
 --
 

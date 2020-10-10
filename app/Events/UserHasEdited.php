@@ -25,10 +25,10 @@ class UserHasEdited
      */
     public function __construct($element_org,$element_final,$table,$user_id)
     {
-        public->element_org = $element_org;
-        public->element_final = $element_final;
-        public->table = $table;
-        public->user_id = $user_id;
+        $this->element_org = $element_org;
+        $this->element_final = $element_final;
+        $this->table = $table;
+        $this->user_id = $user_id;
     }
 
     /**

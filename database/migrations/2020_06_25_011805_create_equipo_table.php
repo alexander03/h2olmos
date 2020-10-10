@@ -30,7 +30,7 @@ class CreateEquipoTable extends Migration
             $table->year('anio')->nullable();
             $table->unsignedBigInteger('area_id');
             $table->unsignedBigInteger('concesionaria_id');
-            
+            $table->float('capacidad_carga',6,2);
             $table->unsignedBigInteger('ua_id')->nullable();
             /*
             $table->string('chasis',20)->nullable();
