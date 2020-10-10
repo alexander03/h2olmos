@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Concesionaria;
 use App\Librerias\Libreria;
 use Illuminate\Support\Facades\DB;
+use App\Events\UserHasCreatedOrDeleted;
+use Illuminate\Support\Facades\Auth;
 
 class ConcesionariaController extends Controller
 {
@@ -108,6 +110,8 @@ class ConcesionariaController extends Controller
             $concesionaria->ruc= strtoupper($request->input('ruc'));
             $concesionaria->abreviatura= strtoupper($request->input('abreviatura'));
             $concesionaria->save();
+
+            event( new UserHasCreatedOrDeleted($concesionaria->id,'concesionaria', Auth::user()->id,'crear'));
         });
         return is_null($error) ? "OK" : $error;
     }
@@ -165,6 +169,7 @@ class ConcesionariaController extends Controller
         $error = DB::transaction(function() use($id){
             $concesionaria = Concesionaria::find($id);
             $concesionaria->delete();
+            event( new UserHasCreatedOrDeleted($abastecimiento->id,'concesionaria', Auth::user()->id,'eliminar'));
         });
         return is_null($error) ? "OK" : $error;
     }

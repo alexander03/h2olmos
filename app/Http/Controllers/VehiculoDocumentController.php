@@ -175,8 +175,8 @@ class VehiculoDocumentController extends Controller
         }
         $error = DB::transaction(function() use($id){
             $vehiculo = Vehiculodocument::find($id);
-            event( new UserHasCreatedOrDeleted($vehiculodocument->id,'vehiculodocument', Auth::user()->id),'eliminar'));
             $vehiculo->delete();
+            event( new UserHasCreatedOrDeleted($vehiculo->id,'vehiculo', Auth::user()->id,'crear'));
         });
         return is_null($error) ? "OK" : $error;
     }

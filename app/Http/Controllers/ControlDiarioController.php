@@ -20,6 +20,8 @@ use Maatwebsite\Excel\Facades\Excel;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use App\Exports\ExcelReport_HorasTrabajadas;
+use App\Events\UserHasCreatedOrDeleted;
+use Illuminate\Support\Facades\Auth;
 
 class ControlDiarioController extends Controller
 {
@@ -278,7 +280,9 @@ class ControlDiarioController extends Controller
                 $controldiario->tipo_material       = $request -> input('tipo_material.'. $key);
                 $controldiario->observaciones       = $request -> input('observaciones.'. $key);
 
-                $controldiario->save();    
+                $controldiario->save();
+
+                event( new UserHasCreatedOrDeleted($controldiario->id,'controldiario', Auth::user()->id,'crear'));
             }
         
         });
@@ -441,6 +445,8 @@ class ControlDiarioController extends Controller
         $error = DB::transaction(function() use($id){
             $equipo = Equipo::find($id);
             $equipo->delete();
+
+            event( new UserHasCreatedOrDeleted($equipo->id,'equipo', Auth::user()->id,'eliminar'));
         });
         return is_null($error) ? "OK" : $error;
     }
