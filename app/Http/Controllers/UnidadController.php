@@ -167,8 +167,8 @@ class UnidadController extends Controller
             return $existe;
         }
         $error = DB::transaction(function() use($id){
-            $tipohora = Unidad::find($id);
-            $tipohora->delete();
+            $unidad = Unidad::find($id);
+            $unidad->delete();
         });
         return is_null($error) ? "OK" : $error;
     }

@@ -14,6 +14,9 @@ use App\Librerias\Libreria;
 use App\Rules\SearchUaPadre;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+use App\Events\UserHasEdited;
+
 class EquipoController extends Controller
 {
     protected $folderview      = 'app.equipo';
@@ -342,6 +345,10 @@ class EquipoController extends Controller
         } 
         $error = DB::transaction(function() use($request, $id){
             $equipo = Equipo::find($id);
+
+            //Copia bitacora
+            $equipoOrg = $equipo;
+
 //            $equipo->codigo 	 		  = strtoupper($request->input('codigo'));
             $equipo->ua_id                = Ua::where('codigo',$request->input('ua_id'))->get()[0]->id;
             $equipo->descripcion 		  = strtoupper($request->input('descripcion'));
@@ -355,6 +362,8 @@ class EquipoController extends Controller
             	$equipo->area_id 				  = $request->input('area_id');
             }
             $equipo->save();
+
+            event( new UserHasEdited($equipoOrg,$equipo,'equipo', auth()->user()->id));
         });
         return is_null($error) ? "OK" : $error;
     }
