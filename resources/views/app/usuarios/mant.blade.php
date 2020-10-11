@@ -32,9 +32,15 @@
 		@foreach ($cboConcesionaria as $item)
 			<div>
 				{!! Form::label($item['ruc'], $item['abreviatura'], []) !!}
-				{!! Form::checkbox($item['ruc'], $item['id'], $item['estado'], ['id' => $item['ruc']]) !!}
+				@if ($item['estado'])
+					<input type="checkbox" name="{{$item['ruc']}}" value="{{$item['id']}}" checked="true" class="arr-concesionarias" data-estado="true">
+				@else
+					<input type="checkbox" name="{{$item['ruc']}}" value="{{$item['id']}}" class="arr-concesionarias" data-estado="false">
+				@endif
+				{{-- {!! Form::checkbox($item['ruc'], $item['id'], $item['estado'], ['class' => 'arr-concesionarias', 'id' => $item['ruc'], 'data-estado' => $item['estado']]) !!} --}}
 			</div>
 		@endforeach
+		{!! Form::text('las-concesionarias', '', ['id' => 'input-concesionarias', 'hidden' =>true]) !!}
 	</div>
 </div>
 <div class="form-group">
@@ -49,15 +55,34 @@
 		configurarAnchoModal('350');
 		init(IDFORMMANTENIMIENTO+'{!! $entidad !!}', 'M', '{!! $entidad !!}');
 
-		const inputCode = document.getElementById('codigo');
-		inputCode.addEventListener('change', e => {
-			if(isNaN(e.target.value)) e.target.value = '';
-		})
+		const inputConcesionarias = document.getElementById('input-concesionarias');
+		const arrConcesionarias = Array.from(document.getElementsByClassName('arr-concesionarias')).map(el => {
+			return {
+				'id'     : el.value,
+				'estado' : el.dataset.estado == true
+			};
+		});
 
-		inputCode.addEventListener('keydown', e => {
-			//TODO: que acepte las teclas: flecha left y right
-			if(e.target.value.length > 6 && e.keyCode != 8) e.preventDefault();
-			if(e.keyCode < 8 || (e.keyCode >9 && e.keyCode< 48) || (e.keyCode >57 && e.keyCode< 67) || (e.keyCode >67 && e.keyCode< 86) || (e.keyCode >86 && e.keyCode< 96) || e.keyCode> 105) e.preventDefault();
-		})
+
+		$('.arr-concesionarias').change(function() {
+			if ($(this).is(':checked') ) {
+				changeEstadoConcesionaria($(this).val(),true);
+			} else {
+				changeEstadoConcesionaria($(this).val(),false);
+			}
+			inputConcesionarias.value = JSON.stringify(arrConcesionarias);
+		});
+
+		const changeEstadoConcesionaria = (idElement,estado) => {
+			arrConcesionarias.map((el) => {
+				if(el.id == idElement) {
+					el.estado = estado;
+				}
+			});
+			console.log(arrConcesionarias)
+		};
+
+
+
 	}); 
 </script>

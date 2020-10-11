@@ -138,20 +138,14 @@ class UserController extends Controller
             $user->password= Hash::make($request->input('password'));
             $user->save();
 
-            if($request->input('20523611250') != null) {
+            $concesionarias = json_decode($request->input('las-concesionarias'));
+            foreach ($concesionarias as $con) {
                 $userconcesionaria = new UserConcesionaria();
                 $userconcesionaria->user_id = $user->id;
-                $userconcesionaria->concesionaria_id = $request->input('20523611250');
+                $userconcesionaria->concesionaria_id = $con->id;
+                $userconcesionaria->estado = $con->estado;
                 $userconcesionaria->save();
             }
-            
-            if($request->input('20509093521') != null) {
-                $userconcesionaria2 = new UserConcesionaria();
-                $userconcesionaria2->user_id = $user->id;
-                $userconcesionaria2->concesionaria_id = $request->input('20509093521');
-                $userconcesionaria2->save();
-            }
-
         });
         return is_null($error) ? "OK" : $error;
 
@@ -217,44 +211,8 @@ class UserController extends Controller
             if($request->input('password')) $user->password = Hash::make($request->input('password'));
             $user->save();
 
-            $concesionariaH2O = $user->getConcesionarias->where('ruc', '20523611250')->first();
-            if($concesionariaH2O != null) {
-                if($request->input('20523611250') != null) {
-                    $userconcesionaria = UserConcesionaria::where('user_id', $user->id)->where('concesionaria_id', $concesionariaH2O->id)->first();
-                    $userconcesionaria->estado = true;
-                    $userconcesionaria->save();
-                } else {
-                    $userconcesionaria = UserConcesionaria::where('user_id', $user->id)->where('concesionaria_id', $concesionariaH2O->id)->first();
-                    $userconcesionaria->estado = false;
-                    $userconcesionaria->save();
-                }
-            } else {
-                if($request->input('20523611250') != null) {
-                    $userconcesionaria = new UserConcesionaria();
-                    $userconcesionaria->user_id = $user->id;
-                    $userconcesionaria->concesionaria_id = $request->input('20523611250');
-                    $userconcesionaria->save();
-                }
-            }
-            $concesionariaCTO = $user->getConcesionarias->where('ruc', '20509093521')->first();
-            if($concesionariaCTO != null) {
-                if($request->input('20509093521') != null) {
-                    $userconcesionaria = UserConcesionaria::where('user_id', $user->id)->where('concesionaria_id', $concesionariaCTO->id)->first();
-                    $userconcesionaria->estado = true;
-                    $userconcesionaria->save();
-                }else {
-                    $userconcesionaria = UserConcesionaria::where('user_id', $user->id)->where('concesionaria_id', $concesionariaCTO->id)->first();
-                    $userconcesionaria->estado = false;
-                    $userconcesionaria->save();
-                }
-            } else {
-                if($request->input('20509093521') != null) {
-                    $userconcesionaria = new UserConcesionaria();
-                    $userconcesionaria->user_id = $user->id;
-                    $userconcesionaria->concesionaria_id = $request->input('20509093521');
-                    $userconcesionaria->save();
-                }
-            }
+            //TODO:hacer el editar
+
         });
         return is_null($error) ? "OK" : $error;
     }
