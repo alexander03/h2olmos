@@ -59,10 +59,11 @@
 		const arrConcesionarias = Array.from(document.getElementsByClassName('arr-concesionarias')).map(el => {
 			return {
 				'id'     : el.value,
-				'estado' : el.dataset.estado == true
+				'estado' : el.dataset.estado == 'true' ? true : false
 			};
 		});
 
+		console.log(arrConcesionarias);
 
 		$('.arr-concesionarias').change(function() {
 			if ($(this).is(':checked') ) {

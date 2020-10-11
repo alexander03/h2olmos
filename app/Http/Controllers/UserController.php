@@ -182,35 +182,21 @@ class UserController extends Controller
                 'estado'      => false
             ];
         }
-
         $userConcesionarias = $user->getConcesionarias;
-        // dd($userConcesionarias[0]['id']);
-
-        // foreach ($cboConcesionaria as $con) {
-        //     foreach ($userConcesionarias as $usercon) {
-        //         if($con['id'] == $usercon['id']) {
-        //             // dd($con['id'], $usercon['id']);
-        //             $con['estado'] = true;
-        //             // dd($con);
-        //         }
-        //     }
-        // }
-        
         for ($i=0; $i < count($cboConcesionaria); $i++) {
             for ($j=0; $j < count($userConcesionarias); $j++) { 
                 if($cboConcesionaria[$i]['id'] == $userConcesionarias[$j]['id']) {
-                    $cboConcesionaria[$i]['estado'] = $userConcesionarias[$j]['estado'];
+                    $cboConcesionaria[$i]['estado'] = $userConcesionarias[$j]['pivot']['estado'];
                 }
             }
         }
-        // dd($cboConcesionaria);
 
         return view($this->folderview.'.mant')->with(compact('user', 'formData', 'entidad', 'boton', 'cboTipousers', 'cboConcesionaria', 'listar'));
     }
 
     public function update(Request $request, $id)
     {
-        $existe = Libreria::verificarExistencia($id, 'repuesto');
+        $existe = Libreria::verificarExistencia($id, 'users');
         if ($existe !== true) {
             return $existe;
         }
@@ -241,7 +227,24 @@ class UserController extends Controller
             if($request->input('password')) $user->password = Hash::make($request->input('password'));
             $user->save();
 
-            //TODO:hacer el editar
+
+            $userConcesionarias = $user->getConcesionarias;
+            $concesionarias = json_decode($request->input('las-concesionarias'));
+            foreach ($concesionarias as $con) {
+                foreach ($userConcesionarias as $usercon) {
+                    if($con->id == $usercon->id) {//EXISTE LA CONCESIONARIA
+                        $userconcesionaria = UserConcesionaria::find($usercon->id);
+                        $userconcesionaria->estado = $con->estado;
+                        $userconcesionaria->save();
+                    }else {//NO EXISTE LA CONCESIONARIA
+                        $userconcesionaria = new UserConcesionaria();
+                        $userconcesionaria->user_id = $user->id;
+                        $userconcesionaria->concesionaria_id = $con->id;
+                        $userconcesionaria->estado = $con->estado;
+                        $userconcesionaria->save();
+                    }
+                }
+            }
 
         });
         return is_null($error) ? "OK" : $error;
