@@ -103,10 +103,14 @@ class UserController extends Controller
             $cboTipousers += array($v->id=>$v->descripcion);
         }
 
-        $arrConcesionarias      = Concesionaria::getAll();
-        $cboConcesionaria = [];
-        foreach($arrConcesionarias as $k=>$v){
-            $cboConcesionaria[] = array('ruc'=> $v->ruc ,'id' => $v->id, 'abreviatura' => $v->abreviatura, 'estado' => false);
+        $arrConcesionarias = Concesionaria::getAll();
+        $cboConcesionaria  = [];
+        foreach($arrConcesionarias as $con){
+            $cboConcesionaria[] = [
+                'id'          => $con->id,
+                'abreviatura' => $con->abreviatura,
+                'estado'      => false
+            ];
         }
         return view($this->folderview.'.mant')->with(compact('user', 'formData', 'entidad', 'cboTipousers','cboConcesionaria' ,'boton', 'listar'));
     }
@@ -168,12 +172,38 @@ class UserController extends Controller
         foreach($arrTipousers as $k=>$v){
             $cboTipousers += array($v->id=>$v->descripcion);
         }
-
-        $arrConcesionarias      = $user->getConcesionarias;
-        $cboConcesionaria = [];
-        foreach($arrConcesionarias as $k=>$v){
-            $cboConcesionaria[] = array('ruc'=> $v->ruc ,'id' => $v->id, 'abreviatura' => $v->abreviatura, 'estado' => $v->pivot->estado);
+        
+        $arrConcesionarias = Concesionaria::getAll();
+        $cboConcesionaria  = [];
+        foreach($arrConcesionarias as $con){
+            $cboConcesionaria[] = [
+                'id'          => $con->id,
+                'abreviatura' => $con->abreviatura,
+                'estado'      => false
+            ];
         }
+
+        $userConcesionarias = $user->getConcesionarias;
+        // dd($userConcesionarias[0]['id']);
+
+        // foreach ($cboConcesionaria as $con) {
+        //     foreach ($userConcesionarias as $usercon) {
+        //         if($con['id'] == $usercon['id']) {
+        //             // dd($con['id'], $usercon['id']);
+        //             $con['estado'] = true;
+        //             // dd($con);
+        //         }
+        //     }
+        // }
+        
+        for ($i=0; $i < count($cboConcesionaria); $i++) {
+            for ($j=0; $j < count($userConcesionarias); $j++) { 
+                if($cboConcesionaria[$i]['id'] == $userConcesionarias[$j]['id']) {
+                    $cboConcesionaria[$i]['estado'] = $userConcesionarias[$j]['estado'];
+                }
+            }
+        }
+        // dd($cboConcesionaria);
 
         return view($this->folderview.'.mant')->with(compact('user', 'formData', 'entidad', 'boton', 'cboTipousers', 'cboConcesionaria', 'listar'));
     }

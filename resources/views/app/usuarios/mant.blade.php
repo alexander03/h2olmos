@@ -31,11 +31,11 @@
 	<div class="col-sm-12 d-flex justify-content-around">
 		@foreach ($cboConcesionaria as $item)
 			<div>
-				{!! Form::label($item['ruc'], $item['abreviatura'], []) !!}
+				{!! Form::label($item['id'], $item['abreviatura'], []) !!}
 				@if ($item['estado'])
-					<input type="checkbox" name="{{$item['ruc']}}" value="{{$item['id']}}" checked="true" class="arr-concesionarias" data-estado="true">
+					<input type="checkbox" name="{{$item['id']}}" value="{{$item['id']}}" checked="true" class="arr-concesionarias" data-estado="true">
 				@else
-					<input type="checkbox" name="{{$item['ruc']}}" value="{{$item['id']}}" class="arr-concesionarias" data-estado="false">
+					<input type="checkbox" name="{{$item['id']}}" value="{{$item['id']}}" class="arr-concesionarias" data-estado="false">
 				@endif
 				{{-- {!! Form::checkbox($item['ruc'], $item['id'], $item['estado'], ['class' => 'arr-concesionarias', 'id' => $item['ruc'], 'data-estado' => $item['estado']]) !!} --}}
 			</div>

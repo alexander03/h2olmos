@@ -9,7 +9,7 @@ use DateTime;
 
 use App\Concesionaria;
 use App\Equipo;
-use App\TipoHora;
+use App\Tipohora;
 use App\Controldiario;
 
 class ExcelReport_HorasTrabajadas implements FromView
