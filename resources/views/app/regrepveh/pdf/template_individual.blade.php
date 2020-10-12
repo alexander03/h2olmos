@@ -228,7 +228,7 @@
                         <td class="text items">{{$obs->unidad}}</td>
                         <td class="text items">{{$obs->codigo}}</td>
                         <td class="text items">{{$obs->descripcion}}</td>
-                        <td class="text items">{{$obs->monto*$obs->cantidad}}</td>
+                        <td class="text items">{{round($obs->monto*$obs->cantidad,2)}}</td>
                         <?php $total+=$obs->monto*$obs->cantidad ?>
                     </tr>
                     @endforeach
@@ -250,7 +250,7 @@
                         <td class="text table-borderless pequeno2"></td>
                         <td class="text table-borderless pequeno2"></td>
                         <td class="text table-borderless pequeno2" align="right">SUBTOTAL</td>
-                        <td class="table-bordered pequeno2">{{round($total,2)}}</td>
+                        <td class="table-bordered pequeno2">{{round($total*0.82,2)}}</td>
                     </tr>
                     <tr>
                         <td class="text table-borderless pequeno2"></td>
@@ -258,7 +258,7 @@
                         <td class="text table-borderless pequeno2"></td>
                         <td class="text table-borderless pequeno2"></td>
                         <td class="text table-borderless pequeno2" align="right">IGV</td>
-                        <td class="table-bordered pequeno2">18%</td>
+                        <td class="table-bordered pequeno2">{{round($total*0.18,2)}}</td>
                     </tr>
                     <tr>
                         <td class="text table-borderless pequeno2"></td>
@@ -266,7 +266,7 @@
                         <td class="text table-borderless pequeno2"></td>
                         <td class="text table-borderless pequeno2"></td>
                         <td class="text table-borderless pequeno2" align="right">TOTAL</td>
-                        <td class="table-bordered pequeno2">{{round($total*(100/82),2)}}</td>
+                        <td class="table-bordered pequeno2">{{round($total,2)}}</td>
                     </tr>
                 </table>
 

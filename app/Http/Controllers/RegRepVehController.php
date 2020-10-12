@@ -411,7 +411,7 @@ class RegRepVehController extends Controller
 
 
         $vehiculo=Vehiculo::find($request -> input('vehiculo_id'));
-        $vehiculo->kilometraje_rec=$regrepv -> kmfinal-$vehiculo->kilometraje_act;
+        $vehiculo->kilometraje_rec=$request -> input('kmfinal')-$vehiculo->kilometraje_act;
         $vehiculo->save();
 
         
@@ -506,7 +506,7 @@ public function generatePDF(Request $request) {
         $data['telefono'] = $regrepveh->telefono;
         $data['fechaentrada'] = $regrepveh->fechaentrada;
         $data['fechasalida'] = $regrepveh->fechasalida;
-        $data['fecharegistro'] = $regmanveh->fecharegistro;
+        $data['fecharegistro'] = $regrepveh->fecharegistro;
         $data['regrepveh'] = $regrepveh;
         $data['observaciones'] = $oObservaciones;
         $data['namefile'] = $namefile;
