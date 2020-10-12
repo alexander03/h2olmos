@@ -71,7 +71,7 @@ class MantCorrPrev extends Controller
         $cabecera[]       = array('valor' => 'K. Final', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Lider del area', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Conductor', 'numero' => '1');
-        $cabecera[]       = array('valor' => 'Opciones', 'numero' => '2');
+        $cabecera[]       = array('valor' => 'Opciones', 'numero' => '3');
         $titulo_modificar = $this->tituloModificar;
         $titulo_eliminar  = $this->tituloEliminar;
         $titulo_registrar = $this->tituloRegistrar;

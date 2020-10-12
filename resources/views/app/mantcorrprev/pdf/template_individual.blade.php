@@ -39,7 +39,7 @@
             border: 0.5px;
         }
         .bg-blue{
-            background-color: blue;
+            background-color: #0070c0;
         }
         .h2{
             font-size: 12px;
@@ -72,7 +72,7 @@
                 <table width="100%">
                     <tr>
                         <td rowspan="4" width="20%" class="text-center">
-                            <img src="{{ asset('/assets/img/logo.jpg') }}" width="130" height="70">
+                            <img src="{{ asset('/assets/img/logo-main.png') }}" width="130" height="70">
                         </td>
                         <td rowspan="2" width="50%" class="text-center text-white bg-blue text-bold">
                             CHECK LIST VEHICULAR
