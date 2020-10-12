@@ -410,7 +410,7 @@ class RegRepVehController extends Controller
         });
 
 
-        $vehiculo=Vehiculo::find($regrepv -> ua_id);
+        $vehiculo=Vehiculo::find($request -> input('vehiculo_id'));
         $vehiculo->kilometraje_rec=$regrepv -> kmfinal-$vehiculo->kilometraje_act;
         $vehiculo->save();
 
