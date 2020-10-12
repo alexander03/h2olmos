@@ -38,6 +38,11 @@ class Equipo extends Model
     public function ua()
     {
         return $this->belongsTo('App\Ua');
+    } 
+
+    public function unidad()
+    {
+        return $this->belongsTo('App\Unidad');
     }    
     
     public function controlesdiarios()

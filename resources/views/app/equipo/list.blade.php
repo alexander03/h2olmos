@@ -39,6 +39,16 @@
 					{{ $value->area->descripcion }}
 				@endif
 			</td>
+			<td>{{ $value->horas_min }}</td>
+			<td>{{ $value->precio }}</td>
+			<td>
+				@if(!$value->moneda)
+					Sol S/
+				@else
+					Dolar $
+				@endif
+			</td>
+			<td>{{ $value->unidad->descripcion }}</td>
 			<td>{!! Form::button('<i class="material-icons">edit</i>', array('onclick' => 'modal (\''.URL::route($ruta["edit"], array($value->id, 'listar'=>'SI')).'\', \''.$titulo_modificar.'\', this);', 'class' => 'btn btn-primary btn-link btn-sm','rel'=>'tooltip','title'=>'Editar')) !!}</td>
 			<td>{!! Form::button('<i class="material-icons">close</i>', array('onclick' => 'modal (\''.URL::route($ruta["delete"], array($value->id, 'SI')).'\', \''.$titulo_eliminar.'\', this);', 'class' => 'btn btn-danger btn-link btn-sm','rel'=>'tooltip','title'=>'Eliminar')) !!}</td>
 		</tr>

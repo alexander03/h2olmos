@@ -18,8 +18,9 @@
 				@elseif( $value->tipo == 2)
 					Mantenimiento de Combustible
 				@elseif( $value->tipo == 3)
-					Mantenimiento
+					Registro de repuesto vehicular 
 				@else( $value->tipo == 4)
+					Registro de mantenimiento vehicular
 				@endif
 			</td>
 			<td>

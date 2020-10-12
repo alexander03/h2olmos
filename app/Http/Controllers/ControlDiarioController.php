@@ -262,10 +262,10 @@ class ControlDiarioController extends Controller
                 $uaDB =  Ua::where('codigo', $request -> input('ua_id.'.$key)) -> get();
                 $controldiario->ua_id                 = $uaDB[0]->id;
 
-                $controldiario->hora_inicio = $request -> input('hora_inicio.'. $key);
+//                $controldiario->hora_inicio = $request -> input('hora_inicio.'. $key);
                 $controldiario->hora_total  = $request -> input('hora_total.'. $key);
                 $controldiario->hora_parada  = $request -> input('hora_parada.'. $key);
-                $controldiario->hora_fin    = $request -> input('hora_fin.'. $key);
+//                $controldiario->hora_fin    = $request -> input('hora_fin.'. $key);
                 $controldiario->fecha       = $request -> input('fecha');
                 $controldiario->horometro_inicial       = $request -> input('horometro_inicial');
                 $controldiario->horometro_final       = $request -> input('horometro_final');
@@ -405,10 +405,10 @@ class ControlDiarioController extends Controller
             $uaDB =  Ua::where('codigo', $request -> input('ua_id.0')) -> get();
             $controldiario->ua_id                 = $uaDB[0]->id;
 
-	        $controldiario->hora_inicio = $request -> input('hora_inicio.0');
+//	        $controldiario->hora_inicio = $request -> input('hora_inicio.0');
 	        $controldiario->hora_total  = $request -> input('hora_total.0');
 	        $controldiario->hora_parada  = $request -> input('hora_parada.0');
-            $controldiario->hora_fin 	= $request -> input('hora_fin.0');
+//            $controldiario->hora_fin 	= $request -> input('hora_fin.0');
             $controldiario->horometro_inicial       = $request -> input('horometro_inicial');
             $controldiario->horometro_final       = $request -> input('horometro_final');
 	        $controldiario->fecha 		= $request ->input('fecha');

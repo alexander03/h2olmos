@@ -23,6 +23,10 @@ class EquipoTableSeeder extends Seeder
             'capacidad_carga' => 1223,
             'area_id' => 1,
             'concesionaria_id' => 1,
+            'horas_min' => 152,
+            'precio' => 4550,
+            'moneda' => 1,
+            'unidad_id' => 6,
             'created_at' => now(),
             'updated_at' => now()
         ]);
@@ -39,6 +43,10 @@ class EquipoTableSeeder extends Seeder
             'anio' => '2015',
             'area_id' => 1,
             'concesionaria_id' => 2,
+            'horas_min' => 152,
+            'precio' => 4550,
+            'moneda' => 1,
+            'unidad_id' => 6,
             'created_at' => now(),
             'updated_at' => now()
         ]);        
