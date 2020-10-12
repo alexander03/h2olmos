@@ -193,7 +193,11 @@ class ReportKilometrajeController extends Controller
 		       
        // 
 		//Uniendo todos las listas
-		$ListaFinal = $listaChecklistvehicular->merge($listaAbastecimientoCombustible);
+        $ListaFinal = collect([]);
+
+		$ListaFinal = $ListaFinal->merge($listaChecklistvehicular);
+
+        $ListaFinal = $ListaFinal->merge($listaAbastecimientoCombustible);
 
 		$ListaFinal = $ListaFinal->merge($listaRegRepVeh);
 

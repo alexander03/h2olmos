@@ -48,7 +48,7 @@
 			</td>
 			<td>{{ $value->color }}</td>
 			<td>
-				@if($value->kilometraje_id>0)
+				@if($value->kilometraje_id > 0)
 					{{ $value->kilometraje->descripcion }}
 				@endif
 			</td>
