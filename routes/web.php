@@ -216,11 +216,11 @@ Route::group(['middleware' => 'auth'], function () {
 	//Rutas para mantenimiento correctivo y preventivo
 	Route::resource('mantcorrprev', 'MantCorrPrev', array('except' => array('show')));
 	Route::post('mantcorrprev/buscar', 'MantCorrPrev@buscar')->name('mantcorrprev.buscar');
+	Route::get('mantcorrprev/eliminar/{id}/{listarluego}', 'MantCorrPrev@eliminar')->name('mantcorrprev.eliminar');
 	Route::get('mantcorrprev/createrepuesto', 'MantCorrPrev@createrepuesto')->name('mantcorrprev.createrepuesto');
 	Route::get('mantcorrprev/buscarporua', 'MantCorrPrev@buscarporua')->name('mantcorrprev.buscarporua');
 	Route::get('existeunidad', 'MantCorrPrev@existeUnidad')->name('mantcorrprev.existeunidad');
 	Route::get('mantcorrprev/pdf/generar','MantCorrPrev@generatePDF')->name('mantcorrprev.pdf.export');
-	// Route::get('mantcorrprev/createchecklistvehicular', 'MantCorrPrev@createchecklistvehicular')->name('mantcorrprev.createchecklistvehicular');
 	Route::get('mantcorrprev/searchConductor', 'MantCorrPrev@searchConductor');
 	Route::get('mantcorrprev/searchUnidad', 'MantCorrPrev@searchUnidad');
 

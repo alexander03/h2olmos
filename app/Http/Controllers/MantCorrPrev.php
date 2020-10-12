@@ -39,7 +39,7 @@ class MantCorrPrev extends Controller
         // 'createrepuesto' => 'mantcorrprev.createrepuesto',
         'buscarporua' => 'mantcorrprev.buscarporua',
         'edit'   => 'mantcorrprev.edit', 
-        // 'delete' => 'mantcorrprev.eliminar',
+        'delete' => 'mantcorrprev.eliminar',
         'activar' => 'mantcorrprev.activar',
         'search' => 'mantcorrprev.buscar',
         'store' => 'mantcorrprev.store',
@@ -459,7 +459,6 @@ class MantCorrPrev extends Controller
         $mpdf->Output($namefile, "I");
     }
 
-
     // INICIO DE MODIFICACION
     public function searchConductor(Request $request){
         $filter = $request->filter;
@@ -480,5 +479,35 @@ class MantCorrPrev extends Controller
     }
     // FIN DE MODIFICACION
 
+    public function eliminar($id, $listarLuego)
+    {
+        $existe = Libreria::verificarExistencia($id, 'checklistvehicular');
+        if ($existe !== true) return $existe;
+        $listar = "NO";
+        if (!is_null(Libreria::obtenerParametro($listarLuego))) $listar = $listarLuego;
 
+        $mensaje=true;
+        $modelo   = Checklistvehicular::find($id);
+        $entidad  = 'Checklistvehicular';
+        $formData = array('route' => array('mantcorrprev.destroy', $id), 'method' => 'DELETE', 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
+        $boton    = 'Eliminar';
+        return view('app.confirmarEliminar')->with(compact('modelo', 'formData', 'entidad', 'boton', 'listar','mensaje'));
+    }
+
+    public function destroy($id)
+    {
+        $existe = Libreria::verificarExistencia($id, 'checklistvehicular');
+        if ($existe !== true) return $existe;
+        $error = DB::transaction(function() use($id){
+            $checklistvehicular = Checklistvehicular::find($id);
+            $checklistvehicular->delete();
+
+            //ACTUALIZO K. RECORRIDO DEL VEHICULO
+            $vehiculo = $checklistvehicular->vehiculo;
+            $vehiculo->kilometraje_rec -=  ($checklistvehicular->k_final - $vehiculo->kilometraje_act);
+            $vehiculo->save();
+
+        });
+        return is_null($error) ? "OK" : $error;
+    }
 }
