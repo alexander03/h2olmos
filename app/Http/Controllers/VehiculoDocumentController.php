@@ -200,9 +200,25 @@ class VehiculoDocumentController extends Controller
         $fecha_actual = date("Y-m-d");
         $fecha_limite =  date("Y-m-d",strtotime($fecha_actual."+ 1 week"));
 
+        $concesionariaActual = $this->concesionariaActual();
+        
+        $resultado = Vehiculodocument::select(DB::raw('vehiculo_id , tipo , id  , notificacion , MAX(fecha) as fecha'))
+                    ->where('notificacion', false)
+                    ->whereHas('vehiculo',function($query) use($concesionariaActual){
+                                $query->where('concesionaria_id',  $concesionariaActual);
+                    })
+                    ->groupBy(DB::raw('vehiculo_id , tipo'))
+                    ->having('fecha','>=',$fecha_actual)
+                    ->having('fecha','<=',$fecha_limite)
+                    ->with(['vehiculo' => function($q){
+                        $q->select('id','modelo','placa','marca_id')->with('marca:id,descripcion');
+                    }])
+                    ->get();
+
+
+/*
         $resultado = Vehiculodocument::where(function ($sql) use($fecha_actual,$fecha_limite){
-                        $sql->whereBetween('fecha',[$fecha_actual,$fecha_limite])
-                            ->orWhere('fecha','<=',$fecha_actual);
+                        $sql->whereBetween('fecha',[$fecha_actual,$fecha_limite]);
                     })
                      ->where('notificacion','=',false)
                      ->select('id','fecha','tipo','vehiculo_id')
@@ -210,11 +226,22 @@ class VehiculoDocumentController extends Controller
                         $q->select('id','modelo','placa','marca_id')->with('marca:id,descripcion');
                      }])
                      ->orderBy('fecha')->get();
-
-
+*/
+        $vistos = Vehiculodocument::select(DB::raw('vehiculo_id , tipo , id , notificacion , MAX(fecha) as fecha'))
+                    ->where('notificacion', true)
+                    ->whereHas('vehiculo',function($query) use($concesionariaActual){
+                                $query->where('concesionaria_id',  $concesionariaActual);
+                    })
+                    ->groupBy(DB::raw('vehiculo_id , tipo'))
+                    ->having('fecha','>=',$fecha_actual)
+                    ->having('fecha','<=',$fecha_limite)
+                    ->with(['vehiculo' => function($q){
+                        $q->select('id','modelo','placa','marca_id')->with('marca:id,descripcion');
+                    }])
+                    ->get();
+/*
         $vistos = Vehiculodocument::where(function ($sql) use($fecha_actual,$fecha_limite){
-                        $sql->whereBetween('fecha',[$fecha_actual,$fecha_limite])
-                            ->orWhere('fecha','<=',$fecha_actual);
+                        $sql->whereBetween('fecha',[$fecha_actual,$fecha_limite]);
                     })
                   ->where('notificacion','=',true)
                   ->select('id','fecha','tipo','vehiculo_id')
@@ -222,7 +249,7 @@ class VehiculoDocumentController extends Controller
                         $q->select('id','modelo','placa','marca_id')->with('marca:id,descripcion');
                   }])
                   ->orderBy('fecha')->get();
-
+*/
         $respuesta = ['notfy_new' => $resultado, 'notify_vist' => $vistos];
 
         return response() -> json($respuesta);
@@ -236,6 +263,17 @@ class VehiculoDocumentController extends Controller
 
         $concesionariaActual = $this->concesionariaActual();
 
+        $resultado = Vehiculodocument::select(DB::raw('vehiculo_id , tipo , id , notificacion , MAX(fecha) as fecha'))
+                    ->where('notificacion', false)
+                    ->groupBy(DB::raw('vehiculo_id , tipo'))
+                    ->having('fecha','>=',$fecha_actual)
+                    ->having('fecha','<=',$fecha_limite)
+                    ->whereHas('vehiculo',function($query) use($concesionariaActual){
+                                $query->where('concesionaria_id',  $concesionariaActual);
+                    })
+                    ->get();
+
+/*
         $resultado = Vehiculodocument::where(function ($sql) use($fecha_actual,$fecha_limite){
                         $sql->whereBetween('fecha',[$fecha_actual,$fecha_limite])
                             ->orWhere('fecha','<=',$fecha_actual);
@@ -245,6 +283,7 @@ class VehiculoDocumentController extends Controller
                                 $query->where('concesionaria_id',  $concesionariaActual);
                             })
                     ->get();
+*/
         $resultado = $resultado->count();
 
         return response() -> json(array('numero' => $resultado));

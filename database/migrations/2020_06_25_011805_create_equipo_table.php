@@ -32,6 +32,14 @@ class CreateEquipoTable extends Migration
             $table->unsignedBigInteger('concesionaria_id');
             $table->float('capacidad_carga',6,2);
             $table->unsignedBigInteger('ua_id')->nullable();
+            
+            //datos para reporte
+            $table->float('horas_min',5,2);
+            $table->float('precio',8,2);
+            $table->boolean('moneda');
+            $table->unsignedBigInteger('unidad_id');
+            $table->foreign('unidad_id')->references('id')->on('unidad');
+
             /*
             $table->string('chasis',20)->nullable();
             $table->string('carroceria',10)->nullable();

@@ -151,7 +151,7 @@
                     <tr>
                         <td width="45%" class="text-bold">CONCESIONARIA:&nbsp;<span>{{ $concesionaria }}</span></td>
                         <td width="30%" class="text-bold">CLIENTE:&nbsp;<span>{{ $cliente }}</span></td>
-                        <td width="25%" class="text-bold"><span></span></td>
+                        <td width="25%" class="text-CENTER"><span>{{ $fecharegistro }}</span></td>
                     </tr>
                 </table>
 
@@ -223,7 +223,7 @@
                         <td class="text-center items">{{$contador}}</td>
                         <td class="text items">{{$obs->cantidad}}</td>
                         <td class="text items">{{$obs->descripcion}}</td>
-                        <td class="text items">{{$obs->monto*$obs->cantidad}}</td>
+                        <td class="text items">{{number_format($obs->monto*$obs->cantidad, 2, '.', '')}}</td>
                         <?php $total+=$obs->monto*$obs->cantidad ?>
                     </tr>
                     @endforeach
@@ -241,19 +241,19 @@
                         <td class="text table-borderless pequeno2"></td>
                         <td class="text table-borderless pequeno2"></td>
                         <td class="text table-borderless pequeno2" align="right">SUBTOTAL</td>
-                        <td class="table-bordered pequeno2" align="right">{{$total}}</td>
+                        <td class="table-bordered pequeno2">{{number_format($total*0.82, 2, '.', '')}}</td>
                     </tr>
                     <tr>
                         <td class="text table-borderless pequeno2"></td>
                         <td class="text table-borderless pequeno2"></td>
                         <td class="text table-borderless pequeno2" align="right">IGV</td>
-                        <td class="table-bordered pequeno2" align="right">18%</td>
+                        <td class="table-bordered pequeno2">{{number_format($total*0.18, 2, '.', '')}}</td>
                     </tr>
                     <tr>
                         <td class="text table-borderless pequeno2"></td>
                         <td class="text table-borderless pequeno2"></td>
                         <td class="text table-borderless pequeno2" align="right">TOTAL</td>
-                        <td class="table-bordered pequeno2" align="right">{{round($total*(100/82),2)}}</td>
+                        <td class="table-bordered pequeno2">{{number_format($total, 2, '.', '')}}</td>
                     </tr>
                 </table>
 

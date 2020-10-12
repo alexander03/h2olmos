@@ -14,18 +14,25 @@ class OpcionmenuTableSeeder extends Seeder
     {
         DB::table('opcionmenu')->insert([
             [
-            'descripcion' => 'Ua',
-            'link' => 'ua',
-            'icono' => 'api',
-            'orden' => 1,
-            'grupomenu_id' => 1
+                'descripcion' => 'Ua',
+                'link' => 'ua',
+                'icono' => 'api',
+                'orden' => 1,
+                'grupomenu_id' => 1
             ],
             [
-            'descripcion' => 'Unidades',
-            'link' => 'unidad',
-            'icono' => 'ac_unit',
-            'orden' => 1,
-            'grupomenu_id' => 1
+                'descripcion' => 'Unidades',
+                'link' => 'unidad',
+                'icono' => 'ac_unit',
+                'orden' => 1,
+                'grupomenu_id' => 1
+            ],
+            [
+                'descripcion' => 'Responsable',
+                'link' => 'responsable',
+                'icono' => 'contacts',
+                'orden' => 1,
+                'grupomenu_id' => 1              
             ]
         ]);
         DB::table('opcionmenu')->insert([

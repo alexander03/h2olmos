@@ -417,16 +417,16 @@ CREATE TABLE `controldiario` (
   `turno` tinyint(1) NOT NULL,
   `horometro_inicial` double(6,2) NOT NULL,
   `horometro_final` double(6,2) NOT NULL,
-  `hora_inicio` time DEFAULT NULL,
-  `hora_fin` time DEFAULT NULL,
+--  `hora_inicio` time DEFAULT NULL,
+--  `hora_fin` time DEFAULT NULL,
   `hora_total` decimal(18,2) NOT NULL,
   `hora_parada` decimal(10,2) DEFAULT NULL,
   `tipohora_id` bigint(20) UNSIGNED DEFAULT NULL,
   `viajes` int(11) DEFAULT NULL,
   `km_inicial` int(11) DEFAULT NULL,
-  `acceso_origen` int(11) NOT NULL,
-  `km_destino` int(11) NOT NULL,
-  `acceso_destino` int(11) NOT NULL,
+  `acceso_origen` int(11) DEFAULT NULL,
+  `km_destino` int(11) DEFAULT NULL,
+  `acceso_destino` int(11) DEFAULT NULL,
   `tipo_material` text COLLATE utf8mb4_unicode_ci,
   `fecha` date NOT NULL,
   `observaciones` longtext COLLATE utf8mb4_unicode_ci,
@@ -439,11 +439,11 @@ CREATE TABLE `controldiario` (
 -- Volcado de datos para la tabla `controldiario`
 --
 
-INSERT INTO `controldiario` (`id`, `equipo_id`, `ua_id`, `turno`, `horometro_inicial`, `horometro_final`, `hora_inicio`, `hora_fin`, `hora_total`, `hora_parada`, `tipohora_id`, `viajes`, `km_inicial`, `acceso_origen`, `km_destino`, `acceso_destino`, `tipo_material`, `fecha`, `observaciones`, `deleted_at`, `created_at`, `updated_at`) VALUES
-(1, 1, 31, 1, 123.50, 140.00, '15:20:00', '18:00:00', 3.50, NULL, 13, NULL, NULL, 0, 0, 0, NULL, '2020-09-29', 'todo ok', NULL, '2020-09-29 09:00:26', '2020-09-29 09:00:26'),
-(2, 1, 25, 1, 10.00, 20.00, NULL, NULL, 3.50, 0.50, 8, NULL, NULL, 0, 0, 0, NULL, '2020-10-01', 'ok', NULL, '2020-10-01 08:55:27', '2020-10-01 09:19:26'),
-(3, 1, 25, 1, 20.00, 30.00, NULL, NULL, 5.00, 0.50, 1, NULL, NULL, 0, 0, 0, NULL, '2020-10-01', 'ok1', NULL, '2020-10-01 09:29:11', '2020-10-01 09:29:11'),
-(4, 1, 25, 1, 20.00, 30.00, NULL, NULL, 3.00, 1.00, 17, 2, 100, 1900, 2000, 2100, 'BASE', '2020-10-01', 'ok2', NULL, '2020-10-01 09:29:11', '2020-10-01 09:45:02');
+INSERT INTO `controldiario` (`id`, `equipo_id`, `ua_id`, `turno`, `horometro_inicial`, `horometro_final`, `hora_total`, `hora_parada`, `tipohora_id`, `viajes`, `km_inicial`, `acceso_origen`, `km_destino`, `acceso_destino`, `tipo_material`, `fecha`, `observaciones`, `deleted_at`, `created_at`, `updated_at`) VALUES
+(1, 1, 31, 1, 123.50, 140.00,  3.50, NULL, 13, NULL, NULL, 0, 0, 0, NULL, '2020-09-29', 'todo ok', NULL, '2020-09-29 09:00:26', '2020-09-29 09:00:26'),
+(2, 1, 25, 1, 10.00, 20.00, 3.50, 0.50, 8, NULL, NULL, 0, 0, 0, NULL, '2020-10-01', 'ok', NULL, '2020-10-01 08:55:27', '2020-10-01 09:19:26'),
+(3, 1, 25, 1, 20.00, 30.00,  5.00, 0.50, 1, NULL, NULL, 0, 0, 0, NULL, '2020-10-01', 'ok1', NULL, '2020-10-01 09:29:11', '2020-10-01 09:29:11'),
+(4, 1, 25, 1, 20.00, 30.00,  3.00, 1.00, 17, 2, 100, 1900, 2000, 2100, 'BASE', '2020-10-01', 'ok2', NULL, '2020-10-01 09:29:11', '2020-10-01 09:45:02');
 
 -- --------------------------------------------------------
 
@@ -454,9 +454,9 @@ INSERT INTO `controldiario` (`id`, `equipo_id`, `ua_id`, `turno`, `horometro_ini
 CREATE TABLE `descripcionregmanveh` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `regmanveh_id` bigint(20) UNSIGNED NOT NULL,
-  `cantidad` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `cantidad` decimal(18,2) NOT NULL,
   `trabajo_id` bigint(20) UNSIGNED NOT NULL,
-  `monto` int(11) NOT NULL,
+  `monto` decimal(18,2) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
@@ -471,9 +471,9 @@ CREATE TABLE `descripcionregmanveh` (
 CREATE TABLE `descripcionregrepveh` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `regrepveh_id` int(11) NOT NULL,
-  `cantidad` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `cantidad` decimal(18,2) NOT NULL,
   `repuesto_id` int(11) DEFAULT NULL,
-  `monto` int(11) NOT NULL,
+  `monto` decimal(18,2) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
@@ -497,6 +497,10 @@ CREATE TABLE `equipo` (
   `concesionaria_id` bigint(20) UNSIGNED NOT NULL,
   `ua_id` int(11) NOT NULL,
   `capacidad_carga` decimal(10,2) DEFAULT NULL,
+  `horas_min` double(5,2) NOT NULL,
+  `precio` double(8,2) NOT NULL,
+  `moneda` tinyint(1) NOT NULL,
+  `unidad_id` bigint(20) UNSIGNED NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
@@ -506,8 +510,8 @@ CREATE TABLE `equipo` (
 -- Volcado de datos para la tabla `equipo`
 --
 
-INSERT INTO `equipo` (`id`, `descripcion`, `modelo`, `placa`, `marca_id`, `contratista_id`, `anio`, `area_id`, `concesionaria_id`, `ua_id`, `capacidad_carga`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(1, 'MOTONIVELADRA NEW HOLD', 'NEW HOLDEN', 'RG170B', 2, 3, 2020, 2, 1, 25, NULL, '2020-09-29 08:50:10', '2020-10-01 08:48:36', NULL);
+INSERT INTO `equipo` (`id`, `descripcion`, `modelo`, `placa`, `marca_id`, `contratista_id`, `anio`, `area_id`, `concesionaria_id`, `ua_id`, `capacidad_carga`,`horas_min`, `precio`, `moneda`, `unidad_id`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(1, 'MOTONIVELADRA NEW HOLD', 'NEW HOLDEN', 'RG170B', 2, 3, 2020, 2, 1, 25, NULL,152.00, 4550.00, 1, 6, '2020-09-29 08:50:10', '2020-10-01 08:48:36', NULL);
 
 -- --------------------------------------------------------
 
@@ -786,6 +790,7 @@ CREATE TABLE `regmanveh` (
   `kmfinal` int(11) NOT NULL,
   `fechaentrada` date DEFAULT NULL,
   `fechasalida` date DEFAULT NULL,
+  `fecharegistro` date DEFAULT NULL,
   `tipomantenimiento` int(11) NOT NULL,
   `telefono` int(11) NOT NULL,
   `especial` tinyint NOT NULL DEFAULT 0,
@@ -811,6 +816,7 @@ CREATE TABLE `regrepveh` (
   `kmfinal` int(11) NOT NULL,
   `fechaentrada` date DEFAULT NULL,
   `fechasalida` date DEFAULT NULL,
+  `fecharegistro` date DEFAULT NULL,
   `tipomantenimiento` int(11) NOT NULL,
   `telefono` int(11) NOT NULL,
   `especial` tinyint NOT NULL DEFAULT 0,
@@ -1046,7 +1052,9 @@ INSERT INTO `unidad` (`id`, `descripcion`, `created_at`, `updated_at`, `deleted_
 (2, 'VB', '2020-09-09 07:35:34', '2020-09-09 07:35:34', NULL),
 (3, 'METRO CÚBICO', '2020-09-09 07:35:34', '2020-09-09 07:35:34', NULL),
 (4, 'KILOMETRO', '2020-09-09 07:35:34', '2020-09-09 07:35:34', NULL),
-(5, 'GLB', '2020-09-09 07:35:34', '2020-09-09 07:35:34', NULL);
+(5, 'GLB', '2020-09-09 07:35:34', '2020-09-09 07:35:34', NULL),
+(6, 'HORAS', '2020-09-09 07:35:34', '2020-09-09 07:35:34', NULL),
+(7, 'DIAS', '2020-09-09 07:35:34', '2020-09-09 07:35:34', NULL);
 
 -- --------------------------------------------------------
 
@@ -1157,6 +1165,7 @@ CREATE TABLE `vehiculo` (
   `color` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
   `concesionaria_id` bigint(20) UNSIGNED NOT NULL,
   `carroceria_id` int(11) NOT NULL,
+  `kilometraje_id` bigint(20) UNSIGNED NOT NULL,
   `kilometraje_ini` decimal(18,2) NOT NULL,
   `kilometraje_act` decimal(18,2) NOT NULL,
   `kilometraje_rec` decimal(18,2) NULL,
@@ -1169,8 +1178,8 @@ CREATE TABLE `vehiculo` (
 -- Volcado de datos para la tabla `vehiculo`
 --
 
-INSERT INTO `vehiculo` (`id`, `placa`, `motor`, `modelo`, `asientos`, `anio`, `marca_id`, `ua_id`, `area_id`, `contratista_id`, `chasis`, `color`, `concesionaria_id`, `carroceria_id`, `kilometraje_ini`, `kilometraje_act`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(1, 'AXF-554', 'DIESEL', 'AX-SDAS', 4, 2019, 1, 28, 2, 3, 'JASKFJA', 'ROJO', 1, 4, 500.00, 500.00, '2020-09-29 10:06:29', '2020-09-29 10:06:29', NULL);
+INSERT INTO `vehiculo` (`id`, `placa`, `motor`, `modelo`, `asientos`, `anio`, `marca_id`, `ua_id`, `area_id`, `contratista_id`, `chasis`, `color`, `concesionaria_id`, `carroceria_id`, `kilometraje_id`, `kilometraje_ini`, `kilometraje_act`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(1, 'AXF-554', 'DIESEL', 'AX-SDAS', 4, 2019, 1, 28, 2, 3, 'JASKFJA', 'ROJO', 1, 4, 1 ,500.00, 500.00, '2020-09-29 10:06:29', '2020-09-29 10:06:29', NULL);
 
 -- --------------------------------------------------------
 

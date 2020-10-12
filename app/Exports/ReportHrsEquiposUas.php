@@ -86,17 +86,20 @@ class ReportHrsEquiposUas implements FromCollection, WithHeadings
         foreach ($info as $FragUa) {
             //tabla para una Ua
             $HorasUa = collect([]);
+
+            //Equipos de ua
+            $Equipos = $FragUa->equipos->unique('id');
             
 
             $fila = $this->filaBase;
             $fila[0] = $FragUa->codigo;
             $fila[1] = $FragUa->descripcion;
-            $fila[2] = $FragUa->equipos[0]->ua->codigo;
-            $fila[3] = $FragUa->equipos[0]->descripcion;
+            $fila[2] = $Equipos[0]->ua->codigo;
+            $fila[3] = $Equipos[0]->descripcion;
 
             $reglas = [];
             $reglas[] = ['ua_id',$FragUa->id];
-            $reglas[] = ['equipo_id',$FragUa->equipos[0]->id];
+            $reglas[] = ['equipo_id',$Equipos[0]->id];
             $reglas[] = ['hora_total','!=',null];
 
             $controles = Controldiario::whereBetween('controldiario.fecha',[$fechaInicio,$fechaFin])
@@ -125,8 +128,8 @@ class ReportHrsEquiposUas implements FromCollection, WithHeadings
             $HorasUa->offsetSet(0,$fila);
 
             //revisa el resto de equipos
-            if( count($FragUa->equipos) >= 1 ){
-                for($valor = 1 ; $valor < count($FragUa->equipos) ; $valor++){
+            if( count($Equipos) >= 1 ){
+                for($valor = 1 ; $valor < count($Equipos) ; $valor++){
 
                     //Acumulación de horas
                     $TotalPorEquipo=0;
@@ -134,13 +137,13 @@ class ReportHrsEquiposUas implements FromCollection, WithHeadings
 
                     $reglas = [];
                     $reglas[] = ['ua_id',$FragUa->id];
-                    $reglas[] = ['equipo_id',$FragUa->equipos[$valor]->id];
+                    $reglas[] = ['equipo_id',$Equipos[$valor]->id];
                     $reglas[] = ['hora_total','!=',null];
                     $controles = Controldiario::whereBetween('controldiario.fecha',[$fechaInicio,$fechaFin])
                             ->where($reglas)->select('id','hora_total','fecha')->get();
                     
-                    $fila[2] = $FragUa->equipos[$valor]->ua->codigo;
-                    $fila[3] = $FragUa->equipos[$valor]->descripcion;
+                    $fila[2] = $Equipos[$valor]->ua->codigo;
+                    $fila[3] = $Equipos[$valor]->descripcion;
 
                     //Agrega datos a la fila del equipo
                     foreach ($controles as $control) {
