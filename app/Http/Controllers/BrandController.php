@@ -8,6 +8,8 @@ use App\Brand;
 use App\Librerias\Libreria;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Auth;
+use App\Events\UserHasCreatedOrDeleted;
 
 class BrandController extends Controller
 {
@@ -104,6 +106,7 @@ class BrandController extends Controller
             $brand = new Brand();
             $brand->descripcion= mb_strtoupper($request->input('descripcion'), 'utf-8');
             $brand->save();
+            event( new UserHasCreatedOrDeleted($brand->id,'marca', auth()->user()->id,'crear'));
         });
         return is_null($error) ? "OK" : $error;
     }
