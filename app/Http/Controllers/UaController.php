@@ -18,6 +18,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\UaExport;
 use App\Exports\UaExport2;
 use App\Imports\UaImport;
+use App\Responsable;
 use App\Vehiculo;
 use DateTime;
 use Exception;
@@ -71,6 +72,7 @@ class UaController extends Controller{
         $cabecera[]       = array('valor' => 'Estado', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Fecha de inicio', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Fecha de fin', 'numero' => '1');
+        $cabecera[]       = array('valor' => 'Responsable', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Opciones', 'numero' => '2');
         
         $titulo_modificar = $this->tituloModificar;
@@ -122,9 +124,11 @@ class UaController extends Controller{
         $formData = array('ua.store');
         $formData = array('route' => $formData, 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
         $boton    = 'Registrar'; 
-
+        
+        $responsableList  = Responsable::select('id', 'nombre')->get();
         $unidadList = $unidadModel -> all();
-        return view($this->folderview.'.mant')->with(compact('ua', 'formData', 'entidad', 'boton', 'listar', 'unidadList'));
+
+        return view($this->folderview.'.mant')->with(compact('ua', 'formData', 'entidad', 'boton', 'listar', 'unidadList', 'responsableList'));
     }
 
     public function store(Request $request){
@@ -166,6 +170,10 @@ class UaController extends Controller{
                 $uaDB =  Ua::where('codigo', $request -> input('ua_padre_id')) -> get();
                 $ua -> ua_padre_id = (!( $uaDB -> isEmpty() )) ? $uaDB[0] -> id : null;
             }
+            //RESPONSABLE SI EXISTIERA
+            if($request -> input('responsable_id')){
+                $ua -> responsable_id = $request -> input('responsable_id');
+            }
             $ua -> save();
         });
         return is_null($error) ? "OK" : $error;
@@ -186,8 +194,10 @@ class UaController extends Controller{
         $formData = array('route' => $formData, 'method' => 'PUT', 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
         $boton    = 'Modificar';
 
+        $responsableList  = Responsable::select('id', 'nombre')->get();
         $unidadList = $unidadModel -> all();
-        return view($this->folderview.'.mant')->with(compact('ua', 'formData', 'entidad', 'boton', 'listar', 'unidadList'));
+
+        return view($this->folderview.'.mant')->with(compact('ua', 'formData', 'entidad', 'boton', 'listar', 'unidadList', 'responsableList'));
     }
 
     public function update(Request $request, $id){

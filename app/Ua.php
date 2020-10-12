@@ -38,4 +38,9 @@ class Ua extends Model{
     {
         return $this->belongsToMany('App\Equipo','controldiario','ua_id','equipo_id')->whereNull('controldiario.deleted_at');;
     }
+
+    public function responsable(){
+        
+        return $this->belongsTo(Responsable::class, 'responsable_id');
+    }
 }

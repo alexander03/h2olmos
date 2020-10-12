@@ -77,7 +77,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('opcionmenu/eliminar/{id}/{listarluego}', 'OpcionmenuController@eliminar')->name('opcionmenu.eliminar');
 	Route::resource('opcionmenu', 'OpcionmenuController', array('except' => array('show')));
 
-	//Rutas propietario - ua - unidad
+	//Rutas ua
 	Route::post('ua/buscar', 'UaController@buscar')->name('ua.buscar');
 	Route::get('ua/eliminar/{id}/{listarluego}', 'UaController@eliminar')->name('ua.eliminar');
 	Route::get('ua/search/{query}', 'UaController@searchAutocomplete')->name('ua.search');
@@ -88,9 +88,15 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::post('ua/deleteall', 'UaController@destroyAll')->name('ua.deleteall');
 	Route::resource('ua', 'UaController');
 
+	//Rutas unidad
 	Route::post('unidad/buscar', 'UnidadController@buscar')->name('unidad.buscar');
 	Route::get('unidad/eliminar/{id}/{listarluego}', 'UnidadController@eliminar')->name('unidad.eliminar');
 	Route::resource('unidad', 'UnidadController');
+
+	//Rutas responsable
+	Route::post('responsable/buscar', 'ResponsableController@buscar')->name('responsable.buscar');
+	Route::get('responsable/eliminar/{id}/{listarluego}', 'ResponsableController@eliminar')->name('responsable.eliminar');
+	Route::resource('responsable', 'ResponsableController');
 	
 	//Rutas abastecimiento de combustible
 	Route::post('abastecimiento/buscar', 'AbastecimientoCombustibleController@buscar')->name('abastecimiento.buscar');

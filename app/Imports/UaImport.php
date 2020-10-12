@@ -5,9 +5,12 @@ namespace App\Imports;
 use App\Concesionaria;
 use App\Ua;
 use App\Unidad;
+use Carbon\Carbon;
+use ErrorException;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Concerns\ToModel;
+use PhpOffice\PhpSpreadsheet\Shared\Date;
 use Excel;
 
 class UaImport implements ToModel
@@ -24,7 +27,7 @@ class UaImport implements ToModel
         if($row[0] === null || $row[1] === null 
             || $row[2] === null || $row[3] === null) return null;
         //VALIDAR QUE EL CÓDIGO SEA 8 DIGITOS
-        if(strlen($row[0]) > 8) throw new Exception('Error UA no cumple con el formato de maximo de 8 digitos');
+        if(strlen($row[0]) > 8) throw new Exception('Error UA no cumple con el formato de máximo de 8 digitos');
         //CONVERSIÓN EXPLICITA DE HABILITADO
         (strtolower($row[2]) == 'si' ) ? $row[2] = 1 : $row[2] = 0; 
         //CONVERSIÓN EXPLICITA DE DATOS US PADRE
@@ -47,13 +50,23 @@ class UaImport implements ToModel
             if(count($ua_padre_id) > 0) $row[5] = $ua_padre_id[0] -> id;
             else throw new Exception('UA PADRE no existe <strong>'.$row[5]. "</strong> de la UA ".$row[0]." ".$row[1]);
         }else{$row[5] = null;}
-        $fecha = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row[3])->format('Y-m-d');
-        if($row[4]!=""){
-            $fecha1 = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row[4])->format('Y-m-d');
+        
+        try{
+            $fecha = Carbon::instance(Date::excelToDateTimeObject($row[3]))->format('Y-m-d');
+        }catch(ErrorException $ex){
+            $fecha = Carbon::createFromFormat('Y-m-d', $row[3]);
+        }
+        
+        if($row[4]!==""){
+            try{
+                $fecha1 = Carbon::instance(Date::excelToDateTimeObject($row[4]))->format('Y-m-d');
+            }catch(ErrorException $ex){
+                $fecha1 = Carbon::createFromFormat('Y-m-d', $row[4]);
+            }
         }else{
             $fecha1 = null;
         }
-        
+  
         return new Ua([
             'codigo' => $row[0],
             'descripcion' => strtoupper($row[1]),

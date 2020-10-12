@@ -62,6 +62,23 @@ if ($ua !== NULL) {
 		</div>
 		<input type="date" name="fecha_fin" id="id-f-fin" class="form-control" value="<?php if($ua) echo $ua->fecha_fin; ?>">
 	</div>
+	<div class="form-group col-md-6 p-3">
+		<label for="id-resp" class="pl-3">Responsable</label>
+		<div class="u-ua-style js-ua-desc">
+			<?php if($ua) if(!$ua -> responsable_id) echo 'Sin responsable' ?>
+		</div>
+		<input type="text" class="form-control" style="display: none">
+		<section class="d-flex mt-1"> 
+			<select class="form-control" name="responsable_id" id="id-resp">
+				<option value="">Seleccionar el responsable</option>
+				@foreach ($responsableList as $resp)
+					<option value="{{ $resp -> id }}" <?php if($ua) if($ua -> responsable_id) if($ua -> responsable_id == $resp -> id) echo 'selected' ?>>
+						{{ $resp -> nombre }}
+					</option>
+				@endforeach
+			</select>
+		</section>	
+	</div>
 	<div class="form-group w-100">
 		<div class="col-lg-12 col-md-12 col-sm-12 text-right">
 			{!! Form::button('<i class="fa fa-check fa-lg"></i> '.$boton, array('class' => 'btn btn-success btn-sm', 'id' => 'btnGuardar', 'onclick' => 'guardar(\''.$entidad.'\', this)')) !!}

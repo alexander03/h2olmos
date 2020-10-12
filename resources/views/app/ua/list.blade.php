@@ -14,23 +14,24 @@
 		</button>
 	</article>
 </section>
+
 <table id="example1" class="table table-striped table-hover mt-2">
 
 	<thead>
-		<tr class="text-center">
+		<tr class="text-center ua-table__row">
 			@foreach($cabecera as $key => $value)
 				<th class="text-nowrap" @if((int)$value['numero'] > 1) colspan="{{ $value['numero'] }}" @endif>{!! $value['valor'] !!}</th>
 			@endforeach
 		</tr>
 	</thead>
-	<tbody class="text-center">
+	<tbody class="text-center ua-table__body">
 		<?php
 		$contador = $inicio + 1;
 		?>
 		@foreach ($lista as $key => $value)
-		<tr>
-			<td class="text-nowrap">{{ $contador }}</td>
-			<td class="text-nowrap">
+		<tr class="ua-table__row">
+			<td>{{ $contador }}</td>
+			<td>
 				<div class="custom-control custom-checkbox" style="left: 35%">
 					<input type="checkbox" class="custom-control-input" 
 						id="id-{{ $value -> id }}" name="wants_delete" 
@@ -38,23 +39,30 @@
 					<label class="custom-control-label" for="id-{{ $value -> id }}"></label>
 				</div>
 			</td>
-			<td class="text-nowrap">{{ $value->	codigo }}</td>
-			<td class="text-nowrap text-left">{{ $value->	descripcion }}</td>
-			<td class="text-nowrap text-left">
+			<td>{{ $value->	codigo }}</td>
+			<td>{{ $value->	descripcion }}</td>
+			<td>
 				@if($value -> ua_padre_id)
 					<?php echo '<strong>'.$value -> uaPadre($value -> ua_padre_id)[0] -> codigo.'</strong> '.$value -> uaPadre($value -> ua_padre_id)[0] -> descripcion; ?>
 				@else
 					Sin padre
 				@endif
 			</td>
-			<td class="text-nowrap">
+			<td>
 				{{ $value -> es_padre }}
 			</td>
-			<td class="text-nowrap">{{ ($value-> habilitada) ? 'HABILITADO' : 'DESHABILITADO' }}</td>
-			<td class="text-nowrap">{{ date("d/m/Y",strtotime($value-> fecha_inicio)) }}</td>
-			<td class="text-nowrap">{{ ($value-> fecha_fin) ? $value -> fecha_fin : 'ILIMITADO' }}</td>
-			<td class="text-nowrap">{!! Form::button('<i class="material-icons">edit</i>', array('onclick' => 'modal (\''.URL::route($ruta["edit"], array($value->id, 'listar'=>'SI')).'\', \''.$titulo_modificar.'\', this);', 'class' => 'btn btn-primary btn-link btn-sm','rel'=>'tooltip','title'=>'Editar')) !!}</td>
-			<td class="text-nowrap">{!! Form::button('<i class="material-icons">close</i>', array('onclick' => 'modal (\''.URL::route($ruta["delete"], array($value->id, 'SI')).'\', \''.$titulo_eliminar.'\', this);', 'class' => 'btn btn-danger btn-link btn-sm','rel'=>'tooltip','title'=>'Eliminar')) !!}</td>
+			<td>{{ ($value-> habilitada) ? 'HABILITADO' : 'DESHABILITADO' }}</td>
+			<td>{{ date("d/m/Y",strtotime($value-> fecha_inicio)) }}</td>
+			<td>{{ ($value-> fecha_fin) ? $value -> fecha_fin : 'ILIMITADO' }}</td>
+			<td>
+				@if($value -> responsable_id)
+				{{ $value -> responsable -> nombre }}
+				@else
+					Sin responsable
+				@endif
+			</td>
+			<td>{!! Form::button('<i class="material-icons">edit</i>', array('onclick' => 'modal (\''.URL::route($ruta["edit"], array($value->id, 'listar'=>'SI')).'\', \''.$titulo_modificar.'\', this);', 'class' => 'btn btn-primary btn-link btn-sm','rel'=>'tooltip','title'=>'Editar')) !!}</td>
+			<td>{!! Form::button('<i class="material-icons">close</i>', array('onclick' => 'modal (\''.URL::route($ruta["delete"], array($value->id, 'SI')).'\', \''.$titulo_eliminar.'\', this);', 'class' => 'btn btn-danger btn-link btn-sm','rel'=>'tooltip','title'=>'Eliminar')) !!}</td>
 		</tr>
 		<?php
 		$contador = $contador + 1;
