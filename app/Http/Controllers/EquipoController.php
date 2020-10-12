@@ -76,6 +76,10 @@ class EquipoController extends Controller
         $cabecera[]       = array('valor' => 'Capac. Carga(m3)', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Subcontratista', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Area', 'numero' => '1');
+        $cabecera[]       = array('valor' => 'Horas mínimas', 'numero' => '1');
+        $cabecera[]       = array('valor' => 'Precio', 'numero' => '1');
+        $cabecera[]       = array('valor' => 'Moneda', 'numero' => '1');
+        $cabecera[]       = array('valor' => 'Unidad', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Opciones', 'numero' => '2');
         
         $titulo_modificar = $this->tituloModificar;
@@ -183,7 +187,11 @@ class EquipoController extends Controller
                             'placa'                 => 'max:15',
     						'anio' 					=> 'required',
     						'contratista_id'  		=> 'numeric|min:1',
-    						'ua_id' 				=> ['required', new SearchUaPadre() ]
+    						'ua_id' 				=> ['required', new SearchUaPadre() ],
+                            'horas_min'             => 'numeric|min:1|max:999',
+                            'precio'                => 'numeric|min:1|max:999999',
+                            'moneda'                => 'boolean',
+                            'unidad_id'             => 'numeric|min:1'
 //    						'fechavencimientosoat'  => 'required',
 //    						'fechavencimientogps'   => 'required',
 //    						'fechavencimientortv'   => 'required'
@@ -199,6 +207,17 @@ class EquipoController extends Controller
             'placa.max'                       => 'La placa sobrepasa los 15 carácteres',
             'anio.required'    				  => 'Debe ingresar la fecha de fabricación',
             'contratista_id.min'   	  		  => 'Debe asignar un contratista',
+            'horas_min.numeric'               => 'Número de horas inválido',
+            'horas_min.min'                   => 'Debe ingresar un numero de horas mínimas',
+            'horas_min.max'                   => 'Se sobrepasó el numero de horas mínimas posibles de almacenar',
+            'precio.numeric'                  => 'Precio inválido',
+            'precio.min'                      => 'Debe ingresar un precio',
+            'precio.max'                      => 'Se sobrepasó el valor del precio posibles de almacenar',
+            'moneda.boolean'                  => 'Debe ingresar una moneda',
+            'unidad_id.numeric'               => 'Debe ingresar una unidad'
+
+
+
 //            'ua_id.required'		  		  => 'Debe asignar una ua',
 //            'fechavencimientosoat.required'   => 'Debe ingresar la fecha de vencimiento de SOAT',
 //            'fechavencimientogps.required'    => 'Debe ingresar la fecha de vencimiento de GPS',
@@ -220,6 +239,12 @@ class EquipoController extends Controller
             $equipo->capacidad_carga      = $request->input('capacidad_carga');
             $equipo->contratista_id 	  = $request->input('contratista_id');
             $equipo->concesionaria_id     =  $this->consecionariaActual();
+
+            $equipo->horas_min            = $request->input('horas_min');
+            $equipo->precio               = $request->input('precio');
+            $equipo->moneda               = $request->input('moneda');
+            $equipo->unidad_id            = $request->input('unidad_id');
+
             
             if($request->input('area_id') != 0){
             	$equipo->area_id 				  = $request->input('area_id');
@@ -318,7 +343,11 @@ class EquipoController extends Controller
                             'placa'                 => 'max:15',
                             'anio'                  => 'required',
                             'contratista_id'        => 'numeric|min:1',
-                            'ua_id'                 => ['required', new SearchUaPadre() ]
+                            'ua_id'                 => ['required', new SearchUaPadre() ],
+                            'horas_min'             => 'numeric|min:1|max:999',
+                            'precio'                => 'numeric|min:1|max:999999',
+                            'moneda'                => 'boolean',
+                            'unidad_id'             => 'numeric|min:1'
 //                            'fechavencimientosoat'  => 'required',
 //                            'fechavencimientogps'   => 'required',
 //                            'fechavencimientortv'   => 'required'
@@ -334,6 +363,14 @@ class EquipoController extends Controller
             'placa.max'                       => 'La placa sobrepasa los 15 carácteres',
             'anio.required'                   => 'Debe ingresar la fecha de fabricación',
             'contratista_id.min'              => 'Debe asignar un contratista',
+            'horas_min.numeric'               => 'Número de horas inválido',
+            'horas_min.min'                   => 'Debe ingresar un numero de horas mínimas',
+            'horas_min.max'                   => 'Se sobrepasó el numero de horas mínimas posibles de almacenar',
+            'precio.numeric'                  => 'Precio inválido',
+            'precio.min'                      => 'Debe ingresar un precio',
+            'precio.max'                      => 'Se sobrepasó el valor del precio posibles de almacenar',
+            'moneda.boolean'                  => 'Debe ingresar una moneda',
+            'unidad_id.numeric'               => 'Debe ingresar una unidad'
 //            'ua_id.required'                  => 'Debe asignar una ua',
 //            'fechavencimientosoat.required'   => 'Debe ingresar la fecha de vencimiento de SOAT',
 //            'fechavencimientogps.required'    => 'Debe ingresar la fecha de vencimiento de GPS',
@@ -361,6 +398,11 @@ class EquipoController extends Controller
             if($request->input('area_id') != 0){
             	$equipo->area_id 				  = $request->input('area_id');
             }
+            $equipo->horas_min            = $request->input('horas_min');
+            $equipo->precio               = $request->input('precio');
+            $equipo->moneda               = $request->input('moneda');
+            $equipo->unidad_id            = $request->input('unidad_id');
+
             $equipo->save();
 
             event( new UserHasEdited($equipoOrg,$equipo,'equipo', auth()->user()->id));

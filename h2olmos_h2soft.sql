@@ -497,6 +497,10 @@ CREATE TABLE `equipo` (
   `concesionaria_id` bigint(20) UNSIGNED NOT NULL,
   `ua_id` int(11) NOT NULL,
   `capacidad_carga` decimal(10,2) DEFAULT NULL,
+  `horas_min` double(5,2) NOT NULL,
+  `precio` double(8,2) NOT NULL,
+  `moneda` tinyint(1) NOT NULL,
+  `unidad_id` bigint(20) UNSIGNED NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
@@ -506,8 +510,8 @@ CREATE TABLE `equipo` (
 -- Volcado de datos para la tabla `equipo`
 --
 
-INSERT INTO `equipo` (`id`, `descripcion`, `modelo`, `placa`, `marca_id`, `contratista_id`, `anio`, `area_id`, `concesionaria_id`, `ua_id`, `capacidad_carga`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(1, 'MOTONIVELADRA NEW HOLD', 'NEW HOLDEN', 'RG170B', 2, 3, 2020, 2, 1, 25, NULL, '2020-09-29 08:50:10', '2020-10-01 08:48:36', NULL);
+INSERT INTO `equipo` (`id`, `descripcion`, `modelo`, `placa`, `marca_id`, `contratista_id`, `anio`, `area_id`, `concesionaria_id`, `ua_id`, `capacidad_carga`,`horas_min`, `precio`, `moneda`, `unidad_id`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(1, 'MOTONIVELADRA NEW HOLD', 'NEW HOLDEN', 'RG170B', 2, 3, 2020, 2, 1, 25, NULL,152.00, 4550.00, 1, 6, '2020-09-29 08:50:10', '2020-10-01 08:48:36', NULL);
 
 -- --------------------------------------------------------
 
@@ -1046,7 +1050,9 @@ INSERT INTO `unidad` (`id`, `descripcion`, `created_at`, `updated_at`, `deleted_
 (2, 'VB', '2020-09-09 07:35:34', '2020-09-09 07:35:34', NULL),
 (3, 'METRO CÚBICO', '2020-09-09 07:35:34', '2020-09-09 07:35:34', NULL),
 (4, 'KILOMETRO', '2020-09-09 07:35:34', '2020-09-09 07:35:34', NULL),
-(5, 'GLB', '2020-09-09 07:35:34', '2020-09-09 07:35:34', NULL);
+(5, 'GLB', '2020-09-09 07:35:34', '2020-09-09 07:35:34', NULL),
+(6, 'HORAS', '2020-09-09 07:35:34', '2020-09-09 07:35:34', NULL),
+(7, 'DIAS', '2020-09-09 07:35:34', '2020-09-09 07:35:34', NULL);
 
 -- --------------------------------------------------------
 
