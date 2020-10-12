@@ -232,6 +232,7 @@ class RegManVehController extends Controller
             $regmanv -> kmfinal = $request -> input('kmfinal');
             $regmanv -> fechaentrada = $request -> input('fechaentrada');
             $regmanv -> fechasalida = $request -> input('fechasalida');
+            $regmanv -> fecharegistro = now();
             $regmanv -> tipomantenimiento = $request -> input('tipomantenimiento');
             $regmanv -> telefono = $request -> input('telefono');
             $regmanv -> save();
@@ -492,6 +493,7 @@ public function searchAutocompleteTrabajo($query){
         $data['telefono'] = $regmanveh->telefono;
         $data['fechaentrada'] = $regmanveh->fechaentrada;
         $data['fechasalida'] = $regmanveh->fechasalida;
+        $data['fecharegistro'] = $regmanveh->fecharegistro;
         $data['regmanveh'] = $regmanveh;
         $data['observaciones'] = $oObservaciones;
         $data['namefile'] = $namefile;

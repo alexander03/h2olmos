@@ -454,9 +454,9 @@ INSERT INTO `controldiario` (`id`, `equipo_id`, `ua_id`, `turno`, `horometro_ini
 CREATE TABLE `descripcionregmanveh` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `regmanveh_id` bigint(20) UNSIGNED NOT NULL,
-  `cantidad` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `cantidad` decimal(18,2) NOT NULL,
   `trabajo_id` bigint(20) UNSIGNED NOT NULL,
-  `monto` int(11) NOT NULL,
+  `monto` decimal(18,2) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
@@ -471,9 +471,9 @@ CREATE TABLE `descripcionregmanveh` (
 CREATE TABLE `descripcionregrepveh` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `regrepveh_id` int(11) NOT NULL,
-  `cantidad` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `cantidad` decimal(18,2) NOT NULL,
   `repuesto_id` int(11) DEFAULT NULL,
-  `monto` int(11) NOT NULL,
+  `monto` decimal(18,2) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL

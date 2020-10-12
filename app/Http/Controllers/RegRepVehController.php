@@ -232,6 +232,7 @@ class RegRepVehController extends Controller
             $regrepv -> kmfinal = $request -> input('kmfinal');
             $regrepv -> fechaentrada = $request -> input('fechaentrada');
             $regrepv -> fechasalida = $request -> input('fechasalida');
+            $regrepv -> fechasalida = now();
             $regrepv -> tipomantenimiento = $request -> input('tipomantenimiento');
             $regrepv -> telefono = $request -> input('telefono');
             $regrepv -> save();
@@ -505,6 +506,7 @@ public function generatePDF(Request $request) {
         $data['telefono'] = $regrepveh->telefono;
         $data['fechaentrada'] = $regrepveh->fechaentrada;
         $data['fechasalida'] = $regrepveh->fechasalida;
+        $data['fecharegistro'] = $regmanveh->fecharegistro;
         $data['regrepveh'] = $regrepveh;
         $data['observaciones'] = $oObservaciones;
         $data['namefile'] = $namefile;

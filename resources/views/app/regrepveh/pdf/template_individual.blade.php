@@ -250,7 +250,7 @@
                         <td class="text table-borderless pequeno2"></td>
                         <td class="text table-borderless pequeno2"></td>
                         <td class="text table-borderless pequeno2" align="right">SUBTOTAL</td>
-                        <td class="table-bordered pequeno2" align="right">{{$total}}</td>
+                        <td class="table-bordered pequeno2">{{round($total,2)}}</td>
                     </tr>
                     <tr>
                         <td class="text table-borderless pequeno2"></td>
@@ -258,7 +258,7 @@
                         <td class="text table-borderless pequeno2"></td>
                         <td class="text table-borderless pequeno2"></td>
                         <td class="text table-borderless pequeno2" align="right">IGV</td>
-                        <td class="table-bordered pequeno2" align="right">18%</td>
+                        <td class="table-bordered pequeno2">18%</td>
                     </tr>
                     <tr>
                         <td class="text table-borderless pequeno2"></td>
@@ -266,7 +266,7 @@
                         <td class="text table-borderless pequeno2"></td>
                         <td class="text table-borderless pequeno2"></td>
                         <td class="text table-borderless pequeno2" align="right">TOTAL</td>
-                        <td class="table-bordered pequeno2" align="right">{{round($total*(100/82),2)}}</td>
+                        <td class="table-bordered pequeno2">{{round($total*(100/82),2)}}</td>
                     </tr>
                 </table>
 
