@@ -17,11 +17,7 @@ use Illuminate\Validation\Rule;
 use Mpdf\Mpdf;
 use App\Contratista;
 use App\Vehiculodocument;
-
-
-// INICIO DE MODIFICACION
 use App\Rules\RulePlacaExist;
-// FIN DE MODIFICACION
 
 
 class MantCorrPrev extends Controller

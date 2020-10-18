@@ -254,9 +254,12 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('grupomenu/eliminar/{id}/{listarluego}', 'GrupomenuController@eliminar')->name('grupomenu.eliminar');
 	Route::resource('grupomenu', 'GrupomenuController', array('except' => array('show')));
 
-
-	Route::get('controldiario/exportExcelReport', 'ControlDiarioController@exportExcelReport')->name('controldiario.exportExcelReport');
 	Route::get('controldiario/generateReport', 'ControlDiarioController@generateReport')->name('controldiario.generateReport');
+	Route::get('controldiario/generateReportByA', 'ControlDiarioController@generateReportByA')->name('controldiario.generateReportByA');
+	Route::get('controldiario/exportExcelReport', 'ControlDiarioController@exportExcelReport')->name('controldiario.exportExcelReport');
+	Route::post('controldiario/exportExcelReportByA', 'ControlDiarioController@exportExcelReportByA')->name('controldiario.exportExcelReportByA');
+
+	Route::get('controldiario/getEquipos', 'ControlDiarioController@getEquipos')->name('controldiario.getEquipos');
 });
 
 

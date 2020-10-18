@@ -20,6 +20,8 @@ use Maatwebsite\Excel\Facades\Excel;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use App\Exports\ExcelReport_HorasTrabajadas;
+use DateTime;
+use App\Exports\ExcelReport_ByA;
 
 class ControlDiarioController extends Controller
 {
@@ -28,13 +30,15 @@ class ControlDiarioController extends Controller
     protected $tituloRegistrar = 'Registrar control diario de equipos';
     protected $tituloModificar = 'Modificar control diario de equipos';
     protected $tituloEliminar  = 'Eliminar control diario de equipos';
-    protected $tituloGenerar  = 'Generar reporte de control diario';
+    protected $tituloGenerar  = 'Generar reporte de Horas Trabajadas';
+    protected $tituloGenerarReporteByA  = 'Generar reporte de B&A';
     protected $rutas           = array('create' => 'controldiario.create', 
             'edit'           => 'controldiario.edit', 
             'delete'         => 'controldiario.eliminar',
             'search'         => 'controldiario.buscar',
             'index'          => 'controldiario.index',
-            'generateReport' => 'controldiario.generateReport'
+            'generateReport' => 'controldiario.generateReport',
+            'generateReportByA' => 'controldiario.generateReportByA'
         );
 
        /**
@@ -151,11 +155,12 @@ class ControlDiarioController extends Controller
         $title            = $this->tituloAdmin;
         $titulo_registrar = $this->tituloRegistrar;
         $titulo_generar   = $this->tituloGenerar;
+        $titulo_generar_reporte_bya   = $this->tituloGenerarReporteByA;
         $ruta             = $this->rutas;
 
         
+        return view($this->folderview.'.admin')->with(compact('entidad', 'title', 'titulo_registrar', 'titulo_generar', 'titulo_generar_reporte_bya','ruta'));
 
-        return view($this->folderview.'.admin')->with(compact('entidad', 'title', 'titulo_registrar', 'titulo_generar', 'ruta'));
     }
 
     /**
@@ -501,6 +506,44 @@ class ControlDiarioController extends Controller
         return view($this->folderview.'.generate')->with(compact('controldiario' ,'formData', 'entidad', 'boton', 'listar'));
     }
 
+    public function generateReportByA(Request $request)
+    {
+        $listar   = Libreria::getParam($request->input('listar'), 'NO');
+        $entidad  = 'Controldiario';
+        $controldiario = null;
+
+        $formData = array(
+            'route' => ['controldiario.exportExcelReport'], 
+            'class' => 'form-horizontal', 
+            'id' => 'formMantenimiento'.$entidad, 
+            'autocomplete' => 'off'
+        );
+        
+        $boton    = 'Generar Reporte'; 
+        
+        return view($this->folderview.'.generate_report_bya')->with(compact('controldiario' ,'formData', 'entidad', 'boton', 'listar'));
+    }
+
+    public function getEquipos(Request $request)
+    {
+        $concesionaria = Concesionaria::getConcesionariaActual()['id'];
+
+        // $start_date = (new DateTime($request->start_date))->format('Y-m-d');
+        // $end_date = (new DateTime($request->end_date))->format('Y-m-d');
+        $startDate = $request->startDate;
+        $endDate = $request->endDate;
+
+        $dbEquipos = Equipo::join('controldiario', 'equipo.id', '=', 'controldiario.equipo_id')
+                        ->select('equipo.id AS id', 'equipo.descripcion AS descripcion')->distinct()
+                        ->where('controldiario.fecha', '>=', $startDate)
+                        ->where('controldiario.fecha', '<=', $endDate)
+                        ->orderBy('equipo.descripcion', 'asc')->get();
+        
+        return [
+            'listEquipos' => $dbEquipos
+        ];
+    }
+
     public function exportExcelReport(Request $request)
     {
         $dates = [
@@ -509,5 +552,14 @@ class ControlDiarioController extends Controller
         ];
         
         return (new ExcelReport_HorasTrabajadas($dates))->download('excel.xlsx');
+    }
+
+    public function exportExcelReportByA(Request $request)
+    {
+        $start_date = new DateTime($request->input('start_date'));
+        $end_date = new DateTime($request->input('end_date'));
+        $equipo_ids = $request->input('equipo');
+        
+        return (new ExcelReport_ByA($start_date, $end_date, $equipo_ids))->download('report_bya.xlsx');
     }
 }
