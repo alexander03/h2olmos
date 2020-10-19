@@ -11,6 +11,9 @@ use App\Ua;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
+use App\Events\UserHasEdited;
+use App\Events\UserHasCreatedOrDeleted;
 
 class PropietarioController extends Controller
 {
@@ -148,6 +151,9 @@ class PropietarioController extends Controller
             $propietario -> status = $request -> input('status');
             $propietario -> ubicacion = $request -> input('ubicacion');
             $propietario -> save();
+
+            event( new UserHasCreatedOrDeleted($propietario->id,'propietario', auth()->user()->id,'crear'));
+
         });
         return is_null($error) ? "OK" : $error;
     }
@@ -214,6 +220,9 @@ class PropietarioController extends Controller
 
         $error = DB::transaction(function() use($request, $id){
             $propietario = Propietario::find($id);
+
+            $propietarioOrg = $propietario;
+
             $propietario -> descripcion = strtoupper($request->input('descripcion'));
             //BUSCAR
             if($request -> input('ua_id')){
@@ -231,6 +240,8 @@ class PropietarioController extends Controller
             $propietario -> status = $request -> input('status');
             $propietario -> ubicacion = $request -> input('ubicacion');
             $propietario -> save();
+
+            event( new UserHasEdited($propietarioOrg,$propietario,'propietario', auth()->user()->id));
         });
         return is_null($error) ? "OK" : $error;
     }
@@ -260,8 +271,10 @@ class PropietarioController extends Controller
             return $existe;
         }
         $error = DB::transaction(function() use($id){
-            $tipohora = Propietario::find($id);
-            $tipohora->delete();
+            $propietario = Propietario::find($id);
+
+            event( new UserHasCreatedOrDeleted($propietario->id,'propietario', auth()->user()->id,'eliminar'));
+            $propietario->delete();
         });
         return is_null($error) ? "OK" : $error;
     }

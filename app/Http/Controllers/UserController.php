@@ -12,6 +12,9 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 use App\Librerias\Libreria;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+use App\Events\UserHasEdited;
+use App\Events\UserHasCreatedOrDeleted;
 
 class UserController extends Controller
 {
@@ -142,6 +145,8 @@ class UserController extends Controller
             $user->password= Hash::make($request->input('password'));
             $user->save();
 
+            event( new UserHasCreatedOrDeleted($user->id,'user', auth()->user()->id,'crear'));
+
             $concesionarias = json_decode($request->input('las-concesionarias'));
             foreach ($concesionarias as $con) {
                 $userconcesionaria = new UserConcesionaria();
@@ -220,6 +225,9 @@ class UserController extends Controller
 
         $error = DB::transaction(function() use($request, $id){
             $user = User::find($id);
+
+            $userOrg = $user;
+
             // return $userconcesionariaH2O = $user->getConcesionarias->where('ruc', '20523611250')->first();
             $user->tipouser_id= $request->input('tipouser_id');
             $user->name= mb_strtoupper($request->input('name'), 'utf-8');
@@ -227,6 +235,7 @@ class UserController extends Controller
             if($request->input('password')) $user->password = Hash::make($request->input('password'));
             $user->save();
 
+            event( new UserHasEdited($userOrg,$user,'unidad', auth()->user()->id));
 
             $userConcesionarias = $user->getConcesionarias;
             $concesionarias = json_decode($request->input('las-concesionarias'));
@@ -276,6 +285,9 @@ class UserController extends Controller
         }
         $error = DB::transaction(function() use($id){
             $user = User::find($id);
+
+            event( new UserHasCreatedOrDeleted($user->id,'user', auth()->user()->id,'eliminar'));
+
             $user->delete();
         });
         return is_null($error) ? "OK" : $error;

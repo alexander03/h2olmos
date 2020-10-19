@@ -22,6 +22,9 @@ use App\Responsable;
 use App\Vehiculo;
 use DateTime;
 use Exception;
+use Illuminate\Support\Facades\Auth;
+use App\Events\UserHasEdited;
+use App\Events\UserHasCreatedOrDeleted;
 
 class UaController extends Controller{
     protected $folderview      = 'app.ua';
@@ -175,6 +178,8 @@ class UaController extends Controller{
                 $ua -> responsable_id = $request -> input('responsable_id');
             }
             $ua -> save();
+
+            event( new UserHasCreatedOrDeleted($ua->id,'ua', auth()->user()->id,'crear'));
         });
         return is_null($error) ? "OK" : $error;
     }
@@ -232,6 +237,9 @@ class UaController extends Controller{
 
         $error = DB::transaction(function() use($request, $id){
             $ua = Ua::find($id);
+
+            $uaOrg = $ua;
+
             $ua -> codigo = $request -> input('codigo');
             $ua -> descripcion = strtoupper($request->input('descripcion'));
             $ua -> habilitada = $request -> input('habilitada');
@@ -243,6 +251,9 @@ class UaController extends Controller{
                 $ua -> ua_padre_id = (!( $uaDB -> isEmpty() )) ? $uaDB[0] -> id : null;
             }
             $ua -> save();
+
+
+            event( new UserHasEdited($uaOrg,$ua,'ua', auth()->user()->id));
         });
         return is_null($error) ? "OK" : $error;
     }
@@ -381,6 +392,9 @@ class UaController extends Controller{
         }
         $error = DB::transaction(function() use($id){
             $ua = Ua::find($id);
+
+            event( new UserHasCreatedOrDeleted($ua->id,'ua', auth()->user()->id,'eliminar'));
+
             $ua->delete();
         });
         return is_null($error) ? "OK" : $error;

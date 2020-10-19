@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
 use App\Events\UserHasCreatedOrDeleted;
+use App\Events\UserHasEdited;
 
 class BrandController extends Controller
 {
@@ -146,8 +147,12 @@ class BrandController extends Controller
         } 
         $error = DB::transaction(function() use($request, $id){
             $brand = Brand::find($id);
+            $brandCop = $brand;
+
             $brand->descripcion= mb_strtoupper($request->input('descripcion'), 'utf-8');
             $brand->save();
+
+            event(new UserHasEdited($brandCop,$brand,'marca',auth()->user()->id));
         });
         return is_null($error) ? "OK" : $error;
     }
@@ -178,6 +183,7 @@ class BrandController extends Controller
         }
         $error = DB::transaction(function() use($id){
             $brand = Brand::find($id);
+            event( new UserHasCreatedOrDeleted($brand->id,'marca', auth()->user()->id,'eliminar'));
             $brand->delete();
         });
         return is_null($error) ? "OK" : $error;

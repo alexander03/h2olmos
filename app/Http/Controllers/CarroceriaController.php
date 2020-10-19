@@ -7,6 +7,9 @@ use App\Carroceria;
 use App\Librerias\Libreria;
 use Validator;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+use App\Events\UserHasCreatedOrDeleted;
+use App\Events\UserHasEdited;
 
 class CarroceriaController extends Controller
 {
@@ -108,6 +111,7 @@ class CarroceriaController extends Controller
             $carroceria = new Carroceria();
             $carroceria->descripcion = strtoupper($request->input('descripcion'));
             $carroceria->save();
+            event( new UserHasCreatedOrDeleted($carroceria->id,'carroceria', auth()->user()->id,'crear'));
         });
         return is_null($error) ? "OK" : $error;
     }
@@ -151,8 +155,13 @@ class CarroceriaController extends Controller
         } 
         $error = DB::transaction(function() use($request, $id){
             $carroceria = Carroceria::find($id);
+
+            $carroceriaCop = $carroceria;
+
             $carroceria->descripcion = strtoupper($request->input('descripcion'));
             $carroceria->save();
+
+            event(new UserHasEdited($carroceriaCop,$carroceria,'carroceria',auth()->user()->id));
         });
         return is_null($error) ? "OK" : $error;
     }
@@ -165,6 +174,7 @@ class CarroceriaController extends Controller
         }
         $error = DB::transaction(function() use($id){
             $carroceria = Carroceria::find($id);
+            event( new UserHasCreatedOrDeleted($carroceria->id,'carroceria', auth()->user()->id,'eliminar'));
             $carroceria->delete();
         });
         return is_null($error) ? "OK" : $error;

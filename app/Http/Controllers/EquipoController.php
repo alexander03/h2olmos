@@ -16,6 +16,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Events\UserHasEdited;
+use App\Events\UserHasCreatedOrDeleted;
 
 class EquipoController extends Controller
 {
@@ -252,6 +253,9 @@ class EquipoController extends Controller
 
 
             $equipo->save();
+
+
+            event( new UserHasCreatedOrDeleted($equipo->id,'equipo', auth()->user()->id,'crear'));
         });
         return is_null($error) ? "OK" : $error;
     }
@@ -424,6 +428,7 @@ class EquipoController extends Controller
         }
         $error = DB::transaction(function() use($id){
             $equipo = Equipo::find($id);
+            event( new UserHasCreatedOrDeleted($equipo->id,'equipo', auth()->user()->id,'eliminar'));
             $equipo->delete();
         });
         return is_null($error) ? "OK" : $error;

@@ -7,6 +7,9 @@ use Illuminate\Http\Request;
 use App\Contratista;
 use App\Librerias\Libreria;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+use App\Events\UserHasCreatedOrDeleted;
+use App\Events\UserHasEdited;
 
 class ContratistaController extends Controller
 {
@@ -110,6 +113,7 @@ class ContratistaController extends Controller
             $contratista->email= strtoupper($request->input('email'));
             $contratista->telefono= strtoupper($request->input('telefono'));
             $contratista->save();
+            event( new UserHasCreatedOrDeleted($contratista->id,'contratista', auth()->user()->id,'crear'));
         });
         return is_null($error) ? "OK" : $error;
     }
@@ -146,12 +150,17 @@ class ContratistaController extends Controller
         } 
         $error = DB::transaction(function() use($request, $id){
             $contratista = Contratista::find($id);
+
+            $contratistaCop = $contratista;
+
             $contratista->razonsocial= strtoupper($request->input('razonsocial'));
             $contratista->ruc= strtoupper($request->input('ruc'));
             $contratista->propietario= strtoupper($request->input('propietario'));
             $contratista->email= strtoupper($request->input('email'));
             $contratista->telefono= strtoupper($request->input('telefono'));
             $contratista->save();
+
+            event(new UserHasEdited($contratistaCop,$contratista,'contratista',auth()->user()->id));
         });
         return is_null($error) ? "OK" : $error;
     }
@@ -164,6 +173,8 @@ class ContratistaController extends Controller
         }
         $error = DB::transaction(function() use($id){
             $contratista = Contratista::find($id);
+
+            event( new UserHasCreatedOrDeleted($contratista->id,'contratista', auth()->user()->id,'eliminar'));
             $contratista->delete();
         });
         return is_null($error) ? "OK" : $error;

@@ -7,6 +7,9 @@ use Illuminate\Http\Request;
 use App\Trabajo;
 use App\Librerias\Libreria;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+use App\Events\UserHasEdited;
+use App\Events\UserHasCreatedOrDeleted;
 
 class TrabajoController extends Controller
 {
@@ -98,6 +101,9 @@ class TrabajoController extends Controller
             $trabajo = new Trabajo();
             $trabajo->descripcion= strtoupper($request->input('descripcion'));
             $trabajo->save();
+
+            event( new UserHasCreatedOrDeleted($trabajo->id,'trabajo', auth()->user()->id,'crear'));
+
         });
         return is_null($error) ? "OK" : $error;
     }
@@ -134,8 +140,14 @@ class TrabajoController extends Controller
         } 
         $error = DB::transaction(function() use($request, $id){
             $trabajo = Trabajo::find($id);
+
+            $trabajoOrg = $trabajo;
+
             $trabajo->descripcion= strtoupper($request->input('descripcion'));
             $trabajo->save();
+
+
+            event( new UserHasEdited($trabajoOrg,$trabajo,'trabajo', auth()->user()->id));
         });
         return is_null($error) ? "OK" : $error;
     }
@@ -148,6 +160,7 @@ class TrabajoController extends Controller
         }
         $error = DB::transaction(function() use($id){
             $trabajo = Trabajo::find($id);
+            event( new UserHasCreatedOrDeleted($trabajo->id,'trabajo', auth()->user()->id,'eliminar'));
             $trabajo->delete();
         });
         return is_null($error) ? "OK" : $error;

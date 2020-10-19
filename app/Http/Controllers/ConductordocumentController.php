@@ -8,6 +8,9 @@ use App\Librerias\Libreria;
 use App\Conductor;
 use App\Conductordocument;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+use App\Events\UserHasCreatedOrDeleted;
+use App\Events\UserHasEdited;
 
 use App\Rules\RuleImgFirmaExist;
 
@@ -125,6 +128,7 @@ class ConductordocumentController extends Controller
 
      		$conductordocument->conductor_id = $request->input('conductor_id');
             $conductordocument->save();
+            event( new UserHasCreatedOrDeleted($conductordocument->id,'conductordocument', auth()->user()->id,'crear'));
         });
         return is_null($error) ? "OK" : $error;
     }
@@ -148,6 +152,7 @@ class ConductordocumentController extends Controller
         if ($existe !== true) return $existe;
         $error = DB::transaction(function() use($id){
             $conductordocument = Conductordocument::find($id);
+            event( new UserHasCreatedOrDeleted($conductordocument->id,'conductordocument', auth()->user()->id,'eliminar'));
             $conductordocument->delete();
         });
         return is_null($error) ? "OK" : $error;

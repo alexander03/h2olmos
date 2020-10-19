@@ -17,6 +17,9 @@ use Illuminate\Validation\Rule;
 use Mpdf\Mpdf;
 use App\Contratista;
 use App\Vehiculodocument;
+use Illuminate\Support\Facades\Auth;
+use App\Events\UserHasEdited;
+use App\Events\UserHasCreatedOrDeleted;
 
 
 // INICIO DE MODIFICACION
@@ -191,7 +194,7 @@ class MantCorrPrev extends Controller
             $checklistvehicular->concesionaria_id = Concesionaria::getConcesionariaActual()->id;
             $checklistvehicular->save();
 
-
+            event( new UserHasCreatedOrDeleted($checklistvehicular->id,'checklistvehicular', auth()->user()->id,'crear'));
 
         });
         return is_null($error) ? "OK" : $error;
@@ -282,6 +285,9 @@ class MantCorrPrev extends Controller
         
         $error = DB::transaction(function() use($request, $id){
             $checklistvehicular = Checklistvehicular::find($id);
+            
+            $checklistvehicularOrg = $checklistvehicular;
+
             $checklistvehicular->fecha_registro= $request->input('fecha_registro');
 
             $placa = $request->input('unidad_placa');
@@ -305,6 +311,8 @@ class MantCorrPrev extends Controller
             if($request->input('documentos') != null) $checklistvehicular->documentos = json_decode($request->input('documentos'));
             
             $checklistvehicular->save();
+
+            event( new UserHasEdited($checklistvehicularOrg,$checklistvehicular,'checklistvehicular', auth()->user()->id));
         });
         return is_null($error) ? "OK" : $error;
     }
@@ -500,6 +508,8 @@ class MantCorrPrev extends Controller
         if ($existe !== true) return $existe;
         $error = DB::transaction(function() use($id){
             $checklistvehicular = Checklistvehicular::find($id);
+
+            event( new UserHasCreatedOrDeleted($checklistvehicular->id,'checklistvehicular', auth()->user()->id,'eliminar'));
             $checklistvehicular->delete();
 
             //ACTUALIZO K. RECORRIDO DEL VEHICULO

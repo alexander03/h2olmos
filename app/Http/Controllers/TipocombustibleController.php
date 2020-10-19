@@ -7,6 +7,9 @@ use App\Tipocombustible;
 use Illuminate\Http\Request;
 use App\Librerias\Libreria;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+use App\Events\UserHasEdited;
+use App\Events\UserHasCreatedOrDeleted;
 
 class TipocombustibleController extends Controller
 {
@@ -98,6 +101,8 @@ class TipocombustibleController extends Controller
             $tipocombustible = new Tipocombustible();
             $tipocombustible->descripcion = strtoupper($request->input('descripcion'));
             $tipocombustible->save();
+
+            event( new UserHasCreatedOrDeleted($tipocombustible->id,'tipocombustible', auth()->user()->id,'crear'));
         });
         return is_null($error) ? "OK" : $error;
     }
@@ -142,8 +147,13 @@ class TipocombustibleController extends Controller
         } 
         $error = DB::transaction(function() use($request, $id){
             $tipocombustible = Tipocombustible::find($id);
+
+            $tipocombustibleOrg = $tipocombustible;
+
             $tipocombustible->descripcion = strtoupper($request->input('descripcion'));
             $tipocombustible->save();
+
+            event( new UserHasEdited($tipocombustibleOrg,$tipocombustible,'tipocombustible', auth()->user()->id));
         });
         return is_null($error) ? "OK" : $error;
     }
@@ -156,6 +166,7 @@ class TipocombustibleController extends Controller
         }
         $error = DB::transaction(function() use($id){
             $tipocombustible = Tipocombustible::find($id);
+            event( new UserHasCreatedOrDeleted($tipocombustible->id,'tipocombustible', auth()->user()->id,'eliminar'));    
             $tipocombustible->delete();
         });
         return is_null($error) ? "OK" : $error;

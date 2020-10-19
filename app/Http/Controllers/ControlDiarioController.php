@@ -20,6 +20,9 @@ use Maatwebsite\Excel\Facades\Excel;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use App\Exports\ExcelReport_HorasTrabajadas;
+use Illuminate\Support\Facades\Auth;
+use App\Events\UserHasCreatedOrDeleted;
+use App\Events\UserHasEdited;
 
 class ControlDiarioController extends Controller
 {
@@ -278,7 +281,10 @@ class ControlDiarioController extends Controller
                 $controldiario->tipo_material       = $request -> input('tipo_material.'. $key);
                 $controldiario->observaciones       = $request -> input('observaciones.'. $key);
 
-                $controldiario->save();    
+                $controldiario->save();  
+
+                event( new UserHasCreatedOrDeleted($controldiario->id,'controldiario', auth()->user()->id,'crear'));
+        });  
             }
         
         });
@@ -393,6 +399,9 @@ class ControlDiarioController extends Controller
         $error = DB::transaction(function() use($request, $id){
 
            $controldiario =  Controldiario::find($id);
+
+           $controldiarioCop = $controldiario;
+
 //            $equipoDB = Equipo::where('codigo',$request->input('equipo_id')) -> get();
 //            $idEquipo = explode('--',$request->input('equipo_id'))[1];
 //            $controldiario->equipo_id 	 		  = intval($idEquipo);
@@ -422,6 +431,8 @@ class ControlDiarioController extends Controller
             $controldiario->observaciones       = $request -> input('observaciones.0');
 
             $controldiario->save();
+
+            event(new UserHasEdited($controldiarioCop,$controldiario,'controldiario',auth()->user()->id));
         });
         return is_null($error) ? "OK" : $error;
     }
@@ -439,8 +450,10 @@ class ControlDiarioController extends Controller
             return $existe;
         }
         $error = DB::transaction(function() use($id){
-            $equipo = Equipo::find($id);
-            $equipo->delete();
+            $controldiario = Controldiario::find($id);
+
+            event( new UserHasCreatedOrDeleted($controldiario->id,'controldiario', auth()->user()->id,'crear'));
+            $controldiario->delete();
         });
         return is_null($error) ? "OK" : $error;
     }
