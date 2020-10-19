@@ -9,6 +9,9 @@ use App\Grupomenu;
 use App\Librerias\Libreria;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+use App\Events\UserHasEdited;
+use App\Events\UserHasCreatedOrDeleted;
 
 class OpcionmenuController extends Controller
 {
@@ -134,6 +137,8 @@ class OpcionmenuController extends Controller
             $opcionmenu->link = $request->input('link');
             $opcionmenu->grupomenu_id = $request->input('grupomenu_id');
             $opcionmenu->save();
+
+            event( new UserHasCreatedOrDeleted($opcionmenu->id,'opcionmenu', auth()->user()->id,'crear'));
         });
         return is_null($error) ? "OK" : $error;
     }
@@ -198,12 +203,17 @@ class OpcionmenuController extends Controller
         } 
         $error = DB::transaction(function() use($request, $id){
             $opcionmenu = Opcionmenu::find($id);
+
+            $opcionmenuOrg = $opcionmenu;
+
             $opcionmenu->descripcion= strtoupper($request->input('descripcion'));
             $opcionmenu->icono = $request->input('icono');
             $opcionmenu->orden = $request->input('orden');
             $opcionmenu->link = $request->input('link');
             $opcionmenu->grupomenu_id = $request->input('grupomenu_id');
             $opcionmenu->save();
+        
+            event( new UserHasEdited($opcionmenuOrg,$opcionmenu,'opcionmenu', auth()->user()->id));
         });
         return is_null($error) ? "OK" : $error;
     }
@@ -222,6 +232,7 @@ class OpcionmenuController extends Controller
         }
         $error = DB::transaction(function() use($id){
             $opcionmenu = Opcionmenu::find($id);
+            event( new UserHasCreatedOrDeleted($opcionmenu->id,'opcionmenu', auth()->user()->id,'eliminar'));
             $opcionmenu->delete();
         });
         return is_null($error) ? "OK" : $error;

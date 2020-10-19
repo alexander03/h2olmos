@@ -7,6 +7,9 @@ use Illuminate\Http\Request;
 use App\Concesionaria;
 use App\Librerias\Libreria;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+use App\Events\UserHasCreatedOrDeleted;
+use App\Events\UserHasEdited;
 
 class ConcesionariaController extends Controller
 {
@@ -108,6 +111,7 @@ class ConcesionariaController extends Controller
             $concesionaria->ruc= strtoupper($request->input('ruc'));
             $concesionaria->abreviatura= strtoupper($request->input('abreviatura'));
             $concesionaria->save();
+            event( new UserHasCreatedOrDeleted($concesionaria->id,'concesionaria', auth()->user()->id,'crear'));
         });
         return is_null($error) ? "OK" : $error;
     }
@@ -148,10 +152,15 @@ class ConcesionariaController extends Controller
         } 
         $error = DB::transaction(function() use($request, $id){
             $concesionaria = Concesionaria::find($id);
+
+            $concesionariaCop = $concesionaria;
+
             $concesionaria->razonsocial= strtoupper($request->input('razonsocial'));
             $concesionaria->ruc= strtoupper($request->input('ruc'));
             $concesionaria->abreviatura= strtoupper($request->input('abreviatura'));
             $concesionaria->save();
+
+            event(new UserHasEdited($concesionariaCop,$concesionaria,'concesionaria',auth()->user()->id));
         });
         return is_null($error) ? "OK" : $error;
     }
@@ -164,6 +173,7 @@ class ConcesionariaController extends Controller
         }
         $error = DB::transaction(function() use($id){
             $concesionaria = Concesionaria::find($id);
+            event( new UserHasCreatedOrDeleted($concesionaria->id,'concesionaria', auth()->user()->id,'eliminar'));
             $concesionaria->delete();
         });
         return is_null($error) ? "OK" : $error;

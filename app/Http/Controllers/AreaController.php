@@ -7,6 +7,9 @@ use Illuminate\Http\Request;
 use App\Area;
 use App\Librerias\Libreria;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+use App\Events\UserHasCreatedOrDeleted;
+use App\Events\UserHasEdited;
 
 class AreaController extends Controller
 {
@@ -127,6 +130,7 @@ class AreaController extends Controller
             else{
                 $area->nivel=1;
             }
+            event( new UserHasCreatedOrDeleted($area->id,'area', auth()->user()->id,'crear'));
             $area->save();
         });
         return is_null($error) ? "OK" : $error;
@@ -171,6 +175,9 @@ class AreaController extends Controller
         } 
         $error = DB::transaction(function() use($request, $id){
             $area = Area::find($id);
+
+            $areaCop = $area;
+
             $area->descripcion= strtoupper($request->input('descripcion'));
             if($request->input('areapadre_id')!=0){
                 $area->areapadre_id= strtoupper($request->input('areapadre_id'));
@@ -181,6 +188,8 @@ class AreaController extends Controller
                 $area->areapadre_id=null;
             }
             $area->save();
+
+            event(new UserHasEdited($areaCop,$area,'abastecimiento',auth()->user()->id));
         });
         return is_null($error) ? "OK" : $error;
     }
@@ -193,6 +202,7 @@ class AreaController extends Controller
         }
         $error = DB::transaction(function() use($id){
             $area = Area::find($id);
+            event( new UserHasCreatedOrDeleted($area->id,'area', auth()->user()->id,'eliminar'));
             $area->delete();
         });
         return is_null($error) ? "OK" : $error;

@@ -15,6 +15,9 @@ use Illuminate\Http\Request;
 use App\Librerias\Libreria;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+use App\Events\UserHasEdited;
+use App\Events\UserHasCreatedOrDeleted;
 
 class VehiculoController extends Controller
 {
@@ -280,6 +283,9 @@ class VehiculoController extends Controller
             
 
             $vehiculo->save();
+
+
+            event( new UserHasCreatedOrDeleted($vehiculo->id,'vehiculo', auth()->user()->id,'crear'));
         });
         return is_null($error) ? "OK" : $error;
     }
@@ -438,6 +444,9 @@ class VehiculoController extends Controller
         } 
         $error = DB::transaction(function() use($request, $id){
             $vehiculo =  Vehiculo::find($id);
+
+            $vehiculoOrg = $vehiculo;
+
 //            $vehiculo->ua 	 		  = strtoupper($request->input('ua'));
             $vehiculo->ua_id                  =  Ua::where('codigo',$request->input('ua_id'))->get()[0]->id;
             $vehiculo->modelo 			      = strtoupper($request->input('modelo'));
@@ -462,6 +471,9 @@ class VehiculoController extends Controller
             
 
             $vehiculo->save();
+
+            event( new UserHasEdited($vehiculoOrg,$vehiculo,'vehiculo', auth()->user()->id));
+
         });
         return is_null($error) ? "OK" : $error;
     }
@@ -480,6 +492,9 @@ class VehiculoController extends Controller
         }
         $error = DB::transaction(function() use($id){
             $vehiculo = Vehiculo::find($id);
+
+            event( new UserHasCreatedOrDeleted($vehiculo->id,'vehiculo', auth()->user()->id,'eliminar'));
+
             $vehiculo->delete();
         });
         return is_null($error) ? "OK" : $error;

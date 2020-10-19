@@ -15,6 +15,9 @@ use App\UserConcesionaria;
 use Illuminate\Support\Facades\Hash;
 use App\Librerias\Libreria;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+use App\Events\UserHasCreatedOrDeleted;
+use App\Events\UserHasEdited;
 
 class ConductorController extends Controller
 {
@@ -168,10 +171,16 @@ class ConductorController extends Controller
                 $user->password= Hash::make($request->input('password'));
                 $user->save();
 
+                event( new UserHasCreatedOrDeleted($user->id,'user', auth()->user()->id,'crear'));
+
                 $userconcesionaria = new UserConcesionaria();
                 $userconcesionaria->user_id = $user->id;
                 $userconcesionaria->concesionaria_id = $concesionariaActual->id;
                 $userconcesionaria->save();
+
+
+                event( new UserHasCreatedOrDeleted($userconcesionaria->id,'userconcesionaria', auth()->user()->id,'crear'));
+
 
                 $conductor = new Conductor();
                 $conductor->dni= $request->input('dni');
@@ -183,11 +192,15 @@ class ConductorController extends Controller
                 $conductor->contratista_id= mb_strtoupper($request->input('contratista_id'), 'utf-8');
                 $conductor->user_id = $user->id;
                 $conductor->save();
+
+                event( new UserHasCreatedOrDeleted($conductor->id,'conductor', auth()->user()->id,'crear'));
     
                 $conductorconcesionaria = new Conductorconcesionaria();
                 $conductorconcesionaria->conductor_id = $conductor->id;
                 $conductorconcesionaria->concesionaria_id = $concesionariaActual->id;
                 $conductorconcesionaria->save();
+
+                event( new UserHasCreatedOrDeleted($conductorconcesionaria->id,'conductorconcesionaria', auth()->user()->id,'crear'));
 
                 $imgFirma  = $request->file('imagenfirma');
                 $nameImgFirma = 'dni_' . $conductor->dni . '_' . $imgFirma->getClientOriginalName();
@@ -197,6 +210,9 @@ class ConductorController extends Controller
                 $conductordocument->archivo = $nameImgFirma;
                 $conductordocument->conductor_id = $conductor->id;
                 $conductordocument->save();
+
+                event( new UserHasCreatedOrDeleted($conductordocument->id,'conductordocument', auth()->user()->id,'crear'));
+
                 $imgFirma->move(public_path('files/documento_conductor/imagenes_firmas'), $nameImgFirma);
 
 
@@ -208,6 +224,9 @@ class ConductorController extends Controller
                 $conductordocument->archivo = $nameDocConformidadFirma;
                 $conductordocument->conductor_id = $conductor->id;
                 $conductordocument->save();
+
+                event( new UserHasCreatedOrDeleted($conductordocument->id,'conductordocument', auth()->user()->id,'crear'));
+
                 $docConformidadFirma->move(public_path('files/documento_conductor/documentos_conformidad_firmas'), $nameDocConformidadFirma);
 
             } else {
@@ -215,6 +234,8 @@ class ConductorController extends Controller
                 $conductorconcesionaria->conductor_id = $conductorBuscado->id;
                 $conductorconcesionaria->concesionaria_id = $concesionariaActual->id;
                 $conductorconcesionaria->save();
+
+                event( new UserHasCreatedOrDeleted($conductorconcesionaria->id,'conductorconcesionaria', auth()->user()->id,'crear'));
             }
 
 
@@ -281,6 +302,9 @@ class ConductorController extends Controller
         }
         $error = DB::transaction(function() use($request, $id){
             $conductor = Conductor::find($id);
+
+            $conductorCop = $conductor;
+
             $conductor->dni= $request->input('dni');
             $conductor->apellidos= mb_strtoupper($request->input('apellidos'), 'utf-8');
             $conductor->nombres= mb_strtoupper($request->input('nombres'), 'utf-8');
@@ -289,6 +313,8 @@ class ConductorController extends Controller
             $conductor->fechavencimiento= mb_strtoupper($request->input('fechavencimiento'), 'utf-8');
             $conductor->contratista_id= mb_strtoupper($request->input('contratista_id'), 'utf-8');
             $conductor->save();
+
+            event(new UserHasEdited($conductorCop,$conductor,'abastecimiento',auth()->user()->id));
         });
         return is_null($error) ? "OK" : $error;
     }
@@ -333,6 +359,8 @@ class ConductorController extends Controller
             $conductorconcesionaria = Conductorconcesionaria::where('conductor_id', $id)->where('concesionaria_id', $concesionariaActual->id)->first();
             $conductorconcesionaria->estado = false;
             $conductorconcesionaria->save();
+
+            event( new UserHasCreatedOrDeleted($conductorconcesionaria->id,'conductorconcesionaria', auth()->user()->id,'eliminar'));
         });
         return is_null($error) ? "OK" : $error;
     }
@@ -371,6 +399,8 @@ class ConductorController extends Controller
             $conductorconcesionaria = Conductorconcesionaria::where('conductor_id', $id)->where('concesionaria_id', $concesionariaActual->id)->first();
             $conductorconcesionaria->estado = true;
             $conductorconcesionaria->save();
+
+            event( new UserHasCreatedOrDeleted($conductorconcesionaria->id,'conductorconcesionaria', auth()->user()->id,'reactivar'));
         });
         return is_null($error) ? "OK" : $error;
     }

@@ -8,6 +8,9 @@ use App\Unidad;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
+use App\Events\UserHasEdited;
+use App\Events\UserHasCreatedOrDeleted;
 
 class ResponsableController extends Controller
 {
@@ -98,6 +101,8 @@ class ResponsableController extends Controller
             $responsable -> nombre = strtoupper($request->input('nombre'));
             $responsable -> cargo = strtoupper($request->input('cargo'));
             $responsable -> save();
+
+            event( new UserHasCreatedOrDeleted($responsable->id,'responsable', auth()->user()->id,'crear'));
         });
         return is_null($error) ? "OK" : $error;
     }
@@ -142,9 +147,15 @@ class ResponsableController extends Controller
 
         $error = DB::transaction(function() use($request, $id){
             $responsable = Responsable::find($id);
+
+            $responsableOrg = $responsable;
+
             $responsable -> nombre = strtoupper($request->input('nombre'));
             $responsable -> cargo = strtoupper($request->input('cargo'));
             $responsable -> save();
+
+            event( new UserHasEdited($responsableOrg,$responsable,'responsable', auth()->user()->id));
+
         });
         return is_null($error) ? "OK" : $error;
     }
@@ -176,6 +187,9 @@ class ResponsableController extends Controller
         }
         $error = DB::transaction(function() use($id){
             $responsable = Responsable::find($id);
+
+            event( new UserHasCreatedOrDeleted($responsable->id,'responsable', auth()->user()->id,'eliminar'));
+
             $responsable->delete();
         });
         return is_null($error) ? "OK" : $error;

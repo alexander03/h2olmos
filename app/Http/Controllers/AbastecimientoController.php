@@ -7,6 +7,9 @@ use Illuminate\Http\Request;
 use App\Abastecimiento;
 use App\Librerias\Libreria;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+use App\Events\UserHasCreatedOrDeleted;
+use App\Events\UserHasEdited;
 
 
 class AbastecimientoController extends Controller
@@ -118,6 +121,7 @@ class AbastecimientoController extends Controller
             $abastecimiento = new Abastecimiento();
             $abastecimiento->descripcion = strtoupper($request->input('descripcion'));
             $abastecimiento->save();
+            event( new UserHasCreatedOrDeleted($abastecimiento->id,'abastecimiento', auth()->user()->id,'crear'));
         });
         return is_null($error) ? "OK" : $error;
     }
@@ -179,8 +183,13 @@ class AbastecimientoController extends Controller
         } 
         $error = DB::transaction(function() use($request, $id){
             $abastecimiento = Abastecimiento::find($id);
+
+            $abastecimientoCop = $abastecimiento;
+
             $abastecimiento->descripcion = strtoupper($request->input('descripcion'));
             $abastecimiento->save();
+
+            event(new UserHasEdited($abastecimientoCop,$abastecimiento,'abastecimiento',auth()->user()->id));
         });
         return is_null($error) ? "OK" : $error;
     }
@@ -199,6 +208,7 @@ class AbastecimientoController extends Controller
         }
         $error = DB::transaction(function() use($id){
             $abastecimiento = Abastecimiento::find($id);
+            event( new UserHasCreatedOrDeleted($abastecimiento->id,'abastecimiento', auth()->user()->id,'eliminar'));
             $abastecimiento->delete();
         });
         return is_null($error) ? "OK" : $error;

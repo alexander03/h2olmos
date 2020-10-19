@@ -31,6 +31,10 @@ use App\Vehiculo;
 use Exception;
 use Illuminate\Support\Facades\Hash;
 use Mpdf\Mpdf;
+use Illuminate\Support\Facades\Auth;
+use App\Events\UserHasCreatedOrDeleted;
+use App\Events\UserHasEdited;
+
 
 use function PHPSTORM_META\map;
 
@@ -270,6 +274,8 @@ class AbastecimientoCombustibleController extends Controller{
             $abastecimiento -> abastecimiento_id = $request -> input('abastecimiento_id');
             $abastecimiento -> tipocombustible_id = $request -> input('tipocombustible_id');
 
+
+            event( new UserHasCreatedOrDeleted($abastecimiento->id,'abastecimiento_combustible', auth()->user()->id,'crear'));
             $abastecimiento -> save();
         });
         return is_null($error) ? "OK" : $error;
@@ -350,6 +356,7 @@ class AbastecimientoCombustibleController extends Controller{
 
         $error = DB::transaction(function() use($request, $id){
             $abastecimiento = AbastecimientoCombustible::find($id);
+            $abastecimientoCop = $abastecimiento;
             $abastecimiento -> fecha_abastecimiento = $request -> input('fecha_abastecimiento');
             //BUSCAR GRIFO
             if($request -> input('grifo_id')){
@@ -399,6 +406,9 @@ class AbastecimientoCombustibleController extends Controller{
             $abastecimiento -> tipocombustible_id = $request -> input('tipocombustible_id');
 
             $abastecimiento -> save();
+
+
+            event(new UserHasEdited($abastecimientoCop,$abastecimiento,'abastecimiento_combustible',auth()->user()->id));
         });
         return is_null($error) ? "OK" : $error;
     }
@@ -428,8 +438,9 @@ class AbastecimientoCombustibleController extends Controller{
             return $existe;
         }
         $error = DB::transaction(function() use($id){
-            $tipohora = AbastecimientoCombustible::find($id);
-            $tipohora->delete();
+            $abastecimiento = AbastecimientoCombustible::find($id);
+            event( new UserHasCreatedOrDeleted($abastecimiento->id,'abastecimiento_combustible', auth()->user()->id,'eliminar'));
+            $abastecimiento->delete();
         });
         return is_null($error) ? "OK" : $error;
     }

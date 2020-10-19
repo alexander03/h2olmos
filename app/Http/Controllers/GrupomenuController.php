@@ -8,6 +8,9 @@ use App\Grupomenu;
 use App\Librerias\Libreria;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+use App\Events\UserHasEdited;
+use App\Events\UserHasCreatedOrDeleted;
 
 class GrupomenuController extends Controller
 {
@@ -124,6 +127,8 @@ class GrupomenuController extends Controller
             $grupomenu->icono = $request->input('icono');
             $grupomenu->orden = $request->input('orden');
             $grupomenu->save();
+
+            event( new UserHasCreatedOrDeleted($grupomenu->id,'grupomenu', auth()->user()->id,'crear'));
         });
         return is_null($error) ? "OK" : $error;
     }
@@ -183,10 +188,15 @@ class GrupomenuController extends Controller
         } 
         $error = DB::transaction(function() use($request, $id){
             $grupomenu = Grupomenu::find($id);
+
+            $grupomenuOrg  = $grupomenu;
+
             $grupomenu->descripcion= strtoupper($request->input('descripcion'));
             $grupomenu->icono = $request->input('icono');
             $grupomenu->orden = $request->input('orden');
             $grupomenu->save();
+
+            event( new UserHasEdited($grupomenuOrg,$grupomenu,'grupomenu', auth()->user()->id));
         });
         return is_null($error) ? "OK" : $error;
     }
@@ -205,6 +215,8 @@ class GrupomenuController extends Controller
         }
         $error = DB::transaction(function() use($id){
             $grupomenu = Grupomenu::find($id);
+
+            event( new UserHasCreatedOrDeleted($grupomenu->id,'grupomenu', auth()->user()->id,'eliminar'));
             $grupomenu->delete();
         });
         return is_null($error) ? "OK" : $error;

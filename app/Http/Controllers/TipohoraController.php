@@ -8,6 +8,9 @@ use Illuminate\Http\Request;
 use App\Librerias\Libreria;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+use App\Events\UserHasEdited;
+use App\Events\UserHasCreatedOrDeleted;
 
 class TipohoraController extends Controller
 {
@@ -136,6 +139,8 @@ class TipohoraController extends Controller
             $tipohora->prioridad = ($request->input('prioridad')) ? true : false;
             $tipohora->descripcion = strtoupper($request->input('descripcion'));
             $tipohora->save();
+
+            event( new UserHasCreatedOrDeleted($tipohora->id,'tipohora', auth()->user()->id,'crear'));
         });
         return is_null($error) ? "OK" : $error;
     }
@@ -197,10 +202,15 @@ class TipohoraController extends Controller
         } 
         $error = DB::transaction(function() use($request, $id){
             $tipohora = Tipohora::find($id);
+
+            $tipohoraOrg = $tipohora;
+
             $tipohora->codigo = $request->input('codigo');
             $tipohora->prioridad = ($request->input('prioridad')) ? true : false;
             $tipohora->descripcion = strtoupper($request->input('descripcion'));
             $tipohora->save();
+
+            event( new UserHasEdited($tipohoraOrg,$tipohora,'tipohora', auth()->user()->id));
         });
         return is_null($error) ? "OK" : $error;
     }
@@ -219,6 +229,9 @@ class TipohoraController extends Controller
         }
         $error = DB::transaction(function() use($id){
             $tipohora = Tipohora::find($id);
+
+            event( new UserHasCreatedOrDeleted($tipohora->id,'tipohora', auth()->user()->id,'eliminar'));
+
             $tipohora->delete();
         });
         return is_null($error) ? "OK" : $error;

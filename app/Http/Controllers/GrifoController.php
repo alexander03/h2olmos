@@ -9,6 +9,9 @@ use Illuminate\Http\Request;
 use App\Librerias\Libreria;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+use App\Events\UserHasEdited;
+use App\Events\UserHasCreatedOrDeleted;
 
 class GrifoController extends Controller
 {
@@ -158,6 +161,8 @@ class GrifoController extends Controller
             $grifo->telefono = $request->input('telefono');
             $grifo->correo = $request->input('correo');
             $grifo->save();
+
+            event( new UserHasCreatedOrDeleted($grifo->id,'grifo', auth()->user()->id,'crear'));
         });
         return is_null($error) ? "OK" : $error;
     }
@@ -243,6 +248,9 @@ class GrifoController extends Controller
         } 
         $error = DB::transaction(function() use($request, $id){
             $grifo = Grifo::find($id);
+
+            $grifoOrg = $grifo;
+
             $grifo->descripcion = strtoupper($request->input('descripcion'));
             $grifo->ubicacion = strtoupper($request->input('ubicacion'));
             $grifo->abastecimiento_id = strtoupper($request->input('abastecimiento_id'));
@@ -250,6 +258,9 @@ class GrifoController extends Controller
             $grifo->telefono = $request->input('telefono');
             $grifo->correo = $request->input('correo');
             $grifo->save();
+
+
+            event( new UserHasEdited($grifoOrg,$grifo,'grifo', auth()->user()->id));
         });
         return is_null($error) ? "OK" : $error;
     }
@@ -268,6 +279,7 @@ class GrifoController extends Controller
         }
         $error = DB::transaction(function() use($id){
             $grifo = Grifo::find($id);
+            event( new UserHasCreatedOrDeleted($grifo->id,'grifo', auth()->user()->id,'eliminar'));
             $grifo->delete();
         });
         return is_null($error) ? "OK" : $error;

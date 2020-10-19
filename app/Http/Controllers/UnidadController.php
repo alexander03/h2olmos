@@ -7,6 +7,9 @@ use App\Unidad;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
+use App\Events\UserHasEdited;
+use App\Events\UserHasCreatedOrDeleted;
 
 class UnidadController extends Controller
 {
@@ -93,6 +96,8 @@ class UnidadController extends Controller
             $unidad = new Unidad();
             $unidad -> descripcion = strtoupper($request->input('descripcion'));
             $unidad -> save();
+
+            event( new UserHasCreatedOrDeleted($unidad->id,'unidad', auth()->user()->id,'crear'));
         });
         return is_null($error) ? "OK" : $error;
     }
@@ -135,8 +140,13 @@ class UnidadController extends Controller
 
         $error = DB::transaction(function() use($request, $id){
             $unidad = Unidad::find($id);
+
+            $unidadOrg = $unidad;
+
             $unidad -> descripcion = strtoupper($request->input('descripcion'));
             $unidad -> save();
+
+            event( new UserHasEdited($unidadOrg,$unidad,'unidad', auth()->user()->id));
         });
         return is_null($error) ? "OK" : $error;
     }
@@ -168,6 +178,7 @@ class UnidadController extends Controller
         }
         $error = DB::transaction(function() use($id){
             $unidad = Unidad::find($id);
+            event( new UserHasCreatedOrDeleted($unidad->id,'unidad', auth()->user()->id,'eliminar'));
             $unidad->delete();
         });
         return is_null($error) ? "OK" : $error;

@@ -8,6 +8,9 @@ use App\Kilometraje;
 use App\Librerias\Libreria;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Auth;
+use App\Events\UserHasEdited;
+use App\Events\UserHasCreatedOrDeleted;
 
 class KilometrajeController extends Controller
 {
@@ -109,6 +112,8 @@ class KilometrajeController extends Controller
             $kilometraje->limite_inf = $request->input('limite_inf');
             $kilometraje->limite_sup = $request->input('limite_sup');
             $kilometraje->save();
+
+            event( new UserHasCreatedOrDeleted($kilometraje->id,'kilometraje', auth()->user()->id,'crear'));
         });
         return is_null($error) ? "OK" : $error;
     }
@@ -150,10 +155,15 @@ class KilometrajeController extends Controller
 
         $error = DB::transaction(function() use($request, $id){
             $kilometraje = Kilometraje::find($id);
+
+            $kilometrajeOrg = $kilometraje;
+
             $kilometraje->descripcion= mb_strtoupper($request->input('descripcion'), 'utf-8');
             $kilometraje->limite_inf = $request->input('limite_inf');
             $kilometraje->limite_sup = $request->input('limite_sup');
             $kilometraje->save();
+
+            event( new UserHasEdited($kilometrajeOrg,$kilometraje,'kilometraje', auth()->user()->id));
         });
         return is_null($error) ? "OK" : $error;
     }
@@ -181,6 +191,8 @@ class KilometrajeController extends Controller
 
         $error = DB::transaction(function() use($id){
             $kilometraje = Kilometraje::find($id);
+
+            event( new UserHasCreatedOrDeleted($kilometraje->id,'kilometraje', auth()->user()->id,'eliminar'));
             $kilometraje->delete();
         });
         return is_null($error) ? "OK" : $error;
@@ -200,6 +212,7 @@ class KilometrajeController extends Controller
     public function reactivar($id){
         $error = DB::transaction(function() use($id){
             Kilometraje::onlyTrashed()->where('id', $id)->restore();
+            event( new UserHasCreatedOrDeleted($id,'kilometraje', auth()->user()->id,'reactivar'));
         });
         return is_null($error) ? "OK" : $error;
     }

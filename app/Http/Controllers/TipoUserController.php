@@ -9,6 +9,9 @@ use App\Acceso;
 use Validator;
 use App\Grupomenu;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+use App\Events\UserHasEdited;
+use App\Events\UserHasCreatedOrDeleted;
 
 class TipoUserController extends Controller
 {
@@ -121,6 +124,8 @@ class TipoUserController extends Controller
             $tipouser->descripcion = strtoupper($request->input('descripcion'));
             $tipouser->save();
 
+            event( new UserHasCreatedOrDeleted($tipouser->id,'tipouser', auth()->user()->id,'crear'));
+
             foreach ($request->input('opcionmenu') as $opcionmenu) {
             	$acceso = new Acceso();
             	$acceso->opcionmenu_id = (int) $opcionmenu;
@@ -174,6 +179,9 @@ class TipoUserController extends Controller
 
         $error = DB::transaction(function() use($request, $id){
             $tipouser = Tipouser::find($id);
+
+            $tipouserOrg = Tipouser::with('accesos')->find($id);
+
             $tipouser->descripcion = strtoupper($request->input('descripcion'));
             
             $OpcionMenuOriginal = $tipouser->accesos()->get();
@@ -182,6 +190,9 @@ class TipoUserController extends Controller
 
 
             $tipouser->save();
+
+            event( new UserHasEdited($tipouserOrg,$tipouser,'tipouser', auth()->user()->id));
+
             foreach ($OpcionMenuNuevo as $checkbox => $value) {
             	if($OpcionMenuOriginal->count() == 0 || empty($OpcionMenuNuevo)){
             		break;
@@ -211,7 +222,7 @@ class TipoUserController extends Controller
 	            		$OpcionEliminada->delete();
 	        }
 
-          
+            event( new UserHasEdited($tipouserOrg, Tipouser::with('accesos')->find($id) ,'tipouser', auth()->user()->id));
         });
         return is_null($error) ? "OK" : $error;
     }
@@ -243,6 +254,8 @@ class TipoUserController extends Controller
         $error = DB::transaction(function() use($id){
             $tipouser = Tipouser::find($id);
             $tipouser->delete();
+
+            event( new UserHasCreatedOrDeleted($tipouser->id,'tipouser', auth()->user()->id,'crear'));
         });
         return is_null($error) ? "OK" : $error;
     }
