@@ -229,22 +229,27 @@ class UserController extends Controller
 
 
             $userConcesionarias = $user->getConcesionarias;
+            // dd(count($userConcesionarias));
             $concesionarias = json_decode($request->input('las-concesionarias'));
             if($concesionarias != null) {
                 foreach ($concesionarias as $con) {
+                    $existeConcesionaria = false;
                     foreach ($userConcesionarias as $usercon) {
-                        if($con->id == $usercon->id) {//EXISTE LA CONCESIONARIA
-                            $userconcesionaria = UserConcesionaria::find($usercon->id);
-                            $userconcesionaria->estado = $con->estado;
-                            $userconcesionaria->save();
-                        }else {//NO EXISTE LA CONCESIONARIA
-                            $userconcesionaria = new UserConcesionaria();
-                            $userconcesionaria->user_id = $user->id;
-                            $userconcesionaria->concesionaria_id = $con->id;
-                            $userconcesionaria->estado = $con->estado;
-                            $userconcesionaria->save();
-                        }
+                        if($con->id == $usercon->id) $existeConcesionaria = true;
                     }
+
+                    if($existeConcesionaria === true ){ //EXISTE LA CONCESIONARIA
+                        $userconcesionaria = UserConcesionaria::find($con->id);
+                        $userconcesionaria->estado = $con->estado;
+                        $userconcesionaria->save();
+                    } else { //NO EXISTE LA CONCESIONARIA
+                        $userconcesionaria = new UserConcesionaria();
+                        $userconcesionaria->user_id = $user->id;
+                        $userconcesionaria->concesionaria_id = $con->id;
+                        $userconcesionaria->estado = $con->estado;
+                        $userconcesionaria->save();
+                    }
+
                 }
             }
 
