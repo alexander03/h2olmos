@@ -284,9 +284,7 @@ class ControlDiarioController extends Controller
                 $controldiario->save();  
 
                 event( new UserHasCreatedOrDeleted($controldiario->id,'controldiario', auth()->user()->id,'crear'));
-        });  
-            }
-        
+            };              
         });
         return is_null($error) ? "OK" : $error;
     }
