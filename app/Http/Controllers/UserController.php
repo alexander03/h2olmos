@@ -230,18 +230,20 @@ class UserController extends Controller
 
             $userConcesionarias = $user->getConcesionarias;
             $concesionarias = json_decode($request->input('las-concesionarias'));
-            foreach ($concesionarias as $con) {
-                foreach ($userConcesionarias as $usercon) {
-                    if($con->id == $usercon->id) {//EXISTE LA CONCESIONARIA
-                        $userconcesionaria = UserConcesionaria::find($usercon->id);
-                        $userconcesionaria->estado = $con->estado;
-                        $userconcesionaria->save();
-                    }else {//NO EXISTE LA CONCESIONARIA
-                        $userconcesionaria = new UserConcesionaria();
-                        $userconcesionaria->user_id = $user->id;
-                        $userconcesionaria->concesionaria_id = $con->id;
-                        $userconcesionaria->estado = $con->estado;
-                        $userconcesionaria->save();
+            if($concesionarias != null) {
+                foreach ($concesionarias as $con) {
+                    foreach ($userConcesionarias as $usercon) {
+                        if($con->id == $usercon->id) {//EXISTE LA CONCESIONARIA
+                            $userconcesionaria = UserConcesionaria::find($usercon->id);
+                            $userconcesionaria->estado = $con->estado;
+                            $userconcesionaria->save();
+                        }else {//NO EXISTE LA CONCESIONARIA
+                            $userconcesionaria = new UserConcesionaria();
+                            $userconcesionaria->user_id = $user->id;
+                            $userconcesionaria->concesionaria_id = $con->id;
+                            $userconcesionaria->estado = $con->estado;
+                            $userconcesionaria->save();
+                        }
                     }
                 }
             }

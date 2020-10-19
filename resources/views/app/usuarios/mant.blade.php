@@ -40,7 +40,7 @@
 				{{-- {!! Form::checkbox($item['ruc'], $item['id'], $item['estado'], ['class' => 'arr-concesionarias', 'id' => $item['ruc'], 'data-estado' => $item['estado']]) !!} --}}
 			</div>
 		@endforeach
-		{!! Form::text('las-concesionarias', '', ['id' => 'input-concesionarias', 'hidden' =>true]) !!}
+		{!! Form::text('las-concesionarias', json_encode($cboConcesionaria), ['id' => 'input-concesionarias', 'hidden' => true]) !!}
 	</div>
 </div>
 <div class="form-group">
