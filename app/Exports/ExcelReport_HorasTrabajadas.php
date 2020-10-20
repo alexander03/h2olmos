@@ -6,6 +6,7 @@ use Illuminate\Contracts\View\View;
 use Maatwebsite\Excel\Concerns\FromView;
 use Maatwebsite\Excel\Concerns\Exportable;
 use DateTime;
+use DB;
 
 use App\Concesionaria;
 use App\Equipo;
@@ -386,6 +387,7 @@ class ExcelReport_HorasTrabajadas implements FromView
             $this->add();
         }
         
+        // Row 4
         $this->nextRow();
         $concesionaria = Concesionaria::getConcesionariaActual();
         $table = [
@@ -465,34 +467,92 @@ class ExcelReport_HorasTrabajadas implements FromView
                             ->where('controldiario.fecha', '>=', $this->start_date->format('Y-m-d'))
                             ->where('controldiario.fecha', '<=', $this->end_date->format('Y-m-d'))->get();
         
+        $tiposHora = [];
+        foreach ($dbTipoHora as $th) $tiposHora[] = ['descripcion' => $th['descripcion'], 'id' => $th['id']];
+
+        // Preparo los grupos para la reparacion de la consulta
+        $groups = [];
+
+        // Grupo de "HORAS PARADAS"
+        $group = [];
+        $query = TipoHora::select('id')->where('descripcion', 'like', '%parado%')->get();
+        for ($i = 0; $i < count($query); $i++) { 
+            $group = array_merge($group, [$query[$i]['id']]);
+        }
+        $groups[] = ['descripcion' => 'HORAS PARADAS', 'ids' => $group, 'found' => false];
+
+        // Grupo de "HORAS MANTENIMIENTO"
+        $group = [];
+        $query = TipoHora::select('id')->where('descripcion', 'like', '%mantenimiento%')->get();
+        for ($i = 0; $i < count($query); $i++) { 
+            $group = array_merge($group, [$query[$i]['id']]);
+        }
+        $groups[] = ['descripcion' => 'HORAS MANTENIMIENTO', 'ids' => $group, 'found' => false];
+        
+        // Grupo de "HORAS TRABAJADAS"
+        $groups[] = ['descripcion' => 'HORAS TRABAJADAS', 'ids' => [NULL], 'found' => false];
+        
+        // Elimino todos los registros que tengan algun id de alguno de los grupos
+        for ($i = 0; $i < count($groups); $i++) { // Paso por todos los grupos existentes
+            // Elimino todos los registros que tengan algun id de este grupo
+            foreach ($groups[$i]['ids'] as $id) { // Paso por cada id del grupo existente
+                // Elimino el registro que tenga el id de este grupo
+                for ($j = 0; $j < count($tiposHora); $j++) {  // Paso por cada registro del query principal
+                    if ( $tiposHora[$j]['id'] == $id ) {
+                        $groups[$i]['found'] = true;
+                        unset($tiposHora[$j]);
+                    }
+                }
+                // Para reacomodar los indices
+                $tiposHora = array_merge($tiposHora);
+            }
+        }
+        // Reparo el formato de los ids del query principal
+        for ($i = 0; $i < count($tiposHora); $i++) {  // Paso por cada registro del query principal
+            $tiposHora[$i]['ids'] = [$tiposHora[$i]['id']];
+            unset($tiposHora[$i]['id']);
+        }
+        // Agregar los nuevos grupos al query principal
+        foreach ($groups as $group) {
+            if ( $group['found'] ) {
+                $tiposHora[] = [
+                    'descripcion' => $group['descripcion'],
+                    'ids' => $group['ids']
+                ];
+            }
+        }
+
         $array = [];
-        // dd($dbTipoHora);
-        for ($i = 0; $i < count($dbTipoHora); $i++) { 
-            $tipohora_id = $dbTipoHora[$i]['id'];
-            $descripcion = mb_strtoupper($dbTipoHora[$i]['descripcion'], 'utf-8');
+        
+        for ($i = 0; $i < count($tiposHora); $i++) { 
+            $tipoHora_ids = $tiposHora[$i]['ids'];
+            $tipoHora_descripcion = mb_strtoupper($tiposHora[$i]['descripcion'], 'utf-8');
 
             $array[] = [
-                'value' => is_null($descripcion) ? 'Horas trabajadas' : $descripcion,
-                // 'subData' => []
-                'subData' => $this->getControlDiario($equipo_id, $tipohora_id)
+                'value' => $tipoHora_descripcion,
+                'subData' => $this->getControlDiario($equipo_id, $tipoHora_ids)
             ];
         } unset($i);
 
         return $array;
     }
 
-    private function getControlDiario($equipo_id, $tipohora_id): array
+    private function getControlDiario($equipo_id, $thIds): array
     {
         $start_date = $this->start_date->format('Y-m-d');
         $end_date = $this->end_date->format('Y-m-d');
 
-        $dbControl = Controldiario::select('id', 'fecha', 'hora_total')
+        $dbControl = Controldiario::select('fecha', DB::raw('SUM(hora_total) AS hora_total'))
                                 ->where('equipo_id', '=', $equipo_id)
-                                ->where('tipohora_id', '=', $tipohora_id)
+                                ->where(function ($query) use ($thIds) {
+                                    foreach ($thIds as $id) $query->orWhere('tipohora_id', '=', $id);
+                                })
                                 ->where(function ($query) use ($start_date, $end_date) {
                                     $query->where('controldiario.fecha', '>=', $start_date)
                                         ->where('controldiario.fecha', '<=', $end_date);
-                                })->orderBy('fecha', 'ASC')->get();
+                                })
+                                ->groupBy('fecha')
+                                ->orderBy('fecha', 'ASC')->get();
         
         $value = [];
         $total_general = 0; $total_mes = 0; $mes = null;

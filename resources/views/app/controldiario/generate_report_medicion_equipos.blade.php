@@ -6,7 +6,7 @@ if ($controldiario !== NULL) {
 ?>
 
 <div id="divMensajeError{!! $entidad !!}"></div>
-{!! Form::open(array('url' => route('controldiario.exportExcelReportByA'), 'method' => 'POST', 'target' => '_blank')) !!}
+{!! Form::open(array('url' => route('controldiario.exportExcelReportMedicionEquipos'), 'method' => 'POST', 'target' => '_blank')) !!}
 {!! Form::hidden('listar', $listar, array('id' => 'listar')) !!}
 
 <div class="form-group">
@@ -14,8 +14,13 @@ if ($controldiario !== NULL) {
 	{{-- ENCABEZADO PRINCIPAL --}}
 	<div class="col-12 container-small form-group">
 		<div class="shadow rounded pt-2 table-primary input-group" style="border: 1px solid;">
-			{!! Form::label('fecha', 'Seleccione el rango de fechas del reporte', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label mt-1 mb-0 h5 font-weight-bold text-dark')) !!}
-
+			<div class="col-12 form-group input-group">
+				{!! Form::label('fecha', 'Seleccione el rango de fechas del reporte', array('class' => 'col-lg-8 col-md-8 col-sm-8 control-label mt-1 mb-0 h5 font-weight-bold text-dark')) !!}
+				<div class="col-4 p-0 m-0 input-group">
+					{!! Form::label(NULL, 'Reporte', array('class' => 'col-lg-6 col-md-6 col-sm-6 control-label mt-1 mb-0 font-weight-bold text-dark')) !!}
+					{!! Form::select('reporte', ['bya (os) - 2' => 'B&A', 'jymp (os) - 1' => 'J&MP'], 'bya (os) - 2', ['class' => 'col-6 pt-0 pb-0 pl-2 form-control-sm']) !!}
+				</div>
+			</div>
 			<div class="col-12 form-group input-group">
 				<div class="col-lg-6 col-md-6 col-sm-12 p-0 m-0 input-group">
 					{!! Form::label('start_date', 'Fecha inicial: ', array('class' => 'mt-3 col-lg-5 col-md-5 col-sm-6 control-label text-right text-dark')) !!}

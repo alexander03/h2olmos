@@ -46,7 +46,8 @@
 				</a>
 
 				{!! Form::button('<i class="material-icons">cloud_download</i> Reporte H. Trabs', array('class' => 'btn btn-primary btn-sm', 'id' => 'btnGenerateReportHorasTrab', 'onclick' => 'modal (\''.URL::route($ruta["generateReport"], array('listar'=>'NO')).'\', \''.$titulo_generar.'\', this);')) !!}
-				{!! Form::button('<i class="material-icons">cloud_download</i> Reporte B&A', array('class' => 'btn btn-primary btn-sm', 'id' => 'btnGenerateReportByA', 'onclick' => 'modal (\''.URL::route($ruta["generateReportByA"], array('listar'=>'NO')).'\', \''.$titulo_generar_reporte_bya.'\', this);')) !!}
+				{!! Form::button('<i class="material-icons">cloud_download</i> Reporte de Medicion de Equipos', array('class' => 'btn btn-primary btn-sm', 'id' => 'btnGenerateReportMedicionEquipos', 'onclick' => 'modal (\''.URL::route($ruta["generateReportMedicionEquipos"], array('listar'=>'NO')).'\', \''.$titulo_generar_reporte_medicion_equipos.'\', this);')) !!}
+
 
 
 			</div>	

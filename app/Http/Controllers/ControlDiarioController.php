@@ -22,6 +22,8 @@ use Illuminate\Support\Facades\DB;
 use App\Exports\ExcelReport_HorasTrabajadas;
 use DateTime;
 use App\Exports\ExcelReport_ByA;
+use App\Exports\ExcelReport_JyMP;
+use Exception;
 
 class ControlDiarioController extends Controller
 {
@@ -31,14 +33,14 @@ class ControlDiarioController extends Controller
     protected $tituloModificar = 'Modificar control diario de equipos';
     protected $tituloEliminar  = 'Eliminar control diario de equipos';
     protected $tituloGenerar  = 'Generar reporte de Horas Trabajadas';
-    protected $tituloGenerarReporteByA  = 'Generar reporte de B&A';
+    protected $tituloGenerarReporteMedicionEquipos  = 'Generar reporte de Medicion de Equipos';
     protected $rutas           = array('create' => 'controldiario.create', 
             'edit'           => 'controldiario.edit', 
             'delete'         => 'controldiario.eliminar',
             'search'         => 'controldiario.buscar',
             'index'          => 'controldiario.index',
             'generateReport' => 'controldiario.generateReport',
-            'generateReportByA' => 'controldiario.generateReportByA'
+            'generateReportMedicionEquipos' => 'controldiario.generateReportMedicionEquipos'
         );
 
        /**
@@ -155,12 +157,10 @@ class ControlDiarioController extends Controller
         $title            = $this->tituloAdmin;
         $titulo_registrar = $this->tituloRegistrar;
         $titulo_generar   = $this->tituloGenerar;
-        $titulo_generar_reporte_bya   = $this->tituloGenerarReporteByA;
+        $titulo_generar_reporte_medicion_equipos   = $this->tituloGenerarReporteMedicionEquipos;
         $ruta             = $this->rutas;
 
-        
-        return view($this->folderview.'.admin')->with(compact('entidad', 'title', 'titulo_registrar', 'titulo_generar', 'titulo_generar_reporte_bya','ruta'));
-
+        return view($this->folderview.'.admin')->with(compact('entidad', 'title', 'titulo_registrar', 'titulo_generar', 'titulo_generar_reporte_medicion_equipos','ruta'));
     }
 
     /**
@@ -506,14 +506,14 @@ class ControlDiarioController extends Controller
         return view($this->folderview.'.generate')->with(compact('controldiario' ,'formData', 'entidad', 'boton', 'listar'));
     }
 
-    public function generateReportByA(Request $request)
+    public function generateReportMedicionEquipos(Request $request)
     {
         $listar   = Libreria::getParam($request->input('listar'), 'NO');
         $entidad  = 'Controldiario';
         $controldiario = null;
 
         $formData = array(
-            'route' => ['controldiario.exportExcelReport'], 
+            'route' => ['controldiario.exportExcelReportMedicionEquipos'], 
             'class' => 'form-horizontal', 
             'id' => 'formMantenimiento'.$entidad, 
             'autocomplete' => 'off'
@@ -521,7 +521,7 @@ class ControlDiarioController extends Controller
         
         $boton    = 'Generar Reporte'; 
         
-        return view($this->folderview.'.generate_report_bya')->with(compact('controldiario' ,'formData', 'entidad', 'boton', 'listar'));
+        return view($this->folderview.'.generate_report_medicion_equipos')->with(compact('controldiario' ,'formData', 'entidad', 'boton', 'listar'));
     }
 
     public function getEquipos(Request $request)
@@ -554,12 +554,21 @@ class ControlDiarioController extends Controller
         return (new ExcelReport_HorasTrabajadas($dates))->download('excel.xlsx');
     }
 
-    public function exportExcelReportByA(Request $request)
+    public function exportExcelReportMedicionEquipos(Request $request)
     {
+        if ( is_null($request->input('start_date')) || is_null($request->input('end_date')) ) return;
+
         $start_date = new DateTime($request->input('start_date'));
         $end_date = new DateTime($request->input('end_date'));
         $equipo_ids = $request->input('equipo');
-        
-        return (new ExcelReport_ByA($start_date, $end_date, $equipo_ids))->download('report_bya.xlsx');
+        $reporte = $request->input('reporte');
+
+        if ( $reporte === 'bya (os) - 2' ) {
+            return (new ExcelReport_ByA($start_date, $end_date, $equipo_ids))->download('report_bya.xlsx');
+        } else if ( $reporte === 'jymp (os) - 1' ) {
+            return (new ExcelReport_JyMP($start_date, $end_date, $equipo_ids))->download('report_jymp.xlsx');
+        } else {
+            throw new Exception("Value of (\$reporte = $reporte) don't found");
+        }
     }
 }
