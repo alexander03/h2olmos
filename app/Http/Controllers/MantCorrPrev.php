@@ -24,7 +24,6 @@ use App\Events\UserHasCreatedOrDeleted;
 
 // INICIO DE MODIFICACION
 use App\Rules\RulePlacaExist;
-// FIN DE MODIFICACION
 
 
 class MantCorrPrev extends Controller
