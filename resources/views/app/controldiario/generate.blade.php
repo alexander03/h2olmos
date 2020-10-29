@@ -11,15 +11,16 @@ if ($controldiario !== NULL) {
 
 <div class="form-group">
 
-	{!! Form::label('fecha', 'Seleccione el rango del reporte', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label')) !!}
+	{!! Form::label(NULL, '!Debe ingresar las 2 fechas¡', array('class' => 'table-warning pt-2 pb-2 col-12 control-label text-danger font-weight-bold', 'id' => 'error', 'hidden' => true)) !!}
+	{!! Form::label('fecha', 'Seleccione el rango del reporte', array('class' => 'col-lg-12 col-md-12 col-sm-12 control-label text-dark')) !!}
 
 	<div class="col-12 form-group input-group">
 		<div class="col-lg-6 col-md-6 col-sm-12 p-0 m-0 input-group">
-			{!! Form::label('fecha', 'Fecha inicial: ', array('class' => 'mt-3 mb-2 col-lg-5 col-md-5 col-sm-6 control-label text-right')) !!}
+			{!! Form::label('fecha', 'Fecha inicial: ', array('class' => 'mt-3 mb-2 col-lg-5 col-md-5 col-sm-6 control-label text-right text-dark')) !!}
 			<input type="date" name="start_date" id='start_date' class="form-control input-xs">
 		</div>
 		<div class="col-lg-6 col-md-6 col-sm-12 p-0 m-0 input-group">
-			{!! Form::label('fecha', 'Fecha final: ', array('class' => 'mt-3 mb-2 col-lg-5 col-md-5 col-sm-6 control-label text-right')) !!}
+			{!! Form::label('fecha', 'Fecha final: ', array('class' => 'mt-3 mb-2 col-lg-5 col-md-5 col-sm-6 control-label text-right text-dark')) !!}
 			<input type="date" name="end_date" id='end_date' class="form-control input-xs">
 		</div>
 	</div>
@@ -63,6 +64,7 @@ if ($controldiario !== NULL) {
 		getCurrentDate();
 
 		// Tipo de reporte
+		const error = Array.from([document.getElementById('error')])[0];
 		const form = Array.from([document.getElementById('form')])[0];
 		const btnExportExcel = Array.from([document.getElementById('btnExportExcel')])[0];
 		const btnExportPdf = Array.from([document.getElementById('btnExportPdf')])[0];
@@ -70,11 +72,19 @@ if ($controldiario !== NULL) {
 
 		const saveTypeExport = (e, typeExport) => {
 			e.preventDefault();
+
+			if ( startDate.value === '' || endDate.value === '' ) {
+				error.removeAttribute('hidden'); return;
+			}
+
 			inputTypeExport.value = typeExport;
 			form.submit();
 		}
 
 		// Eventos del sistema
+		startDate.addEventListener('change', (e) => {
+			if ( startDate.value !== '' && endDate.value !== '' ) error.setAttribute('hidden', true);
+		});
 		endDate.addEventListener('change', (e) => {
 			startDate.setAttribute('max', endDate.value);
 			
@@ -82,6 +92,8 @@ if ($controldiario !== NULL) {
 			let end_date = new Date(endDate.value);
 
 			if ( start_date > end_date ) startDate.value = endDate.value;
+
+			if ( startDate.value !== '' && endDate.value !== '' ) error.setAttribute('hidden', true);
 		});
 		btnExportExcel.addEventListener('click', e => saveTypeExport(e, 'excel'));
 		btnExportPdf.addEventListener('click', e => saveTypeExport(e, 'pdf'));
