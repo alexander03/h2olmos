@@ -6,7 +6,7 @@ if ($controldiario !== NULL) {
 ?>
 
 <div id="divMensajeError{!! $entidad !!}"></div>
-{!! Form::open(array('url' => route('controldiario.exportExcelReport'), 'method' => 'GET')) !!}
+{!! Form::open(array('url' => route('controldiario.exportExcelReport'), 'method' => 'GET', 'id' => 'form', 'target' => '_blank')) !!}
 {!! Form::hidden('listar', $listar, array('id' => 'listar')) !!}
 
 <div class="form-group">
@@ -31,10 +31,12 @@ if ($controldiario !== NULL) {
 		{{-- <a href="{{ route('controldiario.exportExcelReport') }}" target="_blank" class="btn btn-sm btn-primary" title="Exportar">
 			<i class="material-icons">cloud_download</i> Generar Reporte
 		</a> --}}
-		{!! Form::button('<i class="fa fa-check fa-lg"></i> '.$boton, array('class' => 'btn btn-success btn-sm', 'id' => 'btnGenerar', 'type' => 'submit')) !!}
+		{!! Form::hidden('typeExport', NULL) !!}
+		{!! Form::button('<i class="fa fa-check fa-lg"></i> '.$btnExcel, array('class' => 'btn btn-success btn-sm', 'id' => 'btnExportExcel', 'type' => 'submit')) !!}
+		{!! Form::button('<i class="fa fa-check fa-lg"></i> '.$btnPdf, array('class' => 'btn btn-success btn-sm', 'id' => 'btnExportPdf', 'type' => 'submit')) !!}
 		{!! Form::button('<i class="fa fa-exclamation fa-lg"></i> Cancelar', array('class' => 'btn btn-warning btn-sm', 'id' => 'btnCancelar'.$entidad, 'onclick' => 'cerrarModal();')) !!}
 	</div>
-</div>
+</div> 
 
 {!! Form::close() !!}
 
@@ -43,7 +45,7 @@ if ($controldiario !== NULL) {
 		configurarAnchoModal('750');
 		init(IDFORMMANTENIMIENTO+'{!! $entidad !!}', 'M', '{!! $entidad !!}');
 
-		
+		// Administracion de las fechas
 		const startDate = document.getElementById('start_date');
 		const endDate = document.getElementById('end_date');
 
@@ -60,8 +62,19 @@ if ($controldiario !== NULL) {
 		}
 		getCurrentDate();
 
-		
+		// Tipo de reporte
+		const form = Array.from([document.getElementById('form')])[0];
+		const btnExportExcel = Array.from([document.getElementById('btnExportExcel')])[0];
+		const btnExportPdf = Array.from([document.getElementById('btnExportPdf')])[0];
+		const inputTypeExport = Array.from(document.getElementsByName('typeExport'))[0];
 
+		const saveTypeExport = (e, typeExport) => {
+			e.preventDefault();
+			inputTypeExport.value = typeExport;
+			form.submit();
+		}
+
+		// Eventos del sistema
 		endDate.addEventListener('change', (e) => {
 			startDate.setAttribute('max', endDate.value);
 			
@@ -70,6 +83,8 @@ if ($controldiario !== NULL) {
 
 			if ( start_date > end_date ) startDate.value = endDate.value;
 		});
+		btnExportExcel.addEventListener('click', e => saveTypeExport(e, 'excel'));
+		btnExportPdf.addEventListener('click', e => saveTypeExport(e, 'pdf'));
 
 	});
 </script>

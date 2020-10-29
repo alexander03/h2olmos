@@ -20,10 +20,17 @@ use Maatwebsite\Excel\Facades\Excel;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use App\Exports\ExcelReport_HorasTrabajadas;
+use Illuminate\Support\Facades\Auth;
+use App\Events\UserHasCreatedOrDeleted;
+use App\Events\UserHasEdited;
 use DateTime;
 use App\Exports\ExcelReport_ByA;
 use App\Exports\ExcelReport_JyMP;
+use App\Exports\PdfReport_ByA;
+use App\Exports\PdfReport_JyMP;
+use App\Exports\PdfReport_HorasTrabajadas;
 use Exception;
+use Mpdf\Mpdf;
 
 class ControlDiarioController extends Controller
 {
@@ -267,10 +274,10 @@ class ControlDiarioController extends Controller
                 $uaDB =  Ua::where('codigo', $request -> input('ua_id.'.$key)) -> get();
                 $controldiario->ua_id                 = $uaDB[0]->id;
 
-                $controldiario->hora_inicio = $request -> input('hora_inicio.'. $key);
+//                $controldiario->hora_inicio = $request -> input('hora_inicio.'. $key);
                 $controldiario->hora_total  = $request -> input('hora_total.'. $key);
                 $controldiario->hora_parada  = $request -> input('hora_parada.'. $key);
-                $controldiario->hora_fin    = $request -> input('hora_fin.'. $key);
+//                $controldiario->hora_fin    = $request -> input('hora_fin.'. $key);
                 $controldiario->fecha       = $request -> input('fecha');
                 $controldiario->horometro_inicial       = $request -> input('horometro_inicial');
                 $controldiario->horometro_final       = $request -> input('horometro_final');
@@ -283,9 +290,10 @@ class ControlDiarioController extends Controller
                 $controldiario->tipo_material       = $request -> input('tipo_material.'. $key);
                 $controldiario->observaciones       = $request -> input('observaciones.'. $key);
 
-                $controldiario->save();    
-            }
-        
+                $controldiario->save();  
+
+                event( new UserHasCreatedOrDeleted($controldiario->id,'controldiario', auth()->user()->id,'crear'));
+            };              
         });
         return is_null($error) ? "OK" : $error;
     }
@@ -398,6 +406,9 @@ class ControlDiarioController extends Controller
         $error = DB::transaction(function() use($request, $id){
 
            $controldiario =  Controldiario::find($id);
+
+           $controldiarioCop = $controldiario;
+
 //            $equipoDB = Equipo::where('codigo',$request->input('equipo_id')) -> get();
 //            $idEquipo = explode('--',$request->input('equipo_id'))[1];
 //            $controldiario->equipo_id 	 		  = intval($idEquipo);
@@ -410,10 +421,10 @@ class ControlDiarioController extends Controller
             $uaDB =  Ua::where('codigo', $request -> input('ua_id.0')) -> get();
             $controldiario->ua_id                 = $uaDB[0]->id;
 
-	        $controldiario->hora_inicio = $request -> input('hora_inicio.0');
+//	        $controldiario->hora_inicio = $request -> input('hora_inicio.0');
 	        $controldiario->hora_total  = $request -> input('hora_total.0');
 	        $controldiario->hora_parada  = $request -> input('hora_parada.0');
-            $controldiario->hora_fin 	= $request -> input('hora_fin.0');
+//            $controldiario->hora_fin 	= $request -> input('hora_fin.0');
             $controldiario->horometro_inicial       = $request -> input('horometro_inicial');
             $controldiario->horometro_final       = $request -> input('horometro_final');
 	        $controldiario->fecha 		= $request ->input('fecha');
@@ -427,6 +438,8 @@ class ControlDiarioController extends Controller
             $controldiario->observaciones       = $request -> input('observaciones.0');
 
             $controldiario->save();
+
+            event(new UserHasEdited($controldiarioCop,$controldiario,'controldiario',auth()->user()->id));
         });
         return is_null($error) ? "OK" : $error;
     }
@@ -444,8 +457,10 @@ class ControlDiarioController extends Controller
             return $existe;
         }
         $error = DB::transaction(function() use($id){
-            $equipo = Equipo::find($id);
-            $equipo->delete();
+            $controldiario = Controldiario::find($id);
+
+            event( new UserHasCreatedOrDeleted($controldiario->id,'controldiario', auth()->user()->id,'crear'));
+            $controldiario->delete();
         });
         return is_null($error) ? "OK" : $error;
     }
@@ -484,6 +499,41 @@ class ControlDiarioController extends Controller
         return Excel::download(new ReportHrsEquiposUas($fecha1,$fecha2,$concesionaria), 'vencimiento-documento-vehiculo.xlsx'); 
     }
 
+    public function HEquipoxUapdf(Request $request){
+        $concesionaria = $this->consecionariaActual();
+
+        $fechaInicio = $request->fecha_registro_inicial;
+        $fechaFin = $request->fecha_registro_final;
+
+        $lista = new ReportHrsEquiposUas($fechaInicio,$fechaFin,$concesionaria);
+
+        $collectionResult = $lista->collection();
+
+        //días y total
+        while($fechaInicio != $fechaFin){
+            
+            $fechas[] = $fechaInicio;
+
+            $fechaInicio = date("Y-m-d",strtotime($fechaInicio."+ 1 day"));
+        }
+        $fechas[] = $fechaInicio;
+
+        $fechas[] = 'Total';
+
+        $data['data'] = $collectionResult;
+        $data['fechas'] = $fechas;
+        $html = view('app.controldiario.pdf.h_equixua', $data)->render();
+        $mpdf = new Mpdf(['orientation' => 'L']);
+        $mpdf->SetDisplayMode('fullpage');
+        $mpdf->WriteHTML($html);
+        $mpdf->Output('report_HxEquipoxUa.pdf', "I");
+
+
+
+        
+    }
+
+
     private function consecionariaActual(){
         $ConcesionariaActual = Concesionaria::join('userconcesionaria','userconcesionaria.concesionaria_id','=','concesionaria.id')
         ->join('users','users.id','=','userconcesionaria.user_id')
@@ -502,8 +552,10 @@ class ControlDiarioController extends Controller
 
         $formData = array('controldiario.exportExcelReport');
         $formData = array('route' => $formData, 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
-        $boton    = 'Generar Reporte'; 
-        return view($this->folderview.'.generate')->with(compact('controldiario' ,'formData', 'entidad', 'boton', 'listar'));
+        $btnExcel    = 'Generar Reporte en Excel'; 
+        $btnPdf    = 'Generar Reporte en Pdf'; 
+        
+        return view($this->folderview.'.generate')->with(compact('controldiario' ,'formData', 'entidad', 'btnExcel', 'btnPdf', 'listar'));
     }
 
     public function generateReportMedicionEquipos(Request $request)
@@ -519,9 +571,10 @@ class ControlDiarioController extends Controller
             'autocomplete' => 'off'
         );
         
-        $boton    = 'Generar Reporte'; 
+        $btnExcel    = 'Generar Reporte en Excel'; 
+        $btnPdf    = 'Generar Reporte en Pdf'; 
         
-        return view($this->folderview.'.generate_report_medicion_equipos')->with(compact('controldiario' ,'formData', 'entidad', 'boton', 'listar'));
+        return view($this->folderview.'.generate_report_medicion_equipos')->with(compact('controldiario' ,'formData', 'entidad', 'btnExcel', 'btnPdf', 'listar'));
     }
 
     public function getEquipos(Request $request)
@@ -546,12 +599,24 @@ class ControlDiarioController extends Controller
 
     public function exportExcelReport(Request $request)
     {
+        $start_date = $request->input('start_date');
+        $end_date = $request->input('end_date');
+        $typeReport = $request->input('typeExport');
+
+        if ( is_null($start_date) || is_null($end_date) || is_null($typeReport) ) throw new Exception('Some input on exportExcelReport method is null');
+
         $dates = [
-            'start_date' => $request->input('start_date'),
-            'end_date' => $request->input('end_date')
+            'start_date' => $start_date,
+            'end_date' => $end_date
         ];
-        
-        return (new ExcelReport_HorasTrabajadas($dates))->download('excel.xlsx');
+
+        if ( $typeReport === 'excel' ) {
+            return (new ExcelReport_HorasTrabajadas($dates))->download('excel.xlsx');
+        } else if ( $typeReport === 'pdf' ) {
+            $this->exportPdfReport_HorasTrabajadas(new DateTime($start_date), new DateTime($end_date));
+        } else {
+            throw new Exception("On exportExcelReport method, the value of \$typeExport has not found");
+        }
     }
 
     public function exportExcelReportMedicionEquipos(Request $request)
@@ -562,13 +627,76 @@ class ControlDiarioController extends Controller
         $end_date = new DateTime($request->input('end_date'));
         $equipo_ids = $request->input('equipo');
         $reporte = $request->input('reporte');
+        $typeExport = $request->input('typeExport');
 
+        if ( $typeExport === 'excel' ) {
+            if ( $reporte === 'bya (os) - 2' ) {
+                return (new ExcelReport_ByA($start_date, $end_date, $equipo_ids))->download('report_bya.xlsx');
+            } else if ( $reporte === 'jymp (os) - 1' ) {
+                return (new ExcelReport_JyMP($start_date, $end_date, $equipo_ids))->download('report_jymp.xlsx');
+            } else {
+                throw new Exception("Value of (\$reporte = $reporte) don't found");
+            }
+        } else if ( $typeExport === 'pdf' ) {
+            $this->exportPdfReport($reporte, $start_date, $end_date, $equipo_ids);
+        } else {
+            throw new Exception("Value of (\$typeExport = $typeExport) don't found");
+        }
+    }
+
+    public function exportPdfReport(string $reporte, DateTime $start_date, DateTime $end_date, array $equipo_ids = [])
+    {
         if ( $reporte === 'bya (os) - 2' ) {
-            return (new ExcelReport_ByA($start_date, $end_date, $equipo_ids))->download('report_bya.xlsx');
+            $this->exportPdfReport_ByA($start_date, $end_date, $equipo_ids);
         } else if ( $reporte === 'jymp (os) - 1' ) {
-            return (new ExcelReport_JyMP($start_date, $end_date, $equipo_ids))->download('report_jymp.xlsx');
+            $this->exportPdfReport_JyMP($start_date, $end_date, $equipo_ids);
         } else {
             throw new Exception("Value of (\$reporte = $reporte) don't found");
         }
+    }
+
+    public function exportPdfReport_ByA(DateTime $start_date, DateTime $end_date, array $equipo_ids = []) 
+    {
+        $data = (new PdfReport_ByA($start_date, $end_date, $equipo_ids))->getData();
+
+        $data['namefile'] = "Reporte B&A - ".time().".pdf";
+        
+        $html = view($this->folderview . ".exports.pdfReports.ByA", $data)->render();
+
+        $mpdf = new Mpdf(['orientation' => "L"]);
+        $mpdf->SetDisplayMode("fullpage");
+        $mpdf->WriteHTML($html);
+
+        $mpdf->Output($data['namefile'], "I");
+    }
+
+    public function exportPdfReport_JyMP(DateTime $start_date, DateTime $end_date, array $equipo_ids = []) 
+    {
+        $data = (new PdfReport_JyMP($start_date, $end_date, $equipo_ids))->getData();
+
+        $data['namefile'] = "Reporte J&MP - ".time().".pdf";
+        
+        $html = view($this->folderview . ".exports.pdfReports.JyMP", $data)->render();
+
+        $mpdf = new Mpdf();
+        $mpdf->SetDisplayMode("fullpage");
+        $mpdf->WriteHTML($html);
+
+        $mpdf->Output($data["namefile"], "I");
+    }
+
+    public function exportPdfReport_HorasTrabajadas(DateTime $start_date, DateTime $end_date)
+    {
+        $data = (new PdfReport_HorasTrabajadas($start_date, $end_date))->getData();
+
+        $data['namefile'] = "Reporte Horas Trabajadas - ".time().".pdf";
+        
+        $html = view($this->folderview . ".exports.pdfReports.HorasTrabajadas", $data)->render();
+
+        $mpdf = new Mpdf(['orientation' => 'L']);
+        $mpdf->SetDisplayMode("fullpage");
+        $mpdf->WriteHTML($html);
+
+        $mpdf->Output($data["namefile"], "I");
     }
 }
