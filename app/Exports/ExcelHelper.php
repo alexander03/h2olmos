@@ -39,7 +39,7 @@ class ExcelHelper
 
         return $this;
     }
-
+    
     /**
      *  @method fixTable(). Esta funcion sirve para reparar un array $table y convertirlo en un table completa.
      *  @param array=>$table. Es el array que tiene los valores y tengo que evaluar para completarlo.

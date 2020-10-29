@@ -26,6 +26,9 @@ use App\Events\UserHasEdited;
 use DateTime;
 use App\Exports\ExcelReport_ByA;
 use App\Exports\ExcelReport_JyMP;
+use App\Exports\PdfReport_ByA;
+use App\Exports\PdfReport_JyMP;
+use App\Exports\PdfReport_HorasTrabajadas;
 use Exception;
 use Mpdf\Mpdf;
 
@@ -549,8 +552,10 @@ class ControlDiarioController extends Controller
 
         $formData = array('controldiario.exportExcelReport');
         $formData = array('route' => $formData, 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
-        $boton    = 'Generar Reporte'; 
-        return view($this->folderview.'.generate')->with(compact('controldiario' ,'formData', 'entidad', 'boton', 'listar'));
+        $btnExcel    = 'Generar Reporte en Excel'; 
+        $btnPdf    = 'Generar Reporte en Pdf'; 
+        
+        return view($this->folderview.'.generate')->with(compact('controldiario' ,'formData', 'entidad', 'btnExcel', 'btnPdf', 'listar'));
     }
 
     public function generateReportMedicionEquipos(Request $request)
@@ -566,9 +571,10 @@ class ControlDiarioController extends Controller
             'autocomplete' => 'off'
         );
         
-        $boton    = 'Generar Reporte'; 
+        $btnExcel    = 'Generar Reporte en Excel'; 
+        $btnPdf    = 'Generar Reporte en Pdf'; 
         
-        return view($this->folderview.'.generate_report_medicion_equipos')->with(compact('controldiario' ,'formData', 'entidad', 'boton', 'listar'));
+        return view($this->folderview.'.generate_report_medicion_equipos')->with(compact('controldiario' ,'formData', 'entidad', 'btnExcel', 'btnPdf', 'listar'));
     }
 
     public function getEquipos(Request $request)
@@ -593,12 +599,24 @@ class ControlDiarioController extends Controller
 
     public function exportExcelReport(Request $request)
     {
+        $start_date = $request->input('start_date');
+        $end_date = $request->input('end_date');
+        $typeReport = $request->input('typeExport');
+
+        if ( is_null($start_date) || is_null($end_date) || is_null($typeReport) ) throw new Exception('Some input on exportExcelReport method is null');
+
         $dates = [
-            'start_date' => $request->input('start_date'),
-            'end_date' => $request->input('end_date')
+            'start_date' => $start_date,
+            'end_date' => $end_date
         ];
-        
-        return (new ExcelReport_HorasTrabajadas($dates))->download('excel.xlsx');
+
+        if ( $typeReport === 'excel' ) {
+            return (new ExcelReport_HorasTrabajadas($dates))->download('excel.xlsx');
+        } else if ( $typeReport === 'pdf' ) {
+            $this->exportPdfReport_HorasTrabajadas(new DateTime($start_date), new DateTime($end_date));
+        } else {
+            throw new Exception("On exportExcelReport method, the value of \$typeExport has not found");
+        }
     }
 
     public function exportExcelReportMedicionEquipos(Request $request)
@@ -609,13 +627,76 @@ class ControlDiarioController extends Controller
         $end_date = new DateTime($request->input('end_date'));
         $equipo_ids = $request->input('equipo');
         $reporte = $request->input('reporte');
+        $typeExport = $request->input('typeExport');
 
+        if ( $typeExport === 'excel' ) {
+            if ( $reporte === 'bya (os) - 2' ) {
+                return (new ExcelReport_ByA($start_date, $end_date, $equipo_ids))->download('report_bya.xlsx');
+            } else if ( $reporte === 'jymp (os) - 1' ) {
+                return (new ExcelReport_JyMP($start_date, $end_date, $equipo_ids))->download('report_jymp.xlsx');
+            } else {
+                throw new Exception("Value of (\$reporte = $reporte) don't found");
+            }
+        } else if ( $typeExport === 'pdf' ) {
+            $this->exportPdfReport($reporte, $start_date, $end_date, $equipo_ids);
+        } else {
+            throw new Exception("Value of (\$typeExport = $typeExport) don't found");
+        }
+    }
+
+    public function exportPdfReport(string $reporte, DateTime $start_date, DateTime $end_date, array $equipo_ids = [])
+    {
         if ( $reporte === 'bya (os) - 2' ) {
-            return (new ExcelReport_ByA($start_date, $end_date, $equipo_ids))->download('report_bya.xlsx');
+            $this->exportPdfReport_ByA($start_date, $end_date, $equipo_ids);
         } else if ( $reporte === 'jymp (os) - 1' ) {
-            return (new ExcelReport_JyMP($start_date, $end_date, $equipo_ids))->download('report_jymp.xlsx');
+            $this->exportPdfReport_JyMP($start_date, $end_date, $equipo_ids);
         } else {
             throw new Exception("Value of (\$reporte = $reporte) don't found");
         }
+    }
+
+    public function exportPdfReport_ByA(DateTime $start_date, DateTime $end_date, array $equipo_ids = []) 
+    {
+        $data = (new PdfReport_ByA($start_date, $end_date, $equipo_ids))->getData();
+
+        $data['namefile'] = "Reporte B&A - ".time().".pdf";
+        
+        $html = view($this->folderview . ".exports.pdfReports.ByA", $data)->render();
+
+        $mpdf = new Mpdf(['orientation' => "L"]);
+        $mpdf->SetDisplayMode("fullpage");
+        $mpdf->WriteHTML($html);
+
+        $mpdf->Output($data['namefile'], "I");
+    }
+
+    public function exportPdfReport_JyMP(DateTime $start_date, DateTime $end_date, array $equipo_ids = []) 
+    {
+        $data = (new PdfReport_JyMP($start_date, $end_date, $equipo_ids))->getData();
+
+        $data['namefile'] = "Reporte J&MP - ".time().".pdf";
+        
+        $html = view($this->folderview . ".exports.pdfReports.JyMP", $data)->render();
+
+        $mpdf = new Mpdf();
+        $mpdf->SetDisplayMode("fullpage");
+        $mpdf->WriteHTML($html);
+
+        $mpdf->Output($data["namefile"], "I");
+    }
+
+    public function exportPdfReport_HorasTrabajadas(DateTime $start_date, DateTime $end_date)
+    {
+        $data = (new PdfReport_HorasTrabajadas($start_date, $end_date))->getData();
+
+        $data['namefile'] = "Reporte Horas Trabajadas - ".time().".pdf";
+        
+        $html = view($this->folderview . ".exports.pdfReports.HorasTrabajadas", $data)->render();
+
+        $mpdf = new Mpdf(['orientation' => 'L']);
+        $mpdf->SetDisplayMode("fullpage");
+        $mpdf->WriteHTML($html);
+
+        $mpdf->Output($data["namefile"], "I");
     }
 }

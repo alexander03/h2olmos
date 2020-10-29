@@ -6,7 +6,7 @@ if ($controldiario !== NULL) {
 ?>
 
 <div id="divMensajeError{!! $entidad !!}"></div>
-{!! Form::open(array('url' => route('controldiario.exportExcelReportMedicionEquipos'), 'method' => 'POST', 'target' => '_blank')) !!}
+{!! Form::open(array('url' => route('controldiario.exportExcelReportMedicionEquipos'), 'method' => 'POST', 'target' => '_blank', 'id' => 'principal-form')) !!}
 {!! Form::hidden('listar', $listar, array('id' => 'listar')) !!}
 
 <div class="form-group">
@@ -63,7 +63,9 @@ if ($controldiario !== NULL) {
 		{{-- <a href="{{ route('controldiario.exportExcelReport') }}" target="_blank" class="btn btn-sm btn-primary" title="Exportar">
 			<i class="material-icons">cloud_download</i> Generar Reporte
 		</a> --}}
-		{!! Form::button('<i class="fa fa-check fa-lg"></i> '.$boton, array('class' => 'btn btn-success btn-sm', 'id' => 'btnGenerar', 'type' => 'submit')) !!}
+		{!! Form::hidden('typeExport', NULL) !!}
+		{!! Form::button('<i class="fa fa-check fa-lg"></i> '.$btnExcel, array('class' => 'btn btn-success btn-sm', 'id' => 'btnGenerarExcel', 'type' => 'submit')) !!}
+		{!! Form::button('<i class="fa fa-check fa-lg"></i> '.$btnPdf, array('class' => 'btn btn-success btn-sm', 'id' => 'btnGenerarPdf', 'type' => 'submit')) !!}
 		{!! Form::button('<i class="fa fa-exclamation fa-lg"></i> Cancelar', array('class' => 'btn btn-warning btn-sm', 'id' => 'btnCancelar'.$entidad, 'onclick' => 'cerrarModal();')) !!}
 	</div>
 </div>
@@ -163,6 +165,11 @@ if ($controldiario !== NULL) {
 			loadingEquipos.hidden = true;
 		}
 		
+		// Control de tipo de exportacion
+		const form = Array.from([document.getElementById('principal-form')])[0];
+		const typeExport = Array.from(document.getElementsByName('typeExport'))[0];
+		const btnExportExcel = Array.from([document.getElementById('btnGenerarExcel')])[0];
+		const btnExportPdf = Array.from([document.getElementById('btnGenerarPdf')])[0];
 
 		// Inicio de la pagina
 		const start = () => {
@@ -197,5 +204,16 @@ if ($controldiario !== NULL) {
 				});
 			});
 		});
+		btnExportExcel.addEventListener('click', (e) => {
+			e.preventDefault();
+			typeExport.value = 'excel';
+			form.submit();
+		});
+		btnExportPdf.addEventListener('click', (e) => {
+			e.preventDefault();
+			typeExport.value = 'pdf';
+			form.submit();
+		});
+
 	});
 </script>
