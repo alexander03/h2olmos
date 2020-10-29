@@ -27,6 +27,7 @@ use DateTime;
 use App\Exports\ExcelReport_ByA;
 use App\Exports\ExcelReport_JyMP;
 use Exception;
+use Mpdf\Mpdf;
 
 class ControlDiarioController extends Controller
 {
@@ -494,6 +495,41 @@ class ControlDiarioController extends Controller
         
         return Excel::download(new ReportHrsEquiposUas($fecha1,$fecha2,$concesionaria), 'vencimiento-documento-vehiculo.xlsx'); 
     }
+
+    public function HEquipoxUapdf(Request $request){
+        $concesionaria = $this->consecionariaActual();
+
+        $fechaInicio = $request->fecha_registro_inicial;
+        $fechaFin = $request->fecha_registro_final;
+
+        $lista = new ReportHrsEquiposUas($fechaInicio,$fechaFin,$concesionaria);
+
+        $collectionResult = $lista->collection();
+
+        //días y total
+        while($fechaInicio != $fechaFin){
+            
+            $fechas[] = $fechaInicio;
+
+            $fechaInicio = date("Y-m-d",strtotime($fechaInicio."+ 1 day"));
+        }
+        $fechas[] = $fechaInicio;
+
+        $fechas[] = 'Total';
+
+        $data['data'] = $collectionResult;
+        $data['fechas'] = $fechas;
+        $html = view('app.controldiario.pdf.h_equixua', $data)->render();
+        $mpdf = new Mpdf(['orientation' => 'L']);
+        $mpdf->SetDisplayMode('fullpage');
+        $mpdf->WriteHTML($html);
+        $mpdf->Output('report_HxEquipoxUa.pdf', "I");
+
+
+
+        
+    }
+
 
     private function consecionariaActual(){
         $ConcesionariaActual = Concesionaria::join('userconcesionaria','userconcesionaria.concesionaria_id','=','concesionaria.id')

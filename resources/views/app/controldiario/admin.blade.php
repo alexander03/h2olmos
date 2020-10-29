@@ -24,7 +24,7 @@
 			</div>
 			<div class="col-lg-2 col-md-2 col-sm-2 col-6 ">
 					{!! Form::label('fecha_registro_inicial', 'Fecha inicial') !!}
-					{!! Form::date('fecha_registro_inicial', '', array('class' => 'form-control input-xs', 'id' => 'fecha_registro_inicial', 'onchange' => 'EditbtnExelHEU()')) !!}			
+					{!! Form::date('fecha_registro_inicial', date('Y-m-d', strtotime('first day of this month', time())) , array('class' => 'form-control input-xs', 'id' => 'fecha_registro_inicial', 'onchange' => 'EditbtnExelHEU()')) !!}			
 				</div>
 			<div class="col-lg-2 col-md-2 col-sm-2 col-6 ">
 					{!! Form::label('fecha_registro_final', 'Fecha final') !!}
@@ -42,7 +42,10 @@
 				
 
 				<a href="{{ route('controldiario.hequipoxua') }}?" target="_blank" id="btnExelHEU" class="btn btn-sm btn-primary">
-					<i class="material-icons">cloud_download</i> Report H.ExU
+					<i class="material-icons">cloud_download</i> Report H.ExU .xlsx
+				</a>
+				<a href="{{ route('controldiario.hequipoxuapdf') }}?" target="_blank" id="btnPDFHEU" class="btn btn-sm btn-primary">
+					<i class="material-icons">cloud_download</i> Report H.ExU .pdf
 				</a>
 
 				{!! Form::button('<i class="material-icons">cloud_download</i> Reporte H. Trabs', array('class' => 'btn btn-primary btn-sm', 'id' => 'btnGenerateReportHorasTrab', 'onclick' => 'modal (\''.URL::route($ruta["generateReport"], array('listar'=>'NO')).'\', \''.$titulo_generar.'\', this);')) !!}
@@ -75,13 +78,17 @@
 		const fecha1 = document.getElementById('fecha_registro_inicial').value;
 		const fecha2 = document.getElementById('fecha_registro_final').value;
 
-		let ruta = document.getElementById('btnExelHEU').getAttribute('href');
+		let rutaExel = document.getElementById('btnExelHEU').getAttribute('href');
+		let rutaPDF = document.getElementById('btnPDFHEU').getAttribute('href');
 
-		ruta = ruta.split('?')[0];
+		rutaExel = rutaExel.split('?')[0];
+		rutaPDF = rutaPDF.split('?')[0];
 		
-		let newRuta = ruta + `?fecha_registro_inicial=${fecha1}&fecha_registro_final=${fecha2}`;
+		let newRutaExel = rutaExel + `?fecha_registro_inicial=${fecha1}&fecha_registro_final=${fecha2}`;
+		let newRutaPDF = rutaPDF + `?fecha_registro_inicial=${fecha1}&fecha_registro_final=${fecha2}`;
 
-		document.getElementById('btnExelHEU').setAttribute('href',newRuta);
+		document.getElementById('btnExelHEU').setAttribute('href',newRutaExel);
+		document.getElementById('btnPDFHEU').setAttribute('href',newRutaPDF);
 	};
 
 	

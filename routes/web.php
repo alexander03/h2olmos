@@ -116,6 +116,7 @@ Route::group(['middleware' => 'auth'], function () {
 	//Rutas controldiario
 	Route::post('controldiario/buscar', 'ControlDiarioController@buscar')->name('controldiario.buscar');
 	Route::get('controldiario/hequipoxua', 'ControlDiarioController@HEquipoxUa')->name('controldiario.hequipoxua');
+	Route::get('controldiario/hequipoxuapdf', 'ControlDiarioController@HEquipoxUapdf')->name('controldiario.hequipoxuapdf');
 	Route::get('controldiario/eliminar/{id}/{listarluego}', 'ControlDiarioController@eliminar')->name('controldiario.eliminar');
 	Route::resource('controldiario', 'ControlDiarioController', array('except' => array('show')));
 
