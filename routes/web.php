@@ -243,6 +243,8 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('regrepveh/search/vehiculo/{query}', 'RegRepVehController@searchAutocompleteVehiculo')->name('regrepveh.search.vehiculo');
 	Route::get('regrepveh/pdf/generar','RegRepVehController@generatePDF')->name('regrepveh.pdf.export');
 	Route::resource('regrepveh', 'RegRepVehController');
+	Route::get('regrepveh/excel/generar', 'RegRepVehController@exportExcel')->name('regrepveh.excel.export');
+	Route::get('regrepveh/excel2/generar', 'RegRepVehController@exportExcel2')->name('regrepveh.excel2.export');
 
 //Rutas para Registro Trabajo Vehicular
 	Route::resource('regmanveh', 'RegManVehController', array('except' => array('show')));

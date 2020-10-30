@@ -21,6 +21,9 @@ use Mpdf\Mpdf;
 use Illuminate\Support\Facades\Auth;
 use App\Events\UserHasEdited;
 use App\Events\UserHasCreatedOrDeleted;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\RegRepVehExportExcel;
+use App\Exports\RegRepVehExportExcel2;
 
 class RegRepVehController extends Controller
 {
@@ -495,6 +498,16 @@ public function searchAutocompleteVehiculo($query){
         
         return response() -> json($res);
     }
+public function show($id){}
+
+public function exportExcel(){
+        
+        return Excel::download(new RegRepVehExportExcel, 'RegistroRepuestoVehicular.xlsx');
+    }
+public function exportExcel2(){
+    
+    return Excel::download(new RegRepVehExportExcel2, 'RegistroRepuestoVehicular.xlsx');
+}
 
 
 public function generatePDF(Request $request) {

@@ -36,6 +36,8 @@
 			</div>
 			<div class="form-group">
 				{!! Form::button('<i class="material-icons">search</i>Buscar', array('class' => 'btn btn-success p-2 pl-1 pr-1', 'id' => 'btnBuscar', 'onclick' => 'buscar(\''.$entidad.'\')')) !!}
+				<button class = "btn p-2 pl-1 pr-1"><a href="{{ route('regrepveh.excel.export')  }}" style="color:#fff" target="_blank"><i class="material-icons">cloud_download</i> Exportar</a></button>
+				<button class = "btn p-2 pl-1 pr-1"><a href="{{ route('regrepveh.excel2.export')  }}" style="color:#fff" target="_blank"><i class="material-icons">cloud_download</i> Exportar2</a></button>
 				{!! Form::button('<i class="material-icons">add</i>Registrar', array('class' => 'btn btn-info p-2 pl-1 pr-1', 'id' => 'btnNuevo', 'onclick' => 'modal (\''.URL::route($ruta["createrepuesto"], array('listar'=>'SI')).'\', \''.$tituloRegistrar.'\', this);')) !!}
 
 			</div>
